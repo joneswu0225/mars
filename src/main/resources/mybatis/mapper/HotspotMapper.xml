@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.mapper.HotspotMapper" >
+    <insert id="insert" parameterType="Hotspot">
+        insert into pano_hotspot(`code`, `catalog_name`, `title`, `content`, `onclick`, `onload`, `style_name`, `insert_time`)
+        values(#{code}, #{catalogName}, #{title}, #{content}, #{onclick}, #{onload}, #{styleName}, now())
+    </insert>
+    <insert id="update" parameterType="Hotspot">
+        update pano_hotspot
+        set code = #{code}, catalog_name = #{catalogName},
+            onclick = #{onclick}, onload = #{onload}
+        <if test="title != null and title !=''">
+            , title = #{title}
+        </if>
+        <if test="content != null and content !=''">
+            , content = #{content}
+        </if>
+        <if test="hover != null and hover !=''">
+            , hover = #{hover}
+        </if>
+        <if test="out != null and out !=''">
+            , out = #{out}
+        </if>
+        ,style_name = #{styleName}
+        where hotspot_id=#{hotspotId}
+    </insert>
+
+    <select id="findList" resultType="Hotspot" parameterType="Query">
+        <include refid="com.jones.mars.mapper.CommonMapper.startPage" />
+        select * from pano_hotspot
+        where 1=1
+        <if test="query != null and query.title != null and query.title !=''">
+            and title like concat('%',#{query.title},'%')
+        </if>
+        order by hotspot_id desc
+        <include refid="com.jones.mars.mapper.CommonMapper.endPage" />
+    </select>
+
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from pano_hotspot
+        where 1=1
+        <if test="query != null and query.title != null and query.title !=''">
+            and title like concat('%',#{query.title},'%')
+        </if>
+    </select>
+
+    <select id="findByCode" resultType="Hotspot" parameterType="java.lang.String">
+        select * from pano_hotspot
+        where code = #{code}
+    </select>
+
+    <select id="findAll" resultType="Hotspot">
+        select * from pano_hotspot order by hotspot_id desc
+    </select>
+
+    <select id="findOne" resultType="Hotspot">
+        select * from pano_hotspot where hotspot_id=#{hotspotId}
+    </select>
+
+    <delete id="delete">
+        delete from pano_hotspot where hotspot_id=#{hotspotId}
+    </delete>
+</mapper>

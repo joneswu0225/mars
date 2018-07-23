@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.mapper.HsHsMapper" >
+    <insert id="insert" parameterType="HsHs">
+        insert into pano_hs_hs(`hotspot_code`, `p_hotspot_code`, `ath`, `atv`, `role_id`, `insert_time`)
+        values(#{hotspotCode}, #{pHotspotCode}, #{ath}, #{atv}, #{roleId}, now())
+    </insert>
+    <insert id="update" parameterType="HsHs">
+        update pano_hs_hs
+        set hotspot_code = #{hotspotCode}, p_hotspot_code = #{pHotspotCode}, ath = #{ath}, atv = #{atv}, role_id = #{roleId}
+        where hs_hs_id=#{hsHsId}
+    </insert>
+    <select id="findList" resultType="HsHs" parameterType="Query">
+        <include refid="com.jones.mars.mapper.CommonMapper.startPage" />
+        select * from pano_hs_hs
+        where 1=1
+        <if test="query != null and query.pHotspotCode != null and query.pHotspotCode !=''">
+            and p_hotspot_code = #{query.pHotspotCode}
+        </if>
+        <if test="query != null and query.hotspotCode != null and query.hotspotCode !=''">
+            and hotspot_code = #{query.hotspotCode}
+        </if>
+        order by hs_hs_id desc
+        <include refid="com.jones.mars.mapper.CommonMapper.endPage" />
+    </select>
+    <select id="findInnerHotspotList" resultType="Hotspot" parameterType="Query">
+        <include refid="com.jones.mars.mapper.CommonMapper.startPage" />
+        select
+            hs.p_hotspot_code p_hotspot_code,
+            hs.ath ath,
+            hs.atv atv,
+            h.*
+        from pano_hs_hs hs, pano_hotspot h
+        where hs.hotspot_code = h.code
+        <if test="query != null and query.pHotspotCode != null and query.pHotspotCode !=''">
+            and p_hotspot_code = #{query.pHotspotCode}
+        </if>
+        order by hs_hs_id desc
+        <include refid="com.jones.mars.mapper.CommonMapper.endPage" />
+    </select>
+
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from pano_hs_hs
+        where 1=1
+        <if test="query != null and query.pHotspotCode != null and query.pHotspotCode !=''">
+            and p_hotspot_code = #{query.pHotspotCode}
+        </if>
+        <if test="query != null and query.hotspotCode != null and query.hotspotCode !=''">
+            and hotspot_code = #{query.hotspotCode}
+        </if>
+    </select>
+    <select id="findOne" resultType="HsHs">
+        select * from pano_hs_hs where hs_hs_id=#{hsHsId}
+    </select>
+    <delete id="delete">
+        delete from pano_hs_hs where hs_hs_id=#{hsHsId}
+    </delete>
+</mapper>

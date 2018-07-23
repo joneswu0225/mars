@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.mapper.SceneMapper" >
+    <select id="findList" resultType="Scene" parameterType="Query">
+        <include refid="com.jones.mars.mapper.CommonMapper.startPage" />
+        select * from pano_scene
+        where 1=1
+        <if test="query != null and query.title != null and query.title !=''">
+            and title like concat('%',#{query.title},'%')
+        </if>
+        order by scene_id desc
+        <include refid="com.jones.mars.mapper.CommonMapper.endPage" />
+    </select>
+
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from pano_scene
+        where 1=1
+        <if test="query != null and query.title != null and query.title !=''">
+            and title like concat('%',#{query.title},'%')
+        </if>
+    </select>
+
+    <select id="findByTitle" resultType="Scene" parameterType="java.lang.String">
+        select * from pano_scene
+        where title = #{title}
+    </select>
+
+    <select id="findAll" resultType="Scene">
+        select * from pano_scene order by scene_id desc
+    </select>
+
+    <insert id="update" parameterType="Hotspot">
+        update pano_scene
+        set title = #{title}, detail = #{detail}
+        where scene_id=#{sceneId}
+    </insert>
+</mapper>

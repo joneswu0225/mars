@@ -1,0 +1,129 @@
+@charset "utf-8";
+/* CSS Document */
+/*头部*/
+.headd{background-color: #fff;clear: both;padding-top: 22px;}
+.head{width: 1200px;height: 71px;margin: 0 auto;clear: both;}
+.htitlef1{line-height: 78px;}
+.line110{line-height: 71px;}
+/*脚部*/
+.footer1{height: 118px;background-color: #f4f4f4;border-bottom: 1px #e3e3e3 solid;clear: both;}
+.footer2{height: 106px;background-color: #f4f4f4;border-top: 1px #fff solid;line-height: 50px;font-size: 12px;color: #999;}
+.fimg{height: 80px;margin: 0 auto;}
+/*主体部分*/
+.content{width: 1200px;margin:0 auto;clear: both;}
+.inputxt{border: 1px solid #ddd;height: 30px;font-size: 16px;text-indent: 3px;line-height: 30px;}
+.inputcbx{position: relative;top:3px;}
+.tools-inputxt{border: 1px solid #3886dd;height: 25px;font-size: 14px;text-indent: 3px;margin-top:6px;margin-left:5px;line-height: 25px;}
+.clear{ clear:both;}
+.current{font-weight:bold;}
+
+
+
+
+
+select{padding:5px;}
+/*标题*/
+h1, h2, h3, h4, h5, h6{font-weight: bolder; font-family:"Microsoft Yahei";}
+/*宽度*/
+.width200{width:200px;display: inline-block;}
+.margR280{margin-right:280px;}
+.margR35{margin-right:35px;}
+.height30{height:30px;line-height:30px;}
+.margTB10{margin:10px auto;}
+/*分页*/
+.page {text-align: center;padding: 10px 0px;color: #999999;}
+.pageCenter {margin-left: 7px;margin-right: 10px;}
+.pageCenter a {display: inline-block;height: 30px;line-height: 30px;text-align: center;min-width: 28px;_width: 28px;overflow: visible;border: solid 1px #D6D6D6;background-color: white;}
+.pageMore {margin-left: 5px;}
+.pageCenter a:hover {background-color: #dd6000;color: white;border: solid 1px #dd6000;}
+.pageCenter a.pageUp {width: 63px;background-position: 0px -176px;}
+.pageCenter a.pageDown {width: 62px;background-position: -72px -176px;}
+.pageText {border: solid 1px #D6D6D6;width: 41px;text-align: center;line-height: 30px;margin: 0px 3px;height: 30px;position: relative;top: 0px;*top: 6px;}
+.pageButton {display: inline-block;width: 56px;height: 30px;border: solid 1px #dd6000;text-align: center;color: white;margin-left: 3px;background-color: #dd6000;line-height: 30px;font-family: "Microsoft Yahei";font-size: 16px;position: relative;top: 3px;}
+.pageButton:hover {color: white;}
+.pageCenter a.pageChecked {border: 0;font-weight: bold;background: none;}
+.pageCenter a.pageChecked:hover {color: #E04D22;border: none;}
+
+
+.contentpart1{width:990px;}
+/*新闻部分*/
+
+.news{width: 680px;margin-left:10px;font-family:"微软雅黑";color:#333}
+.news-logo{height:45px;border-bottom:#d3d2d0 solid 2px;}
+.news-logo-depart{width:100px;height:25px;font-family:"微软雅黑";border-bottom:#ff8118 solid 4px;margin-top:10px;}
+
+.news-logo-content{margin-left:5px;color:#3886dd; border-left:#ff8118 solid 3px;margin-left:3px; }
+.news-more{width:100px; height:25px;text-align:right;}
+.news-more a{color:#3886dd;}
+.news-more a:hover{color:#f93;}
+/*在线客服部分*/
+.onlineQA{width:290px;color:#b9b9b9;}
+/*广告部分*/
+.ads{width:990px;height:120px;margin-left:10px;clear:both;}
+/*友情链接部分*/
+.support{width:990px;height:150px;}
+.friendlink{width:680px;margin-left:10px;}
+.friendlink-pic{height:150px;}
+.friend{width:161px; height:53px; margin-top:15px; margin-left:8px; line-height:40px; }
+.cooperate{width:290px;height:200px;}
+.cooperatelink{width:265px;height:40px;padding:10px;margin-top:10px;border:#f4f4f4 solid 3px;}
+.cooperatelink-pic{width:110px;height:50px;}
+/*iframe*/
+.iframepage{border:0 transparent;width: 755px;}
+
+
+/**下拉框样式**/
+.convertSelect{ 
+	padding:5px; width:152px; font-size: 14px; border: 1px solid #3886dd;
+}
+/*ie7首页下拉框样式修改*/
+.start-select{
+	+margin-top: -33px;
+	+margin-left: -170px;
+}
+
+.search-select-list {
+	position: relative;
+	width: 64px;
+	left: -1px;
+	top: 0px;
+	border: 1px solid #ddd;
+	background-color: #fff;
+	z-index: 10;
+	display: none;
+}
+.search-select-list a, .search-select-list a:visited {
+	color: #666666;
+	display: block;
+	height: 28px;
+	overflow:hidden;
+}
+.search-select-list a:hover {
+	/*background: none repeat scroll 0 0 #3886dd;
+	color: #FFFFFF;*/
+	color: #3886dd;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+/*不支持javascript浏览器*/
+.noscriptScreen{
+	background: #fff;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	z-index: 999;
+	box-shadow: 0 1px 3px 0 #000;
+	height: 20px;
+	line-height: 20px;
+	padding-left: 10%;
+}
+
+
+
+
+
+
+
+
