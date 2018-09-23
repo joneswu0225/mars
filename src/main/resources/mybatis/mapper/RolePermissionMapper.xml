@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.RolePermissionMapper" >
+    <insert id="insert" parameterType="RolePermission">
+        insert into role_permission(`role_id`, `class_id`, `operation`, `create_time`, `update_time`)
+        values(#{roleId}, #{classId}, #{operation}, now(), now())
+    </insert>
+    <delete id="delete">
+        delete from role_permission where id=#{id}
+    </delete>
+</mapper>

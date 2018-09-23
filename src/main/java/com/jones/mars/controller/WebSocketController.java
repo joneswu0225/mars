@@ -1,8 +1,10 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.config.SocketSessionRegistry;
+import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.GeneralResponse;
 import com.jones.mars.model.SocketMessage;
+import com.jones.mars.object.BaseResponse;
 import com.jones.mars.util.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessageHeaders;
@@ -57,8 +59,8 @@ public class WebSocketController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/getCode", method = RequestMethod.GET)
-    GeneralResponse getCode() {
-        return new GeneralResponse(true, RandomString.generate(5));
+    BaseResponse getCode() {
+        return BaseResponse.builder().code(ErrorCode.OK).data(RandomString.generate(5)).build();
     }
 
 

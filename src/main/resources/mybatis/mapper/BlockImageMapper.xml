@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.BlockImageMapper" >
+    <insert id="insert" parameterType="BlockImage">
+        insert into block_image(`name`, `path`, `detail`, `block_id`, `create_time`, `update_time`)
+        values(#{name}, #{path}, #{detail}, #{blockId}, #{detail}, #{plateformFlg}, now(), now())
+    </insert>
+    <insert id="update" parameterType="BlockImage">
+        update block_image
+        set name = #{name}, detail = #{detail}
+        <if test="path != null and path != ''">
+            , path = #{path}
+        </if>
+        <if test="blockId != null">
+            , block_id = #{blockId}
+        </if>
+        ,update_time = now()
+        where id=#{id}
+    </insert>
+    <select id="findList" resultType="BlockImage" parameterType="Query">
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select * from block_image
+        where delete_flg=0
+        <if test="query != null and query.name != null and query.name !=''">
+            and name like concat('%',#{query.name},'%')
+        </if>
+        <if test="query != null and query.blockId != null'">
+            and block_id = #{query.blockId}
+        </if>
+        order by blockId desc, id desc
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
+        select id, name from block_image
+        where delete_flg=0
+        <if test="query != null and query.blockId != null'">
+            and block_id = #{query.blockId}
+        </if>
+        order by id desc
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from block_image
+        where delete_flg=0
+        <if test="query != null and query.name != null and query.name !=''">
+            and name like concat('%',#{query.name},'%')
+        </if>
+    </select>
+    <select id="findOne" resultType="BlockImage">
+        select * from block_image where id=#{id}
+    </select>
+    <update id="delete">
+        update block_image set delete_flg=1 where id=#{id}
+    </update>
+</mapper>

@@ -2,23 +2,25 @@ package com.jones.mars.model;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 @Data
 public class Hotspot {
-    private Integer hotspotId;
+    private Integer id;
     private String code;
-    private String catalogName;
     private String title;
-    private String content;
-    private float ath;
-    private float atv;
-    private String onclick = "";
-    private String onload = "";
-    private String hover = "";
-    private String out = "";
-    private String styleName;
-    private String sceneCode;
-    private String pHotspotCode;
-    private Date insertTime;
+    private String name;
+    private String icon;
+    private Float location_x;
+    private Float location_y;
+    private Integer baseFlg;
+    private Integer bhotspotId;
+    private Integer sceneId;
+    private Date createTime;
+    private Date updateTime;
+    private List<HotspotContent> baseContents = new ArrayList<>();
+    private List<HotspotContent> contents = new ArrayList<>();
 }
 

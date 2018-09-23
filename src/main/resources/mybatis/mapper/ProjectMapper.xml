@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.ProjectMapper" >
+    <insert id="insert" parameterType="Project" useGeneratedKeys="true" keyProperty="id">
+        insert into project(`name`, `detail`, `image_url`, `module_id`, `class_id`, `creator_id`, `status`, `create_time`, `update_time`)
+        values(#{name}, #{detail}, #{imageUrl}, #{moduleId}, #{classId}, #{creatorId}, #{status}, now(), now())
+    </insert>
+    <insert id="update" parameterType="Project">
+        update project
+        set id=#{id}
+        <if test="name != null and name !=''">
+            ,name = #{name}
+        </if>
+        <if test="detail != null and detail !=''">
+            ,detail = #{detail}
+        </if>
+        <if test="imageurl != null and imageurl !=''">
+            ,image_url = #{imageurl}
+        </if>
+        <if test="reason != null and reason !=''">
+            ,reason = #{reason}
+        </if>
+        <if test="moduleId != null">
+            , module_id = #{moduleId}
+        </if>
+        <if test="classId != null">
+            , class_id = #{classId}
+        </if>
+        <if test="creatorId != null">
+            , creator_id = #{creatorId}
+        </if>
+        <if test="status != null">
+            , status = #{status}
+        </if>
+        <if test="publicFlg != null">
+            , public_flg = #{publicFlg}
+        </if>
+        <if test="publishDate != null">
+            , publish_date = #{publishDate}
+        </if>
+        ,update_time = now()
+        where id=#{id}
+    </insert>
+    <select id="findList" resultType="Project" parameterType="Query">
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select p.*,b.enterprise_id as enterpriseId, b.id as blockId, b.name as blockName, m.name as moduleName, c.name as className
+        from block b ,block_project bp , project p left join project_module m on p.module_id = m.id left join project_class c on p.class_id=c.id
+        where bp.block_id = b.id and p.id=bp.project_id
+        and p.delete_flg=0
+        <if test="name != null and name !=''">
+            and p.name like concat('%',#{name},'%')
+        </if>
+        <if test="blockId != null">
+            and b.id=#{blockId}
+        </if>
+        <if test="enterpriseId != null">
+            and b.enterprise_id=#{enterpriseId}
+        </if>
+        <if test="moduleId != null">
+            and p.module_id=#{moduleId}
+        </if>
+        <if test="classId != null">
+            and p.class_id=#{classId}
+        </if>
+        order by p.id desc
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*)
+        from block b ,block_project bp , project p left join project_module m on p.module_id = m.id left join project_class c on p.class_id=c.id
+        where bp.block_id = b.id and p.id=bp.project_id
+        and p.delete_flg=0
+        <if test="name != null and name !=''">
+            and p.name like concat('%',#{name},'%')
+        </if>
+        <if test="blockId != null">
+            and b.id=#{blockId}
+        </if>
+        <if test="moduleId != null">
+            and p.module_id=#{moduleId}
+        </if>
+        <if test="classId != null">
+            and p.class_id=#{classId}
+        </if>
+    </select>
+    <select id="findAllName" resultType="Project" parameterType="Query">
+        select id, name from project p, block_project bp
+        where p.delete_flg=0 and bp.project=p.id
+        <if test="name != null and name !=''">
+            and p.name like concat('%',#{name},'%')
+        </if>
+        <if test="blockId != null">
+            and p.block_id=#{blockId}
+        </if>
+        <if test="moduleId != null">
+            and p.module_id=#{moduleId}
+        </if>
+        <if test="classId != null">
+            and p.class_id=#{classId}
+        </if>
+        order by id desc
+    </select>
+    <select id="findAll" resultType="Project">
+        select p.*, b.id as blockId, b.name as blockName, m.name as moduleName, c.name as className
+        from block b ,block_project bp , project p left join project_module m on p.module_id = m.id left join project_class c on p.class_id=c.id
+        where p.delete_flg=0 and bp.block_id = b.id and p.id=bp.project_id
+        order by p.id desc
+    </select>
+    <select id="findOne" resultType="Project">
+        select p.*, b.id as blockId, b.name as blockName, m.name as moduleName, c.name as className
+        from block b ,block_project bp , project p left join project_module m on p.module_id = m.id left join project_class c on p.class_id=c.id    s
+        where p.id=#{id} and bp.block_id = b.id and p.id=bp.project_id
+    </select>
+    <update id="delete">
+        update project set delete_flg=1 where id=#{id}
+    </update>
+</mapper>

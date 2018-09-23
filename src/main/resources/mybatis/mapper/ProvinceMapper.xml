@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.ProvinceMapper" >
+    <insert id="insert" parameterType="Province">
+        insert into const_province(`name`)
+        values(#{name})
+    </insert>
+    <insert id="update" parameterType="Province">
+        update const_province set name = #{name} where id=#{id}
+    </insert>
+    <select id="findList" resultType="Province" parameterType="Query">
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select * from const_province
+        order by name
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from const_province
+    </select>
+    <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
+        select id, name from const_province
+        order by name
+    </select>
+    <select id="findAll" resultType="Province">
+        select * from const_province order by name
+    </select>
+    <select id="findOne" resultType="Province">
+        select * from const_province where id=#{id}
+    </select>
+    <delete id="delete">
+        delete from const_province where id=#{id}
+    </delete>
+</mapper>

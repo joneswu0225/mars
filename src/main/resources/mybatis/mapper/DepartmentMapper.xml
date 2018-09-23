@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.DepartmentMapper" >
+    <insert id="insert" parameterType="Department">
+        insert into department(`name`, `parent_id`, `level`, `manager_id`, `operator_id`, `enterprise_id`, `create_time`, `update_time`)
+        values(#{name}, #{parentId}, #{level}, #{managerId}, #{operatorId}, #{enterpriseId}, now(), now())
+    </insert>
+    <insert id="update" parameterType="Department">
+        update department
+        set name = #{name}
+        <if test="enterpriseId != null">
+            , enterprise_id = #{enterpriseId}
+        </if>
+        <if test="managerId != null">
+            , manager_id = #{managerId}
+        </if>
+        <if test="parentId != null">
+            , parent_id = #{parentId}
+        </if>
+        <if test="level != null">
+            , level = #{level}
+        </if>
+        , and operator_id = #{operatorId}
+        ,update_time = now()
+        where id=#{id}
+    </insert>
+    <select id="findList" resultType="Department" parameterType="Query">
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select d.*, p.name as parentName from department d left join department p on d.parent_id = p.id
+        where delete_flg=0
+        <if test="!= null and name != null and name !=''">
+            and d.name like concat('%',#{name},'%')
+        </if>
+        <if test="!= null and enterpriseId != null">
+            and d.enterprise_id=#{enterpriseId}
+        </if>
+        <if test="!= null and level != null">
+            and d.level=#{level}
+        </if>
+        order by d.id desc
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from department d
+        where delete_flg=0
+        <if test="!= null and name != null and name !=''">
+            and d.name like concat('%',#{name},'%')
+        </if>
+        <if test="!= null and enterpriseId != null">
+            and d.enterprise_id=#{enterpriseId}
+        </if>
+        <if test="!= null and level != null">
+            and d.level=#{level}
+        </if>
+    </select>
+    <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
+        select id, name from department d
+        where delete_flg=0
+        <if test="!= null and name != null and name !=''">
+            and d.name like concat('%',#{name},'%')
+        </if>
+        <if test="enterpriseId != null">
+            and d.enterprise_id=#{enterpriseId}
+        </if>
+        order by id desc
+    </select>
+    <select id="findAll" resultType="Department">
+        select * from department where delete_flg=0 order by id desc
+    </select>
+    <select id="findOne" resultType="Department">
+        select d.*, p.name as parentName from department d left join department p on d.parent_id = p.id
+        where id=#{id}
+    </select>
+    <delete id="delete">
+        delete from department where id=#{id};
+        delete from user_department where department_id=#{id};
+    </delete>
+</mapper>

@@ -1,3 +1,4 @@
+/*
 package com.jones.mars;
 
 import org.junit.Test;
@@ -15,3 +16,4 @@ public class MarsApplicationTests {
 	}
 
 }
+*/

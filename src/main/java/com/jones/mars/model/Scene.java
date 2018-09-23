@@ -4,10 +4,13 @@ import lombok.Data;
 
 @Data
 public class Scene {
-    private Integer sceneId;
+    private Integer id;
+    private Integer sceneTypeId;
     private String code;
-    private String title;
+    private String name;
     private String detail;
-    private String projectCode;
-
+    private Integer imageId;
+    private Float locationX;
+    private Float locationY;
+    private Integer seq;
 }

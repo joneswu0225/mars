@@ -1,0 +1,25 @@
+package com.jones.mars.model.param;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
+import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
+import java.util.Date;
+
+@Data
+@ApiModel(value="模块参数")
+public class BlockParam {
+    @NotBlank(message = "模块名称不能为空")
+    @ApiModelProperty(value="模块名称",name="name")
+    private String name;
+    @NotBlank(message = "公司ID")
+    @ApiModelProperty(value="公司ID",name="enterpriseId")
+    private Integer enterpriseId;
+    @ApiModelProperty(value="是否为平台内部模块，1：是，0：否",name="plateformFlg")
+    private Integer plateformFlg;
+    @ApiModelProperty(value="模块简介",name="detail")
+    private String detail;
+}
+

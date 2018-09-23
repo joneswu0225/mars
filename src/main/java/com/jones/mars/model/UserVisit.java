@@ -12,7 +12,7 @@ public class UserVisit {
     private String path;
     private String srcIp;
     private Integer roleId;
-    private Date insertTime;
+    private Date createTime;
 
     public UserVisit(String path, String srcIp) {
         this.path = path;

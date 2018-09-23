@@ -1,3 +1,4 @@
+/*
 package com.jones.mars.util;
 
 import freemarker.template.Configuration;
@@ -76,3 +77,4 @@ public class FreemarkerUtil {
     }
 }
 
+*/

@@ -1,63 +1,71 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jones.mars.mapper.HotspotMapper" >
-    <insert id="insert" parameterType="Hotspot">
-        insert into pano_hotspot(`code`, `catalog_name`, `title`, `content`, `onclick`, `onload`, `style_name`, `insert_time`)
-        values(#{code}, #{catalogName}, #{title}, #{content}, #{onclick}, #{onload}, #{styleName}, now())
+<mapper namespace="com.jones.mars.repository.HotspotMapper" >
+    <resultMap id="HotspotMap" type="Hotspot" >
+        <id property="id" column="id" />
+        <association property="baseContents" column="bhotspot_id" select="com.jones.mars.repository.HotspotContentMapper.findByHotspotId"/>
+        <association property="contents" column="id" select="com.jones.mars.repository.HotspotContentMapper.findByHotspotId"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="Hotspot" useGeneratedKeys="true" keyProperty="id">
+        insert into hotspot(`code`, `name`, `title`, `icon`, `location_x`, `location_y`, `bhotspot_id`, `base_flg`, `create_time`, `update_time`)
+        values(#{code}, #{name}, #{title}, #{icon}, #{locationX}, #{locationY}, #{bhotspotId}, #{baseFlg}, now(), now())
     </insert>
     <insert id="update" parameterType="Hotspot">
-        update pano_hotspot
-        set code = #{code}, catalog_name = #{catalogName},
-            onclick = #{onclick}, onload = #{onload}
+        update hotspot
+        set id = #{id}
+        <if test="icon != null and icon !=''">
+            , icon = #{icon}
+        </if>
+        <if test="name != null and name !=''">
+            , name = #{name}
+        </if>
+        <if test="code != null and code !=''">
+            , code = #{code}
+        </if>
         <if test="title != null and title !=''">
             , title = #{title}
         </if>
-        <if test="content != null and content !=''">
-            , content = #{content}
+        <if test="locationX != null">
+            , location_x = #{locationX}
         </if>
-        <if test="hover != null and hover !=''">
-            , hover = #{hover}
+        <if test="locationY != null">
+            , location_y = #{locationY}
         </if>
-        <if test="out != null and out !=''">
-            , out = #{out}
+        <if test="bhotspot_id != null">
+            , bhotspot_id = #{bhotspotId}
         </if>
-        ,style_name = #{styleName}
-        where hotspot_id=#{hotspotId}
+        where id = #{id}
     </insert>
 
     <select id="findList" resultType="Hotspot" parameterType="Query">
-        <include refid="com.jones.mars.mapper.CommonMapper.startPage" />
-        select * from pano_hotspot
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select * from hotspot
         where 1=1
-        <if test="query != null and query.title != null and query.title !=''">
-            and title like concat('%',#{query.title},'%')
+        <if test="query != null and query.sceneId != null">
+            and scene_id=#{sceneId}
         </if>
-        order by hotspot_id desc
-        <include refid="com.jones.mars.mapper.CommonMapper.endPage" />
+        order by id desc
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
 
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
-        select count(*) from pano_hotspot
+        select count(*) from hotspot
         where 1=1
-        <if test="query != null and query.title != null and query.title !=''">
-            and title like concat('%',#{query.title},'%')
+        <if test="query != null and query.sceneId != null">
+            and scene_id=#{sceneId}
         </if>
     </select>
 
-    <select id="findByCode" resultType="Hotspot" parameterType="java.lang.String">
-        select * from pano_hotspot
-        where code = #{code}
-    </select>
-
     <select id="findAll" resultType="Hotspot">
-        select * from pano_hotspot order by hotspot_id desc
+        select * from hotspot order by id desc
     </select>
 
     <select id="findOne" resultType="Hotspot">
-        select * from pano_hotspot where hotspot_id=#{hotspotId}
+        select * from hotspot where id=#{id}
     </select>
 
     <delete id="delete">
-        delete from pano_hotspot where hotspot_id=#{hotspotId}
+        delete from hotspot where id=#{id}
     </delete>
 </mapper>

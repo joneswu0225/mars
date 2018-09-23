@@ -1,6 +1,5 @@
 package com.jones.mars.controller;
 
-import com.jones.mars.model.Query;
 import com.jones.mars.model.User;
 import com.jones.mars.util.LoginUtil;
 
@@ -36,17 +35,4 @@ public class BaseController {
         this.size = size;
     }
 
-    public Query getQuery(int pageNum, int pageSize, Object param) {
-        Query query = new Query(pageNum, pageSize);
-        query.setQuery(param);
-        return query;
-    }
-
-    public Query getQuery(Object param) {
-        return getQuery(this.page, this.size, param);
-    }
-
-    public Query getQuery(int pageNum, int pageSize) {
-        return getQuery(pageNum, pageSize, null);
-    }
 }

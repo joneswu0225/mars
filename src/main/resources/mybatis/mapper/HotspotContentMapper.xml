@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.HotspotContentMapper" >
+    <insert id="insert" parameterType="HotspotContent">
+        insert into hotspot(`hotspot_id`, `content`, `title`, `extra`, `seq`, `type`)
+        values(#{hotspot_id}, #{content}, #{title}, #{extra}, #{seq}, #{type})
+    </insert>
+    <insert id="update" parameterType="HotspotContent">
+        update hotspot_content
+        set content = #{content}
+        <if test="title != null and title != ''">
+            , title = #{title}
+        </if>
+        <if test="type != null and type != ''">
+            , type = #{type}
+        </if>
+        <if test="extra != null and extra != ''">
+            , extra = #{extra}
+        </if>
+        where id = #{id}
+    </insert>
+
+    <select id="findList" resultType="HotspotContent" parameterType="Query">
+        select * from hotspot_content
+        where hotspot_id=#{query.hotspotId}
+        order by seq
+    </select>
+
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from hotspot_content
+        where hotspot_id=#{query.hotspotId}
+    </select>
+
+    <select id="findByHotspotId" resultType="HotspotContent" parameterType="java.lang.Integer">
+        select * from hotspot_content
+        where hotspot_id=#{hotspotId}
+        order by seq
+    </select>
+
+    <select id="findAll" resultType="HotspotContent">
+        select * from hotspot_content order by hotspot_id desc
+    </select>
+
+    <select id="findOne" resultType="HotspotContent">
+        select * from hotspot_content where id=#{id}
+    </select>
+
+    <delete id="delete">
+        delete from hotspot_content where id=#{id}
+    </delete>
+</mapper>

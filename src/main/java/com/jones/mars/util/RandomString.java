@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class RandomString {
     public static final String SOURCES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    public static final String SOURCES_DIGIST = "1234567890";
 
     public static void main(String[] args) {
         System.out.println(generate(5));
@@ -11,6 +12,10 @@ public class RandomString {
 
     public static String generate(int size) {
         return generateString(new Random(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", size);
+    }
+
+    public static String generateVerifyCode(){
+        return generateString(new Random(), SOURCES_DIGIST, 6);
     }
 
     private static String generateString(Random random, String characters, int length) {

@@ -1,53 +1,106 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jones.mars.mapper.UserMapper" >
-    <resultMap id="userMap" type="User">
-        <id property="userId" column="user_id" />
-        <result property="username" column="username" />
-        <result property="password" column="password" />
-        <association property="role" resultMap="roleMap"/>
-    </resultMap>
-    <resultMap id="roleMap" type="Role">
-        <id property="roleId" column="role_id" />
-        <result property="roleName" column="role_name" />
-        <result property="roleTitle" column="role_title" />
-        <result property="projectCode" column="project_code" />
-    </resultMap>
-
-    <select id="findAll" resultMap="userMap">
-        select u.*, r.* from user u left join user_role ur on u.user_id=ur.user_id
-            left join role r on ur.role_id=r.role_id
-    </select>
-
-    <select id="findList" resultMap="userMap" parameterType="Query">
-        <include refid="com.jones.mars.mapper.CommonMapper.startPage" />
-        select u.*, r.* from user u left join user_role ur on u.user_id=ur.user_id
-            left join role r on ur.role_id=r.role_id
-        where 1=1
-        <if test="query != null and query.username != null and query.username !=''">
-            and u.username = #{query.username}
+<mapper namespace="com.jones.mars.repository.UserMapper" >
+    <insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        insert into user(`mobile`, `password`, `user_type`, `unique_code`, `create_time`, `update_time`)
+        values(#{mobile}, #{password}, #{userType}, #{uniqueCode}, now(), now());
+    </insert>
+    <insert id="insertProfile" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        insert into user_profile(`user_id`, `sgname`, `job`, `province`, `city`, `address`, `description`, `birthday`, `avatar`, `namecard`)
+        values(#{id}, #{sgname}, #{job}, #{province}, #{city}, #{address}, #{description}, #{birthday}, #{avatar}, #{namecard});
+    </insert>
+    <insert id="updateProfile" parameterType="User">
+        update user_profile set user_id=#{id}
+        <if test="sgname != null and sgname !=''">
+            ,sgname = #{sgname}
         </if>
-        <include refid="com.jones.mars.mapper.CommonMapper.endPage" />
+        <if test="job != null and job !=''">
+            ,job = #{job}
+        </if>
+        <if test="email != null and email !=''">
+            ,province = #{province}
+        </if>
+        <if test="city != null and city !=''">
+            ,city = #{city}
+        </if>
+        <if test="address != null and address !=''">
+            ,address = #{address}
+        </if>
+        <if test="description != null and description !=''">
+            ,description = #{description}
+        </if>
+        <if test="birthday != null ">
+            ,birthday = #{birthday}
+        </if>
+        <if test="avatar != null and avatar !=''">
+            ,avatar = #{avatar}
+        </if>
+        <if test="namecard != null and namecard !=''">
+            ,namecard = #{namecard}
+        </if>
+        where user_id=#{id}
+    </insert>
+    <insert id="update" parameterType="User">
+        update user set id=#{id}
+        <if test="userType != null and userType !=''">
+            ,user_type = #{userType}
+        </if>
+        <if test="password != null and password !=''">
+            ,password = #{password}
+        </if>
+        <if test="uniqueCode != null and uniqueCode !=''">
+            ,unique_code = #{uniqueCode}
+        </if>
+        <if test="verifyCode != null and verifyCode !=''">
+            ,verify_code = #{verifyCode}
+        </if>
+        <if test="ip != null and ip !=''">
+            ,ip = #{ip}
+        </if>
+        <if test="lastLoginTime != null">
+            ,last_login_time = #{lastLoginTime}
+        </if>
+        where id=#{id}
+    </insert>
+    <select id="findList" resultType="User" parameterType="Query">
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select u.*, p.sgname,p.job,p.email,p.province,p.city,p.address, p.birthday, p.avatar, p.namecard from user u left join user_profile p on u.id=p.user_id
+        where u.delete_flg=0
+        <if test="query != null and query.mobile != null and query.mobile !=''">
+            and u.mobile = #{query.mobile}
+        </if>
+        <if test="query != null and query.sgname != null and query.sgname !=''">
+            and p.sgname like concat('%',#{query.sgname},'%')
+        </if>
+        <if test="query != null and query.uniqueCode != null and query.uniqueCode !=''">
+            and p.unique_code = #{query.uniqueCode}
+        </if>
+        order by u.id desc
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
-        select count(1) from user u
-        where 1=1
-        <if test="query != null and query.username != null and query.username !=''">
-            and u.username = #{query.username}
+        select count(1) from `user` u left join user_profile p on u.id=p.user_id
+        where delete_flg=0
+        <if test="query != null and query.mobile != null and query.mobile !=''">
+            and u.mobile = #{query.mobile}
+        </if>
+        <if test="query != null and query.sgname != null and query.sgname !=''">
+            and p.sgname like concat('%',#{query.sgname},'%')
+        </if>
+        <if test="query != null and query.uniqueCode != null and query.uniqueCode !=''">
+            and p.unique_code = #{query.uniqueCode}
         </if>
     </select>
-    <select id="findOne" resultMap="userMap" parameterType="User">
-        select u.*, r.* from user u left join user_role ur on u.user_id=ur.user_id
-        left join role r on ur.role_id=r.role_id
-        where username = #{username} and password = #{password}
+    <select id="findAll" resultType="User">
+        select * from user
+        where delete_flg=0
+        order by name
     </select>
-
-    <insert id="insert" parameterType="User">
-        insert into user(username,password)
-        values(#{username}, #{password})
-    </insert>
-
-    <update id="update" parameterType="User">
-        update user set password=#{password} where username=#{username}
+    <select id="findOne" resultType="User">
+        select  u.*, p.sgname,p.job,p.email,p.province,p.city,p.address, p.birthday, p.avatar, p.namecard from user u left join user_profile p on u.id=p.user_id
+        where u.id=#{id}
+    </select>
+    <update id="delete">
+        update user set delete_flg=1 where id=#{id}
     </update>
 </mapper>

@@ -4,12 +4,18 @@ import lombok.Data;
 
 @Data
 public class GeneralResponse {
-    private boolean suc;
-    private String msg;
+    private int errorCode = 0;
+    private String errorMsg;
+    private Object data;
 
-    public GeneralResponse(boolean suc, String msg) {
-        setSuc(suc);
-        setMsg(msg);
+    public GeneralResponse(){}
+
+    public GeneralResponse(Object data){
+        setData(data);
+    }
+    public GeneralResponse(int errorCode, String errorMsg) {
+        setErrorCode(errorCode);
+        setErrorMsg(errorMsg);
     }
 
 }
