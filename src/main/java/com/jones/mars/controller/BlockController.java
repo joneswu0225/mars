@@ -2,7 +2,7 @@ package com.jones.mars.controller;
 
 import com.jones.mars.model.Block;
 import com.jones.mars.model.param.BlockParam;
-import com.jones.mars.model.Query;
+import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.BlockService;
 import io.swagger.annotations.Api;
@@ -38,6 +38,12 @@ public class BlockController extends BaseController {
     public BaseResponse allName(@RequestParam(name="enterpriseId") @ApiParam(required=true) Integer enterpriseId) {
         //TODO 判断用户是否有该公司角色
         return service.allName(enterpriseId);
+    }
+
+    @ApiOperation(value = "模块详情", notes = "")
+    @GetMapping("{blockId}")
+    public BaseResponse findOne(@PathVariable Integer blockId) {
+        return service.findById(blockId);
     }
 
     @ApiOperation(value = "更新模块", notes = "")

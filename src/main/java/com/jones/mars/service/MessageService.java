@@ -1,7 +1,7 @@
 package com.jones.mars.service;
 
 import com.jones.mars.model.Message;
-import com.jones.mars.model.Query;
+import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
 import com.jones.mars.repository.MessageMapper;

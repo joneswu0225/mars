@@ -5,19 +5,21 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Data
 public class User {
+    public static final int COMMON = 0;
+    public static final int ENTMANAGER = 1;
+    public static final int ADMIN = 2;
+
     private Integer id;
-    private String mobileLike;
     private String mobile;
     private String sgname;
     private String password;
     private UserType userType;
     private String verifyCode;
-    private String uniqueCodeLike;
-    private String uniqueCode;
     private String ip;
     private Date lastLoginTime;
     private Date updateTime;
@@ -31,12 +33,6 @@ public class User {
     private String avatar;
     private String namecard;
     private String description;
-
-
-    public Map<String, Object> getInfo(){
-        Map<String, Object> userInfo = new HashMap<>();
-        return userInfo;
-    }
-
+    private List<Enterprise> enterprises;
 }
 

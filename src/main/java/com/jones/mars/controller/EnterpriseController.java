@@ -2,7 +2,7 @@ package com.jones.mars.controller;
 
 import com.jones.mars.model.Enterprise;
 import com.jones.mars.model.param.EnterpriseParam;
-import com.jones.mars.model.Query;
+import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.BlockService;
 import com.jones.mars.service.EnterpriseService;
@@ -30,10 +30,17 @@ public class EnterpriseController extends BaseController {
         return service.findByPage(query);
     }
 
+
     @ApiOperation(value = "新增企业", notes = "")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) EnterpriseParam param) {
         return service.add(Enterprise.enterpriseBuilder(param).build());
+    }
+
+    @ApiOperation(value = "企业详情", notes = "企业详情")
+    @GetMapping("{enterpriseId}")
+    public BaseResponse findOne(@PathVariable Integer enterpriseId) {
+        return service.findById(enterpriseId);
     }
 
     @ApiOperation(value = "更新企业", notes = "")

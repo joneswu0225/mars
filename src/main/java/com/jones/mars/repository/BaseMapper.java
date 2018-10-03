@@ -1,16 +1,18 @@
 package com.jones.mars.repository;
 
 
-import com.jones.mars.model.Query;
+import com.jones.mars.model.query.Query;
 
 import java.util.List;
 
 public interface BaseMapper<T> {
     List<T> findList(Query paramQuery);
 
+    Object findOne(Integer id);
+
     Integer findCount(Query paramQuery);
 
-    List<T> findAll();
+    List<T> findAll(Query paramQuery);
 
     void insert(T param);
 

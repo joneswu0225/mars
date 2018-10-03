@@ -1,7 +1,7 @@
 package com.jones.mars.repository;
 
 import com.jones.mars.model.CompanyJoin;
-import com.jones.mars.model.Query;
+import com.jones.mars.model.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

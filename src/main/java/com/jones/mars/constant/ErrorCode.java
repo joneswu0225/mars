@@ -19,25 +19,14 @@ public enum ErrorCode {
 
 	//登录错误
 	LOGIN_MOBILE_NOTEXISTS("1002", "手机号不存在"),
-	LOGIN_VERIFYCODE_WRONG("1003", "验证码错误"),
+	LOGIN_FAIL("1003", "验证码或密码错误"),
 
 	//请求错误
-	VALIDATION_FAILED("100001", "参数校验失败"),
-	BAD_REQUEST("100002", "请求参数错误 [%s]"),
+	VALIDATION_FAILED("1011", "参数校验失败"),
+	BAD_REQUEST("1012", "请求参数错误 [%s]"),
+	UPLOAD_FAILED("1013", "文件上传失败"),
 
-	//数据错误
-	UNSUPPORTED_DATABASE("300001", "不支持的数据库"), 
-	UNSUPPORTED_COLUMN("300002","不支持的字段类型"), 
-	CONVERT_NOT_SUPPORT("300003","类型转换错误"), 
-	CONVERT_OVERFLOW("300004", "类型转换溢出"),
-
-	//客户端错误
-	CANNOT_CONNECT_TO_SERVER("500001", "无法连接服务器"),
-	
 	INTERNAL_ERROR("9000", "系统内部错误"),
-
-//	FORM_ERROR("8999", "表单错误")
-
 	;
 
 	public final String key;

@@ -3,8 +3,10 @@ package com.jones.mars.model.param;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
@@ -15,7 +17,8 @@ public class NewsParam {
     @NotBlank(message = "作者不能为空")
     @ApiModelProperty(value="作者",name="author")
     private String author;
-    @NotBlank(message = "发布不能为空")
+    @NotNull(message = "发布不能为空")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     @ApiModelProperty(value = "发布时间",name="publishTime")
     private Date publishTime;
     @NotBlank(message = "摘要不能为空")

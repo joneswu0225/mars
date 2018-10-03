@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.SceneMapper" >
     <insert id="insert" parameterType="Scene">
-        insert into scene(`name`, `detail`, `code`,`scene_type_id`, `block_id`, `image_id`, `location_x`, `location_y`)
-        values(#{name}, #{detail}, #{code},#{sceneTypeId}, #{blockId}, #{imageId}, #{locationX}, #{locationY})
+        insert into scene(`name`, `detail`, `code`,`block_id`, `image_id`, `location_x`, `location_y`)
+        values(#{name}, #{detail}, #{code}, #{blockId}, #{imageId}, #{locationX}, #{locationY})
     </insert>
     <insert id="update" parameterType="Scene">
         update scene set id=#{id}
@@ -12,9 +12,6 @@
         </if>
         <if test="detail != null and detail !=''">
             ,detail = #{detail}
-        </if>
-        <if test="code != null and code !=''">
-            ,code = #{code}
         </if>
         <if test="imageId != null">
             ,image_id = #{imageId}
@@ -32,13 +29,16 @@
     </insert>
     <select id="findList" resultType="Scene" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select * from scene
+        select s.*, ps.seq from scene s, project_scene ps where s.id=ps.sceneId
         where delete_flg=0
-        <if test="name != null and name !=''">
-            and name = #{name}
+        <if test="projectId != null">
+            and ps.project_id = #{projectId}
         </if>
         <if test="blockId != null">
             and block_id = #{blockId}
+        </if>
+        <if test="name != null and name !=''">
+            and name = #{name}
         </if>
         <if test="sceneTypeId != null">
             and scene_type_id = #{sceneTypeId}
@@ -47,22 +47,20 @@
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
-        select count(*) from scene
+        select count(*) from scene s, project_scene ps where s.id=ps.sceneId
         where delete_flg=0
-        <if test="name != null and name !=''">
-            and name = #{name}
+        <if test="projectId != null">
+            and ps.project_id = #{projectId}
         </if>
         <if test="blockId != null">
             and block_id = #{blockId}
         </if>
+        <if test="name != null and name !=''">
+            and name = #{name}
+        </if>
         <if test="sceneTypeId != null">
             and scene_type_id = #{sceneTypeId}
         </if>
-    </select>
-    <select id="findByProjectId" resultType="Scene" parameterType="java.lang.Integer">
-        select s.*, ps.seq from scene s, project_scene ps where  s.id=ps.sceneId
-        where ps.project_id=#{projectId}
-        order by seq
     </select>
     <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
         select id, name from scene
@@ -75,10 +73,16 @@
         </if>
         order by name
     </select>
-    <select id="findAll" resultType="Scene">
-        select * from scene
+    <select id="findAll" resultType="Scene" parameterType="Query">
+        select s.*, ps.seq from scene s, project_scene ps where s.id=ps.sceneId
         where delete_flg=0
-        order by name
+        <if test="projectId != null">
+            and ps.project_id = #{projectId}
+        </if>
+        <if test="blockId != null">
+            and block_id = #{blockId}
+        </if>
+        order by seq
     </select>
     <select id="findOne" resultType="Scene">
         select * from scene where id=#{id}

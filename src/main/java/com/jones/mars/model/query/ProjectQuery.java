@@ -1,6 +1,5 @@
-package com.jones.mars.model.param;
+package com.jones.mars.model.query;
 
-import com.jones.mars.model.Query;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,6 +11,8 @@ public class ProjectQuery extends Query {
     private Integer blockId;
     @ApiModelProperty(value="企业ID",name="enterpriseId")
     private Integer enterpriseId;
+    @ApiModelProperty(value="来源企业ID",name="oriEnterpriseId")
+    private Integer oriEnterpriseId;
     @ApiModelProperty(value="项目名称",name="name")
     private String name;
     @ApiModelProperty(value="一级分类ID",name="moduleId")

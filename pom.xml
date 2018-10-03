@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>mars</name>
-	<description>panao plateform</description>
+	<description>pano plateform</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public class LoginUtil {
-    public static final String CUR_USER = "cur_user";
-    public static final int SESSION_MAX_INACTIVE_INTERVAL = 43200;
+    public static final String CUR_USER = "authorization";
+    public static final int SESSION_MAX_INACTIVE_INTERVAL = 86400;
     public static LoginUtil INSTANCE = null;
 
     public static LoginUtil getInstance() {
@@ -20,7 +20,6 @@ public class LoginUtil {
                 }
             }
         }
-
         return INSTANCE;
     }
 
@@ -31,20 +30,20 @@ public class LoginUtil {
 
     private HttpSession getSession() {
         HttpSession session = getRequest().getSession(true);
-        session.setMaxInactiveInterval(43200);
+        session.setMaxInactiveInterval(SESSION_MAX_INACTIVE_INTERVAL);
         return session;
     }
 
     public User getUser() {
-        return (User) getSession().getAttribute("cur_user");
+        return (User) getSession().getAttribute(CUR_USER);
     }
 
     public void removeUser() {
-        getSession().removeAttribute("cur_user");
+        getSession().removeAttribute(CUR_USER);
     }
 
     public void setUser(User user) {
-        getSession().setAttribute("cur_user", user);
+        getSession().setAttribute(CUR_USER, user);
     }
 }
 

@@ -1,6 +1,6 @@
 package com.jones.mars.util;
 
-import com.jones.mars.model.Query;
+import com.jones.mars.model.query.Query;
 import lombok.Data;
 
 import java.util.List;

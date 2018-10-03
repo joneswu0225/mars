@@ -5,7 +5,7 @@ import com.jones.mars.model.param.UserLoginParam;
 import com.jones.mars.model.param.UserPasswordRestParam;
 import com.jones.mars.model.param.UserRegistParam;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.service.LoginService;
+import com.jones.mars.service.UserService;
 import com.jones.mars.support.ValidMobile;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -22,18 +22,18 @@ import javax.validation.Valid;
 public class LoginController extends BaseController {
 
     @Autowired
-    private LoginService loginService;
+    private UserService userService;
 
     @ApiOperation(value = "用户注册", notes = "用户注册")
     @PostMapping("regist")
     public BaseResponse regist(@Valid @RequestBody @ApiParam(required=true) UserRegistParam param) {
-        return loginService.regist(param);
+        return userService.regist(param);
     }
 
     @ApiOperation(value = "手机号查重", notes = "手机号查重")
     @GetMapping("{mobile}/exists")
     public BaseResponse exists(@PathVariable (value="mobile") @ValidMobile @ApiParam String mobile) {
-        return loginService.mobileExists(mobile);
+        return userService.mobileExists(mobile);
     }
 
     @ApiOperation(value = "获取验证码", notes = "注册时获取验证码手机号可以为空，其他情况需要有手机号")
@@ -42,7 +42,7 @@ public class LoginController extends BaseController {
         if (StringUtils.isEmpty(mobile)) {
             return BaseResponse.builder().data("HSE3").build();
         } else {
-            return loginService.getVerifyCode(mobile);
+            return userService.getVerifyCode(mobile);
         }
     }
 
@@ -53,13 +53,13 @@ public class LoginController extends BaseController {
         user.setMobile(param.getMobile());
         user.setVerifyCode(param.getVerifyCode());
         user.setPassword(param.getPassword());
-        return loginService.resetPassword(user);
+        return userService.resetPassword(user);
     }
 
     @ApiOperation(value = "登录", notes = "登录")
     @PostMapping("login")
     public BaseResponse login(@RequestBody @ApiParam(required=true) UserLoginParam param) {
-        return loginService.doLogin(param);
+        return userService.doLogin(param);
     }
 
 }

@@ -7,6 +7,5 @@ import java.util.List;
 
 @Repository
 public interface SceneMapper extends BaseMapper<Scene> {
-    List<Scene> findByProjectid(Integer projectId);
 }
 

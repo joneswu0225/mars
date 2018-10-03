@@ -1,38 +1,26 @@
 package com.jones.mars.service;
 
+import com.jones.mars.model.query.HotspotQuery;
+import com.jones.mars.object.BaseResponse;
+import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.HotspotMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HotspotService {
+public class HotspotService  extends BaseService{
 
-//    @Autowired
-//    private HotspotRepository hotspotRepository;
-//
-//    public Page<Hotspot> findByPage(Query<Hotspot> query) {
-//        return this.hotspotRepository.findByPage(query);
-//    }
-//
-//    public GeneralResponse saveHotspot(Hotspot hotspot) {
-//        GeneralResponse resp = new GeneralResponse(false, "添加失败，请重试！");
-//        if ((this.hotspotRepository.existsCode(hotspot.getCode())) && (hotspot.getHotspotId() == null)) {
-//            resp.setMsg("code 已存在！");
-//        } else {
-//            resp = new GeneralResponse(true, "");
-//            this.hotspotRepository.save(hotspot);
-//        }
-//        return resp;
-//    }
-//
-//    public List<Hotspot> findAll() {
-//        return this.hotspotRepository.findAll();
-//    }
-//
-//    public Hotspot findOne(Integer id) {
-//        return this.hotspotRepository.findOne(id);
-//    }
-//
-//    public void delete(Integer hotspotId) {
-//        this.hotspotRepository.delete(hotspotId);
-//    }
+    @Autowired
+    private HotspotMapper mapper;
+
+    @Override
+    public BaseMapper getMapper(){
+        return this.mapper;
+    }
+
+    public BaseResponse findAll(Integer sceneId){
+        return BaseResponse.builder().data(mapper.findAll(HotspotQuery.builder().sceneId(sceneId).build())).build();
+    }
 }
+
 

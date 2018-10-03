@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.ProjectMapper" >
+    <resultMap id="ProjectMap" type="Project" >
+        <id property="id" column="id" />
+        <association property="contents" column="project_id" select="com.jones.mars.repository.ProjectPartnerMapper.findByProjectId"/>
+    </resultMap>
     <insert id="insert" parameterType="Project" useGeneratedKeys="true" keyProperty="id">
-        insert into project(`name`, `detail`, `image_url`, `module_id`, `class_id`, `creator_id`, `status`, `create_time`, `update_time`)
-        values(#{name}, #{detail}, #{imageUrl}, #{moduleId}, #{classId}, #{creatorId}, #{status}, now(), now())
+        insert into project(`name`, `detail`, `image_url`, `module_id`, `class_id`, `creator_id`, `status`, `ori_enterprise_id`, `create_time`, `update_time`)
+        values(#{name}, #{detail}, #{imageUrl}, #{moduleId}, #{classId}, #{creatorId}, #{status}, #{oriEnterpriseId}, now(), now())
     </insert>
     <insert id="update" parameterType="Project">
         update project
@@ -43,8 +47,10 @@
     </insert>
     <select id="findList" resultType="Project" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select p.*,b.enterprise_id as enterpriseId, b.id as blockId, b.name as blockName, m.name as moduleName, c.name as className
-        from block b ,block_project bp , project p left join project_module m on p.module_id = m.id left join project_class c on p.class_id=c.id
+        select p.*, e.name as oriEnterpriseName, e.avatar as oriEnterpriseAvatar, b.id as blockId, b.name as blockName, m.name as moduleName, c.name as className
+        from block b ,block_project bp, project p
+        left join project_module m on p.module_id = m.id left join project_class c on p.class_id=c.id
+        left join enterprise e on p.ori_enterprise_id = e.id
         where bp.block_id = b.id and p.id=bp.project_id
         and p.delete_flg=0
         <if test="name != null and name !=''">
@@ -55,6 +61,9 @@
         </if>
         <if test="enterpriseId != null">
             and b.enterprise_id=#{enterpriseId}
+        </if>
+        <if test="oriEnterpriseId != null">
+            and p.ori_enterprise_id=#{oriEnterpriseId}
         </if>
         <if test="moduleId != null">
             and p.module_id=#{moduleId}
@@ -75,6 +84,12 @@
         </if>
         <if test="blockId != null">
             and b.id=#{blockId}
+        </if>
+        <if test="enterpriseId != null">
+            and b.enterprise_id=#{enterpriseId}
+        </if>
+        <if test="oriEnterpriseId != null">
+            and p.ori_enterprise_id=#{oriEnterpriseId}
         </if>
         <if test="moduleId != null">
             and p.module_id=#{moduleId}
@@ -107,8 +122,9 @@
         order by p.id desc
     </select>
     <select id="findOne" resultType="Project">
-        select p.*, b.id as blockId, b.name as blockName, m.name as moduleName, c.name as className
-        from block b ,block_project bp , project p left join project_module m on p.module_id = m.id left join project_class c on p.class_id=c.id    s
+        select p.*,e.name as oriEnterpriseName,e.avatar as oriEnterpriseAvatar, b.id as blockId, b.name as blockName, m.name as moduleName, c.name as className
+        from block b ,block_project bp , project p left join project_module m on p.module_id = m.id left join project_class c on p.class_id=c.id
+        left join enterprise e on p.ori_enterprise_id = e.id
         where p.id=#{id} and bp.block_id = b.id and p.id=bp.project_id
     </select>
     <update id="delete">

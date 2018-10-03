@@ -1,0 +1,12 @@
+package com.jones.mars.repository;
+
+import com.jones.mars.model.FileUpload;
+import com.jones.mars.model.query.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface FileUploadMapper extends BaseMapper<FileUpload > {
+    List<Object> findAllName(Query query);
+}

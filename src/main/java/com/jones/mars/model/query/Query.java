@@ -1,4 +1,4 @@
-package com.jones.mars.model;
+package com.jones.mars.model.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

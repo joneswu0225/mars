@@ -26,6 +26,9 @@ public class ProjectParam {
     @NotNull(message = "二级分类ID不能为空")
     @ApiModelProperty(value="二级分类ID",name="classId")
     private Integer classId;
+    @NotNull(message = "所属企业ID不能为空")
+    @ApiModelProperty(value="所属企业ID",name="classId")
+    private Integer oriEnterpriseId;
 
 }
 

@@ -45,6 +45,7 @@
         <if test="query != null and query.sceneId != null">
             and scene_id=#{sceneId}
         </if>
+
         order by id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
@@ -57,11 +58,19 @@
         </if>
     </select>
 
-    <select id="findAll" resultType="Hotspot">
-        select * from hotspot order by id desc
+    <select id="findAll" resultMap="HotspotMap" parameterType="Query">
+        select * from hotspot
+        where 1=1
+        <if test="query != null and query.sceneId != null">
+            and scene_id in
+            <foreach collection="query.sceneIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        order by id desc
     </select>
 
-    <select id="findOne" resultType="Hotspot">
+    <select id="findOne" resultMap="HotspotMap">
         select * from hotspot where id=#{id}
     </select>
 

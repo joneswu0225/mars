@@ -2,12 +2,15 @@ package com.jones.mars.service;
 
 import com.jones.mars.model.BlockProject;
 import com.jones.mars.model.Project;
+import com.jones.mars.model.ProjectPartner;
 import com.jones.mars.model.param.ProjectParam;
-import com.jones.mars.model.Query;
+import com.jones.mars.model.query.Query;
+import com.jones.mars.model.param.ProjectPartnerParam;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
 import com.jones.mars.repository.BlockProjectMapper;
 import com.jones.mars.repository.ProjectMapper;
+import com.jones.mars.repository.ProjectPartnerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +24,8 @@ public class ProjectService extends BaseService {
     private ProjectMapper mapper;
     @Autowired
     private BlockProjectMapper blockProjectMapper;
+    @Autowired
+    private ProjectPartnerMapper projectPartnerMapper;
 
     @Override
     public BaseMapper getMapper(){
@@ -34,12 +39,30 @@ public class ProjectService extends BaseService {
         System.out.println(project.getId());
         BlockProject blockProject = BlockProject.builder().blockId(param.getBlockId()).projectId(project.getId()).build();
         blockProjectMapper.insert(blockProject);
+        // TODO 添加项目创建人为共建人（管理员）
+        // Integer creatorId = 1;
+//         projectPartnerMapper.insert(ProjectPartnerParam.builder().userIds(new Integer[]{creatorId}).projectId(project.getId()).managerFlg(ProjectPartner.PARTNER_MANAGER).build());
         return BaseResponse.builder().build();
     }
 
     public BaseResponse allName(Query query){
         List<Object> list = mapper.findAllName(query);
         return BaseResponse.builder().data(list).build();
+    }
+
+    public BaseResponse addParners(Integer projectId, Integer... userIds){
+        projectPartnerMapper.insert(ProjectPartnerParam.builder().projectId(projectId).userIds(userIds).build());
+        return BaseResponse.builder().build();
+    }
+
+    public BaseResponse updatePartnerFlg(Integer projectPartnerId, Integer managerFlg){
+        projectPartnerMapper.update(ProjectPartner.builder().id(projectPartnerId).managerFlg(managerFlg).build());
+        return BaseResponse.builder().build();
+    }
+
+    public BaseResponse deletePartner(Integer projectPartnerId){
+        projectPartnerMapper.delete(ProjectPartner.builder().id(projectPartnerId).build());
+        return BaseResponse.builder().build();
     }
 
 }

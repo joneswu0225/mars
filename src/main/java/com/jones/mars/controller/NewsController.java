@@ -2,7 +2,7 @@ package com.jones.mars.controller;
 
 import com.jones.mars.model.News;
 import com.jones.mars.model.param.NewsParam;
-import com.jones.mars.model.Query;
+import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.NewsService;
 import io.swagger.annotations.Api;
@@ -33,6 +33,12 @@ public class NewsController extends BaseController {
     @PostMapping("")
     public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) NewsParam param) {
         return service.add(param);
+    }
+
+    @ApiOperation(value = "新闻动态详情", notes = "新闻动态详情")
+    @GetMapping("{newsId}")
+    public BaseResponse findOne(@PathVariable Integer newsId) {
+        return service.findById(newsId);
     }
 
     @ApiOperation(value = "更新新闻动态", notes = "更新新闻动态")

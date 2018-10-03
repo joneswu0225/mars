@@ -1,7 +1,7 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.model.Message;
-import com.jones.mars.model.Query;
+import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.MessageService;
 import io.swagger.annotations.Api;

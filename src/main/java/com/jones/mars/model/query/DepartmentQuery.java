@@ -1,6 +1,5 @@
-package com.jones.mars.model.param;
+package com.jones.mars.model.query;
 
-import com.jones.mars.model.Query;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

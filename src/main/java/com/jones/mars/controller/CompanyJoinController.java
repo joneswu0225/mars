@@ -1,7 +1,7 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.model.param.CompanyJoinParam;
-import com.jones.mars.model.Query;
+import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.CompanyJoinService;
 import io.swagger.annotations.Api;

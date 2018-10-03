@@ -18,6 +18,8 @@ public class Enterprise {
     private Integer id;
     private String name;
     private String detail;
+    private String avatar;
+    private String imagePath;
     private Integer managerId;
     private String managerName;
     private String basePath;

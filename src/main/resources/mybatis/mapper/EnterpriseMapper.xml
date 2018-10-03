@@ -25,13 +25,13 @@
     </insert>
     <select id="findList" resultType="Enterprise" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select d.*, p.name as managerName from enterprise d left join user_profile p on d.manager_id = p.user_id
+        select d.*, p.sgname as managerName from enterprise d left join user_profile p on d.manager_id = p.user_id
         where 1=1
-        <if test="query != null and query.name != null and query.name !=''">
-            and d.name like concat('%',#{query.name},'%')
+        <if test="name != null and name !=''">
+            and d.name like concat('%',#{name},'%')
         </if>
-        <if test="query != null and query.plateformFlg != null">
-            and d.plateform_flg = #{query.plateformFlg}
+        <if test="plateformFlg != null">
+            and d.plateform_flg = #{plateformFlg}
         </if>
         order by d.id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
@@ -39,21 +39,36 @@
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from enterprise d
         where 1=1
-        <if test="query != null and query.name != null and query.name !=''">
-            and d.name like concat('%',#{query.name},'%')
+        <if test="name != null and name !=''">
+            and d.name like concat('%',#{name},'%')
         </if>
-        <if test="query != null and query.plateformFlg != null">
-            and d.plateform_flg = #{query.plateformFlg}
+        <if test="plateformFlg != null">
+            and d.plateform_flg = #{plateformFlg}
         </if>java.lang.
     </select>
     <select id="findAllName" resultType="Enterprise" parameterType="Query">
         select id, name from enterprise d
         where 1=1
-        <if test="query != null and query.name != null and query.name !=''">
-            and d.name like concat('%',#{query.name},'%')
+        <if test="name != null and name !=''">
+            and d.name like concat('%',#{name},'%')
         </if>
-        <if test="query != null and query.plateformFlg != null">
-            and d.plateform_flg = #{query.plateformFlg}
+        <if test="plateformFlg != null">
+            and d.plateform_flg = #{plateformFlg}
+        </if>
+        order by id desc
+    </select>
+    <select id="findUserEnterprise" resultType="Enterprise" parameterType="Query">
+        select e.*
+        from enterprise e, enterprise_user u
+        where e.id=u.enterprise_id
+        <if test="userId != null">
+            and u.user_id=#{userId}
+        </if>
+        <if test="name != null and name !=''">
+            and e.name like concat('%',#{name},'%')
+        </if>
+        <if test="plateformFlg != null">
+            and e.plateform_flg = #{plateformFlg}
         </if>
         order by id desc
     </select>
@@ -61,7 +76,7 @@
         select * from enterprise order by id desc
     </select>
     <select id="findOne" resultType="Enterprise">
-        select d.*, p.name as managerName from enterprise d left join user_profile p on d.manager_id = p.user_id
+        select d.*, p.sgname as managerName from enterprise d left join user_profile p on d.manager_id = p.user_id
         where id=#{id}
     </select>
     <update id="delete">

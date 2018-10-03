@@ -1,6 +1,6 @@
 package com.jones.mars.service;
 
-import com.jones.mars.model.Query;
+import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
 import com.jones.mars.util.Page;
@@ -37,6 +37,16 @@ public abstract class BaseService<T> {
     public BaseResponse update(Object param){
         getMapper().update(param);
         return BaseResponse.builder().build();
+    }
+
+    /**
+     * 获取详情
+     * @param id
+     * @return
+     */
+    public BaseResponse findById(Integer id){
+        Object item = getMapper().findOne(id);
+        return BaseResponse.builder().data(item).build();
     }
 
     /**

@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.UserMapper" >
     <insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        insert into user(`mobile`, `password`, `user_type`, `unique_code`, `create_time`, `update_time`)
-        values(#{mobile}, #{password}, #{userType}, #{uniqueCode}, now(), now());
+        insert into user(`mobile`, `password`, `user_type`, `create_time`, `update_time`)
+        values(#{mobile}, #{password}, #{userType}, now(), now());
     </insert>
     <insert id="insertProfile" parameterType="User" useGeneratedKeys="true" keyProperty="id">
         insert into user_profile(`user_id`, `sgname`, `job`, `province`, `city`, `address`, `description`, `birthday`, `avatar`, `namecard`)
@@ -48,9 +48,6 @@
         <if test="password != null and password !=''">
             ,password = #{password}
         </if>
-        <if test="uniqueCode != null and uniqueCode !=''">
-            ,unique_code = #{uniqueCode}
-        </if>
         <if test="verifyCode != null and verifyCode !=''">
             ,verify_code = #{verifyCode}
         </if>
@@ -66,14 +63,17 @@
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select u.*, p.sgname,p.job,p.email,p.province,p.city,p.address, p.birthday, p.avatar, p.namecard from user u left join user_profile p on u.id=p.user_id
         where u.delete_flg=0
-        <if test="query != null and query.mobile != null and query.mobile !=''">
-            and u.mobile = #{query.mobile}
+        <if test="verifyCode != null and verifyCode !=''">
+            and u.verify_code = #{verifyCode}
         </if>
-        <if test="query != null and query.sgname != null and query.sgname !=''">
-            and p.sgname like concat('%',#{query.sgname},'%')
+        <if test="password != null and password !=''">
+            and u.password = #{password}
         </if>
-        <if test="query != null and query.uniqueCode != null and query.uniqueCode !=''">
-            and p.unique_code = #{query.uniqueCode}
+        <if test="mobile != null and mobile !=''">
+            and u.mobile = #{mobile}
+        </if>
+        <if test="sgname != null and sgname !=''">
+            and p.sgname like concat('%',#{sgname},'%')
         </if>
         order by u.id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
@@ -81,14 +81,17 @@
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(1) from `user` u left join user_profile p on u.id=p.user_id
         where delete_flg=0
-        <if test="query != null and query.mobile != null and query.mobile !=''">
-            and u.mobile = #{query.mobile}
+        <if test="verifyCode != null and verifyCode !=''">
+            and u.verify_code = #{verifyCode}
         </if>
-        <if test="query != null and query.sgname != null and query.sgname !=''">
-            and p.sgname like concat('%',#{query.sgname},'%')
+        <if test="password != null and password !=''">
+            and u.password = #{password}
         </if>
-        <if test="query != null and query.uniqueCode != null and query.uniqueCode !=''">
-            and p.unique_code = #{query.uniqueCode}
+        <if test="mobile != null and mobile !=''">
+            and u.mobile = #{mobile}
+        </if>
+        <if test="sgname != null and sgname !=''">
+            and p.sgname like concat('%',#{sgname},'%')
         </if>
     </select>
     <select id="findAll" resultType="User">
