@@ -89,9 +89,7 @@ public class UserService extends BaseService<User>{
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse getVerifyCode(String mobile){
         String verifyCode = RandomString.generateVerifyCode();
-        User newUserParam = new User();
-        newUserParam.setMobile(mobile);
-        List<User> users = mapper.findList(new Query(newUserParam));
+        List<User> users = mapper.findList(UserQuery.builder().mobile(mobile).build());
         if(users.size() == 1){
             User user_db = users.get(0);
             User user_update = new User();

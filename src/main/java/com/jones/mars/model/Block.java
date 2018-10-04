@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.BlockParam;
 import lombok.Builder;
 import lombok.Data;
@@ -9,11 +10,8 @@ import java.util.Date;
 @Data
 @Builder
 public class Block {
-    public static final int PLATEFROM = 1;
-    public static final int NOPLATEFROM = 0;
-
     private Integer id;
-    private Integer plateformFlg = NOPLATEFROM;
+    private Integer plateformFlg = CommonConstant.NOPLATEFROM;
     private String detail;
     private Integer operatorId;
     private Date updateTime;

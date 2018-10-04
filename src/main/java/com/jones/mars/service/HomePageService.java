@@ -3,6 +3,7 @@ package com.jones.mars.service;
 import com.jones.mars.model.Block;
 import com.jones.mars.model.Enterprise;
 import com.jones.mars.model.Project;
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.query.EnterpriseQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.model.query.ProjectQuery;
@@ -39,9 +40,9 @@ public class HomePageService{
     }
 
     private void refreshPlateformEnterprise(){
-        Map<Integer, Enterprise> plateformEnterpriseMap = mapper.findAllName(EnterpriseQuery.builder().plateformFlg(Enterprise.PLATEFROM).build())
+        Map<Integer, Enterprise> plateformEnterpriseMap = mapper.findAllName(EnterpriseQuery.builder().plateformFlg(CommonConstant.PLATEFROM).build())
                 .stream().collect(Collectors.toMap(Enterprise::getId, p->p));
-        List<Block> blockList = blockMapper.findList(new Query(Block.builder().plateformFlg(Block.PLATEFROM).build()));
+        List<Block> blockList = blockMapper.findList(new Query(Block.builder().plateformFlg(CommonConstant.PLATEFROM).build()));
         blockList.forEach(p->{
             if(plateformEnterpriseMap.containsKey(p.getEnterpriseId())){
                 plateformEnterpriseMap.get(p.getEnterpriseId()).getBlockList().add(p);

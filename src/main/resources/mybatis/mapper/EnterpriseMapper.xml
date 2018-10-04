@@ -44,7 +44,7 @@
         </if>
         <if test="plateformFlg != null">
             and d.plateform_flg = #{plateformFlg}
-        </if>java.lang.
+        </if>
     </select>
     <select id="findAllName" resultType="Enterprise" parameterType="Query">
         select id, name from enterprise d
@@ -60,7 +60,7 @@
     <select id="findUserEnterprise" resultType="Enterprise" parameterType="Query">
         select e.*
         from enterprise e, enterprise_user u
-        where e.id=u.enterprise_id
+        where e.id=u.enterprise_id and e.plateform_flg=0
         <if test="userId != null">
             and u.user_id=#{userId}
         </if>
