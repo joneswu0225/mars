@@ -25,6 +25,7 @@ public class Enterprise {
     private Date createTime;
     private Integer plateformFlg = CommonConstant.NOPLATEFROM;
     private List<Block> blockList = new ArrayList<>();
+    private List<Role> roleList = new ArrayList<>();
 
     public static EnterpriseBuilder enterpriseBuilder(EnterpriseParam param){
         return builder().name(param.getName()).detail(param.getDetail()).managerId(param.getManagerId());

@@ -4,18 +4,17 @@ import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.exception.InternalException;
 import com.jones.mars.model.Enterprise;
 import com.jones.mars.model.User;
-import com.jones.mars.model.constant.UserType;
-import com.jones.mars.model.query.Query;
-import com.jones.mars.model.query.EnterpriseQuery;
 import com.jones.mars.model.param.UserLoginParam;
 import com.jones.mars.model.param.UserRegistParam;
+import com.jones.mars.model.query.EnterpriseQuery;
+import com.jones.mars.model.query.Query;
 import com.jones.mars.model.query.UserQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
 import com.jones.mars.repository.EnterpriseMapper;
+import com.jones.mars.repository.RoleMapper;
 import com.jones.mars.repository.UserMapper;
 import com.jones.mars.util.LoginUtil;
-import com.jones.mars.util.Md5Util;
 import com.jones.mars.util.RandomString;
 import com.jones.mars.util.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +34,8 @@ public class UserService extends BaseService<User>{
     private UserMapper mapper;
     @Autowired
     private EnterpriseMapper enterpriseMapper;
+    @Autowired
+    private RoleMapper roleMapper;
 
     private boolean exists(String mobile){
         User user = new User();
@@ -71,7 +72,7 @@ public class UserService extends BaseService<User>{
             user.setMobile(param.getMobile());
             // TODO 对密码加密
             user.setPassword(param.getPassword());
-            user.setUserType(UserType.COMMON);
+            user.setUserType(User.COMMON);
             mapper.insert(user);
             mapper.insertProfile(user);
             return BaseResponse.builder().data(user.getId()).build();
@@ -164,6 +165,10 @@ public class UserService extends BaseService<User>{
                 result.put("enterprises", enterprises);
                 user_db.setEnterprises(enterprises);
             }
+//            if(user_db.getUserType().equals(User.COMMON)){
+//                List<Block> roleList = roleMapper.findGrantedBlock(user_db.getId());
+//                result.put("roles", roleList);
+//            }
             result.put("expireTime", new Date(now.getTime() + LoginUtil.SESSION_MAX_INACTIVE_INTERVAL));
             LoginUtil.getInstance().setUser(user_db);
             return BaseResponse.builder().data(result).build();

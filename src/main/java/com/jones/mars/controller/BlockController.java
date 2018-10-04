@@ -2,6 +2,7 @@ package com.jones.mars.controller;
 
 import com.jones.mars.model.Block;
 import com.jones.mars.model.param.BlockParam;
+import com.jones.mars.model.query.BlockQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.BlockService;
@@ -23,8 +24,8 @@ public class BlockController extends BaseController {
 
     @ApiOperation(value = "模块列表", notes = "模块列表")
     @GetMapping("")
-    public BaseResponse list(@ApiParam Query query) {
-        return service.findByPage(query);
+    public BaseResponse list(@ApiParam BlockQuery query) {
+        return service.findBlocks(query);
     }
 
     @ApiOperation(value = "新增模块", notes = "")

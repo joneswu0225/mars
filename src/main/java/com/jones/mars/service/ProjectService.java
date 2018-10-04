@@ -7,10 +7,7 @@ import com.jones.mars.model.param.ProjectParam;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.model.param.ProjectPartnerParam;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
-import com.jones.mars.repository.BlockProjectMapper;
-import com.jones.mars.repository.ProjectMapper;
-import com.jones.mars.repository.ProjectPartnerMapper;
+import com.jones.mars.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +23,8 @@ public class ProjectService extends BaseService {
     private BlockProjectMapper blockProjectMapper;
     @Autowired
     private ProjectPartnerMapper projectPartnerMapper;
+    @Autowired
+    private ProjectModuleMapper projectModuleMapper;
 
     @Override
     public BaseMapper getMapper(){

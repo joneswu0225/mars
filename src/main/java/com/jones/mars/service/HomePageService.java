@@ -1,16 +1,12 @@
 package com.jones.mars.service;
 
-import com.jones.mars.model.Block;
-import com.jones.mars.model.Enterprise;
-import com.jones.mars.model.Project;
+import com.jones.mars.model.*;
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.query.EnterpriseQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.model.query.ProjectQuery;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BlockMapper;
-import com.jones.mars.repository.EnterpriseMapper;
-import com.jones.mars.repository.ProjectMapper;
+import com.jones.mars.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +24,10 @@ public class HomePageService{
     private BlockMapper blockMapper;
     @Autowired
     private ProjectMapper projectMapper;
+    @Autowired
+    private ProjectModuleMapper projectModuleMapper;
+    @Autowired
+    private ProjectClassMapper projectClassMapper;
 
     private Map<Integer, Enterprise> plateformEnterpriseMap;
     private List<Project> recommendProjects;

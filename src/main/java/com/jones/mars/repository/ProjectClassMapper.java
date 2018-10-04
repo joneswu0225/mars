@@ -1,6 +1,6 @@
 package com.jones.mars.repository;
 
-import com.jones.mars.model.constant.ProjectClass;
+import com.jones.mars.model.ProjectClass;
 import org.springframework.stereotype.Repository;
 
 @Repository

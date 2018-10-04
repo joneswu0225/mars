@@ -71,6 +71,9 @@
         <if test="classId != null">
             and p.class_id=#{classId}
         </if>
+        <if test="filterDownShelf != null and filterDownShelf == 1">
+            and p.status != 3
+        </if>
         order by p.id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
@@ -96,6 +99,9 @@
         </if>
         <if test="classId != null">
             and p.class_id=#{classId}
+        </if>
+        <if test="filterDownShelf != null and filterDownShelf == 1">
+            and p.status != 3
         </if>
     </select>
     <select id="findAllName" resultType="Project" parameterType="Query">

@@ -6,44 +6,51 @@
         values(#{name}, #{moduleId})
     </insert>
     <insert id="update" parameterType="ProjectClass">
-        update project_class set name = #{name},#{module_id}=#{moduleId} where id=#{id}
+        update project_class set name = #{name} where id=#{id}
     </insert>
     <select id="findList" resultType="ProjectClass" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select * from project_class
-        where 1=1
+        select c.* from project_class c left join project_module m on c.module_id = m.id
+        where delete_flg=0
         <if test="moduleId != null">
             and module_id = #{moduleId}
         </if>
-        <if test="publicFlg != null">
-            and public_flg = #{publicFlg}
+        <if test="blockId != null">
+            and m.block_id = #{blockId}
         </if>
         order by name
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
-        select count(*) from project_class
-        where 1=1
+        select count(*) from project_class c left join project_module m on c.module_id = m.id
+        where delete_flg=0
         <if test="moduleId != null">
             and module_id = #{moduleId}
         </if>
-        <if test="publicFlg != null">
-            and public_flg = #{publicFlg}
+        <if test="blockId != null">
+            and m.block_id = #{blockId}
         </if>
     </select>
     <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
-        select id, name from project_class
-        where 1=1
+        select id, name from project_class c left join project_module m on c.module_id = m.id
+        where delete_flg=0
         <if test="moduleId != null">
             and module_id = #{moduleId}
         </if>
-        <if test="publicFlg != null">
-            and public_flg = #{publicFlg}
+        <if test="blockId != null">
+            and m.block_id = #{blockId}
         </if>
         order by name
     </select>
-    <select id="findAll" resultType="ProjectClass">
-        select * from project_class order by name
+    <select id="findAll" resultType="ProjectClass" parameterType="Query">
+        select * from project_class where delete_flg=0
+        <if test="moduleId != null">
+            and module_id = #{moduleId}
+        </if>
+        <if test="blockId != null">
+            and m.block_id = #{blockId}
+        </if>
+        order by name
     </select>
     <select id="findOne" resultType="ProjectClass">
         select * from project_class where id=#{id}

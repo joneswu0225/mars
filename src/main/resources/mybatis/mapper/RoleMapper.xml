@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.RoleMapper" >
+    <resultMap id="BlockMap" type="Block" >
+        <id column="blockId" property="id"/>
+        <result column="enterpirse_id" property="enterpriseId" />
+        <result column="blockName" property="name" />
+        <result column="blockStatus" property="status" />
+        <collection property="moduleList" ofType="ProjectModule" column="blockId">
+            <id column="moduleId" property="id"/>
+            <result column="blockId" property="blockId"/>
+            <result column="moduleName" property="name"/>
+            <collection property="classList" ofType="ProjectClass" column="moduleId">
+                <id column="classId" property="id"/>
+                <result column="module_id" property="moduleId"/>
+                <result column="className" property="name"/>
+                <result column="operation" property="operation"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="findGrantedBlock" resultMap="BlockMap">
+        select r.enterprise_id, r.block_id as blockId, b.name as blockName,b.status as blockStatus,
+        m.id as moduleId, m.name as moduleName, c.id as classId, c.name as className, p.operation
+        from user_role ur, role r, role_permission p, project_class c, project_module m, block b
+        where ur.role_id=r.id and ur.role_id=p.role_id and p.class_id=c.id and c.module_id=m.id and r.block_id=b.id
+        and ur.user_id=#{userId}
+        <if test="enterpriseId != null">
+            and r.enterprise_id = #{enterpriseId}
+        </if>
+        order by r.enterprise_id, r.block_id, m.id
+    </select>
+
     <insert id="insert" parameterType="Role">
         insert into role(`name`, `block_id`, `enterprise_id`, `create_time`, `update_time`)
         values(#{name}, #{blockId}, #{enterpriseId}, now(), now())
@@ -8,19 +37,59 @@
     <insert id="update" parameterType="Role">
         update role set name = #{name}, update_name=now() where id=#{id}
     </insert>
-    <select id="findList" resultType="Role" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select * from role
+    <resultMap id="RolePermissionMap" type="Role" >
+        <id property="id" column="id" />
+        <id property="name" column="name" />
+        <id property="block_id" column="blockId" />
+        <id property="update_time" column="updateTime" />
+        <id property="create_time" column="createTime" />
+        <collection property="permissionList" ofType="RolePermission" column="role_id">
+            <id column="permissionId" property="id"/>
+            <result column="role_id" property="roleId"/>
+            <result column="class_id" property="classId"/>
+            <result column="operation" property="operation"/>
+        </collection>
+    </resultMap>
+    <select id="findPermissionList" resultMap="RolePermissionMap" parameterType="Query">
+        select r.id, r.name, r.block_id,r.update_time, r.create_time, p.id as permissionId, p.role_id, p.class_id, p.operation
+        from role r left join role_permission p on r.id=p.role_id
         where delete_flg=0
         <if test="blockId != null">
-            and block_id = #{blockId}
+            and r.block_id = #{blockId}
         </if>
         <if test="enterpriseId != null">
-            and enterprise_id = #{enterpriseId}
+            and r.enterprise_id = #{enterpriseId}
+        </if>
+        order by id desc
+    </select>
+    <resultMap id="RoleUserMap" type="Role" >
+        <id property="id" column="id" />
+        <id property="name" column="name" />
+        <id property="block_id" column="blockId" />
+        <id property="blockName" column="blockName" />
+        <id property="update_time" column="updateTime" />
+        <id property="create_time" column="createTime" />
+        <collection property="userList" ofType="User" column="user_id">
+            <id column="user_id" property="id"/>
+            <result column="sgname" property="sgname"/>
+        </collection>
+    </resultMap>
+    <select id="findList" resultMap="RoleUserMap" parameterType="Query">
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select r.id, r.name, r.block_id, b.name as blockName,r.update_time, r.create_time, p.id as permissionId, p.role_id, p.class_id, p.operation
+        from role r left join user_role ur on r.id=ur.role_id left join user_profile u on ur.user_id=u.sgname
+        left join block b on r.block_id=b.id
+        where delete_flg=0
+        <if test="blockId != null">
+            and r.block_id = #{blockId}
+        </if>
+        <if test="enterpriseId != null">
+            and r.enterprise_id = #{enterpriseId}
         </if>
         order by id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
+
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from role
         where delete_flg=0
@@ -39,8 +108,10 @@
     <select id="findAll" resultType="Role">
         select * from role order by name
     </select>
-    <select id="findOne" resultType="Role">
-        select * from role where id=#{id}
+    <select id="findOne" resultMap="RolePermissionMap">
+        select r.id, r.name, r.block_id,r.update_time, r.create_time, p.id as permissionId, p.role_id, p.class_id, p.operation
+        from role r left join role_permission p on r.id=p.role_id
+        where id=#{id}
     </select>
     <update id="delete">
         update role set delete_flg=1 where id=#{id}

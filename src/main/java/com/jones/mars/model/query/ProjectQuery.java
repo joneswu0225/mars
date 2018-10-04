@@ -19,4 +19,6 @@ public class ProjectQuery extends Query {
     private Integer moduleId;
     @ApiModelProperty(value="二级分类ID",name="classId")
     private Integer classId;
+    @ApiModelProperty(value="隐藏下架，1：隐藏，0：显示",name="filterDownShelf")
+    private Integer filterDownShelf;
 }

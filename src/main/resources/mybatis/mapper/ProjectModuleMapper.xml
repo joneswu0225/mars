@@ -1,28 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.ProjectModuleMapper" >
+    <resultMap id="ProjectModuleMap" type="ProjectModule" >
+        <id property="id" column="id" />
+        <id property="name" column="name" />
+        <id property="block_id" column="blockId" />
+        <collection property="classList" ofType="ProjectClass" column="module_id">
+            <id column="classId" property="id"/>
+            <result column="module_id" property="moduleId"/>
+            <result column="className" property="name"/>
+        </collection>
+    </resultMap>
     <insert id="insert" parameterType="ProjectModule">
-        insert into project_module(`name`, `create_flg`)
-        values(#{name}, #{createFlg})
+        insert into project_module(`name`, `block_id`)
+        values(#{name}, #{blockId})
     </insert>
     <insert id="update" parameterType="ProjectModule">
-        update project_module set name = #{name}, create_flg=#{createFlg} where id=#{id}
+        update project_module set name = #{name} where id=#{id}
     </insert>
-    <select id="findList" resultType="ProjectModule" parameterType="Query">
+    <select id="findList" resultMap="ProjectModuleMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select * from project_module
-        where delete_flg=0
-        <if test="publicFlg != null">
-            and public_flg = #{publicFlg}
+        select m.*, c.id as classId, c.name as className, c.module_id
+        from project_module m left join project_class c on m.id=c.module_id
+        where m.delete_flg=0
+        <if test="blockId != null">
+            and m.block_id = #{blockId}
         </if>
-        order by name
+        <if test="blockIdIn != null">
+            and m.block_id in
+            <foreach collection="blockIdIn" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        order by m.name, c.name
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from project_module
         where delete_flg=0
-        <if test="publicFlg != null">
-            and public_flg = #{publicFlg}
+        <if test="blockId != null">
+            and block_id = #{blockId}
+        </if>
+        <if test="blockIdIn != null">
+            and m.block_id in
+            <foreach collection="blockIdIn" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
         </if>
     </select>
     <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
@@ -33,9 +56,18 @@
         </if>
         order by name
     </select>
-    <select id="findAll" resultType="ProjectModule">
-        select * from project_module
+    <select id="findAll" resultMap="ProjectModuleMap" parameterType="Query">
+        select m.*, c.id as classId, c.name as className, c.module_id from project_module m left join project_class c on m.id=c.module_id
         where delete_flg=0
+        <if test="blockId != null">
+            and m.block_id = #{blockId}
+        </if>
+        <if test="blockIdIn != null">
+            and m.block_id in
+            <foreach collection="blockIdIn" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
         order by name
     </select>
     <select id="findOne" resultType="ProjectModule">

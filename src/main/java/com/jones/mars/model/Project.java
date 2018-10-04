@@ -11,6 +11,11 @@ import java.util.List;
 @Data
 @Builder
 public class Project {
+    public static final int EDITIND = 0;
+    public static final int VERIFYING = 1;
+    public static final int ONSHELF = 2;
+    public static final int DOWNSHELF = 3;
+
     private Integer id;
     private String name;
     private String detail;
