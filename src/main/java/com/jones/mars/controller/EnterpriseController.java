@@ -34,7 +34,7 @@ public class EnterpriseController extends BaseController {
     @ApiOperation(value = "新增企业", notes = "")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) EnterpriseParam param) {
-        return service.add(Enterprise.enterpriseBuilder(param).build());
+        return service.add(param);
     }
 
     @ApiOperation(value = "企业详情", notes = "企业详情")
@@ -48,7 +48,8 @@ public class EnterpriseController extends BaseController {
     public BaseResponse update(
             @PathVariable Integer enterpriseId,
             @RequestBody @ApiParam(required=true) EnterpriseParam param) {
-        return service.update(Enterprise.enterpriseBuilder(param).id(enterpriseId).build());
+        param.setId(enterpriseId);
+        return service.update(param);
     }
 
     @ApiOperation(value = "删除企业", notes = "")

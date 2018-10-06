@@ -2,6 +2,7 @@ package com.jones.mars.service;
 
 import com.jones.mars.model.CompanyJoin;
 import com.jones.mars.model.param.CompanyJoinParam;
+import com.jones.mars.model.param.CompanyJoinUpdateParam;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
 import com.jones.mars.repository.CompanyJoinMapper;
@@ -26,18 +27,17 @@ public class CompanyJoinService extends BaseService{
      */
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse join(CompanyJoinParam param){
-        mapper.insert(CompanyJoin.companyJoinBuilder(param).build());
+        mapper.insert(param);
         return BaseResponse.builder().build();
     }
 
     /**
      * 更新企业入驻信息
-     * @param remark
+     * @param param
      * @return
      */
-    public BaseResponse updateStaus(String remark){
-        // 设置状态为已经处理
-        mapper.update(CompanyJoin.builder().status(1).remark(remark).build());
+    public BaseResponse updateStaus(CompanyJoinUpdateParam param){
+        mapper.update(CompanyJoin.builder().status(param.getStatus()).remark(param.getRemark()).build());
         return BaseResponse.builder().build();
     }
 

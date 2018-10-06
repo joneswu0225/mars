@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.ProjectSceneMapper" >
-    <insert id="insert" parameterType="ProjectScene">
-        insert into project_scene(`project_id`, `scene_id`, `seq`)
-        values(#{projectId}, #{sceneId}, #{seq})
-        ON DUPLICATE KEY
-        UPDATE `project_scene` set seq = #{seq} where project_id = #{projectId} and scene_id=#{sceneId}
+    <insert id="insert" parameterType="ProjectSceneParam">
+        <foreach collection="userIds" item="userId" index="index" open="(" close=")" separator=",">
+            insert into project_scene(`project_id`, `scene_id`, `seq`)
+            values(#{projectId}, #{sceneId}, #{index})
+            ON DUPLICATE KEY
+            UPDATE `project_scene` set seq = #{index} where project_id = #{projectId} and scene_id=#{sceneId};
+        </foreach>
     </insert>
     <delete id="delete" parameterType="ProjectScene">
         delete from project_scene where project_id = #{projectId} and scene_id=#{sceneId}

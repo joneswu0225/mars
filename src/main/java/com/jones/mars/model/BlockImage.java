@@ -18,8 +18,5 @@ public class BlockImage {
     private Date updateTime;
     private Date createTime;
 
-    public static BlockImage.BlockImageBuilder blockImageBuilder(BlockImageParam param){
-        return builder().name(param.getName()).blockId(param.getBlockId()).detail(param.getDetail()).path(param.getPath());
-    }
 }
 

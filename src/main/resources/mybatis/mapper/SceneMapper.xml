@@ -63,13 +63,19 @@
         </if>
     </select>
     <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
-        select id, name from scene
+        select distinct(s.id, s.name) from scene s left join project_scene ps on ps.scene_id = s.id left join project p on ps.project_id=p.id
         where delete_flg=0
-        <if test="name != null and name !=''">
-            and name = #{name}
-        </if>
         <if test="blockId != null">
             and block_id = #{blockId}
+        </if>
+        <if test="projectId != null">
+            and ps.project_id = #{projectId}
+        </if>
+        <if test="moduleId != null">
+            and p.module_id = #{moduleId}
+        </if>
+        <if test="classId != null">
+            and p.class_id = #{classId}
         </if>
         order by name
     </select>

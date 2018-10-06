@@ -2,6 +2,7 @@ package com.jones.mars.model.param;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,5 +16,7 @@ public class EnterpriseShownParam {
     private String imageUrl;
     @ApiModelProperty(value="关联企业",name="enterpriseId", allowEmptyValue=true)
     private Integer enterpriseId;
+    @ApiParam(hidden = true)
+    private Integer id;
 }
 

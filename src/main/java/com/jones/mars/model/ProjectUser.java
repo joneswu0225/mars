@@ -7,12 +7,13 @@ import java.util.Date;
 
 @Data
 @Builder
-public class ProjectPartner {
-  public static final int PARTNER_MANAGER = 1;
-  public static final int PARTNER_NORMAL = 0;
+public class ProjectUser {
+  public static final int PROJECT_MANAGER = 1;
+  public static final int PROJECT_NORMAL = 0;
   private Integer id;
   private Integer projectId;
   private Integer userId;
-  private Integer managerFlg = PARTNER_NORMAL;
+  private String sgname;
+  private Integer managerFlg = PROJECT_NORMAL;
 }
 

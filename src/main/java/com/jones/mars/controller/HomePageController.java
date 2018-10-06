@@ -1,5 +1,8 @@
 package com.jones.mars.controller;
 
+import com.jones.mars.constant.ErrorCode;
+import com.jones.mars.model.Project;
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.query.ProjectQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.HomePageService;
@@ -25,8 +28,6 @@ public class HomePageController{
     private HomePageService service;
     @Autowired
     private ProjectService projectService;
-    @Autowired
-    private ProjectModuleService projectModuleService;
 
     @ApiOperation(value = "获取船福专题、全景船舶、全景设备下所有子模块名称", notes = "")
     @GetMapping("moduleInfo")
@@ -40,11 +41,21 @@ public class HomePageController{
         return service.recommendProjects();
     }
 
+    @ApiOperation(value = "首页入驻品牌", notes = "")
+    @GetMapping("brand")
+    public BaseResponse enterpriserShown() {
+        return service.enterpriseShown();
+    }
 
     @ApiOperation(value = "项目详情", notes = "项目详情")
     @GetMapping("project/{projectId}")
     public BaseResponse findOne(@PathVariable Integer projectId) {
-        return projectService.findById(projectId);
+        BaseResponse resp = projectService.findById(projectId);
+        // project 非平台公开
+        if(!((Project)resp.getData()).getBlockPlateformFlg().equals(CommonConstant.PLATEFROM)){
+            resp = BaseResponse.builder().code(ErrorCode.AUTH_PROJECT_FAILED).build();
+        }
+        return resp;
     }
 
     @ApiOperation(value = "船福专题、全景船舶、全景设备", notes = "")

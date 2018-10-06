@@ -6,6 +6,6 @@
         values(#{blockId}, #{projectId})
     </insert>
     <delete id="delete">
-        delete from block_project where id=#{id}
+        delete from block_project where project_id=#{projectId}
     </delete>
 </mapper>

@@ -1,6 +1,7 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.model.param.CompanyJoinParam;
+import com.jones.mars.model.param.CompanyJoinUpdateParam;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.CompanyJoinService;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/company")
+@RequestMapping("/companyJoin")
 @Slf4j
 @Api(value = "企业入驻", tags = {"企业入驻"})
 public class CompanyJoinController extends BaseController {
@@ -23,21 +24,24 @@ public class CompanyJoinController extends BaseController {
     private CompanyJoinService service;
 
     @ApiOperation(value = "入驻列表", notes = "入驻列表")
-    @GetMapping("list")
+    @GetMapping("")
     public BaseResponse list(@ApiParam Query query) {
         return service.findByPage(query);
     }
 
     @ApiOperation(value = "企业入驻", notes = "企业入驻")
-    @PostMapping("join")
+    @PostMapping("")
     public BaseResponse join(@Valid @RequestBody @ApiParam(required=true) CompanyJoinParam param) {
         return service.join(param);
     }
 
     @ApiOperation(value = "更新企业入驻处理信息", notes = "添加备注")
-    @PatchMapping("/status")
-    public BaseResponse updateStatus(@RequestParam (value="remark") @ApiParam(required=true) String remark) {
-        return service.updateStaus(remark);
+    @PatchMapping("/{companyJoinId}")
+    public BaseResponse updateStatus(
+            @PathVariable Integer companyJoinId,
+            @Valid @RequestBody @ApiParam(required=true) CompanyJoinUpdateParam param) {
+        param.setId(companyJoinId);
+        return service.updateStaus(param);
     }
 
 

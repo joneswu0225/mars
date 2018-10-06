@@ -30,7 +30,7 @@ public class BlockImageController extends BaseController {
     @ApiOperation(value = "新增模块平面图", notes = "")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) BlockImageParam param) {
-        return service.add(BlockImage.blockImageBuilder(param).build());
+        return service.add(param);
     }
 
     @ApiOperation(value = "获取模块下所有模块平面图名称", notes = "")
@@ -44,13 +44,14 @@ public class BlockImageController extends BaseController {
     public BaseResponse update(
             @PathVariable Integer blockImageId,
             @RequestBody @ApiParam(required=true) BlockImageParam param) {
-        return service.update(BlockImage.blockImageBuilder(param).id(blockImageId).build());
+        param.setId(blockImageId);
+        return service.update(param);
     }
 
     @ApiOperation(value = "删除模块平面图", notes = "")
     @DeleteMapping("{blockImageId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer blockId) {
-        return service.delete(blockId);
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer blockImageId) {
+        return service.delete(blockImageId);
     }
 
 }

@@ -26,6 +26,9 @@ public enum ErrorCode {
 	BAD_REQUEST("1012", "请求参数错误 [%s]"),
 	UPLOAD_FAILED("1013", "文件上传失败"),
 
+	//权限不够
+	AUTH_PROJECT_FAILED("2001", "无权访问该项目"),
+
 	INTERNAL_ERROR("9000", "系统内部错误"),
 	;
 

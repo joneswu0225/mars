@@ -20,8 +20,8 @@ public class CompanyJoin {
     private Date updateTime;
     private Date createTime;
 
-    public static CompanyJoinBuilder companyJoinBuilder(CompanyJoinParam param){
-        return builder().companyName(param.getCompanyName()).contactor(param.getContactor()).mobile(param.getMobile()).title(param.getTitle())
-                .email(param.getEmail());
-    }
+//    public static CompanyJoinBuilder companyJoinBuilder(CompanyJoinParam param){
+//        return builder().companyName(param.getCompanyName()).contactor(param.getContactor()).mobile(param.getMobile()).title(param.getTitle())
+//                .email(param.getEmail());
+//    }
 }

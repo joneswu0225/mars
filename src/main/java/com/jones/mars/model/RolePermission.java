@@ -13,7 +13,7 @@ public class RolePermission {
   private Integer id;
   private Integer roleId;
   private Integer classId;
-  private ClassOperation operation;
+  private Integer operation;
   private Date updateTime;
   private Date createTime;
 }

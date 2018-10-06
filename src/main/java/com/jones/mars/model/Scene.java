@@ -16,13 +16,14 @@ public class Scene {
     private String detail;
     private Integer blockId;
     private Integer imageId;
+    private Integer imageUrl;
     private Float locationX;
     private Float locationY;
     private Integer seq;
     private List<Hotspot> hotspots;
 
-    public static Scene.SceneBuilder sceneBuilder(SceneParam param){
-        return builder().name(param.getName()).detail(param.getDetail()).blockId(param.getBlockId())
-                .imageId(param.getImageId()).locationX(param.getLocationX()).locationY(param.getLocationY());
-    }
+//    public static Scene.SceneBuilder sceneBuilder(SceneParam param){
+//        return builder().name(param.getName()).detail(param.getDetail()).blockId(param.getBlockId())
+//                .imageId(param.getImageId()).locationX(param.getLocationX()).locationY(param.getLocationY());
+//    }
 }

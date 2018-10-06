@@ -46,9 +46,8 @@ public class NewsController extends BaseController {
     public BaseResponse update(
             @PathVariable Integer newsId,
             @Valid @RequestBody @ApiParam(required=true) NewsParam param) {
-        News news = new News(param);
-        news.setId(newsId);
-        return service.update(news);
+        param.setId(newsId);
+        return service.update(param);
     }
 
     // TODO 增加后台注解

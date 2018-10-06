@@ -1,10 +1,12 @@
 package com.jones.mars.service;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.exception.InternalException;
 import com.jones.mars.model.Enterprise;
 import com.jones.mars.model.User;
 import com.jones.mars.model.param.UserLoginParam;
+import com.jones.mars.model.param.UserProfileParam;
 import com.jones.mars.model.param.UserRegistParam;
 import com.jones.mars.model.query.EnterpriseQuery;
 import com.jones.mars.model.query.Query;
@@ -34,13 +36,9 @@ public class UserService extends BaseService<User>{
     private UserMapper mapper;
     @Autowired
     private EnterpriseMapper enterpriseMapper;
-    @Autowired
-    private RoleMapper roleMapper;
 
     private boolean exists(String mobile){
-        User user = new User();
-        user.setMobile(mobile);
-        Integer count = mapper.findCount(new Query(user));
+        Integer count = mapper.findCount(UserQuery.builder().mobile(mobile).build());
         return count > 0;
     }
 
@@ -62,17 +60,19 @@ public class UserService extends BaseService<User>{
 
     /**
      * 用户注册
-     * @param param
+     * @param user
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public BaseResponse regist(UserRegistParam param){
-        if(!exists(param.getMobile())){
-            User user = new User();
-            user.setMobile(param.getMobile());
-            // TODO 对密码加密
-            user.setPassword(param.getPassword());
-            user.setUserType(User.COMMON);
+    public BaseResponse add(User user){
+        if(!exists(user.getMobile())){
+            if(!StringUtils.isEmpty(user.getPassword())){
+                // TODO 对密码加密
+                user.setPassword(user.getPassword());
+            }
+            if(user.getUserType() == null){
+                user.setUserType(User.COMMON);
+            }
             mapper.insert(user);
             mapper.insertProfile(user);
             return BaseResponse.builder().data(user.getId()).build();
@@ -93,9 +93,7 @@ public class UserService extends BaseService<User>{
         List<User> users = mapper.findList(UserQuery.builder().mobile(mobile).build());
         if(users.size() == 1){
             User user_db = users.get(0);
-            User user_update = new User();
-            user_update.setId(user_db.getId());
-            user_update.setVerifyCode(verifyCode);
+            User user_update = User.builder().id(user_db.getId()).verifyCode(verifyCode).build();
             mapper.update(user_update);
             Map<String, String> resp = new HashMap<>();
             resp.put("verifyCode", verifyCode);
@@ -117,9 +115,7 @@ public class UserService extends BaseService<User>{
         List<User> users = mapper.findList(new Query(param));
         if(users.size() == 1){
             User user_db = users.get(0);
-            User user_update = new User();
-            user_update.setId(user_db.getId());
-            user_update.setPassword(param.getPassword());
+            User user_update = User.builder().id(user_db.getId()).password(param.getPassword()).build();
             mapper.update(user_update);
             return BaseResponse.builder().data(user_update.getId()).build();
         } else if(users.size() < 1){
@@ -131,7 +127,6 @@ public class UserService extends BaseService<User>{
 
     /**
      * 用户登录
-     * TODO 登录信息放到session
      * @param userParam
      * @return
      */
@@ -149,9 +144,7 @@ public class UserService extends BaseService<User>{
             Date now = new Date();
             User user_db = users.get(0);
             user_db.setLastLoginTime(now);
-            User user_update = new User();
-            user_update.setId(user_db.getId());
-            user_update.setLastLoginTime(now);
+            User user_update = User.builder().id(user_db.getId()).lastLoginTime(now).build();
             mapper.update(user_update);
             Map<String, Object> result = new HashMap<>();
             result.put(LoginUtil.CUR_USER, "Basic " + UuidUtil.generate().toUpperCase());
@@ -177,6 +170,12 @@ public class UserService extends BaseService<User>{
         } else {
             throw new InternalException("手机及验证码重复");
         }
+    }
+
+
+    public BaseResponse updateProfile(UserProfileParam param){
+        mapper.updateProfile(param);
+        return BaseResponse.builder().build();
     }
 
     @Override

@@ -1,0 +1,32 @@
+package com.jones.mars.model.param;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
+import lombok.Data;
+
+@Data
+@ApiModel(value="用户状态参数")
+public class UserProfileParam {
+    @ApiModelProperty(value="姓名",name="userType")
+    private String sgname;
+    @ApiModelProperty(value="职业",name="job")
+    private String job;
+    @ApiModelProperty(value="城市",name="city")
+    private String city;
+    @ApiModelProperty(value="省份",name="province")
+    private String province;
+    @ApiModelProperty(value="地址",name="address")
+    private String address;
+    @ApiModelProperty(value="生日",name="birthday")
+    private String birthday;
+    @ApiModelProperty(value="头像",name="avatar")
+    private String avatar;
+    @ApiModelProperty(value="名片",name="namecard")
+    private String namecard;
+    @ApiModelProperty(value="个人简介",name="description")
+    private String description;
+    @ApiParam(hidden = true)
+    private Integer userId;
+}
+

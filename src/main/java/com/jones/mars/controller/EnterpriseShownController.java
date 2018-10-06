@@ -1,6 +1,5 @@
 package com.jones.mars.controller;
 
-import com.jones.mars.model.EnterpriseShown;
 import com.jones.mars.model.param.EnterpriseShownParam;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
@@ -29,24 +28,22 @@ public class EnterpriseShownController extends BaseController {
         return service.findByPage(query);
     }
 
-    @ApiOperation(value = "新增入驻品牌", notes = "新增入驻品牌")
+    @ApiOperation(value = "新增入驻品牌", notes = "新增入驻品牌，后台接口")
     @PostMapping("")
     public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) EnterpriseShownParam param) {
         return service.add(param);
     }
 
-    @ApiOperation(value = "更新入驻品牌", notes = "更新入驻品牌")
+    @ApiOperation(value = "更新入驻品牌", notes = "更新入驻品牌，后台接口")
     @PutMapping("{enterpriseShownId}")
     public BaseResponse update(
             @PathVariable Integer enterpriseShownId,
             @Valid @RequestBody @ApiParam(required=true) EnterpriseShownParam param) {
-        EnterpriseShown enterpriseShown = new EnterpriseShown(param);
-        enterpriseShown.setId(enterpriseShownId);
-        return service.update(enterpriseShown);
+        param.setId(enterpriseShownId);
+        return service.update(param);
     }
 
-    // TODO 增加后台注解
-    @ApiOperation(value = "删除入驻品牌", notes = "后台调用")
+    @ApiOperation(value = "删除入驻品牌", notes = "后台接口")
     @DeleteMapping("{enterpriseShownId}")
     public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer enterpriseShownId) {
         return service.delete(enterpriseShownId);

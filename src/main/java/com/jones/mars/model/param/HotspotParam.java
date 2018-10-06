@@ -1,10 +1,13 @@
 package com.jones.mars.model.param;
 
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Data;
 
 @Data
 public class HotspotParam {
+    @ApiParam(hidden = true)
+    private Integer id;
     @ApiModelProperty(value="热点code",name="code")
     private String code;
     @ApiModelProperty(value="热点标题",name="title")

@@ -13,6 +13,4 @@ public class SceneQuery extends Query {
     private Integer blockId;
     @ApiModelProperty(value="项目ID",name="projectId")
     private Integer projectId;
-    @ApiModelProperty(value="场景类型ID",name="sceneTypeId")
-    private Integer sceneTypeId;
 }

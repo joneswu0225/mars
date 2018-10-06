@@ -4,6 +4,7 @@ import com.jones.mars.model.RolePermission;
 import com.jones.mars.model.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -15,6 +16,8 @@ import java.util.List;
 @Data
 @ApiModel(value="权限参数")
 public class RoleParam {
+    @ApiParam(hidden = true)
+    private Integer id;
     @NotNull(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")
     private Integer blockId;

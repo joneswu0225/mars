@@ -1,6 +1,7 @@
 package com.jones.mars.service;
 
 import com.jones.mars.model.Hotspot;
+import com.jones.mars.model.ProjectScene;
 import com.jones.mars.model.Scene;
 import com.jones.mars.model.query.HotspotQuery;
 import com.jones.mars.model.param.ProjectSceneParam;
@@ -37,8 +38,8 @@ public class SceneService extends BaseService {
         return BaseResponse.builder().data(sceneMapper.findAll(query)).build();
     }
 
-    public BaseResponse findByProjectId(Integer projectId){
-        return BaseResponse.builder().data(sceneMapper.findAll(SceneQuery.builder().projectId(projectId).build())).build();
+    public BaseResponse allName(SceneQuery query){
+        return BaseResponse.builder().data(sceneMapper.findAll(query)).build();
     }
 
     public BaseResponse findPanoInfo(Integer projectId){
@@ -49,41 +50,12 @@ public class SceneService extends BaseService {
         return BaseResponse.builder().data(sceneMap.values()).build();
     }
 
-    @Transactional
-    public BaseResponse insertProjectScene(Integer projectId, Integer... sceneIds) {
-        ProjectSceneParam  param = ProjectSceneParam.builder().projectId(projectId).build();
-        for (int i=0; i<sceneIds.length; i++) {
-            param.setSceneId(sceneIds[i]);
-            param.setSeq(i);
-            projectSceneMapper.insert(param);
-        }
+    public BaseResponse insertProjectScene(ProjectSceneParam param) {
+        projectSceneMapper.insert(param);
         return BaseResponse.builder().build();
     }
 
-    @Transactional
-    public BaseResponse insertProjectScene(List<ProjectSceneParam> params){
-        for(ProjectSceneParam param : params){
-            projectSceneMapper.insert(param);
-        }
-        /*Integer projectId = params.get(0).getProjectId();
-        SceneQuery query = new SceneQuery();
-        query.setProjectId(projectId);
-        List<Scene> list = sceneMapper.findAll(query);
-        List<Integer> sceneIds = list.stream().map(p->p.getId()).collect(Collectors.toList());
-        for(ProjectSceneParam param : params){
-            projectSceneMapper.insert(param);
-            sceneIds.remove(param.getSceneId());
-        }
-        ProjectScene projectScene = new ProjectScene();
-        projectScene.setProjectId(projectId);
-        for(Integer sceneId : sceneIds){
-            projectScene.setSceneId(sceneId);
-            projectSceneMapper.delete(projectScene);
-        }*/
-        return BaseResponse.builder().build();
-    }
-
-    public BaseResponse deleteProjectScene(ProjectSceneParam param){
+    public BaseResponse deleteProjectScene(ProjectScene param){
         projectSceneMapper.delete(param);
         return BaseResponse.builder().build();
     }

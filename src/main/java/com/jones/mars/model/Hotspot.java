@@ -25,9 +25,9 @@ public class Hotspot {
     private List<HotspotContent> baseContents = new ArrayList<>();
     private List<HotspotContent> contents = new ArrayList<>();
 
-    public static Hotspot.HotspotBuilder hotspotBuilder(HotspotParam param){
-        return builder().name(param.getName()).code(param.getCode()).title(param.getTitle()).locationX(param.getLocationX())
-                .locationY(param.getLocationY()).baseFlg(param.getBaseFlg()).bhotspotId(param.getBhotspotId()).sceneId(param.getSceneId());
-    }
+//    public static Hotspot.HotspotBuilder hotspotBuilder(HotspotParam param){
+//        return builder().name(param.getName()).code(param.getCode()).title(param.getTitle()).locationX(param.getLocationX())
+//                .locationY(param.getLocationY()).baseFlg(param.getBaseFlg()).bhotspotId(param.getBhotspotId()).sceneId(param.getSceneId());
+//    }
 }
 

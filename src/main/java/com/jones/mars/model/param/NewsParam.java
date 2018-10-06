@@ -2,6 +2,7 @@ package com.jones.mars.model.param;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -12,6 +13,8 @@ import java.util.Date;
 @Data
 @ApiModel(value="新闻动态")
 public class NewsParam {
+    @ApiParam(hidden = true)
+    private Integer id;
     @ApiModelProperty(value="富文本内容",name="content")
     private String content;
     @NotBlank(message = "作者不能为空")
@@ -30,5 +33,6 @@ public class NewsParam {
     @NotBlank(message = "封面图片不能为空")
     @ApiModelProperty(value = "封面图片URL",name="imageUrl")
     private String imageUrl;
+
 }
 

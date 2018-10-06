@@ -13,6 +13,8 @@ public class Role{
   private Integer id;
   private String name;
   private Integer enterpriseId;
+  private String enterpriseName;
+  private String enterpriseAvatar;
   private Integer blockId;
   private Integer blockName;
   private Date updateTime;

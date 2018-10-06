@@ -8,6 +8,7 @@ import com.jones.mars.model.query.ProjectQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -25,18 +26,21 @@ public class HomePageService{
     @Autowired
     private ProjectMapper projectMapper;
     @Autowired
-    private ProjectModuleMapper projectModuleMapper;
+    private EnterpriseShownMapper enterpriseShownMapper;
     @Autowired
     private ProjectClassMapper projectClassMapper;
 
     private Map<Integer, Enterprise> plateformEnterpriseMap;
     private List<Project> recommendProjects;
+    private List<EnterpriseShown> enterpriseShowns;
 
 
     @PostConstruct
+    @Scheduled(cron = "0 0 2 * * ?")
     public void refreshInitData(){
         refreshPlateformEnterprise();
         refreshRecommendProjects();
+        refreshEnterpriseShowns();
     }
 
     private void refreshPlateformEnterprise(){
@@ -62,6 +66,14 @@ public class HomePageService{
         this.recommendProjects = projects;
     }
 
+    private void refreshEnterpriseShowns(){
+        this.enterpriseShowns = enterpriseShownMapper.findAll(new Query());
+    }
+
+
+    public BaseResponse enterpriseShown(){
+        return BaseResponse.builder().data(this.enterpriseShowns).build();
+    }
 
     public BaseResponse plateformEnterprise(){
         return BaseResponse.builder().data(this.plateformEnterpriseMap.values()).build();

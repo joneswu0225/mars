@@ -8,13 +8,13 @@ import java.util.List;
 public interface BaseMapper<T> {
     List<T> findList(Query paramQuery);
 
-    Object findOne(Integer id);
+    T findOne(Integer id);
 
     Integer findCount(Query paramQuery);
 
     List<T> findAll(Query paramQuery);
 
-    void insert(T param);
+    void insert(Object param);
 
     void update(T param);
 

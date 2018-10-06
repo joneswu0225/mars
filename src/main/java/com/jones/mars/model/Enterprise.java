@@ -27,9 +27,9 @@ public class Enterprise {
     private List<Block> blockList = new ArrayList<>();
     private List<Role> roleList = new ArrayList<>();
 
-    public static EnterpriseBuilder enterpriseBuilder(EnterpriseParam param){
-        return builder().name(param.getName()).detail(param.getDetail()).managerId(param.getManagerId());
-    }
+//    public static EnterpriseBuilder enterpriseBuilder(EnterpriseParam param){
+//        return builder().name(param.getName()).detail(param.getDetail()).managerId(param.getManagerId());
+//    }
 
 }
 

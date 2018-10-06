@@ -1,11 +1,13 @@
 package com.jones.mars.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
+@Builder
 public class User {
     public static final int COMMON = 0;
     public static final int ENTMANAGER = 1;

@@ -2,6 +2,7 @@ package com.jones.mars.model.param;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -10,6 +11,8 @@ import javax.validation.constraints.NotNull;
 @Data
 @ApiModel(value="场景参数")
 public class SceneParam {
+    @ApiParam(hidden = true)
+    private Integer id;
     @ApiModelProperty(value="场景名称",name="name")
     private String name;
     @ApiModelProperty(value="场景简介",name="detail")

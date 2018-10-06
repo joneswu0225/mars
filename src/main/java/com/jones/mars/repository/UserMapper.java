@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserMapper extends BaseMapper<User> {
     void insertProfile(User paramUser);
+    void updateProfile(Object paramUser);
 }

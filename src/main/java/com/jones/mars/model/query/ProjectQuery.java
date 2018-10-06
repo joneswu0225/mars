@@ -2,6 +2,7 @@ package com.jones.mars.model.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Data;
 
 @Data
@@ -21,4 +22,6 @@ public class ProjectQuery extends Query {
     private Integer classId;
     @ApiModelProperty(value="隐藏下架，1：隐藏，0：显示",name="filterDownShelf")
     private Integer filterDownShelf;
+    @ApiParam(hidden = true)
+    private Integer plateformFlg;
 }
