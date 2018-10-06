@@ -10,9 +10,9 @@ import java.util.List;
 
 @Data
 @Builder
-public class DepartmentUserParam {
+public class UserRoleParam {
     @ApiParam(hidden = true)
-    private Integer departmentId;
+    private Integer roleId;
     @NotEmpty
     @ApiModelProperty(value="用户ID",name="userIds")
     private List<Integer> userIds;

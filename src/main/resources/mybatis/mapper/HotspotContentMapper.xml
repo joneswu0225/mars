@@ -19,7 +19,11 @@
         </if>
         where id = #{id}
     </insert>
-
+    <insert id="updateHotspotContentSeq ">
+        <foreach collection="hotspotContentIds" item="hotspotContentId" index="index">
+            update hotspot_content set seq=#{index} where id=#{hotspotContentId}
+        </foreach>
+    </insert>
     <select id="findList" resultType="HotspotContent" parameterType="Query">
         select * from hotspot_content
         where hotspot_id=#{query.hotspotId}

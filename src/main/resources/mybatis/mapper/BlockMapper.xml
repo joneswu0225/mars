@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.BlockMapper" >
     <resultMap id="BlockMap" type="Block" >
-        <id property="blockId" column="id" />
-        <id property="enterpirse_id" column="enterpriseId" />
-        <id property="blockName" column="name" />
-        <id property="blockStatus" column="staus" />
+        <id column="blockId" property="id" />
+        <id column="enterpirse_id" property="enterpriseId" />
+        <id column="blockName" property="name" />
+        <id column="blockStatus" property="staus" />
         <collection property="moduleList" ofType="ProjectModule" column="blockId">
             <id column="moduleId" property="id"/>
             <result column="blockId" property="blockId"/>

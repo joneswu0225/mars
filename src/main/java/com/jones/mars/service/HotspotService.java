@@ -21,6 +21,7 @@ public class HotspotService  extends BaseService{
     public BaseResponse findAll(Integer sceneId){
         return BaseResponse.builder().data(mapper.findAll(HotspotQuery.builder().sceneId(sceneId).build())).build();
     }
+
 }
 
 

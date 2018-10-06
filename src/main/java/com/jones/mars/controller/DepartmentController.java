@@ -1,9 +1,11 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.model.param.DepartmentParam;
+import com.jones.mars.model.param.DepartmentUserParam;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.DepartmentService;
+import com.jones.mars.service.EnterpriseUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/department")
@@ -21,11 +24,19 @@ public class DepartmentController extends BaseController {
 
     @Autowired
     private DepartmentService service;
+    @Autowired
+    private EnterpriseUserService enterpriseUserService;
 
     @ApiOperation(value = "部门列表", notes = "部门列表")
     @GetMapping("")
     public BaseResponse list(@ApiParam Query query) {
         return service.findByPage(query);
+    }
+
+    @ApiOperation(value = "人员部门列表", notes = "按人员划分部门")
+    @GetMapping("user")
+    public BaseResponse userlist(@ApiParam Query query) {
+        return enterpriseUserService.findByPage(query);
     }
 
     @ApiOperation(value = "新增部门", notes = "新增部门")
@@ -49,11 +60,26 @@ public class DepartmentController extends BaseController {
         return service.update(param);
     }
 
-    // TODO 增加后台注解
     @ApiOperation(value = "删除部门", notes = "后台调用")
     @DeleteMapping("{departmentId}")
     public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer departmentId) {
         return service.delete(departmentId);
+    }
+
+    @ApiOperation(value = "部门加人", notes = "")
+    @PostMapping("{departmentId}/user")
+    public BaseResponse addUser(
+            @PathVariable Integer departmentId,
+            @Valid @RequestBody @ApiParam(required=true) DepartmentUserParam param) {
+        param.setDepartmentId(departmentId);
+        return service.addDepartmentUser(param);
+    }
+
+    @ApiOperation(value = "部门删人", notes = "")
+    @DeleteMapping("{departmentId}/user/{userId}")
+    public BaseResponse removeUser(@PathVariable @ApiParam(required=true) Integer departmentId,
+                                   @PathVariable @ApiParam(required=true) Integer userId) {
+        return service.removeDepartmentUser(DepartmentUserParam.builder().departmentId(departmentId).userIds(Arrays.asList(userId)).build());
     }
 
 

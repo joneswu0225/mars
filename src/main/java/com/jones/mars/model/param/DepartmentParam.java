@@ -27,6 +27,8 @@ public class DepartmentParam {
     private Integer managerId;
     @ApiParam(hidden = true)
     private Integer id;
+    @ApiParam(hidden = true)
+    private Integer departmentId;
     @ApiModelProperty(value="部门人员ID列表",name="userIds", allowEmptyValue=true)
     private List<Integer> userIds;
 }

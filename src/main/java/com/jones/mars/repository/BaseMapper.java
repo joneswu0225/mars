@@ -18,6 +18,6 @@ public interface BaseMapper<T> {
 
     void update(T param);
 
-    void delete(Integer id);
+    void delete(Object param);
 }
 

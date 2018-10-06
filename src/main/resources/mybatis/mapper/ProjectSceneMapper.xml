@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.ProjectSceneMapper" >
     <insert id="insert" parameterType="ProjectSceneParam">
-        <foreach collection="userIds" item="userId" index="index" open="(" close=")" separator=",">
+        <foreach collection="userIds" item="userId" index="index">
             insert into project_scene(`project_id`, `scene_id`, `seq`)
             values(#{projectId}, #{sceneId}, #{index})
             ON DUPLICATE KEY

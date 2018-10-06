@@ -2,10 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.EnterpriseUserMapper" >
     <insert id="insert" parameterType="EnterpriseUserParam">
-        <foreach collection="userIds" item="userId" index="index" open="(" close=")" separator=",">
-            insert into enterprise_user(`enterprise_id`, `user_id`, `create_time`,`update_time`)
-            values(#{enterpriseId}, #{userId}, now(), now());
-        </foreach>
+        insert into enterprise_user(`enterprise_id`, `user_id`, `create_time`,`update_time`)
+        values(#{enterpriseId}, #{userId}, now(), now());
     </insert>
     <select id="findEnterpriseUser" parameterType="java.lang.Integer">
         select eu.*, p.sgname as userSgname
@@ -13,6 +11,25 @@
         where enterprise_id=#{enterpriseId}
         order by id desc
     </select>
+    <select id="findList" resultType="EnterpriseUser" parameterType="Query">
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select eu.*, p.sgname as userSgname, d.id as departmentId, d.name as departmentName
+        from enterprise_user eu left join user_profile p on eu.user_id=p.user_id left join department d on d.enterprise_id=eu.enterprise_id
+        where enterprise_id=#{enterpriseId}
+        order by id desc
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*)
+        from enterprise_user eu left join user_profile p on eu.user_id=p.user_id left join department d on d.enterprise_id=eu.enterprise_id
+        where enterprise_id=#{enterpriseId}
+    </select>
+    <select id="findOne">
+        select eu.*, p.sgname as userSgname, d.id as departmentId, d.name as departmentName
+        from enterprise_user eu left join user_profile p on eu.user_id=p.user_id left join department d on d.enterprise_id=eu.enterprise_id
+        where eu.id=#{id}
+    </select>
+
     <delete id="delete">
         delete from enterprise_user where id=#{id}
     </delete>

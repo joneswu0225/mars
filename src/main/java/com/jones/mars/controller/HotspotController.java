@@ -1,6 +1,5 @@
 package com.jones.mars.controller;
 
-import com.jones.mars.model.Hotspot;
 import com.jones.mars.model.param.HotspotParam;
 import com.jones.mars.model.query.HotspotQuery;
 import com.jones.mars.object.BaseResponse;

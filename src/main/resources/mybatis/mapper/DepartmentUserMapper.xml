@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.DepartmentUserMapper" >
     <insert id="insert" parameterType="DepartmentUserParam">
-        <foreach collection="userIds" item="userId" index="index" open="(" close=")" separator=",">
+        <foreach collection="userIds" item="userId" index="index">
             insert into department_user(`department_id`, `user_id`, `create_time`,`update_time`)
             values(#{departmentId}, #{userId}, now(), now());
         </foreach>
@@ -14,6 +14,11 @@
         order by id desc
     </select>
     <delete id="delete">
-        delete from department_user where id=#{id}
+        <if test="enterpriseId != null">
+            delete from department_user where user_id=#{userId} and department_id in (select id from department where enterprise_id=#{enterpriseId})
+        </if>
+        <if test="departmentId != null">
+            delete from department_user where department_id=#{departmentId} and user_id=#{userId}
+        </if>
     </delete>
 </mapper>

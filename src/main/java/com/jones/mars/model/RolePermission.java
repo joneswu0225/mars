@@ -1,6 +1,5 @@
 package com.jones.mars.model;
 
-import com.jones.mars.model.constant.ClassOperation;
 import lombok.Data;
 
 import java.util.Date;

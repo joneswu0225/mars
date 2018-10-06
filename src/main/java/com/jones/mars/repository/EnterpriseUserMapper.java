@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EnterpriseUserMapper {
-    void insert(Object param);
-    void delete(Object param);
+public interface EnterpriseUserMapper extends BaseMapper<EnterpriseUser> {
     List<EnterpriseUser> findEnterpriseUser(Integer enterpriseId);
 }

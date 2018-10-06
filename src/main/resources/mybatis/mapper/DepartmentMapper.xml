@@ -24,9 +24,25 @@
         ,update_time = now()
         where id=#{id}
     </insert>
-    <select id="findList" resultType="Department" parameterType="Query">
+    <resultMap id="DepartmentMap" type="Department" >
+        <id column="id" property="id" />
+        <id column="enterpirse_id" property="enterpriseId" />
+        <id column="name" property="name" />
+        <id column="parent_id" property="parentId" />
+        <id column="manager_id" property="managerId" />
+        <id column="parentName" property="parentName" />
+        <id column="managerName" property="managerName" />
+        <collection property="moduleList" ofType="departmentUser" column="department_id">
+            <id column="departmentUserId" property="id"/>
+            <result column="user_id" property="userId"/>
+            <result column="userSgname" property="userSgname"/>
+        </collection>
+    </resultMap>
+    <select id="findList" resultMap="DepartmentMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select d.*, p.name as parentName from department d left join department p on d.parent_id = p.id
+        select d.id, d.enterprise_id, d.name, d.parent_id, d.manager_id,up1.sgname as managerName, p.name as parentName,du.id as departmentUserId, du.department_id, up2.user_id, up2.sgname as userSgname
+        from department d left join department p on d.parent_id = p.id left join user_profile up1 on d.manager_id=up1.user_id
+          left join department_user on du.department_id=d.id left join user_profile up2 on du.user_id=up2.user_id
         where delete_flg=0
         <if test="!= null and name != null and name !=''">
             and d.name like concat('%',#{name},'%')
