@@ -14,7 +14,7 @@ public class HotspotParam {
     private String title;
     @ApiModelProperty(value="热点名称",name="name")
     private String name;
-    @ApiModelProperty(value="热点坐标-x",name="locationX;")
+    @ApiModelProperty(value="热点坐标-x",name="locationX")
     private Float locationX;
     @ApiModelProperty(value="热点坐标-y",name="locationY")
     private Float locationY;

@@ -28,12 +28,19 @@ public class SceneController extends BaseController {
         return sceneService.findByPage(query);
     }
 
+    @ApiOperation(value = "所有场景名称", notes = "用于场景选择下拉列表")
+    @GetMapping("name")
+    public BaseResponse allname(@ApiParam SceneQuery query) {
+        return sceneService.allName(query);
+    }
+
     @ApiOperation(value = "新增场景", notes = "新增场景,后台接口")
     @PostMapping("")
     public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) SceneParam param) {
         return sceneService.add(param);
     }
 
+    // TODO 更新项目场景顺序！！！
     @ApiOperation(value = "场景详情", notes = "场景详情,后台接口")
     @GetMapping("{sceneId}")
     public BaseResponse findOne(@PathVariable Integer sceneId) {

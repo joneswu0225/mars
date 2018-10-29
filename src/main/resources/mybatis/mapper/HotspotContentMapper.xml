@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.HotspotContentMapper" >
-    <insert id="insert" parameterType="HotspotContent">
-        insert into hotspot(`hotspot_id`, `content`, `title`, `extra`, `seq`, `type`)
-        values(#{hotspot_id}, #{content}, #{title}, #{extra}, #{seq}, #{type})
+    <insert id="insert" parameterType="HotspotContentParams" useGeneratedKeys="true" keyProperty="id">
+        insert into hotspot_content(`hotspot_id`, `content`, `title`, `extra`, `seq`, `type`) values
+        <foreach collection="hotspotContentList" item="param" index="index" separator=",">
+            (#{param.hotspotId}, #{param.content}, #{param.title}, #{param.extra}, #{index}, #{param.type})
+        </foreach>
     </insert>
-    <insert id="update" parameterType="HotspotContent">
+    <insert id="update" parameterType="HotspotContentParams">
+        <foreach collection="hotspotContentList" item="param" index="index" separator=";">
         update hotspot_content
-        set content = #{content}
-        <if test="title != null and title != ''">
-            , title = #{title}
-        </if>
-        <if test="type != null and type != ''">
-            , type = #{type}
-        </if>
-        <if test="extra != null and extra != ''">
-            , extra = #{extra}
-        </if>
+        set content = #{content}, title = #{title}, type = #{type}, extra = #{extra}, seq=#{index}
         where id = #{id}
+        </foreach>
     </insert>
-    <insert id="updateHotspotContentSeq ">
+    <insert id="updateHotspotContentSeq">
         <foreach collection="hotspotContentIds" item="hotspotContentId" index="index">
             update hotspot_content set seq=#{index} where id=#{hotspotContentId}
         </foreach>

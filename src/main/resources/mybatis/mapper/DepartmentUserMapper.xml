@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.DepartmentUserMapper" >
-    <insert id="insert" parameterType="DepartmentUserParam">
+    <insert id="insert" parameterType="DepartmentUserParam" useGeneratedKeys="true" keyProperty="id">
         <foreach collection="userIds" item="userId" index="index">
             insert into department_user(`department_id`, `user_id`, `create_time`,`update_time`)
             values(#{departmentId}, #{userId}, now(), now());

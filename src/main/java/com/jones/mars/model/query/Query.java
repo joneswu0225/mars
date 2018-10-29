@@ -12,6 +12,8 @@ import javax.validation.constraints.Pattern;
 public class Query {
     private static final int DEFAULT_PAGE_NUM = 1;
     private static final int DEFAULT_PAGE_SIZE = 20;
+    @ApiParam(hidden = true)
+    private Integer id;
     @Pattern(regexp = "\\d", message = "页码必须为数字")
     @ApiModelProperty(value="页码",name="page")
     private Integer page = DEFAULT_PAGE_NUM;

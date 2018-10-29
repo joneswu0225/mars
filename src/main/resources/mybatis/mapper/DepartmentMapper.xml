@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.DepartmentMapper" >
-    <insert id="insert" parameterType="Department">
+    <insert id="insert" parameterType="Department" useGeneratedKeys="true" keyProperty="id">
         insert into department(`name`, `parent_id`, `level`, `manager_id`, `operator_id`, `enterprise_id`, `create_time`, `update_time`)
         values(#{name}, #{parentId}, #{level}, #{managerId}, #{operatorId}, #{enterpriseId}, now(), now())
     </insert>

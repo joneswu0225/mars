@@ -28,6 +28,8 @@ public enum ErrorCode {
 
 	//权限不够
 	AUTH_PROJECT_FAILED("2001", "无权访问该项目"),
+	//业务错误
+	ENT_USER_EXISTS("3001", "企业用户已存在"),
 
 	INTERNAL_ERROR("9000", "系统内部错误"),
 	;

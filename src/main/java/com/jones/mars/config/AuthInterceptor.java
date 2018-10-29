@@ -3,9 +3,13 @@ package com.jones.mars.config;
 import com.jones.mars.model.param.UserLoginParam;
 import com.jones.mars.service.UserService;
 import com.jones.mars.util.LoginUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -14,8 +18,9 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 
-
+@Slf4j
 @Configuration
 public class AuthInterceptor extends WebMvcConfigurerAdapter {
 
@@ -41,6 +46,7 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
         addInterceptor.excludePathPatterns("/user/auth**");
         addInterceptor.excludePathPatterns("/logout**");
         addInterceptor.excludePathPatterns("/pano**");
+        addInterceptor.excludePathPatterns("/home/**");
 
         // 拦截配置
         addInterceptor.addPathPatterns("/**");
@@ -56,17 +62,39 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
             if (request.getQueryString() != null) {
                 url += "?" + request.getQueryString();
             }
-            if (session.getAttribute(LoginUtil.CUR_USER) != null) {
-                return true;
+            if (session.getAttribute(LoginUtil.CUR_USER) == null) {
+                UserLoginParam user = new UserLoginParam();
+                user.setMobile("18616701071");
+                user.setPassword("123456789");
+                service.doLogin(user);
             }
-            UserLoginParam user = new UserLoginParam();
-            user.setMobile("18616701071");
-            user.setPassword("123456789");
-            service.doLogin(user);
+
             //跳转登录
 //            response.sendRedirect("/login" + ((url.contains("/error")) ? "" : ("?callback=" + url)));
 //            return false;
-            return true;
+            // has login, handle permission
+            if (hasPermission(handler)) {
+                return true;
+            } else {
+                response.sendError(HttpStatus.FORBIDDEN.value(), "没有权限");
+                log.warn("User {} are trying to access {}, but (s)he has no permission", LoginUtil.getInstance().getUser().getMobile(), url);
+                return false;
+            }
         }
+    }
+
+    private boolean hasPermission(Object handler) {
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            LoginUser loginUser = handlerMethod.getMethod().getAnnotation(LoginUser.class);
+            // if RequirePermission Not found before method, check class level
+            if (loginUser == null) {
+                loginUser = handlerMethod.getMethod().getDeclaringClass().getAnnotation(LoginUser.class);
+            }
+            if (loginUser != null) {
+                return Arrays.asList(loginUser.role()).contains(LoginUtil.getInstance().getUser().getUserType());
+            }
+        }
+        return true;
     }
 }

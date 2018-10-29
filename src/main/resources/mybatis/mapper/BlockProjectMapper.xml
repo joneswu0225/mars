@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.BlockProjectMapper" >
-    <insert id="insert" parameterType="RolePermission">
+    <insert id="insert" parameterType="BlockProject" useGeneratedKeys="true" keyProperty="id">
         insert into block_project(`block_id`, `project_id`)
         values(#{blockId}, #{projectId})
+        ON DUPLICATE KEY UPDATE
+            block_id = #{blockId}, project_id=#{projectId}
     </insert>
     <delete id="delete">
-        delete from block_project where project_id=#{projectId}
+        delete from block_project where project_id=#{projectId} and block_id=#{blockId}
     </delete>
 </mapper>

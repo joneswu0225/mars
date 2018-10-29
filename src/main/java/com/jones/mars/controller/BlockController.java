@@ -1,11 +1,13 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.model.Block;
+import com.jones.mars.model.User;
 import com.jones.mars.model.param.BlockParam;
 import com.jones.mars.model.query.BlockQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.BlockService;
+import com.jones.mars.util.LoginUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -31,6 +33,7 @@ public class BlockController extends BaseController {
     @ApiOperation(value = "新增模块", notes = "")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) BlockParam param) {
+        param.setOperatorId(getLoginUser().getId());
         return service.add(Block.blockBuilder(param).build());
     }
 
@@ -52,7 +55,9 @@ public class BlockController extends BaseController {
     public BaseResponse update(
             @PathVariable Integer blockId,
             @RequestBody @ApiParam(required=true) BlockParam param) {
-        return service.update(Block.blockBuilder(param).id(blockId).build());
+        param.setOperatorId(getLoginUser().getId());
+        param.setId(blockId);
+        return service.update(param);
     }
 
     @ApiOperation(value = "删除模块", notes = "")

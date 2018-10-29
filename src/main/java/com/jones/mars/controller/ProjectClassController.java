@@ -1,9 +1,8 @@
 package com.jones.mars.controller;
 
-import com.jones.mars.model.ProjectClass;
+import com.jones.mars.model.BlockClass;
 import com.jones.mars.model.param.ProjectClassParam;
 import com.jones.mars.model.query.ProjectClassQuery;
-import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.ProjectClassService;
 import io.swagger.annotations.Api;
@@ -41,7 +40,7 @@ public class ProjectClassController extends BaseController {
     public BaseResponse update(
             @PathVariable Integer projectClassId,
             @Valid @RequestBody @ApiParam(required=true) ProjectClassParam param) {
-        return service.update(ProjectClass.builder().id(projectClassId).moduleId(param.getModuleId()).name(param.getName()).build());
+        return service.update(BlockClass.builder().id(projectClassId).moduleId(param.getModuleId()).name(param.getName()).build());
     }
 
     // TODO 增加后台注解

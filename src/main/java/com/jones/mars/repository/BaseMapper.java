@@ -16,7 +16,7 @@ public interface BaseMapper<T> {
 
     void insert(Object param);
 
-    void update(T param);
+    void update(Object param);
 
     void delete(Object param);
 }

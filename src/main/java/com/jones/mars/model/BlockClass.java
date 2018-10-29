@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ProjectClass {
+public class BlockClass {
     private Integer id;
     private String name;
     private Integer moduleId;

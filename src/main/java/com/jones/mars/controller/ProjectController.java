@@ -1,6 +1,5 @@
 package com.jones.mars.controller;
 
-import com.jones.mars.model.Project;
 import com.jones.mars.model.ProjectScene;
 import com.jones.mars.model.ProjectUser;
 import com.jones.mars.model.param.ProjectParam;
@@ -76,7 +75,7 @@ public class ProjectController extends BaseController {
 //        return sceneService.findByProjectId(projectId);
 //    }
 
-    @ApiOperation(value = "新增项目场景", notes = "新增项目场景")
+    @ApiOperation(value = "保存项目场景", notes = "保存项目场景,切换顺序也直接保存即可")
     @PostMapping("{projectId}/scene")
     public BaseResponse addScene(
             @PathVariable Integer projectId,
@@ -120,6 +119,31 @@ public class ProjectController extends BaseController {
     public BaseResponse deletePartner(@PathVariable @ApiParam(required=true) Integer projectId,
                                       @PathVariable @ApiParam(required=true) Integer userId) {
         return projectService.deleteUser(ProjectUser.builder().projectId(projectId).userId(userId).build());
+    }
+
+    @ApiOperation(value = "上架项目", notes = "")
+    @PatchMapping("{projectId}/onshelf")
+    public BaseResponse publishProject(@PathVariable @ApiParam(required=true) Integer projectId,
+                        @RequestParam(name="publicFlag", required = false) @ApiParam(value="是否公开发布",name="publicFlag")Boolean publicFlag) {
+        return  projectService.onshelfProject(projectId, publicFlag);
+    }
+
+    @ApiOperation(value = "下架项目", notes = "")
+    @PatchMapping("{projectId}/offshelf")
+    public BaseResponse offshelfProject(@PathVariable @ApiParam(required=true) Integer projectId) {
+        return  projectService.offshelfProject(projectId);
+    }
+
+    @ApiOperation(value = "公开项目", notes = "")
+    @PatchMapping("{projectId}/public")
+    public BaseResponse publicProject(@PathVariable @ApiParam(required=true) Integer projectId) {
+        return  projectService.publicProject(projectId);
+    }
+
+    @ApiOperation(value = "取消公开项目", notes = "")
+    @PatchMapping("{projectId}/unpublic")
+    public BaseResponse unpublicProject(@PathVariable @ApiParam(required=true) Integer projectId) {
+        return  projectService.unpublicProject(projectId);
     }
 
 

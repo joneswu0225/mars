@@ -1,6 +1,7 @@
 package com.jones.mars.service;
 
 import com.jones.mars.constant.ErrorCode;
+import com.jones.mars.model.FileUpload;
 import com.jones.mars.model.constant.FileType;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
@@ -45,11 +46,13 @@ public class FileUploadService extends BaseService{
     }
 
     public BaseResponse uploadFile(MultipartFile file, String fileName, FileType fileType, Integer relatedId){
-        String relPath = fileType.getFilePath(relatedId, StringUtils.isEmpty(fileName) ? file.getName() : fileName);
+        fileName = StringUtils.isEmpty(fileName) ? file.getName() : fileName;
+        String relPath = fileType.getFilePath(relatedId, fileName);
         Path path = Paths.get(fileUploadPath, relPath);
         path.toFile().mkdirs();
         try {
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            mapper.insert(FileUpload.builder().type(fileType).path(relPath).name(fileName).relatedId(relatedId).build());
             Map<String, String> result = new HashMap<>();
             result.put("path", relPath);
             return BaseResponse.builder().data(result).build();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.FileUploadMapper" >
-    <insert id="insert" parameterType="FileUpload">
+    <insert id="insert" parameterType="FileUpload" useGeneratedKeys="true" keyProperty="id">
         insert into file_upload(`name`, `path`, `related_id`,`type`, `create_time`, `update_time`)
         values(#{name}, #{path}, #{relatedId}, #{type}, now(), now())
     </insert>

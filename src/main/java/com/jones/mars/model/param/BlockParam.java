@@ -2,6 +2,7 @@ package com.jones.mars.model.param;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,5 +22,9 @@ public class BlockParam {
     private Integer plateformFlg;
     @ApiModelProperty(value="模块简介",name="detail")
     private String detail;
+    @ApiParam(hidden = true)
+    private Integer operatorId;
+    @ApiParam(hidden = true)
+    private Integer id;
 }
 

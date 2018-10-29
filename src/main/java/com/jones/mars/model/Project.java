@@ -27,8 +27,10 @@ public class Project {
     private Integer oriEnterpriseId;
     private String oriEnterpriseAvatar;
     private String oriEnterpriseName;
+    private String oriEnterpriseBasePath;
     private String moduleName;
     private Integer classId;
+    private Integer customFlg;
     private String className;
     private String status;
     private String reason;

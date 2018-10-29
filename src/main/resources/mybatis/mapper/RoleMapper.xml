@@ -6,11 +6,11 @@
         <result column="enterpirse_id" property="enterpriseId" />
         <result column="blockName" property="name" />
         <result column="blockStatus" property="status" />
-        <collection property="moduleList" ofType="ProjectModule" column="blockId">
+        <collection property="moduleList" ofType="BlockModule" column="blockId">
             <id column="moduleId" property="id"/>
             <result column="blockId" property="blockId"/>
             <result column="moduleName" property="name"/>
-            <collection property="classList" ofType="ProjectClass" column="moduleId">
+            <collection property="classList" ofType="BlockClass" column="moduleId">
                 <id column="classId" property="id"/>
                 <result column="module_id" property="moduleId"/>
                 <result column="className" property="name"/>
@@ -21,7 +21,7 @@
     <select id="findGrantedBlock" resultMap="BlockMap">
         select r.enterprise_id, r.block_id as blockId, b.name as blockName,b.status as blockStatus,
         m.id as moduleId, m.name as moduleName, c.id as classId, c.name as className, p.operation
-        from user_role ur, role r, role_permission p, project_class c, project_module m, block b
+        from user_role ur, role r, role_permission p, block_class c, block_module m, block b
         where ur.role_id=r.id and ur.role_id=p.role_id and p.class_id=c.id and c.module_id=m.id and r.block_id=b.id
         and ur.user_id=#{userId}
         <if test="enterpriseId != null">
@@ -33,7 +33,7 @@
         order by r.enterprise_id, r.block_id, m.id
     </select>
 
-    <insert id="insert" parameterType="Role">
+    <insert id="insert" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
         insert into role(`name`, `block_id`, `enterprise_id`, `create_time`, `update_time`)
         values(#{name}, #{blockId}, #{enterpriseId}, now(), now())
     </insert>

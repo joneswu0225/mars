@@ -8,10 +8,10 @@ import java.util.List;
 
 @Data
 @Builder
-public class ProjectModule {
+public class BlockModule {
     private Integer id;
     private String name;
     private Integer blockId;
-    private List<ProjectClass> classList = new ArrayList<>();
+    private List<BlockClass> classList = new ArrayList<>();
 }
 

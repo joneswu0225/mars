@@ -7,7 +7,7 @@ public enum HotspotContentType {
 	TEXT,
 	DICT,
 	AUDIO,
-	PICTURE,
+	IMAGE,
 	HTML
 
 }

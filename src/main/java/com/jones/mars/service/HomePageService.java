@@ -28,7 +28,7 @@ public class HomePageService{
     @Autowired
     private EnterpriseShownMapper enterpriseShownMapper;
     @Autowired
-    private ProjectClassMapper projectClassMapper;
+    private BlockClassMapper blockClassMapper;
 
     private Map<Integer, Enterprise> plateformEnterpriseMap;
     private List<Project> recommendProjects;

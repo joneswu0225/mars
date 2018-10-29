@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jones.mars.repository.ProjectClassMapper" >
-    <insert id="insert" parameterType="ProjectClass">
-        insert into project_class(`name`, `module_id`)
+<mapper namespace="com.jones.mars.repository.BlockClassMapper" >
+    <insert id="insert" parameterType="BlockClass" useGeneratedKeys="true" keyProperty="id">
+        insert into block_class(`name`, `module_id`)
         values(#{name}, #{moduleId})
     </insert>
-    <insert id="update" parameterType="ProjectClass">
-        update project_class set name = #{name} where id=#{id}
+    <insert id="update" parameterType="BlockClass">
+        update block_class set name = #{name} where id=#{id}
     </insert>
-    <select id="findList" resultType="ProjectClass" parameterType="Query">
+    <select id="findList" resultType="BlockClass" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select c.* from project_class c left join project_module m on c.module_id = m.id
+        select c.* from block_class c left join block_module m on c.module_id = m.id
         where delete_flg=0
         <if test="moduleId != null">
             and module_id = #{moduleId}
@@ -22,7 +22,7 @@
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
-        select count(*) from project_class c left join project_module m on c.module_id = m.id
+        select count(*) from block_class c left join block_module m on c.module_id = m.id
         where delete_flg=0
         <if test="moduleId != null">
             and module_id = #{moduleId}
@@ -32,7 +32,7 @@
         </if>
     </select>
     <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
-        select id, name from project_class c left join project_module m on c.module_id = m.id
+        select id, name from block_class c left join block_module m on c.module_id = m.id
         where delete_flg=0
         <if test="moduleId != null">
             and module_id = #{moduleId}
@@ -42,8 +42,8 @@
         </if>
         order by name
     </select>
-    <select id="findAll" resultType="ProjectClass" parameterType="Query">
-        select * from project_class where delete_flg=0
+    <select id="findAll" resultType="BlockClass" parameterType="Query">
+        select * from block_class where delete_flg=0
         <if test="moduleId != null">
             and module_id = #{moduleId}
         </if>
@@ -52,10 +52,10 @@
         </if>
         order by name
     </select>
-    <select id="findOne" resultType="ProjectClass">
-        select * from project_class where id=#{id}
+    <select id="findOne" resultType="BlockClass">
+        select * from block_class where id=#{id}
     </select>
     <delete id="delete">
-        delete from project_class where id=#{id}
+        delete from block_class where id=#{id}
     </delete>
 </mapper>

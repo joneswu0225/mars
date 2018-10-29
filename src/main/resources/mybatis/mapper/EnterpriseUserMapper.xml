@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.EnterpriseUserMapper" >
-    <insert id="insert" parameterType="EnterpriseUserParam">
+    <insert id="insert" parameterType="EnterpriseUserParam" useGeneratedKeys="true" keyProperty="id">
         insert into enterprise_user(`enterprise_id`, `user_id`, `create_time`,`update_time`)
         values(#{enterpriseId}, #{userId}, now(), now());
     </insert>
-    <select id="findEnterpriseUser" parameterType="java.lang.Integer">
+    <select id="findEnterpriseUser" parameterType="java.lang.Integer" resultType="EnterpriseUser">
         select eu.*, p.sgname as userSgname
         from enterprise_user eu left join user_profile p on eu.user_id=p.user_id
         where enterprise_id=#{enterpriseId}

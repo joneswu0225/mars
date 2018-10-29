@@ -29,7 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/file")
 @Slf4j
-//@Api(value = "上传下载", tags = {"上传下载"})
+@Api(value = "上传下载", tags = {"上传下载"})
 public class FileController extends BaseController {
     @Autowired
     private FileUploadService service;

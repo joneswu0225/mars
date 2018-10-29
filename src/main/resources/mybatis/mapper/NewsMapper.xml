@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.NewsMapper" >
-    <insert id="insert" parameterType="News">
+    <insert id="insert" parameterType="News" useGeneratedKeys="true" keyProperty="id">
         insert into news(`title`, `summary`, `author`, `content`, `image_url`, `publish_time`)
         values(#{title}, #{summary}, #{author}, #{contentUrl}, #{imageUrl}, #{publishTime})
     </insert>
-    <insert id="update" parameterType="News">
+    <update id="update" parameterType="News">
         update news set title = #{title}
         , summary = #{summary} , author = #{author} , content = #{contentUrl} , image_url = #{image_url} , publish_time = #{publishTime}
         where id=#{id}
-    </insert>
+    </update>
     <select id="findList" resultType="News" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select * from news

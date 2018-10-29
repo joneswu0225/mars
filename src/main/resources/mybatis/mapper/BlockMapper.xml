@@ -6,11 +6,11 @@
         <id column="enterpirse_id" property="enterpriseId" />
         <id column="blockName" property="name" />
         <id column="blockStatus" property="staus" />
-        <collection property="moduleList" ofType="ProjectModule" column="blockId">
+        <collection property="moduleList" ofType="BlockModule" column="blockId">
             <id column="moduleId" property="id"/>
             <result column="blockId" property="blockId"/>
             <result column="moduleName" property="name"/>
-            <collection property="classList" ofType="ProjectClass" column="moduleId">
+            <collection property="classList" ofType="BlockClass" column="moduleId">
                 <id column="classId" property="id"/>
                 <result column="module_id" property="moduleId"/>
                 <result column="className" property="name"/>
@@ -20,7 +20,7 @@
     </resultMap>
     <select id="findBlockModule" resultMap="BlockMap" parameterType="Query">
         select m.*, c.id as classId, c.name as className, c.module_id
-        from block b left join project_module m on b.id=m.block_id left join project_class c on m.id=c.module_id
+        from block b left join block_module m on b.id=m.block_id left join block_class c on m.id=c.module_id
         where m.delete_flg=0
         <if test="enterpriseId != null">
             and b.enterprise_id=#{enterpriseId}

@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jones.mars.repository.ProjectModuleMapper" >
-    <resultMap id="ProjectModuleMap" type="ProjectModule" >
+<mapper namespace="com.jones.mars.repository.BlockModuleMapper" >
+    <resultMap id="BlockModuleMap" type="BlockModule" >
         <id property="id" column="id" />
         <id property="name" column="name" />
         <id property="block_id" column="blockId" />
-        <collection property="classList" ofType="ProjectClass" column="module_id">
+        <collection property="classList" ofType="BlockClass" column="module_id">
             <id column="classId" property="id"/>
             <result column="module_id" property="moduleId"/>
             <result column="className" property="name"/>
         </collection>
     </resultMap>
-    <insert id="insert" parameterType="ProjectModule">
-        insert into project_module(`name`, `block_id`)
+    <insert id="insert" parameterType="BlockModule" useGeneratedKeys="true" keyProperty="id">
+        insert into block_module(`name`, `block_id`)
         values(#{name}, #{blockId})
     </insert>
-    <insert id="update" parameterType="ProjectModule">
-        update project_module set name = #{name} where id=#{id}
+    <insert id="update" parameterType="BlockModule">
+        update block_module set name = #{name} where id=#{id}
     </insert>
-    <select id="findList" resultMap="ProjectModuleMap" parameterType="Query">
+    <select id="findList" resultMap="BlockModuleMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select m.*, c.id as classId, c.name as className, c.module_id
-        from project_module m left join project_class c on m.id=c.module_id
+        from block_module m left join block_class c on m.id=c.module_id
         where m.delete_flg=0
         <if test="blockId != null">
             and m.block_id = #{blockId}
@@ -36,7 +36,7 @@
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
-        select count(*) from project_module
+        select count(*) from block_module
         where delete_flg=0
         <if test="blockId != null">
             and block_id = #{blockId}
@@ -49,15 +49,15 @@
         </if>
     </select>
     <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
-        select id, name from project_module
+        select id, name from block_module
         where delete_flg=0
         <if test="publicFlg != null">
             and public_flg = #{publicFlg}
         </if>
         order by name
     </select>
-    <select id="findAll" resultMap="ProjectModuleMap" parameterType="Query">
-        select m.*, c.id as classId, c.name as className, c.module_id from project_module m left join project_class c on m.id=c.module_id
+    <select id="findAll" resultMap="BlockModuleMap" parameterType="Query">
+        select m.*, c.id as classId, c.name as className, c.module_id from block_module m left join block_class c on m.id=c.module_id
         where delete_flg=0
         <if test="blockId != null">
             and m.block_id = #{blockId}
@@ -70,10 +70,10 @@
         </if>
         order by name
     </select>
-    <select id="findOne" resultType="ProjectModule">
-        select * from project_module where id=#{id}
+    <select id="findOne" resultType="BlockModule">
+        select * from block_module where id=#{id}
     </select>
     <update id="delete">
-        update project_module set delete_flg=1 where id=#{id}
+        update block_module set delete_flg=1 where id=#{id}
     </update>
 </mapper>

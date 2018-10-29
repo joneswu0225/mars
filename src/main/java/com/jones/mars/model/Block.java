@@ -4,7 +4,6 @@ import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.BlockParam;
 import lombok.Builder;
 import lombok.Data;
-import sun.security.pkcs11.Secmod;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,7 +21,7 @@ public class Block {
     private String status;
     private Integer enterpriseId;
     private String name;
-    private List<ProjectModule> moduleList = new ArrayList<>();
+    private List<BlockModule> moduleList = new ArrayList<>();
 
     public static BlockBuilder blockBuilder(BlockParam param){
         return builder().name(param.getName()).enterpriseId(param.getEnterpriseId()).detail(param.getDetail()).plateformFlg(param.getPlateformFlg());

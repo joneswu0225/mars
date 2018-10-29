@@ -1,9 +1,9 @@
 package com.jones.mars.model;
 
-import com.jones.mars.model.param.SceneParam;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,7 +20,7 @@ public class Scene {
     private Float locationX;
     private Float locationY;
     private Integer seq;
-    private List<Hotspot> hotspots;
+    private List<Hotspot> hotspots = new ArrayList<>();
 
 //    public static Scene.SceneBuilder sceneBuilder(SceneParam param){
 //        return builder().name(param.getName()).detail(param.getDetail()).blockId(param.getBlockId())

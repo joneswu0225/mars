@@ -15,6 +15,8 @@ public class SceneParam {
     private Integer id;
     @ApiModelProperty(value="场景名称",name="name")
     private String name;
+    @ApiModelProperty(value="场景编码",name="code")
+    private String code;
     @ApiModelProperty(value="场景简介",name="detail")
     private String detail;
     @NotNull(message = "模块ID不能为空")

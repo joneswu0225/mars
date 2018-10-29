@@ -39,14 +39,20 @@ public class SceneService extends BaseService {
     }
 
     public BaseResponse allName(SceneQuery query){
-        return BaseResponse.builder().data(sceneMapper.findAll(query)).build();
+        return BaseResponse.builder().data(sceneMapper.findAllName(query)).build();
     }
 
     public BaseResponse findPanoInfo(Integer projectId){
         List<Scene> sceneList = sceneMapper.findAll(SceneQuery.builder().projectId(projectId).build());
         Map<Integer, Scene> sceneMap = sceneList.stream().sorted(Comparator.comparing(Scene::getSeq)).collect(Collectors.toMap(Scene::getId, p->p));
-        List<Hotspot> hotspotList = hotspotMapper.findAll(HotspotQuery.builder().sceneIds(sceneMap.keySet()).build());
-        hotspotList.forEach(p->sceneMap.get(p.getSceneId()).getHotspots().add(p));
+        if(sceneMap.size() > 0){
+            List<Hotspot> hotspotList = hotspotMapper.findAll(HotspotQuery.builder().sceneIds(sceneMap.keySet()).build());
+            hotspotList.forEach(p->{
+                if(sceneMap.containsKey(p.getSceneId())){
+                    sceneMap.get(p.getSceneId()).getHotspots().add(p);
+                }
+            });
+        }
         return BaseResponse.builder().data(sceneMap.values()).build();
     }
 

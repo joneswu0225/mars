@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.ProjectUserMapper" >
-    <insert id="insert" parameterType="ProjectUserParam">
-        <foreach collection="userIds" item="userId" index="index" open="(" close=")" separator=",">
-            insert into project_user(`project_id`, `user_id`, `manager_flg`)
-            values(#{projectId}, #{userId}, #{managerFlg});
+    <insert id="insert" parameterType="ProjectUserParam" useGeneratedKeys="true" keyProperty="id">
+        insert into project_user(`project_id`, `user_id`, `manager_flg`) values
+        <foreach collection="userIds" item="userId" index="index" separator=",">
+            (#{projectId}, #{userId}, #{managerFlg})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        <foreach collection="userIds" item="userId" index="index" separator=",">
+            manager_flg = #{managerFlg}
         </foreach>
     </insert>
-    <select id="findByProjectId" parameterType="java.lang.Integer">
+    <select id="findByProjectId" parameterType="java.lang.Integer" resultType="ProjectUser">
         select pu.*, up.sgname from project_user pu left join user_profile up on pu.user_id=up.user_id
         where project_id=#{projectId} order by manager_flg desc
     </select>

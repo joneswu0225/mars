@@ -13,6 +13,7 @@ import com.jones.mars.util.LoginUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,8 @@ public class ProjectService extends BaseService {
     private BlockProjectMapper blockProjectMapper;
     @Autowired
     private ProjectUserMapper projectUserMapper;
+    @Value("${app.public.block.id}")
+    private Integer publicBlockId;
 
     @Override
     public BaseMapper getMapper(){
@@ -57,10 +60,12 @@ public class ProjectService extends BaseService {
             projectUserMapper.insert(ProjectUserParam.builder().projectId(projectId).userIds(Arrays.asList(currentUser.getId())).managerFlg(ProjectUser.PROJECT_MANAGER).build());
         }
         List<Integer> userIds = param.getUserIds();
-        userIds.remove(currentUser.getId());
         if (!CollectionUtils.isEmpty(userIds)) {
+            userIds.remove(currentUser.getId());
             log.info("添加项目共建人");
-            projectUserMapper.insert(ProjectUserParam.builder().projectId(projectId).userIds(userIds).build());
+            if (!CollectionUtils.isEmpty(userIds)) {
+                projectUserMapper.insert(ProjectUserParam.builder().projectId(projectId).userIds(userIds).build());
+            }
         }
         Map<String, Object> result = new HashMap<>();
         result.put("projectId", projectId);
@@ -91,7 +96,7 @@ public class ProjectService extends BaseService {
         return BaseResponse.builder().data(list).build();
     }
 
-    public BaseResponse findById(Integer projectId){
+    public BaseResponse findOne(Integer projectId){
         Project project = mapper.findOne(projectId);
         List<ProjectUser> projectUsers = projectUserMapper.findByProjectId(projectId);
         project.setUserList(projectUsers);
@@ -112,6 +117,31 @@ public class ProjectService extends BaseService {
 
     public BaseResponse deleteUser(ProjectUser param){
         projectUserMapper.delete(param);
+        return BaseResponse.builder().build();
+    }
+
+    public BaseResponse onshelfProject(Integer projectId, Boolean publicFlag){
+        mapper.update(ProjectParam.builder().id(projectId).status(Project.ONSHELF).publishDate(new Date()).build());
+        if(publicFlag != null && publicFlag){
+            blockProjectMapper.insert(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
+        }
+        return BaseResponse.builder().build();
+    }
+
+    @Transactional
+    public BaseResponse offshelfProject(Integer projectId){
+        mapper.update(ProjectParam.builder().id(projectId).status(Project.DOWNSHELF).build());
+        unpublicProject(projectId);
+        return BaseResponse.builder().build();
+    }
+
+    public BaseResponse unpublicProject(Integer projectId){
+        blockProjectMapper.delete(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
+        return BaseResponse.builder().build();
+    }
+
+    public BaseResponse publicProject(Integer projectId){
+        blockProjectMapper.insert(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
         return BaseResponse.builder().build();
     }
 

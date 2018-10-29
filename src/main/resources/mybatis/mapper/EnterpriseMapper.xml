@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.EnterpriseMapper" >
-    <insert id="insert" parameterType="Enterprise">
-        insert into enterprise(`name`, `detail`, `manager_id`, `base_path`, `create_time`, `update_time`)
-        values(#{name}, #{detail}, #{managerId}, #{basePath}, now(), now())
+    <insert id="insert" parameterType="EnterpriseParam" useGeneratedKeys="true" keyProperty="id">
+        insert into enterprise(`name`, `detail`, `manager_id`, `image_path`, `create_time`, `update_time`)
+        values(#{name}, #{detail}, #{managerId}, #{imagePath}, now(), now())
     </insert>
-    <insert id="update" parameterType="Enterprise">
+    <insert id="update" parameterType="EnterpriseParam">
         update enterprise
-        set name = #{name}
+        set update_time = now()
+        <if test="name != null and name != ''">
+            , name = #{name}
+        </if>
         <if test="detail != null and detail != ''">
             , detail = #{detail}
         </if>
         <if test="managerId != null">
             , manager_id = #{managerId}
         </if>
-        <if test="base_path != null">
+        <if test="imagePath != null">
+            , image_path = #{imagePath}
+        </if>
+        <if test="basePath != null">
             , base_path = #{basePath}
         </if>
-        <if test="level != null">
-            , level = #{level}
-        </if>
-        ,update_time = now()
         where id=#{id}
     </insert>
     <select id="findList" resultType="Enterprise" parameterType="Query">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.ProvinceMapper" >
-    <insert id="insert" parameterType="Province">
+    <insert id="insert" parameterType="Province" useGeneratedKeys="true" keyProperty="id">
         insert into const_province(`name`)
         values(#{name})
     </insert>

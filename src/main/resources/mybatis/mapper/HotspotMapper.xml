@@ -8,15 +8,12 @@
     </resultMap>
 
     <insert id="insert" parameterType="Hotspot" useGeneratedKeys="true" keyProperty="id">
-        insert into hotspot(`code`, `name`, `title`, `icon`, `location_x`, `location_y`, `bhotspot_id`, `base_flg`, `create_time`, `update_time`)
-        values(#{code}, #{name}, #{title}, #{icon}, #{locationX}, #{locationY}, #{bhotspotId}, #{baseFlg}, now(), now())
+        insert into hotspot(`code`, `name`, `title`, `location_x`, `location_y`, `bhotspot_id`, `base_flg`, `scene_id`, `create_time`, `update_time`)
+        values(#{code}, #{name}, #{title}, #{locationX}, #{locationY}, #{bhotspotId}, #{baseFlg}, #{sceneId}, now(), now())
     </insert>
     <insert id="update" parameterType="Hotspot">
         update hotspot
         set id = #{id}
-        <if test="icon != null and icon !=''">
-            , icon = #{icon}
-        </if>
         <if test="name != null and name !=''">
             , name = #{name}
         </if>
@@ -32,7 +29,7 @@
         <if test="locationY != null">
             , location_y = #{locationY}
         </if>
-        <if test="bhotspot_id != null">
+        <if test="bhotspotId != null">
             , bhotspot_id = #{bhotspotId}
         </if>
         where id = #{id}
