@@ -26,7 +26,9 @@ public class MessageService extends BaseService{
      * @return
      */
     public BaseResponse updateStatus(Integer messageId, int status){
-        mapper.update(Message.builder().id(messageId).status(status).build());
+        Message message = Message.builder().status(status).build();
+        message.setId(messageId);
+        mapper.update(message);
         return BaseResponse.builder().build();
     }
 

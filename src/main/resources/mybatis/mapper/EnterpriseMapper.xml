@@ -35,6 +35,9 @@
         <if test="plateformFlg != null">
             and d.plateform_flg = #{plateformFlg}
         </if>
+        <if test="managerId != null">
+            and d.manager_id = #{managerId}
+        </if>
         order by d.id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
@@ -78,8 +81,8 @@
         select * from enterprise order by id desc
     </select>
     <select id="findOne" resultType="Enterprise">
-        select d.*, p.sgname as managerName from enterprise d left join user_profile p on d.manager_id = p.user_id
-        where id=#{id}
+        select e.*, p.sgname as managerName from enterprise e left join user_profile p on e.manager_id = p.user_id
+        where e.id=#{id}
     </select>
     <update id="delete">
         update enterprise set delete_flg=1  where id=#{id}

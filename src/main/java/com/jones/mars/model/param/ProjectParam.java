@@ -1,5 +1,7 @@
 package com.jones.mars.model.param;
 
+import com.jones.mars.model.Project;
+import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
@@ -15,9 +17,7 @@ import java.util.List;
 @Data
 @Builder
 @ApiModel(value="项目参数")
-public class ProjectParam {
-    @ApiParam(hidden = true)
-    private Integer id;
+public class ProjectParam extends BaseObject {
     @NotEmpty(message = "项目名称不能为空")
     @ApiModelProperty(value="项目名称",name="name")
     private String name;
@@ -41,11 +41,13 @@ public class ProjectParam {
     @ApiModelProperty(value="项目共建人ID列表",name="userIds")
     private List<Integer> userIds = new ArrayList<>();
     @ApiParam(hidden = true)
-    private Integer status;
+    private Integer status = Project.EDITIND;
     @ApiParam(hidden = true)
     private Date publishDate;
     @ApiModelProperty(value="是否定制项目",name="customFlg")
     private Integer customFlg;
+    @ApiModelProperty(value="是否公开项目",name="publicFlg")
+    private Integer publicFlg;
 
 }
 

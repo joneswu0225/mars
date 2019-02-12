@@ -1,5 +1,6 @@
 package com.jones.mars.service;
 
+import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.BlockProject;
 import com.jones.mars.model.Project;
 import com.jones.mars.model.ProjectUser;
@@ -68,7 +69,7 @@ public class ProjectService extends BaseService {
             }
         }
         Map<String, Object> result = new HashMap<>();
-        result.put("projectId", projectId);
+        result.put("id", projectId);
         return BaseResponse.builder().data(result).build();
     }
 
@@ -105,7 +106,7 @@ public class ProjectService extends BaseService {
 
     public BaseResponse addUser(ProjectUserParam param){
         projectUserMapper.insert(param);
-        return BaseResponse.builder().build();
+        return BaseResponse.builder().data(param).build();
     }
 
     @Transactional
@@ -120,27 +121,80 @@ public class ProjectService extends BaseService {
         return BaseResponse.builder().build();
     }
 
-    public BaseResponse onshelfProject(Integer projectId, Boolean publicFlag){
-        mapper.update(ProjectParam.builder().id(projectId).status(Project.ONSHELF).publishDate(new Date()).build());
-        if(publicFlag != null && publicFlag){
-            blockProjectMapper.insert(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
+    public BaseResponse submitVerifyProject(Integer projectId){
+        BaseResponse response = BaseResponse.builder().build();
+        Project project = mapper.findOne(projectId);
+        if(project.getStatus().equals(Project.EDITIND)){
+            project = Project.builder().status(Project.VERIFYING).build();
+            project.setId(projectId);
+            mapper.update(project);
+        } else {
+            response.setErrorCode(ErrorCode.PROJECT_VERIFY_VERIFIED);
         }
-        return BaseResponse.builder().build();
+        return response;
+    }
+
+    public BaseResponse verifyProject(Integer projectId, Boolean isPass, String reason){
+        BaseResponse response  = BaseResponse.builder().build();
+        Project project = mapper.findOne(projectId);
+        if(project.getStatus().equals(Project.VERIFYING)) {
+            if (isPass) {
+                return onshelfProject(projectId, false);
+            } else {
+                project = Project.builder().status(Project.NOTPASS).reason(reason).build();
+                project.setId(projectId);
+                mapper.update(project);
+                return BaseResponse.builder().build();
+            }
+        } else {
+            response.setErrorCode(ErrorCode.PROJECT_VERIFY_VERIFIED);
+        }
+        return response;
+    }
+
+    public BaseResponse onshelfProject(Integer projectId, Boolean publicFlag){
+        BaseResponse response  = BaseResponse.builder().build();
+        Project project = mapper.findOne(projectId);
+        if(project.getStatus() > Project.EDITIND) {
+            project = Project.builder().status(Project.ONSHELF).publishDate(new Date()).build();
+            project.setId(projectId);
+            mapper.update(project);
+            if (publicFlag != null && publicFlag) {
+                blockProjectMapper.insert(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
+            }
+        } else {
+            response.setErrorCode(ErrorCode.PROJECT_VERIFY_ONSHELFED);
+        }
+        return response;
     }
 
     @Transactional
     public BaseResponse offshelfProject(Integer projectId){
-        mapper.update(ProjectParam.builder().id(projectId).status(Project.DOWNSHELF).build());
-        unpublicProject(projectId);
-        return BaseResponse.builder().build();
+        BaseResponse response  = BaseResponse.builder().build();
+        Project project = mapper.findOne(projectId);
+        if(project.getStatus().equals(Project.ONSHELF)){
+            project = Project.builder().status(Project.DOWNSHELF).publishDate(new Date()).build();
+            project.setId(projectId);
+            mapper.update(project);
+            unpublicProject(projectId);
+        } else {
+            response.setErrorCode(ErrorCode.PROJECT_VERIFY_OFFSHELFED);
+        }
+        return response;
     }
-
+    @Transactional
     public BaseResponse unpublicProject(Integer projectId){
+        Project project = Project.builder().publicFlg(Project.UNPUBLIC).build();
+        project.setId(projectId);
+        mapper.update(project);
         blockProjectMapper.delete(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
         return BaseResponse.builder().build();
     }
-
+    @Transactional
     public BaseResponse publicProject(Integer projectId){
+        Project project = Project.builder().publicFlg(Project.PUBLIC).build();
+        project.setId(projectId);
+        mapper.update(project);
         blockProjectMapper.insert(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
         return BaseResponse.builder().build();
     }

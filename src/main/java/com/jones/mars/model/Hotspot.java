@@ -1,6 +1,6 @@
 package com.jones.mars.model;
 
-import com.jones.mars.model.param.HotspotParam;
+import com.jones.mars.object.BaseObject;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,8 +10,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class Hotspot {
-    private Integer id;
+public class Hotspot extends BaseObject {
     private String code;
     private String title;
     private String name;
@@ -20,6 +19,7 @@ public class Hotspot {
     private Integer baseFlg;
     private Integer bhotspotId;
     private Integer sceneId;
+    private Integer projectId;
     private Date createTime;
     private Date updateTime;
     private List<HotspotContent> baseContents = new ArrayList<>();

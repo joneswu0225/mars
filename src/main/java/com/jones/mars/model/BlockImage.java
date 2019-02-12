@@ -1,7 +1,6 @@
 package com.jones.mars.model;
 
-import com.jones.mars.model.param.BlockImageParam;
-import com.jones.mars.model.param.BlockParam;
+import com.jones.mars.object.BaseObject;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,8 +8,7 @@ import java.util.Date;
 
 @Data
 @Builder
-public class BlockImage {
-    private Integer id;
+public class BlockImage extends BaseObject {
     private Integer blockId;
     private String detail;
     private String name;

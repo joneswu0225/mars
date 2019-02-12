@@ -1,5 +1,6 @@
 package com.jones.mars.model.param;
 
+import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
@@ -10,9 +11,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @ApiModel(value="场景参数")
-public class SceneParam {
-    @ApiParam(hidden = true)
-    private Integer id;
+public class SceneParam extends BaseObject {
     @ApiModelProperty(value="场景名称",name="name")
     private String name;
     @ApiModelProperty(value="场景编码",name="code")

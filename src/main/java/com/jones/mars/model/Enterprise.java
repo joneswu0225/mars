@@ -2,6 +2,7 @@ package com.jones.mars.model;
 
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.EnterpriseParam;
+import com.jones.mars.object.BaseObject;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class Enterprise {
-    private Integer id;
+public class Enterprise extends BaseObject {
     private String name;
     private String detail;
     private String avatar;

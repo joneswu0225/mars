@@ -1,12 +1,20 @@
 package com.jones.mars.service;
 
+import com.google.gson.JsonObject;
+import com.jones.mars.model.param.ProjectSceneParam;
 import com.jones.mars.model.query.Query;
+import com.jones.mars.object.BaseObject;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
 import com.jones.mars.util.LoginUtil;
 import com.jones.mars.util.Page;
+import org.springframework.integration.support.MapBuilder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.aliyuncs.http.FormatType.JSON;
 
 /**
  * Created by jones on 18-9-2.
@@ -25,9 +33,11 @@ public abstract class BaseService<T> {
      * @param param
      * @return
      */
-    public BaseResponse add(Object param){
+    public BaseResponse add(BaseObject param){
         getMapper().insert(param);
-        return BaseResponse.builder().build();
+        Map<String, Integer> map = new HashMap<>();
+        map.put("id", param.getId());
+        return BaseResponse.builder().data(map).build();
     }
 
     /**
@@ -35,7 +45,7 @@ public abstract class BaseService<T> {
      * @param param
      * @return
      */
-    public BaseResponse update(Object param){
+    public BaseResponse update(BaseObject param){
         getMapper().update(param);
         return BaseResponse.builder().build();
     }
@@ -69,6 +79,5 @@ public abstract class BaseService<T> {
         getMapper().delete(id);
         return BaseResponse.builder().build();
     }
-
 
 }

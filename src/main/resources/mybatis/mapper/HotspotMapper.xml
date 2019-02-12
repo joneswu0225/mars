@@ -8,8 +8,8 @@
     </resultMap>
 
     <insert id="insert" parameterType="Hotspot" useGeneratedKeys="true" keyProperty="id">
-        insert into hotspot(`code`, `name`, `title`, `location_x`, `location_y`, `bhotspot_id`, `base_flg`, `scene_id`, `create_time`, `update_time`)
-        values(#{code}, #{name}, #{title}, #{locationX}, #{locationY}, #{bhotspotId}, #{baseFlg}, #{sceneId}, now(), now())
+        insert into hotspot(`code`, `name`, `title`, `location_x`, `location_y`, `bhotspot_id`, `base_flg`, `scene_id`,`project_id`, `create_time`, `update_time`)
+        values(#{code}, #{name}, #{title}, #{locationX}, #{locationY}, #{bhotspotId}, #{baseFlg}, #{sceneId},#{projectId}, now(), now())
     </insert>
     <insert id="update" parameterType="Hotspot">
         update hotspot
@@ -39,10 +39,12 @@
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select * from hotspot
         where 1=1
-        <if test="query != null and query.sceneId != null">
+        <if test="sceneId != null">
             and scene_id=#{sceneId}
         </if>
-
+        <if test="projectId != null">
+            and project_id=#{projectId}
+        </if>
         order by id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
@@ -50,17 +52,26 @@
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from hotspot
         where 1=1
-        <if test="query != null and query.sceneId != null">
+        <if test="sceneId != null">
             and scene_id=#{sceneId}
+        </if>
+        <if test="projectId != null">
+            and project_id=#{projectId}
         </if>
     </select>
 
     <select id="findAll" resultMap="HotspotMap" parameterType="Query">
         select * from hotspot
         where 1=1
-        <if test="query != null and query.sceneId != null">
+        <if test="projectId != null">
+            and project_id=#{projectId}
+        </if>
+        <if test="sceneId != null">
+            and scene_id = #{sceneId}
+        </if>
+        <if test="sceneIds != null">
             and scene_id in
-            <foreach collection="query.sceneIds" index="index" item="item" open="(" separator="," close=")">
+            <foreach collection="sceneIds" index="index" item="item" open="(" separator="," close=")">
                 #{item}
             </foreach>
         </if>

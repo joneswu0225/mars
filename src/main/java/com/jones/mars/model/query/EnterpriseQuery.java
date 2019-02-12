@@ -9,6 +9,7 @@ public class EnterpriseQuery extends Query {
 
     private String name;
     private Integer userId;
+    private Integer managerId;
     private Integer plateformFlg;
 
 

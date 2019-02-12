@@ -3,11 +3,13 @@ package com.jones.mars.model.param;
 import com.jones.mars.model.constant.HotspotContentType;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
 @Data
+@Builder
 public class HotspotContentParam {
     @NotNull
     @ApiModelProperty(value="类型",name="type")

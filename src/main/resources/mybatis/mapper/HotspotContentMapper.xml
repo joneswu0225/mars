@@ -7,22 +7,32 @@
             (#{param.hotspotId}, #{param.content}, #{param.title}, #{param.extra}, #{index}, #{param.type})
         </foreach>
     </insert>
-    <insert id="update" parameterType="HotspotContentParams">
+    <insert id="insertOne" parameterType="HotspotContentParam" useGeneratedKeys="true" keyProperty="id">
+        insert into hotspot_content(`hotspot_id`, `content`, `title`, `extra`, `seq`, `type`) values
+        (#{hotspotId}, #{content}, #{title}, #{extra}, 0, #{type})
+    </insert>
+    <update id="update" parameterType="HotspotContentParams">
         <foreach collection="hotspotContentList" item="param" index="index" separator=";">
         update hotspot_content
-        set content = #{content}, title = #{title}, type = #{type}, extra = #{extra}, seq=#{index}
-        where id = #{id}
+        set content = #{param.content}, title = #{param.title}, type = #{param.type}, extra = #{param.extra}, seq=#{index}
+        where id = #{param.id}
         </foreach>
-    </insert>
-    <insert id="updateHotspotContentSeq">
+    </update>
+    <update id="updateHotspotContentSeq">
+        update hotspot_content set seq=case
         <foreach collection="hotspotContentIds" item="hotspotContentId" index="index">
-            update hotspot_content set seq=#{index} where id=#{hotspotContentId}
+            when id=#{hotspotContentId} then #{index}
         </foreach>
-    </insert>
+        end
+        where id in
+        <foreach collection="hotspotContentIds" item="hotspotContentId" index="index" separator="," open="(" close=")">
+            #{hotspotContentId}
+        </foreach>
+    </update>
     <select id="findList" resultType="HotspotContent" parameterType="Query">
         select * from hotspot_content
         where hotspot_id=#{query.hotspotId}
-        order by seq
+        order by seq, id
     </select>
 
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">

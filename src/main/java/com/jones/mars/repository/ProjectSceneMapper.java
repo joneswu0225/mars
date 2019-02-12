@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 public interface ProjectSceneMapper {
     void insert(Object param);
     void delete(Object param);
+    void updateProjectSceneSeq(Object param);
 }

@@ -7,6 +7,7 @@ import com.jones.mars.model.param.UserRegistParam;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.UserService;
 import com.jones.mars.support.ValidMobile;
+import com.jones.mars.util.LoginUtil;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,13 @@ public class LoginController extends BaseController {
     @PostMapping("login")
     public BaseResponse login(@RequestBody @ApiParam(required=true) UserLoginParam param) {
         return userService.doLogin(param);
+    }
+
+    @ApiOperation(value = "注销", notes = "注销")
+    @PostMapping("logout")
+    public BaseResponse logout() {
+        LoginUtil.getInstance().removeUser();
+        return BaseResponse.builder().build();
     }
 
 }

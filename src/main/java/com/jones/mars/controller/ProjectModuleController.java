@@ -40,7 +40,9 @@ public class ProjectModuleController extends BaseController {
     public BaseResponse update(
             @PathVariable Integer projectModuleId,
             @Valid @RequestBody @ApiParam(required=true) ProjectModuleParam param) {
-        return service.update(BlockModule.builder().id(projectModuleId).name(param.getName()).build());
+        BlockModule blockModule = BlockModule.builder().name(param.getName()).build();
+        blockModule.setId(projectModuleId);
+        return service.update(blockModule);
     }
 
     // TODO 增加后台注解

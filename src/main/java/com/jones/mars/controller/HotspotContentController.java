@@ -1,7 +1,9 @@
 package com.jones.mars.controller;
 
+import com.jones.mars.model.param.HotspotContentParam;
 import com.jones.mars.model.param.HotspotContentParams;
 import com.jones.mars.model.param.HotspotContentSeqParam;
+import com.jones.mars.model.param.HotspotParam;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.HotspotContentService;
 import io.swagger.annotations.Api;
@@ -10,6 +12,8 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/hotspotContent")
@@ -28,13 +32,28 @@ public class HotspotContentController extends BaseController {
 
     @ApiOperation(value = "批量新增/更新热点内容", notes = "")
     @PostMapping("")
-    public BaseResponse add(@RequestBody @ApiParam(required=true) HotspotContentParams param) {
+    public BaseResponse save(@RequestBody @ApiParam(required=true) HotspotContentParams param) {
         return service.save(param);
+    }
+
+    @ApiOperation(value = "新增热点内容", notes = "")
+    @PostMapping("/single")
+    public BaseResponse singleAdd(@RequestBody @ApiParam(required=true) HotspotContentParam param) {
+        return service.insertContent(param);
+    }
+
+    @ApiOperation(value = "更新内容", notes = "")
+    @PostMapping("/{hotspotContentId}")
+    public BaseResponse singleUpdate(
+            @PathVariable Integer hotspotContentId,
+            @RequestBody @ApiParam(required=true) HotspotContentParam param) {
+        param.setId(hotspotContentId);
+        return service.updateContents(Arrays.asList(param));
     }
 
     @ApiOperation(value = "调整热点内容顺序", notes = "")
     @PostMapping("/changeSeq")
-    public BaseResponse add(@RequestBody @ApiParam(required=true) HotspotContentSeqParam param) {
+    public BaseResponse changeSeq(@RequestBody @ApiParam(required=true) HotspotContentSeqParam param) {
         return service.updateHotspotContentSeq(param);
     }
 

@@ -1,6 +1,7 @@
 package com.jones.mars.model.param;
 
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Data;
 

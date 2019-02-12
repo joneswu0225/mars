@@ -1,21 +1,19 @@
 package com.jones.mars.service;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.exception.InternalException;
 import com.jones.mars.model.Enterprise;
 import com.jones.mars.model.User;
 import com.jones.mars.model.param.UserLoginParam;
 import com.jones.mars.model.param.UserProfileParam;
-import com.jones.mars.model.param.UserRegistParam;
 import com.jones.mars.model.query.EnterpriseQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.model.query.UserQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
 import com.jones.mars.repository.EnterpriseMapper;
-import com.jones.mars.repository.RoleMapper;
 import com.jones.mars.repository.UserMapper;
+import com.jones.mars.util.AliMnsSender;
 import com.jones.mars.util.LoginUtil;
 import com.jones.mars.util.RandomString;
 import com.jones.mars.util.UuidUtil;
@@ -36,6 +34,11 @@ public class UserService extends BaseService<User>{
     private UserMapper mapper;
     @Autowired
     private EnterpriseMapper enterpriseMapper;
+
+    @Override
+    public BaseMapper getMapper() {
+        return this.mapper;
+    }
 
     private boolean exists(String mobile){
         Integer count = mapper.findCount(UserQuery.builder().mobile(mobile).build());
@@ -90,19 +93,24 @@ public class UserService extends BaseService<User>{
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse getVerifyCode(String mobile){
         String verifyCode = RandomString.generateVerifyCode();
+        AliMnsSender.sendMns(mobile, verifyCode);
+        return BaseResponse.builder().build();
+/*
         List<User> users = mapper.findList(UserQuery.builder().mobile(mobile).build());
         if(users.size() == 1){
             User user_db = users.get(0);
-            User user_update = User.builder().id(user_db.getId()).verifyCode(verifyCode).build();
+            User user_update = User.builder().verifyCode(verifyCode).build();
+            user_update.setId(user_db.getId());
             mapper.update(user_update);
-            Map<String, String> resp = new HashMap<>();
-            resp.put("verifyCode", verifyCode);
-            return BaseResponse.builder().data(resp).build();
+            AliMnsSender.sendMns(mobile, verifyCode);
+//            Map<String, String> resp = new HashMap<>();
+//            resp.put("verifyCode", verifyCode);
+            return BaseResponse.builder().build();
         } else if(users.size() < 1){
             return BaseResponse.builder().code(ErrorCode.LOGIN_MOBILE_NOTEXISTS).build();
         } else {
             throw new InternalException("手机号重复");
-        }
+        }*/
     }
 
     /**
@@ -115,7 +123,8 @@ public class UserService extends BaseService<User>{
         List<User> users = mapper.findList(new Query(param));
         if(users.size() == 1){
             User user_db = users.get(0);
-            User user_update = User.builder().id(user_db.getId()).password(param.getPassword()).build();
+            User user_update = User.builder().password(param.getPassword()).build();
+            user_update.setId(user_db.getId());
             mapper.update(user_update);
             return BaseResponse.builder().data(user_update.getId()).build();
         } else if(users.size() < 1){
@@ -131,7 +140,7 @@ public class UserService extends BaseService<User>{
      * @return
      */
     public BaseResponse doLogin(UserLoginParam userParam) {
-        UserQuery.UserQueryBuilder builder = UserQuery.builder();
+        UserQuery.UserQueryBuilder builder = UserQuery.builder().mobile(userParam.getMobile());
         if(StringUtils.isEmpty(userParam.getVerifyCode()) & StringUtils.isEmpty(userParam.getPassword())) {
             return BaseResponse.builder().code(ErrorCode.VALIDATION_FAILED).message("验证码和密码不能同时为空").build();
         } else if (!StringUtils.isEmpty(userParam.getVerifyCode())){
@@ -144,17 +153,22 @@ public class UserService extends BaseService<User>{
             Date now = new Date();
             User user_db = users.get(0);
             user_db.setLastLoginTime(now);
-            User user_update = User.builder().id(user_db.getId()).lastLoginTime(now).build();
+            User user_update = User.builder().lastLoginTime(now).build();
+            user_update.setId(user_db.getId());
             mapper.update(user_update);
             Map<String, Object> result = new HashMap<>();
-            result.put(LoginUtil.CUR_USER, "Basic " + UuidUtil.generate().toUpperCase());
+            String authorization = "Basic " + UuidUtil.generate().toUpperCase();
             result.put("id", user_db.getId());
             result.put("avatar", user_db.getAvatar());
             // 返回用户基本信息
             // 从enterprise_user表中查询所有的企业
             // 如果是管理员则不返回
-            if(!user_db.getUserType().equals(User.ADMIN)){
+            if(user_db.getUserType().equals(User.COMMON)){
                 List<Enterprise> enterprises = enterpriseMapper.findUserEnterprise(EnterpriseQuery.builder().userId(user_db.getId()).build());
+                result.put("enterprises", enterprises);
+                user_db.setEnterprises(enterprises);
+            } else if(user_db.getUserType().equals(User.ENTMANAGER)) {
+                List<Enterprise> enterprises = enterpriseMapper.findList(EnterpriseQuery.builder().managerId(user_db.getId()).build());
                 result.put("enterprises", enterprises);
                 user_db.setEnterprises(enterprises);
             }
@@ -163,7 +177,9 @@ public class UserService extends BaseService<User>{
 //                result.put("roles", roleList);
 //            }
             result.put("expireTime", new Date(now.getTime() + LoginUtil.SESSION_MAX_INACTIVE_INTERVAL));
-            LoginUtil.getInstance().setUser(user_db);
+            result.put("userType", user_db.getUserType());
+            LoginUtil.getInstance().setUser(authorization, user_db);
+            result.put("authorization", user_db.getAuth());
             return BaseResponse.builder().data(result).build();
         } else if(users.size() < 1){
             return BaseResponse.builder().code(ErrorCode.LOGIN_FAIL).build();
@@ -178,9 +194,5 @@ public class UserService extends BaseService<User>{
         return BaseResponse.builder().build();
     }
 
-    @Override
-    public BaseMapper getMapper() {
-        return null;
-    }
 }
 

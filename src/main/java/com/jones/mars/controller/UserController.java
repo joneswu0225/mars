@@ -40,7 +40,9 @@ public class UserController extends BaseController {
     public BaseResponse update(
             @PathVariable Integer userId,
             @RequestBody @ApiParam(required=true) UserParam param) {
-        return service.update(User.builder().id(userId).userType(param.getUserType()).status(param.getStatus()).build());
+        User user = User.builder().userType(param.getUserType()).status(param.getStatus()).build();
+        user.setId(userId);
+        return service.update(user);
     }
 
     @ApiOperation(value = "更新用户信息", notes = "")

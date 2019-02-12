@@ -29,6 +29,7 @@ public class SceneService extends BaseService {
     @Autowired
     private HotspotMapper hotspotMapper;
 
+
     @Override
     public BaseMapper getMapper() {
         return this.sceneMapper;
@@ -46,7 +47,8 @@ public class SceneService extends BaseService {
         List<Scene> sceneList = sceneMapper.findAll(SceneQuery.builder().projectId(projectId).build());
         Map<Integer, Scene> sceneMap = sceneList.stream().sorted(Comparator.comparing(Scene::getSeq)).collect(Collectors.toMap(Scene::getId, p->p));
         if(sceneMap.size() > 0){
-            List<Hotspot> hotspotList = hotspotMapper.findAll(HotspotQuery.builder().sceneIds(sceneMap.keySet()).build());
+//            List<Hotspot> hotspotList = hotspotMapper.findAll(HotspotQuery.builder().sceneIds(sceneMap.keySet()).build());
+            List<Hotspot> hotspotList = hotspotMapper.findAll(HotspotQuery.builder().projectId(projectId).build());
             hotspotList.forEach(p->{
                 if(sceneMap.containsKey(p.getSceneId())){
                     sceneMap.get(p.getSceneId()).getHotspots().add(p);
@@ -66,14 +68,9 @@ public class SceneService extends BaseService {
         return BaseResponse.builder().build();
     }
 
-
-
-
-
-
-
-
-
-
+    public BaseResponse updateProjectSceneSeq(ProjectSceneParam param) {
+        projectSceneMapper.updateProjectSceneSeq(param);
+        return BaseResponse.builder().build();
+    }
 
 }

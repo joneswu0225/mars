@@ -8,7 +8,7 @@
 
     <!--输出到文件，切分文件日志-->
 	<appender name="ROLL-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_HOME}/webetl.log</file>
+        <file>${LOG_HOME}/mars.log</file>
         <!--滚动策略，按照时间滚动 TimeBasedRollingPolicy-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_HOME}/mars-%d{yyyyMMdd}.log</fileNamePattern>

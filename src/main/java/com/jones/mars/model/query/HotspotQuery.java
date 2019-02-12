@@ -13,6 +13,8 @@ import java.util.Set;
 public class HotspotQuery extends Query {
     @ApiModelProperty(value="场景ID",name="sceneId")
     private Integer sceneId;
+    @ApiModelProperty(value="项目ID",name="projectId")
+    private Integer projectId;
     @ApiModelProperty(hidden = true)
     private Set<Integer> sceneIds;
 }

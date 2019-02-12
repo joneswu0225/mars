@@ -15,9 +15,9 @@
             ,detail = #{detail}
         </if>
         <if test="imageUrl != null and imageUrl !=''">
-            ,image_url = #{imageurl}
+            ,image_url = #{imageUrl}
         </if>
-        <if test="reason != null and reason !=''">
+        <if test="reason != null">
             ,reason = #{reason}
         </if>
         <if test="moduleId != null">
@@ -32,6 +32,9 @@
         <if test="customFlg != null">
             , custom_flg = #{customFlg}
         </if>
+        <if test="publicFlg != null">
+            , public_flg = #{publicFlg}
+        </if>
         <if test="publishDate != null">
             , publish_date = #{publishDate}
         </if>
@@ -41,7 +44,7 @@
     <select id="findList" resultType="Project" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select p.*, e.name as oriEnterpriseName, e.avatar as oriEnterpriseAvatar, e.base_path as oriEnterpriseBasePath, b.id as blockId, b.name as blockName, m.name as moduleName, c.name as className
-        from project p left join block_project bp on bp.block_id=p.id left join block b on bp.block_id = b.id
+        from project p left join block_project bp on bp.project_id=p.id left join block b on bp.block_id = b.id
         left join block_module m on p.module_id = m.id left join block_class c on p.class_id=c.id
         left join enterprise e on p.ori_enterprise_id = e.id
         where p.delete_flg=0

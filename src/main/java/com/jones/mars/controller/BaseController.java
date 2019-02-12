@@ -11,14 +11,6 @@ public class BaseController {
         return LoginUtil.getInstance().getUser();
     }
 
-    protected void setLoginUser(User user) {
-        LoginUtil.getInstance().setUser(user);
-    }
-
-    protected void removeLoginUser() {
-        LoginUtil.getInstance().removeUser();
-    }
-
     public int getPage() {
         return this.page;
     }

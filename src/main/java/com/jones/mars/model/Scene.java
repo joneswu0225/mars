@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.jones.mars.object.BaseObject;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,15 +9,14 @@ import java.util.List;
 
 @Data
 @Builder
-public class Scene {
-    private Integer id;
+public class Scene extends BaseObject {
     private Integer sceneTypeId;
     private String code;
     private String name;
     private String detail;
     private Integer blockId;
     private Integer imageId;
-    private Integer imageUrl;
+    private String imageUrl;
     private Float locationX;
     private Float locationY;
     private Integer seq;

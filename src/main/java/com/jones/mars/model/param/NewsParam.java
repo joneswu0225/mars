@@ -1,5 +1,6 @@
 package com.jones.mars.model.param;
 
+import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
@@ -12,11 +13,9 @@ import java.util.Date;
 
 @Data
 @ApiModel(value="新闻动态")
-public class NewsParam {
-    @ApiParam(hidden = true)
-    private Integer id;
-    @ApiModelProperty(value="富文本内容",name="content")
-    private String content;
+public class NewsParam extends BaseObject {
+    @ApiModelProperty(value="内容url",name="contentUrl")
+    private String contentUrl;
     @NotBlank(message = "作者不能为空")
     @ApiModelProperty(value="作者",name="author")
     private String author;

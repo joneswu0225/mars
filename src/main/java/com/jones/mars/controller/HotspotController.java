@@ -36,9 +36,7 @@ public class HotspotController extends BaseController {
     @ApiOperation(value = "新增热点", notes = "")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) HotspotParam param) {
-        if(StringUtils.isEmpty(param.getCode())){
-            param.setCode(param.getSceneId() + "_" + System.currentTimeMillis());
-        }
+        param.setCode("hs_" + System.currentTimeMillis());
         return service.add(param);
     }
 

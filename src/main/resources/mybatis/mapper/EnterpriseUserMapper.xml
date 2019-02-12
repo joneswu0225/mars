@@ -11,18 +11,52 @@
         where enterprise_id=#{enterpriseId}
         order by id desc
     </select>
-    <select id="findList" resultType="EnterpriseUser" parameterType="Query">
+    <resultMap id="EnterpriseUserMap" type="EnterpriseUser" >
+        <id property="id" column="id" />
+        <id property="userId" column="userId" />
+        <id property="userSgname" column="userSgname" />
+        <id property="enterpriseId" column="enterpriseId" />
+        <id property="updateTime" column="updateTime" />
+        <id property="createTime" column="createTime" />
+        <collection property="departmentList" ofType="Department" column="departmentId">
+            <id column="departmentId" property="id"/>
+            <result column="departmentName" property="name"/>
+            <result column="parentId" property="parentId"/>
+            <result column="managerId" property="managerId"/>
+        </collection>
+    </resultMap>
+
+    <select id="findList" resultMap="EnterpriseUserMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select eu.*, p.sgname as userSgname, d.id as departmentId, d.name as departmentName
+        select eu.id, eu.enterprise_id as enterpriseId, eu.user_id as userId,eu.create_time as createTime, eu.update_time as updateTime, p.sgname as userSgname, d.id as departmentId, d.name as departmentName, d.parent_id as parentId, d.manager_id as managerId
         from enterprise_user eu left join user_profile p on eu.user_id=p.user_id left join department d on d.enterprise_id=eu.enterprise_id
-        where enterprise_id=#{enterpriseId}
-        order by id desc
+        where 1=1
+        <if test="enterpriseId != null">
+            and eu.enterprise_id=#{enterpriseId}
+        </if>
+        <if test="sgname != null and sgname != ''">
+            and p.sgname like concat('%',#{sgname},'%')
+        </if>
+        <if test="departmentId != null">
+            and d.id=#{departmentId}
+        </if>
+        order by d.id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*)
         from enterprise_user eu left join user_profile p on eu.user_id=p.user_id left join department d on d.enterprise_id=eu.enterprise_id
-        where enterprise_id=#{enterpriseId}
+        where 1=1
+        <if test="enterpriseId != null">
+            and eu.enterprise_id=#{enterpriseId}
+        </if>
+
+        <if test="sgname != null and sgname != ''">
+            and p.sgname like concat('%',#{sgname},'%')
+        </if>
+        <if test="departmentId != null">
+            and d.id=#{departmentId}
+        </if>
     </select>
     <select id="findOne">
         select eu.*, p.sgname as userSgname, d.id as departmentId, d.name as departmentName

@@ -11,4 +11,6 @@ public class DepartmentQuery extends Query {
     private Integer enterpriseId;
     @ApiModelProperty(value="部门名称",name="name")
     private String name;
+    @ApiModelProperty(value="部门ID",name="departmentId")
+    private Integer departmentId;
 }

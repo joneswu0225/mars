@@ -45,7 +45,9 @@ public class RoleController extends BaseController {
     public BaseResponse update(
             @PathVariable Integer roleId,
             @Valid @RequestBody @ApiParam(required=true) RoleParam param) {
-        return service.update(Role.builder().id(roleId).name(param.getName()).build());
+        Role role = Role.builder().name(param.getName()).build();
+        role.setId(roleId);
+        return service.update(role);
     }
 
     @ApiOperation(value = "删除角色", notes = "后台调用")

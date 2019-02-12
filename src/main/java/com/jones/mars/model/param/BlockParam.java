@@ -1,5 +1,6 @@
 package com.jones.mars.model.param;
 
+import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
@@ -11,7 +12,7 @@ import java.util.Date;
 
 @Data
 @ApiModel(value="模块参数")
-public class BlockParam {
+public class BlockParam extends BaseObject {
     @NotBlank(message = "模块名称不能为空")
     @ApiModelProperty(value="模块名称",name="name")
     private String name;
@@ -24,7 +25,5 @@ public class BlockParam {
     private String detail;
     @ApiParam(hidden = true)
     private Integer operatorId;
-    @ApiParam(hidden = true)
-    private Integer id;
 }
 

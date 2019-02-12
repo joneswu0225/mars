@@ -9,5 +9,6 @@ import java.util.List;
 public interface DepartmentUserMapper {
     void insert(Object param);
     void delete(Object param);
+    void deleteByDepartmentParam(Object param);
     List<DepartmentUser> findDepartmentUser(Integer departmentId);
 }

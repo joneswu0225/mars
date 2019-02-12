@@ -2,6 +2,7 @@ package com.jones.mars.controller;
 
 import com.jones.mars.model.ProjectScene;
 import com.jones.mars.model.ProjectUser;
+import com.jones.mars.model.param.HotspotContentSeqParam;
 import com.jones.mars.model.param.ProjectParam;
 import com.jones.mars.model.param.ProjectSceneParam;
 import com.jones.mars.model.param.ProjectUserParam;
@@ -65,6 +66,7 @@ public class ProjectController extends BaseController {
             @PathVariable Integer projectId,
             @Valid @RequestBody @ApiParam(required=true) ProjectParam param) {
         param.setId(projectId);
+        param.setReason("");
         return projectService.update(param);
     }
 
@@ -84,6 +86,11 @@ public class ProjectController extends BaseController {
         return sceneService.insertProjectScene(param);
     }
 
+    @ApiOperation(value = "调整项目场景顺序", notes = "")
+    @PostMapping("/{projectId}/scene/changeSeq")
+    public BaseResponse changeSceneSeq(@RequestBody @ApiParam(required=true) ProjectSceneParam param) {
+        return sceneService.updateProjectSceneSeq(param);
+    }
     @ApiOperation(value = "删除项目场景", notes = "删除项目场景")
     @DeleteMapping("{projectId}/scene/{sceneId}")
     public BaseResponse deleteScene(
@@ -126,6 +133,21 @@ public class ProjectController extends BaseController {
     public BaseResponse publishProject(@PathVariable @ApiParam(required=true) Integer projectId,
                         @RequestParam(name="publicFlag", required = false) @ApiParam(value="是否公开发布",name="publicFlag")Boolean publicFlag) {
         return  projectService.onshelfProject(projectId, publicFlag);
+    }
+
+    @ApiOperation(value = "提交审核项目", notes = "")
+    @PatchMapping("{projectId}/submitVerify")
+    public BaseResponse submitVerifyProject(@PathVariable @ApiParam(required=true) Integer projectId) {
+        return  projectService.submitVerifyProject(projectId);
+    }
+
+
+    @ApiOperation(value = "审核项目", notes = "")
+    @PatchMapping("{projectId}/verify")
+    public BaseResponse verifyProject(@PathVariable @ApiParam(required=true) Integer projectId,
+                                      @RequestParam(name="isPass", required = true) @ApiParam(value="是否通过",name="isPass")Boolean isPass,
+                                      @RequestParam(name="reason", required = false) @ApiParam(value="不通过理由",name="reason")String reason) {
+        return  projectService.verifyProject(projectId, isPass, reason);
     }
 
     @ApiOperation(value = "下架项目", notes = "")

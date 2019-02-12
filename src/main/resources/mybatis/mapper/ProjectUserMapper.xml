@@ -8,7 +8,7 @@
         </foreach>
         ON DUPLICATE KEY UPDATE
         <foreach collection="userIds" item="userId" index="index" separator=",">
-            manager_flg = #{managerFlg}
+            manager_flg = <if test="managerFlg == null">0</if><if test="managerFlg!=null">#{managerFlg}</if>
         </foreach>
     </insert>
     <select id="findByProjectId" parameterType="java.lang.Integer" resultType="ProjectUser">

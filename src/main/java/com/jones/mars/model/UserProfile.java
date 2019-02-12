@@ -1,11 +1,12 @@
 package com.jones.mars.model;
 
+import com.jones.mars.object.BaseObject;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class UserProfile {
+public class UserProfile extends BaseObject {
     private String description;
     private String birthday;
     private Date createTime;
@@ -20,6 +21,5 @@ public class UserProfile {
     private String mobile;
     private String sgname;
     private Integer userId;
-    private Integer id;
 }
 

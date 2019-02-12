@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.DepartmentMapper" >
-    <insert id="insert" parameterType="Department" useGeneratedKeys="true" keyProperty="id">
-        insert into department(`name`, `parent_id`, `level`, `manager_id`, `operator_id`, `enterprise_id`, `create_time`, `update_time`)
-        values(#{name}, #{parentId}, #{level}, #{managerId}, #{operatorId}, #{enterpriseId}, now(), now())
+    <insert id="insert" parameterType="DepartmentParam" useGeneratedKeys="true" keyProperty="id">
+        insert into department(`name`, `parent_id`, `manager_id`, `operator_id`, `enterprise_id`, `create_time`, `update_time`)
+        values(#{name}, #{parentId}, #{managerId}, #{operatorId}, #{enterpriseId}, now(), now())
     </insert>
-    <insert id="update" parameterType="Department">
+    <update id="update" parameterType="DepartmentParam">
         update department
         set name = #{name}
         <if test="enterpriseId != null">
@@ -17,13 +17,12 @@
         <if test="parentId != null">
             , parent_id = #{parentId}
         </if>
-        <if test="level != null">
-            , level = #{level}
+        <if test="operatorId != null">
+            , operator_id = #{operatorId}
         </if>
-        , and operator_id = #{operatorId}
         ,update_time = now()
-        where id=#{id}
-    </insert>
+        where id=#{departmentId}
+    </update>
     <resultMap id="DepartmentMap" type="Department" >
         <id column="id" property="id" />
         <id column="enterpirse_id" property="enterpriseId" />
@@ -32,47 +31,41 @@
         <id column="manager_id" property="managerId" />
         <id column="parentName" property="parentName" />
         <id column="managerName" property="managerName" />
-        <collection property="moduleList" ofType="departmentUser" column="department_id">
+        <collection property="userList" ofType="departmentUser" column="department_id">
             <id column="departmentUserId" property="id"/>
-            <result column="user_id" property="userId"/>
+            <result column="userId" property="userId"/>
             <result column="userSgname" property="userSgname"/>
         </collection>
     </resultMap>
     <select id="findList" resultMap="DepartmentMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select d.id, d.enterprise_id, d.name, d.parent_id, d.manager_id,up1.sgname as managerName, p.name as parentName,du.id as departmentUserId, du.department_id, up2.user_id, up2.sgname as userSgname
+        select d.id, d.enterprise_id, d.name, d.parent_id, d.manager_id,up1.sgname as managerName, p.name as parentName,du.id as departmentUserId, du.department_id, up2.user_id as userId, up2.sgname as userSgname
         from department d left join department p on d.parent_id = p.id left join user_profile up1 on d.manager_id=up1.user_id
-          left join department_user on du.department_id=d.id left join user_profile up2 on du.user_id=up2.user_id
-        where delete_flg=0
-        <if test="!= null and name != null and name !=''">
+          left join department_user du on du.department_id=d.id left join user_profile up2 on du.user_id=up2.user_id
+        where d.delete_flg=0
+        <if test="name != null and name !=''">
             and d.name like concat('%',#{name},'%')
         </if>
-        <if test="!= null and enterpriseId != null">
+        <if test="enterpriseId != null">
             and d.enterprise_id=#{enterpriseId}
-        </if>
-        <if test="!= null and level != null">
-            and d.level=#{level}
         </if>
         order by d.id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from department d
-        where delete_flg=0
-        <if test="!= null and name != null and name !=''">
+        where d.delete_flg=0
+        <if test="name != null and name !=''">
             and d.name like concat('%',#{name},'%')
         </if>
-        <if test="!= null and enterpriseId != null">
+        <if test="enterpriseId != null">
             and d.enterprise_id=#{enterpriseId}
-        </if>
-        <if test="!= null and level != null">
-            and d.level=#{level}
         </if>
     </select>
     <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
         select id, name from department d
         where delete_flg=0
-        <if test="!= null and name != null and name !=''">
+        <if test="name != null and name !=''">
             and d.name like concat('%',#{name},'%')
         </if>
         <if test="enterpriseId != null">
@@ -83,13 +76,13 @@
     <select id="findAll" resultType="Department">
         select * from department where delete_flg=0 order by id desc
     </select>
-    <select id="findOne" resultType="Department">
-        select d.*, p.name as parentName, p1.sgname as managerName
-        from department d left join department p on d.parent_id = p.id left join user_profile p1 on d.manager_id=p1.user_id
-        where id=#{id}
+    <select id="findOne" resultMap="DepartmentMap">
+        select d.id, d.enterprise_id, d.name, d.parent_id, d.manager_id,up1.sgname as managerName, p.name as parentName,du.id as departmentUserId, du.department_id, up2.user_id as userId, up2.sgname as userSgname
+        from department d left join department p on d.parent_id = p.id left join user_profile up1 on d.manager_id=up1.user_id
+        left join department_user du on du.department_id=d.id left join user_profile up2 on du.user_id=up2.user_id
+        where d.id=#{id}
     </select>
     <delete id="delete">
         delete from department where id=#{id};
-        delete from user_department where department_id=#{id};
     </delete>
 </mapper>

@@ -3,9 +3,10 @@
 <mapper namespace="com.jones.mars.repository.BlockMapper" >
     <resultMap id="BlockMap" type="Block" >
         <id column="blockId" property="id" />
-        <id column="enterpirse_id" property="enterpriseId" />
+        <id column="enterprise_id" property="enterpriseId" />
         <id column="blockName" property="name" />
-        <id column="blockStatus" property="staus" />
+        <id column="blockDetail" property="detail" />
+        <id column="blockStatus" property="status" />
         <collection property="moduleList" ofType="BlockModule" column="blockId">
             <id column="moduleId" property="id"/>
             <result column="blockId" property="blockId"/>
@@ -19,7 +20,7 @@
         </collection>
     </resultMap>
     <select id="findBlockModule" resultMap="BlockMap" parameterType="Query">
-        select m.*, c.id as classId, c.name as className, c.module_id
+        select m.id as moduleId, m.block_id as blockId, m.name as moduleName, c.id as classId, c.name as className, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail
         from block b left join block_module m on b.id=m.block_id left join block_class c on m.id=c.module_id
         where m.delete_flg=0
         <if test="enterpriseId != null">
@@ -36,8 +37,8 @@
         <if test="enterpriseId != null">
             , enterprise_id = #{enterpriseId}
         </if>
-        <if test="staus != null">
-            , staus = #{staus}
+        <if test="status != null">
+            , status = #{status}
         </if>
         , and operator_id = #{operatorId}
         ,update_time = now()
@@ -68,7 +69,7 @@
         <if test="query != null and query.name != null and query.name !=''">
             and name like concat('%',#{query.name},'%')
         </if>
-        <if test="query != null and query.plateformFlg ! = null">
+        <if test="query != null and query.plateformFlg != null">
             and plateform_flg=#{query.plateformFlg}
         </if>
         <if test="query != null and query.status != null">
@@ -81,7 +82,7 @@
     <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
         select id, name from block
         where delete_flg=0
-        <if test="query != null and query.staus != null">
+        <if test="query != null and query.status != null">
             and name like concat('%',#{query.name},'%')
         </if>
         <if test="query != null and query.plateformFlg != null">

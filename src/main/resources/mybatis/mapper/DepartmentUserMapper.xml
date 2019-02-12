@@ -2,23 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.DepartmentUserMapper" >
     <insert id="insert" parameterType="DepartmentUserParam" useGeneratedKeys="true" keyProperty="id">
-        <foreach collection="userIds" item="userId" index="index">
-            insert into department_user(`department_id`, `user_id`, `create_time`,`update_time`)
-            values(#{departmentId}, #{userId}, now(), now());
+        insert into department_user(`department_id`, `user_id`, `create_time`,`update_time`) values
+        <foreach collection="userIds" item="userId" index="index" separator=",">
+            (#{departmentId}, #{userId}, now(), now())
         </foreach>
     </insert>
-    <select id="findDepartmentUser" parameterType="java.lang.Integer">
+    <select id="findDepartmentUser" parameterType="java.lang.Integer" resultType="DepartmentUser">
         select eu.*, p.sgname as userSgname
         from department_user eu left join user_profile p on eu.user_id=p.user_id
         where department_id=#{departmentId}
         order by id desc
     </select>
+    <delete id="deleteByDepartmentParam">
+        delete from department_user where department_id=#{departmentId} and user_id in
+        <foreach collection="userIds" item="userId" index="index" separator="," open="(" close=")">
+            #{userId}
+        </foreach>
+    </delete>
     <delete id="delete">
         <if test="enterpriseId != null">
             delete from department_user where user_id=#{userId} and department_id in (select id from department where enterprise_id=#{enterpriseId})
         </if>
         <if test="departmentId != null">
-            delete from department_user where department_id=#{departmentId} and user_id=#{userId}
+            delete from department_user where department_id=#{departmentId}
+            <if test="userId != null">
+                and user_id=#{userId}
+            </if>
         </if>
     </delete>
 </mapper>

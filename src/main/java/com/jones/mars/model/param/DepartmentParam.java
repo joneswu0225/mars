@@ -1,5 +1,6 @@
 package com.jones.mars.model.param;
 
+import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
@@ -14,7 +15,7 @@ import java.util.List;
 @Data
 @Builder
 @ApiModel(value="部门参数")
-public class DepartmentParam {
+public class DepartmentParam extends BaseObject {
     @NotBlank(message = "部门名称不能为空")
     @ApiModelProperty(value="部门名称",name="name")
     private String name;
@@ -26,9 +27,9 @@ public class DepartmentParam {
     @ApiModelProperty(value="部门负责人ID",name="managerId")
     private Integer managerId;
     @ApiParam(hidden = true)
-    private Integer id;
-    @ApiParam(hidden = true)
     private Integer departmentId;
+    @ApiParam(hidden = true)
+    private Integer operatorId;
     @ApiModelProperty(value="部门人员ID列表",name="userIds", allowEmptyValue=true)
     private List<Integer> userIds;
 }

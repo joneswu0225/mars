@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.jones.mars.object.BaseObject;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,11 +10,9 @@ import java.util.List;
 
 @Data
 @Builder
-public class Department {
-    private Integer id;
+public class Department extends BaseObject {
     private String name;
     private Integer enterpriseId;
-    private String level;
     private Integer parentId;
     private String parentName;
     private Integer managerId;

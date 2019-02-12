@@ -1,6 +1,6 @@
 package com.jones.mars.model;
 
-import com.jones.mars.model.param.CompanyJoinParam;
+import com.jones.mars.object.BaseObject;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,8 +8,7 @@ import java.util.Date;
 
 @Data
 @Builder
-public class CompanyJoin {
-    private Integer id;
+public class CompanyJoin extends BaseObject {
     private String companyName;
     private String contactor;
     private String title;

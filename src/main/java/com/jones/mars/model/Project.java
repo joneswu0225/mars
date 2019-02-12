@@ -1,6 +1,7 @@
 package com.jones.mars.model;
 
 import com.jones.mars.model.param.ProjectParam;
+import com.jones.mars.object.BaseObject;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,13 +11,17 @@ import java.util.List;
 
 @Data
 @Builder
-public class Project {
+public class Project extends BaseObject {
     public static final int EDITIND = 0;
     public static final int VERIFYING = 1;
     public static final int ONSHELF = 2;
-    public static final int DOWNSHELF = 3;
+    public static final int NOTPASS = 3;
+    public static final int DOWNSHELF = 4;
 
-    private Integer id;
+    public static final int UNPUBLIC = 0;
+    public static final int PUBLIC = 1;
+
+
     private String name;
     private String detail;
     private String imageUrl;
@@ -31,8 +36,9 @@ public class Project {
     private String moduleName;
     private Integer classId;
     private Integer customFlg;
+    private Integer publicFlg = UNPUBLIC;
     private String className;
-    private String status;
+    private Integer status = EDITIND;
     private String reason;
     private Date publishDate;
     private Date createTime;

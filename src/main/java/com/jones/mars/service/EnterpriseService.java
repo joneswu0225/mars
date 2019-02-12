@@ -2,6 +2,7 @@ package com.jones.mars.service;
 
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.DepartmentUser;
+import com.jones.mars.model.Enterprise;
 import com.jones.mars.model.param.DepartmentParam;
 import com.jones.mars.model.param.DepartmentUserParam;
 import com.jones.mars.model.param.EnterpriseParam;
@@ -53,7 +54,9 @@ public class EnterpriseService extends BaseService {
         if(!enterpriseFile.exists()){
             enterpriseFile.mkdirs();
         }
-        mapper.update(EnterpriseParam.builder().id(param.getId()).basePath(File.separator + enterpriseId.toString()).build());
+        Enterprise enterprise = Enterprise.builder().basePath(File.separator + enterpriseId.toString()).build();
+        enterprise.setId(enterpriseId);
+        mapper.update(enterprise);
         return BaseResponse.builder().data(enterpriseUserMapper.findEnterpriseUser(enterpriseId)).build();
     }
 
