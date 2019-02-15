@@ -1,6 +1,5 @@
 package com.jones.mars.model.param;
 
-import com.jones.mars.model.constant.HotspotContentType;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.Builder;
@@ -13,7 +12,7 @@ import javax.validation.constraints.NotNull;
 public class HotspotContentParam {
     @NotNull
     @ApiModelProperty(value="类型",name="type")
-    private HotspotContentType type;
+    private String type;
     @ApiModelProperty(value="额外信息",name="extra")
     private String extra;
     @ApiModelProperty(value="内容",name="content")

@@ -12,7 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //启用自动配置
 //exclude表示自动配置时不包括Multipart配置
 //@EnableAutoConfiguration(exclude = {MultipartAutoConfiguration.class})
-//@MapperScan({"com.jones.mars.repository"})
+@MapperScan({"com.jones.mars.repository"})
 public class MarsApplication {
     public static void main(String[] args) {
         SpringApplication.run(MarsApplication.class, args);

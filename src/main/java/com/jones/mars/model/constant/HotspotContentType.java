@@ -8,6 +8,8 @@ public enum HotspotContentType {
 	DICT,
 	AUDIO,
 	IMAGE,
+	COMMENT,
+	TOUR,
 	HTML
 
 }
