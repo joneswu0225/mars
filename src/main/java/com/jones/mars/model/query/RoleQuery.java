@@ -15,7 +15,5 @@ public class RoleQuery extends Query {
     private Integer enterpriseId;
     @ApiModelProperty(value="模块ID",name="blockId")
     private Integer blockId;
-    @ApiModelProperty(value="用户ID",name="userId")
-    private Integer userId;
 }
 

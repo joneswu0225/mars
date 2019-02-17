@@ -33,14 +33,22 @@
     </insert>
     <insert id="update" parameterType="Block" >
         update block
-        set name = #{name}, detail = #{detail}
+        set id =#{id}
+        <if test="name != null and name != ''">
+            ,name = #{name}
+        </if>
+        <if test="detail != null and detail != ''">
+            ,detail = #{detail}
+        </if>
         <if test="enterpriseId != null">
             , enterprise_id = #{enterpriseId}
         </if>
         <if test="status != null">
             , status = #{status}
         </if>
-        , and operator_id = #{operatorId}
+        <if test="operatorId != null">
+            , operator_id = #{operatorId}
+        </if>
         ,update_time = now()
         where id=#{id}
     </insert>

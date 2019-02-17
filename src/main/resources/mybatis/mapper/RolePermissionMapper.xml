@@ -2,10 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.RolePermissionMapper" >
     <insert id="insert" parameterType="RolePermissionParam" useGeneratedKeys="true" keyProperty="id">
-        insert into role_permission(`role_id`, `class_id`, `operation`, `create_time`, `update_time`)
-        values
-        <foreach collection="classIds" item="classId" index="index" separator=",">
+        <foreach collection="classIds" item="classId" index="index" separator=";">
+            insert into role_permission(`role_id`, `class_id`, `operation`, `create_time`, `update_time`)
+            values
             (#{roleId}, #{classId}, #{operation}, now(), now())
+            ON DUPLICATE KEY UPDATE
+            role_id = #{roleId}, class_id=#{classId}, operation=#{operation}, create_time=now(), update_time=now()
         </foreach>
     </insert>
     <delete id="delete">

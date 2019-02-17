@@ -23,6 +23,8 @@ public class BlockParam extends BaseObject {
     private Integer plateformFlg;
     @ApiModelProperty(value="模块简介",name="detail")
     private String detail;
+    @ApiModelProperty(value="模块状态，0：配备，1：运行",name="detail")
+    private Integer status;
     @ApiParam(hidden = true)
     private Integer operatorId;
 }

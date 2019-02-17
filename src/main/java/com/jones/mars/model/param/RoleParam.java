@@ -17,6 +17,9 @@ public class RoleParam {
     @NotNull(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")
     private Integer blockId;
+    @NotNull(message = "企业ID不能为空")
+    @ApiModelProperty(value="企业ID",name="enterpriseId")
+    private Integer enterpriseId;
     @NotBlank(message = "权限名称不能为空")
     @ApiModelProperty(value="权限名称",name="name")
     private String name;

@@ -16,7 +16,7 @@ public class Role extends BaseObject {
   private String enterpriseName;
   private String enterpriseAvatar;
   private Integer blockId;
-  private Integer blockName;
+  private String blockName;
   private Date updateTime;
   private Date createTime;
   private List<RolePermission> permissionList = new ArrayList<>();
