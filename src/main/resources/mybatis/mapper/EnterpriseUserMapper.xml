@@ -65,6 +65,6 @@
     </select>
 
     <delete id="delete">
-        delete from enterprise_user where id=#{id}
+        delete from enterprise_user where enterprise_id=#{enterpriseId} and user_id=#{userId}
     </delete>
 </mapper>

@@ -30,9 +30,11 @@ public class User extends BaseObject {
     private String address;
     private String birthday;
     private String avatar;
+    private String email;
     private String namecard;
     private String description;
     private String auth;
     private List<Enterprise> enterprises;
+    private List<Role> roleList;
 }
 

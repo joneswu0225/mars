@@ -27,7 +27,7 @@ public enum ErrorCode {
 	UPLOAD_FAILED("1013", "文件上传失败"),
 
 	// 项目审核
-	PROJECT_STAUS_ERROR("4000", "项目状态错误"),
+	PROJECT_STATUS_ERROR("4000", "项目状态错误"),
 	PROJECT_VERIFY_VERIFIED("4001", "项目状态错误，编辑状态下才能提交审核"),
 	PROJECT_VERIFY_ONSHELFED("4002", "项目状态错误，提交审核后才能上架"),
 	PROJECT_VERIFY_OFFSHELFED("4003", "项目状态错误，上架的项目才能下架"),

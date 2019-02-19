@@ -1,6 +1,7 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.model.Message;
+import com.jones.mars.model.query.MessageQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.MessageService;
@@ -22,7 +23,7 @@ public class MessageController extends BaseController {
 
     @ApiOperation(value = "通知列表", notes = "通知列表")
     @GetMapping("")
-    public BaseResponse list(@ApiParam Query query) {
+    public BaseResponse list(@ApiParam MessageQuery query) {
         return service.findByPage(query);
     }
 
@@ -46,9 +47,9 @@ public class MessageController extends BaseController {
 
     @ApiOperation(value = "未读消息条数", notes = "先传用户Id，登录拦截加上后就不用传")
     @GetMapping("unreadCount")
-    public BaseResponse unreadCount(@RequestParam @ApiParam(required=true) Integer userId) {
+    public BaseResponse unreadCount() {
         //TODO 从session中获取用户ID
-        return service.findUnreadCount(userId);
+        return service.findUnreadCount(getLoginUser().getId());
     }
 
 }

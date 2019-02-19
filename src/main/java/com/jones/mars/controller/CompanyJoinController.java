@@ -41,7 +41,7 @@ public class CompanyJoinController extends BaseController {
             @PathVariable Integer companyJoinId,
             @Valid @RequestBody @ApiParam(required=true) CompanyJoinUpdateParam param) {
         param.setId(companyJoinId);
-        return service.updateStaus(param);
+        return service.updateStatus(param);
     }
 
 

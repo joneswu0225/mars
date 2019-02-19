@@ -35,7 +35,7 @@ public class UserController extends BaseController {
     }
 
     // 管理员
-    @ApiOperation(value = "更新用户", notes = "")
+    @ApiOperation(value = "验证用户状态", notes = "管理员对用户状态修改")
     @PutMapping("{userId}")
     public BaseResponse update(
             @PathVariable Integer userId,
@@ -43,6 +43,18 @@ public class UserController extends BaseController {
         User user = User.builder().userType(param.getUserType()).status(param.getStatus()).build();
         user.setId(userId);
         return service.update(user);
+    }
+
+    @ApiOperation(value = "查看个人信息", notes = "")
+    @GetMapping("personal")
+    public BaseResponse personal() {
+        return service.findById(getLoginUser().getId());
+    }
+
+    @ApiOperation(value = "查看用户信息", notes = "")
+    @GetMapping("{userId}")
+    public BaseResponse userInfo(@PathVariable Integer userId) {
+        return service.findById(userId);
     }
 
     @ApiOperation(value = "更新用户信息", notes = "")

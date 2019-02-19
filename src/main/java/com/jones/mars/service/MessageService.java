@@ -1,6 +1,7 @@
 package com.jones.mars.service;
 
 import com.jones.mars.model.Message;
+import com.jones.mars.model.query.MessageQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
@@ -38,7 +39,7 @@ public class MessageService extends BaseService{
      * @return
      */
     public BaseResponse findUnreadCount(Integer userId){
-        Integer count = mapper.findCount(new Query(Message.builder().receiver(userId).status(Message.STATUS_UNREAD).build()));
+        Integer count = mapper.findCount(MessageQuery.builder().receiver(userId).status(Message.STATUS_UNREAD).build());
         Map<String, Object> result = new HashMap<>();
         result.put("count", count);
         return BaseResponse.builder().data(result).build();

@@ -14,6 +14,8 @@ import java.util.List;
 public class EnterpriseUserParam extends BaseObject {
     @ApiParam(hidden = true)
     private Integer enterpriseId;
+    @ApiParam(hidden = true)
+    private Integer roleId;
     @ApiModelProperty(value="用户ID",name="userId")
     private Integer userId;
     @ApiModelProperty(value="部门ID",name="departmentId")

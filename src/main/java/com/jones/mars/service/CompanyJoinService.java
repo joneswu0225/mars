@@ -36,7 +36,7 @@ public class CompanyJoinService extends BaseService{
      * @param param
      * @return
      */
-    public BaseResponse updateStaus(CompanyJoinUpdateParam param){
+    public BaseResponse updateStatus(CompanyJoinUpdateParam param){
         mapper.update(CompanyJoin.builder().status(param.getStatus()).remark(param.getRemark()).build());
         return BaseResponse.builder().build();
     }

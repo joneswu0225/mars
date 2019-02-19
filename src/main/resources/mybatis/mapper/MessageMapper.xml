@@ -6,7 +6,7 @@
         values(#{title}, #{content}, now())
     </insert>
     <insert id="update" parameterType="Message">
-        update message set staus = #{staus}
+        update message set status = #{status}
         where id=#{id}
     </insert>
     <select id="findList" resultType="Message" parameterType="Query">
