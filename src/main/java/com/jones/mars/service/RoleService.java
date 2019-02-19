@@ -1,17 +1,13 @@
 package com.jones.mars.service;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
-import com.jones.mars.model.RolePermission;
-import com.jones.mars.model.param.RoleParam;
+import com.jones.mars.model.param.RoleUserParam;
 import com.jones.mars.model.param.RolePermissionParam;
 import com.jones.mars.model.param.UserRoleParam;
-import com.jones.mars.model.query.RoleQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
 import com.jones.mars.repository.RoleMapper;
 import com.jones.mars.repository.RolePermissionMapper;
 import com.jones.mars.repository.UserRoleMapper;
-import com.jones.mars.util.LoginUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +29,7 @@ public class RoleService extends BaseService{
 
 
     @Transactional(rollbackFor = Exception.class)
-    public BaseResponse add(RoleParam param){
+    public BaseResponse add(RoleUserParam param){
         roleMapper.insert(param);
         if(!CollectionUtils.isEmpty(param.getPermissionList())){
             param.getPermissionList().forEach(p->{
@@ -71,7 +67,7 @@ public class RoleService extends BaseService{
     }
 
     public BaseResponse removeUser(UserRoleParam param){
-        rolePermissionMapper.delete(param);
+        userRoleMapper.delete(param);
         return BaseResponse.builder().build();
     }
 }

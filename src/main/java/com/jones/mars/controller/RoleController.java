@@ -1,9 +1,8 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.model.Role;
-import com.jones.mars.model.RolePermission;
-import com.jones.mars.model.UserRole;
 import com.jones.mars.model.param.RoleParam;
+import com.jones.mars.model.param.RoleUserParam;
 import com.jones.mars.model.param.RolePermissionParam;
 import com.jones.mars.model.param.UserRoleParam;
 import com.jones.mars.model.query.RoleQuery;
@@ -36,7 +35,7 @@ public class RoleController extends BaseController {
 
     @ApiOperation(value = "新增角色", notes = "新增角色")
     @PostMapping("")
-    public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) RoleParam param) {
+    public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) RoleUserParam param) {
         return service.add(param);
     }
 
@@ -45,9 +44,8 @@ public class RoleController extends BaseController {
     public BaseResponse update(
             @PathVariable Integer roleId,
             @Valid @RequestBody @ApiParam(required=true) RoleParam param) {
-        Role role = Role.builder().name(param.getName()).build();
-        role.setId(roleId);
-        return service.update(role);
+        param.setId(roleId);
+        return service.update(param);
     }
 
     @ApiOperation(value = "删除角色", notes = "后台调用")
@@ -85,7 +83,7 @@ public class RoleController extends BaseController {
     @DeleteMapping("{roleId}/user/{userId}")
     public BaseResponse removeUser(@PathVariable @ApiParam(required=true) Integer roleId,
                                @PathVariable @ApiParam(required=true) Integer userId) {
-        return service.removeUser(UserRoleParam.builder().roleId(roleId).userIds(Arrays.asList(userId)).build());
+        return service.removeUser(UserRoleParam.builder().roleId(roleId).userId(userId).build());
     }
 
 

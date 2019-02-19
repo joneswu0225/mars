@@ -38,7 +38,7 @@
         values(#{name}, #{blockId}, #{enterpriseId}, now(), now())
     </insert>
     <insert id="update" parameterType="Role">
-        update role set name = #{name}, update_name=now() where id=#{id}
+        update role set name = #{name}, update_time=now() where id=#{id}
     </insert>
     <resultMap id="RolePermissionMap" type="Role" >
         <id column="id" property="id" />
@@ -52,6 +52,7 @@
             <result column="class_id" property="classId"/>
             <result column="operation" property="operation"/>
         </collection>
+
     </resultMap>
     <select id="findPermissionList" resultMap="RolePermissionMap" parameterType="Query">
         select r.id, r.name, r.block_id,r.update_time, r.create_time, p.id as permissionId, p.role_id, p.class_id, p.operation
@@ -68,20 +69,29 @@
     <resultMap id="RoleUserMap" type="Role" >
         <id property="id" column="id" />
         <id property="name" column="name" />
-        <id property="block_id" column="blockId" />
+        <id property="blockId" column="blockId" />
         <id property="blockName" column="blockName" />
+        <id property="enterpriseId" column="enterpriseId" />
         <id property="update_time" column="updateTime" />
         <id property="create_time" column="createTime" />
         <collection property="userList" ofType="User" column="user_id">
             <id column="user_id" property="id"/>
             <result column="sgname" property="sgname"/>
         </collection>
+        <collection property="permissionList" ofType="RolePermission" column="role_id">
+            <id column="permissionId" property="id"/>
+            <result column="role_id" property="roleId"/>
+            <result column="class_id" property="classId"/>
+            <result column="className" property="className"/>
+            <result column="operation" property="operation"/>
+        </collection>
     </resultMap>
     <select id="findList" resultMap="RoleUserMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select r.id, r.name, r.block_id, b.name as blockName,r.update_time, r.create_time, p.id as permissionId, p.role_id, p.class_id, p.operation
-        from role r left join user_role ur on r.id=ur.role_id left join user_profile u on ur.user_id=u.sgname
+        select r.id, r.name, r.block_id as blockId, b.name as blockName,b.enterprise_id as enterpriseId,r.update_time, r.create_time,  p.id as permissionId, p.role_id, p.class_id, c.name as className, p.operation, u.sgname, u.user_id as user_id
+        from role r left join user_role ur on r.id=ur.role_id left join user_profile u on ur.user_id=u.user_id
         left join block b on r.block_id=b.id LEFT JOIN role_permission p on p.role_id=r.id
+        left join block_class c on p.class_id=c.id
         where r.delete_flg=0
         <if test="blockId != null">
             and r.block_id = #{blockId}
