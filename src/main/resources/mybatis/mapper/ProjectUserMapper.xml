@@ -4,7 +4,7 @@
     <insert id="insert" parameterType="ProjectUserParam" useGeneratedKeys="true" keyProperty="id">
         insert into project_user(`project_id`, `user_id`, `manager_flg`) values
         <foreach collection="userIds" item="userId" index="index" separator=",">
-            (#{projectId}, #{userId}, #{managerFlg})
+            (#{projectId}, #{userId}, <if test="managerFlg == null">0</if><if test="managerFlg!=null">#{managerFlg}</if>)
         </foreach>
         ON DUPLICATE KEY UPDATE
         <foreach collection="userIds" item="userId" index="index" separator=",">

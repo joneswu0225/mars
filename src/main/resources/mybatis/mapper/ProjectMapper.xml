@@ -78,9 +78,10 @@
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*)
-        from block b ,block_project bp , project p left join block_module m on p.module_id = m.id left join block_class c on p.class_id=c.id
-        where bp.block_id = b.id and p.id=bp.block_id
-        and p.delete_flg=0
+        from project p left join block_project bp on bp.project_id=p.id left join block b on bp.block_id = b.id
+        left join block_module m on p.module_id = m.id left join block_class c on p.class_id=c.id
+        left join enterprise e on p.ori_enterprise_id = e.id
+        where p.delete_flg=0
         <if test="name != null and name !=''">
             and p.name like concat('%',#{name},'%')
         </if>
@@ -102,6 +103,7 @@
         <if test="classId != null">
             and p.class_id=#{classId}
         </if>
+        <!-- 过滤下架的项目 -->
         <if test="filterDownShelf != null and filterDownShelf == 1">
             and p.status != 3
         </if>

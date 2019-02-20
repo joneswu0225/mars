@@ -73,6 +73,20 @@ public class ProjectService extends BaseService {
         return BaseResponse.builder().data(result).build();
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public BaseResponse update(ProjectParam param) {
+        log.info("更新项目{} {}", param.getId(), param.getName());
+        mapper.update(param);
+        Integer projectId = param.getId();
+        log.info("添加项目共建人");
+        if (!CollectionUtils.isEmpty(param.getUserIds())) {
+            projectUserMapper.insert(ProjectUserParam.builder().projectId(projectId).userIds(param.getUserIds()).build());
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", projectId);
+        return BaseResponse.builder().data(result).build();
+    }
+
     /**
      * 删除项目：
      * 1. 删除模块项目的关联关系
