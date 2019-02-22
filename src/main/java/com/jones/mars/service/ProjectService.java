@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,6 +33,9 @@ public class ProjectService extends BaseService {
     private ProjectUserMapper projectUserMapper;
     @Value("${app.public.block.id}")
     private Integer publicBlockId;
+
+    @Autowired
+    private MessageService service;
 
     @Override
     public BaseMapper getMapper(){
@@ -81,6 +85,9 @@ public class ProjectService extends BaseService {
         log.info("添加项目共建人");
         if (!CollectionUtils.isEmpty(param.getUserIds())) {
             projectUserMapper.insert(ProjectUserParam.builder().projectId(projectId).userIds(param.getUserIds()).build());
+            // TODO 找到新增的然后发消息
+            List<Integer> userIds = projectUserMapper.findByProjectId(projectId).stream().map(p->p.getUserId()).collect(Collectors.toList())
+//            service.sendAddToProject(mapper.get);
         }
         Map<String, Object> result = new HashMap<>();
         result.put("id", projectId);

@@ -9,6 +9,7 @@ import com.jones.mars.model.param.EnterpriseParam;
 import com.jones.mars.model.param.EnterpriseUserParam;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.*;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+@Log
 @Service
 public class EnterpriseService extends BaseService {
     @Autowired
@@ -30,6 +32,10 @@ public class EnterpriseService extends BaseService {
     private DepartmentUserMapper departmentUserMapper;
     @Autowired
     private UserRoleMapper userRoleMapper;
+
+    @Autowired
+    private MessageService service;
+
     @Value("${app.file.pano.path}")
     private String panoBasePath;
 
@@ -72,6 +78,7 @@ public class EnterpriseService extends BaseService {
     public BaseResponse addUser(EnterpriseUserParam param){
         try {
             enterpriseUserMapper.insert(param);
+            service.sendInvitedToEnterprise(mapper.findOne(param.getEnterpriseId()).getName(), param.getUserId());
             if (param.getDepartmentId() != null) {
                 departmentUserMapper.insert(DepartmentUserParam.builder().departmentId(param.getDepartmentId()).userIds(Arrays.asList(param.getUserId())));
             }

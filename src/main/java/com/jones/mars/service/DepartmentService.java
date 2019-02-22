@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -53,10 +54,12 @@ public class DepartmentService extends BaseService {
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse update(DepartmentParam param){
         List<Integer> users = departmentUserMapper.findDepartmentUser(param.getDepartmentId()).parallelStream().map(p->p.getUserId()).collect(Collectors.toList());
+        List<Integer> userIds = new ArrayList<>();
+        Collections.copy(userIds, param.getUserIds());
         // 传入的去掉已有的=仍需添加的
         param.getUserIds().removeAll(users);
         // 已有的去掉传入的=不需要的，要删除
-        users.removeAll(param.getUserIds());
+        users.removeAll(userIds);
         if(users.size()>0) {
             departmentUserMapper.deleteByDepartmentParam(DepartmentParam.builder().departmentId(param.getDepartmentId()).userIds(users));
         }
