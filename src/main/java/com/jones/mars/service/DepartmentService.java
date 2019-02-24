@@ -54,8 +54,7 @@ public class DepartmentService extends BaseService {
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse update(DepartmentParam param){
         List<Integer> users = departmentUserMapper.findDepartmentUser(param.getDepartmentId()).parallelStream().map(p->p.getUserId()).collect(Collectors.toList());
-        List<Integer> userIds = new ArrayList<>();
-        Collections.copy(userIds, param.getUserIds());
+        List<Integer> userIds = new ArrayList<>(users);
         // 传入的去掉已有的=仍需添加的
         param.getUserIds().removeAll(users);
         // 已有的去掉传入的=不需要的，要删除

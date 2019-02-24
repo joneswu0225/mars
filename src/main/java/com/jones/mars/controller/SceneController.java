@@ -28,6 +28,12 @@ public class SceneController extends BaseController {
         return sceneService.findByPage(query);
     }
 
+    @ApiOperation(value = "所有场景列表", notes = "所有场景列表")
+    @GetMapping("list")
+    public BaseResponse all(@ApiParam SceneQuery query) {
+        return sceneService.findList(query);
+    }
+
     @ApiOperation(value = "所有场景名称", notes = "用于场景选择下拉列表")
     @GetMapping("name")
     public BaseResponse allname(@ApiParam SceneQuery query) {

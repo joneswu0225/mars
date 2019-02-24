@@ -10,7 +10,7 @@
         values(#{id}, #{sgname}, #{job}, #{province}, #{city}, #{address}, #{description}, #{birthday}, #{avatar}, #{namecard});
     </insert>
     <insert id="updateProfile" parameterType="User">
-        update user_profile set user_id=#{id}
+        update user_profile set user_id=#{userId}
         <if test="sgname != null and sgname !=''">
             ,sgname = #{sgname}
         </if>
@@ -38,7 +38,7 @@
         <if test="namecard != null and namecard !=''">
             ,namecard = #{namecard}
         </if>
-        where user_id=#{id}
+        where user_id=#{userId}
     </insert>
     <insert id="update" parameterType="User">
         update user set id=#{id}
@@ -103,6 +103,14 @@
     <resultMap id="UserRoleMap" type="User" >
         <id property="id" column="id" />
         <id property="sgname" column="sgname" />
+        <id property="job" column="job" />
+        <id property="email" column="email" />
+        <id property="province" column="province" />
+        <id property="city" column="city" />
+        <id property="address" column="address" />
+        <id property="description" column="description" />
+        <id property="avatar" column="avatar" />
+        <id property="namecard" column="namecard" />
         <id property="block_id" column="blockId" />
         <id property="update_time" column="updateTime" />
         <id property="create_time" column="createTime" />

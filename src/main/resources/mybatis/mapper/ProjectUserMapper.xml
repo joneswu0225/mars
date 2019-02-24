@@ -11,9 +11,13 @@
             manager_flg = <if test="managerFlg == null">0</if><if test="managerFlg!=null">#{managerFlg}</if>
         </foreach>
     </insert>
-    <select id="findByProjectId" parameterType="java.lang.Integer" resultType="ProjectUser">
+    <select id="findList" resultType="ProjectUser">
         select pu.*, up.sgname from project_user pu left join user_profile up on pu.user_id=up.user_id
-        where project_id=#{projectId} order by manager_flg desc
+        where project_id=#{projectId}
+        <if test="managerFlg != null">
+            and manager_flg=#{managerFlg}
+        </if>
+        order by manager_flg desc
     </select>
     <update id="update" parameterType="ProjectUserParam">
         update project_user set manager_flg=#{managerFlg} where project_id=#{projectId}

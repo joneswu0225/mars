@@ -6,6 +6,7 @@ import com.jones.mars.model.Project;
 import com.jones.mars.model.ProjectUser;
 import com.jones.mars.model.User;
 import com.jones.mars.model.param.ProjectParam;
+import com.jones.mars.model.query.ProjectUserQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.model.param.ProjectUserParam;
 import com.jones.mars.object.BaseResponse;
@@ -29,6 +30,8 @@ public class ProjectService extends BaseService {
     private ProjectMapper mapper;
     @Autowired
     private BlockProjectMapper blockProjectMapper;
+    @Autowired
+    private EnterpriseMapper enterpriseMapper;
     @Autowired
     private ProjectUserMapper projectUserMapper;
     @Value("${app.public.block.id}")
@@ -84,10 +87,12 @@ public class ProjectService extends BaseService {
         Integer projectId = param.getId();
         log.info("添加项目共建人");
         if (!CollectionUtils.isEmpty(param.getUserIds())) {
-            projectUserMapper.insert(ProjectUserParam.builder().projectId(projectId).userIds(param.getUserIds()).build());
-            // TODO 找到新增的然后发消息
-            List<Integer> userIds = projectUserMapper.findByProjectId(projectId).stream().map(p->p.getUserId()).collect(Collectors.toList())
-//            service.sendAddToProject(mapper.get);
+            List<Integer> oriUserIds = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
+            param.getUserIds().removeAll(oriUserIds);
+            if(param.getUserIds().size() > 0){
+                projectUserMapper.insert(ProjectUserParam.builder().projectId(projectId).userIds(param.getUserIds()).build());
+                service.sendAddToProject(param.getName(), param.getUserIds());
+            }
         }
         Map<String, Object> result = new HashMap<>();
         result.put("id", projectId);
@@ -120,8 +125,8 @@ public class ProjectService extends BaseService {
 
     public BaseResponse findOne(Integer projectId){
         Project project = mapper.findOne(projectId);
-        List<ProjectUser> projectUsers = projectUserMapper.findByProjectId(projectId);
-        project.setUserList(projectUsers);
+        List<ProjectUser> projectUsers = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).build());
+        project.setUserIds(projectUsers);
         return BaseResponse.builder().data(project).build();
     }
 
@@ -134,6 +139,7 @@ public class ProjectService extends BaseService {
     public BaseResponse updateProjectManager(Integer projectId, Integer userId){
         projectUserMapper.update(ProjectUser.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build());
         projectUserMapper.update(ProjectUser.builder().projectId(projectId).userId(userId).managerFlg(ProjectUser.PROJECT_MANAGER).build());
+        service.sendAddToProjectManager(mapper.findOne(projectId).getName(), userId);
         return BaseResponse.builder().build();
     }
 
@@ -146,9 +152,11 @@ public class ProjectService extends BaseService {
         BaseResponse response = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);
         if(project.getStatus().equals(Project.EDITIND)){
-            project = Project.builder().status(Project.VERIFYING).build();
-            project.setId(projectId);
+            Project updateProject = Project.builder().status(Project.VERIFYING).build();
+            updateProject.setId(projectId);
             mapper.update(project);
+            Integer managerId = enterpriseMapper.findOne(project.getOriEnterpriseId()).getManagerId();
+            service.sendSubmitVerifyProject(LoginUtil.getLoginSgname(), project.getName(), managerId);
         } else {
             response.setErrorCode(ErrorCode.PROJECT_VERIFY_VERIFIED);
         }
@@ -159,13 +167,15 @@ public class ProjectService extends BaseService {
         BaseResponse response  = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);
         if(project.getStatus().equals(Project.VERIFYING)) {
+            List<Integer> oriUserIds = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
             if (isPass) {
-                return onshelfProject(projectId, false);
+                response = onshelfProject(projectId, false);
+                service.sendVerifyPassProject(project.getName(), oriUserIds);
             } else {
-                project = Project.builder().status(Project.NOTPASS).reason(reason).build();
-                project.setId(projectId);
-                mapper.update(project);
-                return BaseResponse.builder().build();
+                Project updateProject = Project.builder().status(Project.NOTPASS).reason(reason).build();
+                updateProject.setId(projectId);
+                mapper.update(updateProject);
+                service.sendVerifyFailProject(project.getName(), oriUserIds);
             }
         } else {
             response.setErrorCode(ErrorCode.PROJECT_VERIFY_VERIFIED);

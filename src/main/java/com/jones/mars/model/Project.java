@@ -44,7 +44,7 @@ public class Project extends BaseObject {
     private Date createTime;
     private Date updateTime;
     private Integer deleteFlg;
-    private List<ProjectUser> userList = new ArrayList<>();
+    private List<ProjectUser> userIds = new ArrayList<>();
 //
 //    public static ProjectBuilder projectBuilder(ProjectParam param){
 //        return builder().name(param.getName()).detail(param.getDetail()).imageUrl(param.getImageUrl())

@@ -22,6 +22,8 @@ public class UserProfileParam {
     private String birthday;
     @ApiModelProperty(value="头像",name="avatar")
     private String avatar;
+    @ApiModelProperty(value="邮箱",name="email")
+    private String email;
     @ApiModelProperty(value="名片",name="namecard")
     private String namecard;
     @ApiModelProperty(value="个人简介",name="description")
