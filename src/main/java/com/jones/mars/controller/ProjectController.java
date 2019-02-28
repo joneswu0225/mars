@@ -81,7 +81,7 @@ public class ProjectController extends BaseController {
     @PostMapping("{projectId}/scene")
     public BaseResponse addScene(
             @PathVariable Integer projectId,
-            @Valid @RequestBody @ApiParam(required=true) ProjectSceneParam param) {
+            @ApiParam(required=true) ProjectSceneParam param) {
         param.setProjectId(projectId);
         return sceneService.insertProjectScene(param);
     }

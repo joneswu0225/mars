@@ -22,6 +22,9 @@
         <if test="locationX != null">
             ,location_x = #{locationX}
         </if>
+        <if test="sceneTypeId != null">
+            ,scene_type_id = #{sceneTypeId}
+        </if>
         where id=#{id}
     </insert>
     <select id="findList" resultType="Scene" parameterType="Query">
@@ -34,10 +37,13 @@
         <if test="blockId != null">
             and s.block_id = #{blockId}
         </if>
+        <if test="sceneTypeId != null">
+            and s.scene_type_id = #{sceneTypeId}
+        </if>
         <if test="name != null and name !=''">
             and s.name = #{name}
         </if>
-        order by id desc
+        order by seq
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
@@ -45,6 +51,9 @@
         where s.delete_flg=0
         <if test="projectId != null">
             and ps.project_id = #{projectId}
+        </if>
+        <if test="sceneTypeId != null">
+            and s.scene_type_id = #{sceneTypeId}
         </if>
         <if test="blockId != null">
             and s.block_id = #{blockId}
@@ -62,6 +71,9 @@
         <if test="projectId != null">
             and ps.project_id = #{projectId}
         </if>
+        <if test="sceneTypeId != null">
+            and s.scene_type_id = #{sceneTypeId}
+        </if>
         <if test="moduleId != null">
             and p.module_id = #{moduleId}
         </if>
@@ -71,13 +83,19 @@
         order by s.name
     </select>
     <select id="findAll" resultType="Scene" parameterType="Query">
-        select s.*,si.path as imageUrl, ps.seq from scene s left join block_image si on s.image_id=si.id, project_scene ps
-        where s.id=ps.scene_id and s.delete_flg=0
+        select s.*,si.path as imageUrl, ps.seq from scene s left join block_image si on s.image_id=si.id left join project_scene ps on s.id=ps.scene_id
+        where s.delete_flg=0
         <if test="projectId != null">
             and ps.project_id = #{projectId}
         </if>
+        <if test="sceneTypeId != null">
+            and s.scene_type_id = #{sceneTypeId}
+        </if>
         <if test="blockId != null">
-            and block_id = #{blockId}
+            and s.block_id = #{blockId}
+        </if>
+        <if test="name != null and name !=''">
+            and s.name = #{name}
         </if>
         order by seq
     </select>

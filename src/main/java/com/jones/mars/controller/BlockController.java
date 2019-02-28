@@ -1,11 +1,14 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.model.Block;
+import com.jones.mars.model.BlockSceneType;
 import com.jones.mars.model.User;
 import com.jones.mars.model.param.BlockParam;
 import com.jones.mars.model.query.BlockQuery;
+import com.jones.mars.model.query.BlockSceneTypeQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
+import com.jones.mars.service.BlockSceneTypeService;
 import com.jones.mars.service.BlockService;
 import com.jones.mars.util.LoginUtil;
 import io.swagger.annotations.Api;
@@ -23,6 +26,8 @@ public class BlockController extends BaseController {
 
     @Autowired
     private BlockService service;
+    @Autowired
+    private BlockSceneTypeService blockSceneTypeService;
 
     @ApiOperation(value = "模块列表", notes = "模块列表")
     @GetMapping("")
@@ -64,6 +69,12 @@ public class BlockController extends BaseController {
     @DeleteMapping("{blockId}")
     public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer blockId) {
         return service.delete(blockId);
+    }
+
+    @ApiOperation(value = "模块下所有场景类型列表", notes = "模块下所有场景类型列表")
+    @GetMapping("{blockId}/sceneType")
+    public BaseResponse sceneType(@PathVariable @ApiParam(required=true) Integer blockId) {
+        return blockSceneTypeService.allName(blockId);
     }
 
 }

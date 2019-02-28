@@ -29,19 +29,19 @@ public class MessageController extends BaseController {
 
     @ApiOperation(value = "更新通知已读状态", notes = "")
     @PatchMapping("{messageId}/read")
-    public BaseResponse read(@PathVariable @ApiParam(required=true) Integer messageId) {
+    public BaseResponse read(@PathVariable Integer messageId) {
         return service.updateStatus(messageId, Message.STATUS_READ);
     }
 
     @ApiOperation(value = "通知详情", notes = "")
     @GetMapping("{messageId}")
-    public BaseResponse findOne(@PathVariable @ApiParam(required=true) Integer messageId) {
+    public BaseResponse findOne(@PathVariable Integer messageId) {
         return service.findById(messageId);
     }
 
     @ApiOperation(value = "删除通知", notes = "")
     @DeleteMapping("{messageId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer messageId) {
+    public BaseResponse delete(@PathVariable Integer messageId) {
         return service.delete(messageId);
     }
 

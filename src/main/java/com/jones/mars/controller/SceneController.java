@@ -1,6 +1,5 @@
 package com.jones.mars.controller;
 
-import com.jones.mars.model.param.HotspotContentSeqParam;
 import com.jones.mars.model.param.SceneParam;
 import com.jones.mars.model.query.SceneQuery;
 import com.jones.mars.object.BaseResponse;
@@ -30,9 +29,9 @@ public class SceneController extends BaseController {
     }
 
     @ApiOperation(value = "所有场景列表", notes = "所有场景列表")
-    @GetMapping("list")
+    @GetMapping("all")
     public BaseResponse all(@ApiParam SceneQuery query) {
-        return sceneService.findList(query);
+        return sceneService.findAll(query);
     }
 
     @ApiOperation(value = "所有场景名称", notes = "用于场景选择下拉列表")

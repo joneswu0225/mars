@@ -17,7 +17,7 @@ public class ProjectSceneParam {
     private Integer id;
     @ApiParam(hidden = true)
     private Integer projectId;
-    @ApiModelProperty(value="场景ID列表",name="sceneIds")
+    @ApiModelProperty(value="场景ID列表(场景顺序按照场景ID顺序排列)",name="sceneIds")
     private List<Integer> sceneIds;
 }
 

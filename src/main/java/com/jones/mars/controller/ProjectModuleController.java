@@ -39,7 +39,7 @@ public class ProjectModuleController extends BaseController {
     @PutMapping("{projectModuleId}")
     public BaseResponse update(
             @PathVariable Integer projectModuleId,
-            @Valid @RequestBody @ApiParam(required=true) ProjectModuleParam param) {
+            @RequestBody @ApiParam(required=true) ProjectModuleParam param) {
         BlockModule blockModule = BlockModule.builder().name(param.getName()).build();
         blockModule.setId(projectModuleId);
         return service.update(blockModule);
