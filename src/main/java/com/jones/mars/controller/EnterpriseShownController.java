@@ -30,7 +30,7 @@ public class EnterpriseShownController extends BaseController {
 
     @ApiOperation(value = "新增入驻品牌", notes = "新增入驻品牌，后台接口")
     @PostMapping("")
-    public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) EnterpriseShownParam param) {
+    public BaseResponse add(@RequestBody @ApiParam(required=true) EnterpriseShownParam param) {
         return service.add(param);
     }
 
@@ -38,7 +38,7 @@ public class EnterpriseShownController extends BaseController {
     @PutMapping("{enterpriseShownId}")
     public BaseResponse update(
             @PathVariable Integer enterpriseShownId,
-            @Valid @RequestBody @ApiParam(required=true) EnterpriseShownParam param) {
+            @RequestBody @ApiParam(required=true) EnterpriseShownParam param) {
         param.setId(enterpriseShownId);
         return service.update(param);
     }

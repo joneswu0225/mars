@@ -39,7 +39,7 @@ public class DepartmentController extends BaseController {
 
     @ApiOperation(value = "新增部门", notes = "新增部门")
     @PostMapping("")
-    public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) DepartmentParam param) {
+    public BaseResponse add(@RequestBody @ApiParam(required=true) DepartmentParam param) {
 //        param.setOperatorId(LoginUtil.getInstance().getUser().getId());
         return service.add(param);
     }
@@ -54,7 +54,7 @@ public class DepartmentController extends BaseController {
     @PutMapping("{departmentId}")
     public BaseResponse update(
             @PathVariable Integer departmentId,
-            @Valid @RequestBody @ApiParam(required=true) DepartmentParam param) {
+            @RequestBody @ApiParam(required=true) DepartmentParam param) {
 //        param.setOperatorId(LoginUtil.getInstance().getUser().getId());
         param.setDepartmentId(departmentId);
         return service.update(param);
@@ -70,7 +70,7 @@ public class DepartmentController extends BaseController {
     @PostMapping("{departmentId}/user")
     public BaseResponse addUser(
             @PathVariable Integer departmentId,
-            @Valid @RequestBody @ApiParam(required=true) DepartmentUserParam param) {
+            @RequestBody @ApiParam(required=true) DepartmentUserParam param) {
         param.setDepartmentId(departmentId);
         return service.addDepartmentUser(param);
     }

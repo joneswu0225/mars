@@ -35,7 +35,7 @@ public class RoleController extends BaseController {
 
     @ApiOperation(value = "新增角色", notes = "新增角色")
     @PostMapping("")
-    public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) RoleUserParam param) {
+    public BaseResponse add(@RequestBody @ApiParam(required=true) RoleUserParam param) {
         return service.add(param);
     }
 
@@ -43,7 +43,7 @@ public class RoleController extends BaseController {
     @PutMapping("{roleId}")
     public BaseResponse update(
             @PathVariable Integer roleId,
-            @Valid @RequestBody @ApiParam(required=true) RoleParam param) {
+            @RequestBody @ApiParam(required=true) RoleParam param) {
         param.setId(roleId);
         return service.update(param);
     }
@@ -58,7 +58,7 @@ public class RoleController extends BaseController {
     @PostMapping("{roleId}/permission")
     public BaseResponse addPermission(
             @PathVariable Integer roleId,
-            @Valid @RequestBody @ApiParam(required=true) RolePermissionParam param) {
+            @RequestBody @ApiParam(required=true) RolePermissionParam param) {
         param.setRoleId(roleId);
         return service.addPermission(param);
     }
@@ -74,7 +74,7 @@ public class RoleController extends BaseController {
     @PostMapping("{roleId}/user")
     public BaseResponse addUser(
             @PathVariable Integer roleId,
-            @Valid @RequestBody @ApiParam(required=true) UserRoleParam param) {
+            @RequestBody @ApiParam(required=true) UserRoleParam param) {
         param.setRoleId(roleId);
         return service.addUser(param);
     }

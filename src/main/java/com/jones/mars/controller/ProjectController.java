@@ -44,7 +44,7 @@ public class ProjectController extends BaseController {
 
     @ApiOperation(value = "新增项目", notes = "新增项目")
     @PostMapping("")
-    public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) ProjectParam param) {
+    public BaseResponse add(@RequestBody @ApiParam(required=true) ProjectParam param) {
         return projectService.add(param);
     }
 
@@ -81,7 +81,7 @@ public class ProjectController extends BaseController {
     @PostMapping("{projectId}/scene")
     public BaseResponse addScene(
             @PathVariable Integer projectId,
-            @ApiParam(required=true) ProjectSceneParam param) {
+            @RequestBody @ApiParam(required=true) ProjectSceneParam param) {
         param.setProjectId(projectId);
         return sceneService.insertProjectScene(param);
     }
@@ -110,7 +110,7 @@ public class ProjectController extends BaseController {
     @ApiOperation(value = "添加项目共建人", notes = "")
     @PostMapping("{projectId}/user")
     public BaseResponse addPartner(@PathVariable @ApiParam(required=true) Integer projectId,
-                                   @Valid @RequestBody @ApiParam(required=true) ProjectUserParam param) {
+                                   @RequestBody @ApiParam(required=true) ProjectUserParam param) {
         param.setProjectId(projectId);
         return projectService.addUser(param);
     }

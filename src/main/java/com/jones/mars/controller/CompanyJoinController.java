@@ -31,7 +31,7 @@ public class CompanyJoinController extends BaseController {
 
     @ApiOperation(value = "企业入驻", notes = "企业入驻")
     @PostMapping("")
-    public BaseResponse join(@Valid @RequestBody @ApiParam(required=true) CompanyJoinParam param) {
+    public BaseResponse join(@RequestBody @ApiParam(required=true) CompanyJoinParam param) {
         return service.join(param);
     }
 

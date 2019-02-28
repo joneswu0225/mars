@@ -27,7 +27,7 @@ public class LoginController extends BaseController {
 
     @ApiOperation(value = "用户注册", notes = "用户注册")
     @PostMapping("regist")
-    public BaseResponse regist(@ApiParam(required=true) UserRegistParam param) {
+    public BaseResponse regist(@RequestBody @ApiParam(required=true) UserRegistParam param) {
         return userService.add(User.builder().mobile(param.getMobile()).password(param.getPassword()).userType(User.COMMON).build());
     }
 
@@ -49,13 +49,13 @@ public class LoginController extends BaseController {
 
     @ApiOperation(value = "重置密码", notes = "重置密码")
     @PostMapping("password/reset")
-    public BaseResponse passwordReset(@ApiParam(required=true) UserPasswordRestParam param) {
+    public BaseResponse passwordReset(@RequestBody @ApiParam(required=true) UserPasswordRestParam param) {
         return userService.resetPassword(User.builder().mobile(param.getMobile()).password(param.getPassword()).verifyCode(param.getVerifyCode()).build());
     }
 
     @ApiOperation(value = "登录", notes = "登录")
     @PostMapping("login")
-    public BaseResponse login(@ApiParam(required=true) UserLoginParam param) {
+    public BaseResponse login(@RequestBody @ApiParam(required=true) UserLoginParam param) {
         return userService.doLogin(param);
     }
 

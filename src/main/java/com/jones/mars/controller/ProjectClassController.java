@@ -31,7 +31,7 @@ public class ProjectClassController extends BaseController {
 
     @ApiOperation(value = "新增二级分类", notes = "新增二级分类")
     @PostMapping("")
-    public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) ProjectClassParam param) {
+    public BaseResponse add(@RequestBody @ApiParam(required=true) ProjectClassParam param) {
         return service.add(param);
     }
 
@@ -39,7 +39,7 @@ public class ProjectClassController extends BaseController {
     @PutMapping("{projectClassId}")
     public BaseResponse update(
             @PathVariable Integer projectClassId,
-            @Valid @RequestBody @ApiParam(required=true) ProjectClassParam param) {
+            @RequestBody @ApiParam(required=true) ProjectClassParam param) {
         BlockClass blockClass = BlockClass.builder().moduleId(param.getModuleId()).name(param.getName()).build();
         blockClass.setId(projectClassId);
         return service.update(blockClass);

@@ -31,7 +31,7 @@ public class NewsController extends BaseController {
 
     @ApiOperation(value = "新增新闻动态", notes = "新增新闻动态")
     @PostMapping("")
-    public BaseResponse add(@ApiParam(required=true) NewsParam param) {
+    public BaseResponse add(@RequestBody @ApiParam(required=true) NewsParam param) {
         return service.add(param);
     }
 
@@ -45,7 +45,7 @@ public class NewsController extends BaseController {
     @PutMapping("{newsId}")
     public BaseResponse update(
             @PathVariable Integer newsId,
-            @ApiParam(required=true) NewsParam param) {
+            @RequestBody @ApiParam(required=true) NewsParam param) {
         param.setId(newsId);
         return service.update(param);
     }

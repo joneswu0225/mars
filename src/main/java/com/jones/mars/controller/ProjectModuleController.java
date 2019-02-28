@@ -31,7 +31,7 @@ public class ProjectModuleController extends BaseController {
 
     @ApiOperation(value = "新增一级分类", notes = "新增一级分类")
     @PostMapping("")
-    public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) ProjectModuleParam param) {
+    public BaseResponse add(@RequestBody @ApiParam(required=true) ProjectModuleParam param) {
         return service.add(param);
     }
 

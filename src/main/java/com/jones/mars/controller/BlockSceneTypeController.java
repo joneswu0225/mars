@@ -30,7 +30,7 @@ public class BlockSceneTypeController extends BaseController {
 
     @ApiOperation(value = "新增场景类型", notes = "新增场景类型")
     @PostMapping("")
-    public BaseResponse add(@ApiParam(required=true) BlockSceneTypeParam param) {
+    public BaseResponse add(@RequestBody @ApiParam(required=true) BlockSceneTypeParam param) {
         return service.add(param);
     }
 
@@ -38,7 +38,7 @@ public class BlockSceneTypeController extends BaseController {
     @PutMapping("{blockSceneTypeId}")
     public BaseResponse update(
             @PathVariable Integer blockSceneTypeId,
-            @ApiParam(required=true) BlockSceneTypeParam param) {
+            @RequestBody @ApiParam(required=true) BlockSceneTypeParam param) {
         BlockSceneType sceneType = BlockSceneType.builder().blockId(param.getBlockId()).name(param.getName()).detail(param.getDetail()).build();
         sceneType.setId(blockSceneTypeId);
         return service.update(sceneType);

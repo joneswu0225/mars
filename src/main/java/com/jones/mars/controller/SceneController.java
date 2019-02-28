@@ -42,7 +42,7 @@ public class SceneController extends BaseController {
 
     @ApiOperation(value = "新增场景", notes = "新增场景,后台接口")
     @PostMapping("")
-    public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) SceneParam param) {
+    public BaseResponse add(@RequestBody @ApiParam(required=true) SceneParam param) {
         return sceneService.add(param);
     }
 
@@ -56,7 +56,7 @@ public class SceneController extends BaseController {
     @PutMapping("{sceneId}")
     public BaseResponse update(
             @PathVariable Integer sceneId,
-            @Valid @RequestBody @ApiParam(required=true) SceneParam param) {
+            @RequestBody @ApiParam(required=true) SceneParam param) {
         param.setId(sceneId);
         return sceneService.update(param);
     }
