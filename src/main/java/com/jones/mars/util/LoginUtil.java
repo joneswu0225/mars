@@ -28,6 +28,10 @@ public class LoginUtil {
         return INSTANCE;
     }
 
+    public static String getLoginSgname(){
+        return getInstance().getUser().getSgname();
+    }
+
     private HttpServletRequest getRequest() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         return requestAttributes.getRequest();

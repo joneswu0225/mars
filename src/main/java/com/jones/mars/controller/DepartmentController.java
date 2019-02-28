@@ -37,12 +37,6 @@ public class DepartmentController extends BaseController {
         return service.findByPage(query);
     }
 
-    @ApiOperation(value = "人员部门列表", notes = "按人员划分部门")
-    @GetMapping("user")
-    public BaseResponse userlist(@ApiParam EnterpriseUserQuery query) {
-        return enterpriseUserService.findByPage(query);
-    }
-
     @ApiOperation(value = "新增部门", notes = "新增部门")
     @PostMapping("")
     public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) DepartmentParam param) {

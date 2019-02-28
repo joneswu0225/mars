@@ -28,6 +28,11 @@ public abstract class BaseService<T> {
         return new Page<T>(query, count, data);
     }
 
+    public BaseResponse findList(Query query) {
+        List data = getMapper().findList(query);
+        return BaseResponse.builder().data(data).build();
+    }
+
     /**
      * 新增
      * @param param

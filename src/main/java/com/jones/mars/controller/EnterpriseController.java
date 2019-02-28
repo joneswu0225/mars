@@ -3,9 +3,11 @@ package com.jones.mars.controller;
 import com.jones.mars.model.EnterpriseUser;
 import com.jones.mars.model.param.EnterpriseParam;
 import com.jones.mars.model.param.EnterpriseUserParam;
+import com.jones.mars.model.query.EnterpriseUserQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.EnterpriseService;
+import com.jones.mars.service.EnterpriseUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -21,6 +23,8 @@ public class EnterpriseController extends BaseController {
 
     @Autowired
     private EnterpriseService service;
+    @Autowired
+    private EnterpriseUserService enterpriseUserService;
 
     @ApiOperation(value = "企业列表", notes = "企业列表")
     @GetMapping("")
@@ -55,6 +59,15 @@ public class EnterpriseController extends BaseController {
     @DeleteMapping("{enterpriseId}")
     public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer enterpriseId) {
         return service.delete(enterpriseId);
+    }
+
+    @ApiOperation(value = "人员部门列表", notes = "按人员划分部门")
+    @GetMapping("/{enterpriseId}/userDepartment")
+    public BaseResponse userlist(
+            @PathVariable Integer enterpriseId,
+            @ApiParam EnterpriseUserQuery query) {
+        query.setEnterpriseId(enterpriseId);
+        return enterpriseUserService.findByPage(query);
     }
 
     @ApiOperation(value = "企业所有员工列表", notes = "")

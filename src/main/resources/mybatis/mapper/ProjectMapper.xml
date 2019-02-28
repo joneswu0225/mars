@@ -69,6 +69,15 @@
         <if test="classId != null">
             and p.class_id=#{classId}
         </if>
+        <if test="status != null">
+            and p.status=#{status}
+        </if>
+        <if test="publishFlg != null and publishFlg==1">
+            and p.status=2
+        </if>
+        <if test="publishFlg != null and publishFlg!=1">
+            and p.status!=2
+        </if>
         <!-- 过滤下架的项目 -->
         <if test="filterDownShelf != null and filterDownShelf == 1">
             and p.status != 3
@@ -102,6 +111,15 @@
         </if>
         <if test="classId != null">
             and p.class_id=#{classId}
+        </if>
+        <if test="status != null">
+            and p.status=#{status}
+        </if>
+        <if test="publishFlg != null and publishFlg==1">
+            and p.status=2
+        </if>
+        <if test="publishFlg != null and publishFlg!=1">
+            and p.status!=2
         </if>
         <!-- 过滤下架的项目 -->
         <if test="filterDownShelf != null and filterDownShelf == 1">

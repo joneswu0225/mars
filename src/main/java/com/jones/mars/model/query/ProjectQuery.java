@@ -20,6 +20,10 @@ public class ProjectQuery extends Query {
     private Integer moduleId;
     @ApiModelProperty(value="二级分类ID",name="classId")
     private Integer classId;
+    @ApiModelProperty(value="查询状态",name="status")
+    private Integer status;
+    @ApiModelProperty(value="发布状态",name="publishFlg")
+    private Integer publishFlg;
     @ApiModelProperty(value="隐藏下架，1：隐藏，0：显示",name="filterDownShelf")
     private Integer filterDownShelf;
     @ApiParam(hidden = true)

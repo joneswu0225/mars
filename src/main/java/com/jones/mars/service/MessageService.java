@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -51,35 +52,39 @@ public class MessageService extends BaseService{
         return BaseResponse.builder().data(result).build();
     }
 
-    private void sendMessage(String title, String content, Integer... receivers){
-        if(receivers.length > 0) {
-            log.info(String.format("发送消息给： %s， 标题： %s， 内容：%s", String.join(",", Arrays.stream(receivers).map(p->p.toString()).collect(Collectors.toList())), title, content));
-            Message message = Message.builder().title(title).content(content).receiverList(Arrays.asList(receivers)).build();
+    private void sendMessage(String title, String content, List<Integer> receivers){
+        if(receivers.size() > 0) {
+            log.info(String.format("发送消息给： %s， 标题： %s， 内容：%s", String.join(",", receivers.stream().map(p->p.toString()).collect(Collectors.toList())), title, content));
+            Message message = Message.builder().title(title).content(content).receiverList(receivers).build();
             mapper.insert(message);
         }
     }
 
-    public void sendInvitedToEnterprise(String enterpriseName, Integer... receivers){
+    public void sendInvitedToEnterprise(String enterpriseName, Integer receiver){
         MessageInfo info = MessageInfo.INVITED_TO_ENTERPRISE;
-        sendMessage(info.title, String.format(info.content, enterpriseName), receivers);
+        sendMessage(info.title, String.format(info.content, enterpriseName), Arrays.asList(receiver));
     }
-    public void sendAddToProject(String projectName, Integer... receivers){
+    public void sendAddToProject(String projectName, List<Integer> receivers){
         MessageInfo info = MessageInfo.ADD_TO_PROJECT;
         sendMessage(info.title, String.format(info.content, projectName), receivers);
     }
-    public void sendModifyProject(String sgname, String projectName, Integer... receivers){
+    public void sendAddToProjectManager(String projectName, Integer receiver){
+        MessageInfo info = MessageInfo.ADD_TO_PROJECT_MANAGER;
+        sendMessage(info.title, String.format(info.content, projectName), Arrays.asList(receiver));
+    }
+    public void sendModifyProject(String sgname, String projectName, List<Integer> receivers){
         MessageInfo info = MessageInfo.MODIFY_PROJECT;
         sendMessage(info.title, String.format(info.content, sgname, projectName), receivers);
     }
-    public void sendSubmitVerifyProject(String sgname, String projectName, Integer... receivers){
+    public void sendSubmitVerifyProject(String sgname, String projectName, Integer receiver){
         MessageInfo info = MessageInfo.SUBMIT_VERIFY_PROJECT;
-        sendMessage(info.title, String.format(info.content, sgname, projectName), receivers);
+        sendMessage(info.title, String.format(info.content, sgname, projectName), Arrays.asList(receiver));
     }
-    public void sendVerifyPassProject(String projectName, Integer... receivers){
+    public void sendVerifyPassProject(String projectName, List<Integer> receivers){
         MessageInfo info = MessageInfo.VERIFY_PASS_PROJECT;
         sendMessage(info.title, String.format(info.content, projectName), receivers);
     }
-    public void sendVerifyFailProject(String projectName, Integer... receivers){
+    public void sendVerifyFailProject(String projectName, List<Integer> receivers){
         MessageInfo info = MessageInfo.VERIFY_FAIL_PROJECT;
         sendMessage(info.title, String.format(info.content, projectName), receivers);
     }
