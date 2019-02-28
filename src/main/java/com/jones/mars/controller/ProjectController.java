@@ -91,6 +91,7 @@ public class ProjectController extends BaseController {
     public BaseResponse changeSceneSeq(@RequestBody @ApiParam(required=true) ProjectSceneParam param) {
         return sceneService.updateProjectSceneSeq(param);
     }
+
     @ApiOperation(value = "删除项目场景", notes = "删除项目场景")
     @DeleteMapping("{projectId}/scene/{sceneId}")
     public BaseResponse deleteScene(

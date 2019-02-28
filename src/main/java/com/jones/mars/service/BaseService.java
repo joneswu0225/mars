@@ -71,6 +71,16 @@ public abstract class BaseService<T> {
     }
 
     /**
+     * 获取全部内容
+     * @param query
+     * @return
+     */
+    public BaseResponse findAll(Query query){
+        List list = getMapper().findAll(query);
+        return BaseResponse.builder().data(list).build();
+    }
+
+    /**
      * 删除
      * @param id
      * @return

@@ -29,8 +29,8 @@ public class HotspotController extends BaseController {
 
     @ApiOperation(value = "获取场景下所有热点", notes = "后台接口")
     @GetMapping("/all")
-    public BaseResponse all(@RequestParam @ApiParam(required=true) Integer sceneId) {
-        return service.findAll(sceneId);
+    public BaseResponse all(@ApiParam HotspotQuery query) {
+        return service.findAll(query);
     }
 
     @ApiOperation(value = "新增热点", notes = "")

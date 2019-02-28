@@ -1,5 +1,6 @@
 package com.jones.mars.controller;
 
+import com.jones.mars.model.param.HotspotContentSeqParam;
 import com.jones.mars.model.param.SceneParam;
 import com.jones.mars.model.query.SceneQuery;
 import com.jones.mars.object.BaseResponse;
@@ -40,7 +41,6 @@ public class SceneController extends BaseController {
         return sceneService.add(param);
     }
 
-    // TODO 更新项目场景顺序！！！
     @ApiOperation(value = "场景详情", notes = "场景详情,后台接口")
     @GetMapping("{sceneId}")
     public BaseResponse findOne(@PathVariable Integer sceneId) {
