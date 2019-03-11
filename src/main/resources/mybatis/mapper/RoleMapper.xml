@@ -42,10 +42,10 @@
     </insert>
     <resultMap id="RolePermissionMap" type="Role" >
         <id column="id" property="id" />
-        <id column="name" property="name" />
-        <id column="block_id" property="blockId" />
-        <id column="update_time" property="updateTime" />
-        <id column="create_time" property="createTime" />
+        <result column="name" property="name" />
+        <result column="block_id" property="blockId" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_time" property="createTime" />
         <collection property="permissionList" ofType="RolePermission" column="role_id">
             <id column="permissionId" property="id"/>
             <result column="role_id" property="roleId"/>
@@ -68,12 +68,12 @@
     </select>
     <resultMap id="RoleUserMap" type="Role" >
         <id property="id" column="id" />
-        <id property="name" column="name" />
-        <id property="blockId" column="blockId" />
-        <id property="blockName" column="blockName" />
-        <id property="enterpriseId" column="enterpriseId" />
-        <id property="update_time" column="updateTime" />
-        <id property="create_time" column="createTime" />
+        <result property="name" column="name" />
+        <result property="blockId" column="blockId" />
+        <result property="blockName" column="blockName" />
+        <result property="enterpriseId" column="enterpriseId" />
+        <result property="update_time" column="updateTime" />
+        <result property="create_time" column="createTime" />
         <collection property="userList" ofType="User" column="user_id">
             <id column="user_id" property="id"/>
             <result column="sgname" property="sgname"/>
@@ -81,6 +81,8 @@
         <collection property="permissionList" ofType="RolePermission" column="role_id">
             <id column="permissionId" property="id"/>
             <result column="role_id" property="roleId"/>
+            <result column="module_id" property="moduleId"/>
+            <result column="moduleName" property="moduleName"/>
             <result column="class_id" property="classId"/>
             <result column="className" property="className"/>
             <result column="operation" property="operation"/>
@@ -88,10 +90,10 @@
     </resultMap>
     <select id="findList" resultMap="RoleUserMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select r.id, r.name, r.block_id as blockId, b.name as blockName,b.enterprise_id as enterpriseId,r.update_time, r.create_time,  p.id as permissionId, p.role_id, p.class_id, c.name as className, p.operation, u.sgname, u.user_id as user_id
+        select r.id, r.name, r.block_id as blockId, b.name as blockName,b.enterprise_id as enterpriseId,r.update_time, r.create_time,  p.id as permissionId, p.role_id, p.class_id, c.name as className, c.module_id, m.name as moduleName, p.operation, u.sgname, u.user_id as user_id
         from role r left join user_role ur on r.id=ur.role_id left join user_profile u on ur.user_id=u.user_id
         left join block b on r.block_id=b.id LEFT JOIN role_permission p on p.role_id=r.id
-        left join block_class c on p.class_id=c.id
+        left join block_class c on p.class_id=c.id left join block_module m on c.module_id=m.id
         where r.delete_flg=0
         <if test="blockId != null">
             and r.block_id = #{blockId}

@@ -102,18 +102,19 @@
 
     <resultMap id="UserRoleMap" type="User" >
         <id property="id" column="id" />
-        <id property="sgname" column="sgname" />
-        <id property="job" column="job" />
-        <id property="email" column="email" />
-        <id property="province" column="province" />
-        <id property="city" column="city" />
-        <id property="address" column="address" />
-        <id property="description" column="description" />
-        <id property="avatar" column="avatar" />
-        <id property="namecard" column="namecard" />
-        <id property="block_id" column="blockId" />
-        <id property="update_time" column="updateTime" />
-        <id property="create_time" column="createTime" />
+        <result property="sgname" column="sgname" />
+        <result property="userType" column="userType" />
+        <result property="job" column="job" />
+        <result property="email" column="email" />
+        <result property="province" column="province" />
+        <result property="city" column="city" />
+        <result property="address" column="address" />
+        <result property="description" column="description" />
+        <result property="avatar" column="avatar" />
+        <result property="namecard" column="namecard" />
+        <result property="block_id" column="blockId" />
+        <result property="update_time" column="updateTime" />
+        <result property="create_time" column="createTime" />
         <collection property="roleList" ofType="Role" column="role_id">
             <id column="role_id" property="id"/>
             <result column="enterprise_id" property="enterpriseId"/>
@@ -123,7 +124,7 @@
         </collection>
     </resultMap>
     <select id="findOne" resultMap="UserRoleMap">
-        select u.mobile,up.sgname, up.job, up.email, up.province, up.city, up.address, up.description, up.birthday, up.avatar, up.namecard, last_login_time, u.create_time, u.update_time, user_type, role_id, r.name as roleName, enterprise_id, e.name as enterpriseName, e.avatar as enterpriseAvatar
+        select u.id, u.user_type as userType, u.mobile,up.sgname, up.job, up.email, up.province, up.city, up.address, up.description, up.birthday, up.avatar, up.namecard, last_login_time, u.create_time, u.update_time, user_type, role_id, r.name as roleName, enterprise_id, e.name as enterpriseName, e.avatar as enterpriseAvatar
         from user u LEFT JOIN user_profile up on u.id=up.user_id left join user_role ur on u.id=ur.user_id LEFT JOIN role r on ur.role_id=r.id left join enterprise e on r.enterprise_id=e.id
         where u.id=#{id}
     </select>

@@ -3,8 +3,8 @@
 <mapper namespace="com.jones.mars.repository.BlockModuleMapper" >
     <resultMap id="BlockModuleMap" type="BlockModule" >
         <id property="id" column="id" />
-        <id property="name" column="name" />
-        <id property="block_id" column="blockId" />
+        <result property="name" column="name" />
+        <result property="block_id" column="blockId" />
         <collection property="classList" ofType="BlockClass" column="module_id">
             <id column="classId" property="id"/>
             <result column="module_id" property="moduleId"/>

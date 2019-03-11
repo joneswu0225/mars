@@ -11,6 +11,8 @@ public class RolePermission extends BaseObject {
   public static final int CREATE = 1;
 
   private Integer roleId;
+  private Integer moduleId;
+  private String moduleName;
   private Integer classId;
   private String className;
   private Integer operation;

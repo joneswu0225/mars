@@ -51,7 +51,7 @@ public class ProjectController extends BaseController {
     @ApiOperation(value = "项目详情", notes = "项目详情")
     @GetMapping("{projectId}")
     public BaseResponse findOne(@PathVariable Integer projectId) {
-        return projectService.findById(projectId);
+        return projectService.findOne(projectId);
     }
 
     @ApiOperation(value = "项目全景信息", notes = "项目全景信息")
@@ -140,6 +140,12 @@ public class ProjectController extends BaseController {
     @PatchMapping("{projectId}/submitVerify")
     public BaseResponse submitVerifyProject(@PathVariable @ApiParam(required=true) Integer projectId) {
         return  projectService.submitVerifyProject(projectId);
+    }
+
+    @ApiOperation(value = "下架的项目退回编辑", notes = "")
+    @PatchMapping("{projectId}/remodify")
+    public BaseResponse remodifyProject(@PathVariable @ApiParam(required=true) Integer projectId) {
+        return  projectService.remodifyProject(projectId);
     }
 
 

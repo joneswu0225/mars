@@ -25,12 +25,11 @@
     </update>
     <resultMap id="DepartmentMap" type="Department" >
         <id column="id" property="id" />
-        <id column="enterpirse_id" property="enterpriseId" />
-        <id column="name" property="name" />
-        <id column="parent_id" property="parentId" />
-        <id column="manager_id" property="managerId" />
-        <id column="parentName" property="parentName" />
-        <id column="managerName" property="managerName" />
+        <result column="enterpirse_id" property="enterpriseId" />
+        <result column="name" property="name" />
+        <result column="manager_id" property="managerId" />
+        <result column="parentName" property="parentName" />
+        <result column="managerName" property="managerName" />
         <collection property="userList" ofType="departmentUser" column="department_id">
             <id column="departmentUserId" property="id"/>
             <result column="userId" property="userId"/>

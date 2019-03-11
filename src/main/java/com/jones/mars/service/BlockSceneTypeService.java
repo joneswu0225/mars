@@ -28,6 +28,10 @@ public class BlockSceneTypeService extends BaseService{
         List<BlockSceneType> list = mapper.findAllName(BlockSceneTypeQuery.builder().blockId(blockId).build());
         return BaseResponse.builder().data(list).build();
     }
+    public BaseResponse findSceneTypeProjectScene(Integer blockId){
+        List<BlockSceneType> list = mapper.findSceneTypeProjectScene(BlockSceneTypeQuery.builder().blockId(blockId).build());
+        return BaseResponse.builder().data(list).build();
+    }
 
 }
 

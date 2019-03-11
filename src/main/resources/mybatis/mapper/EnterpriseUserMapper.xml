@@ -13,11 +13,11 @@
     </select>
     <resultMap id="EnterpriseUserMap" type="EnterpriseUser" >
         <id property="id" column="id" />
-        <id property="userId" column="userId" />
-        <id property="userSgname" column="userSgname" />
-        <id property="enterpriseId" column="enterpriseId" />
-        <id property="updateTime" column="updateTime" />
-        <id property="createTime" column="createTime" />
+        <result property="userId" column="userId" />
+        <result property="userSgname" column="userSgname" />
+        <result property="enterpriseId" column="enterpriseId" />
+        <result property="updateTime" column="updateTime" />
+        <result property="createTime" column="createTime" />
         <collection property="departmentList" ofType="Department" column="departmentId">
             <id column="departmentId" property="id"/>
             <result column="departmentName" property="name"/>
@@ -42,6 +42,23 @@
         </if>
         order by d.id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findAll" resultMap="EnterpriseUserMap" parameterType="Query">
+        select eu.id, eu.enterprise_id as enterpriseId, eu.user_id as userId,eu.create_time as createTime, eu.update_time as updateTime, p.sgname as userSgname, d.id as departmentId, d.name as departmentName, d.parent_id as parentId, d.manager_id as managerId
+        from enterprise_user eu left join user_profile p on eu.user_id=p.user_id
+        LEFT JOIN department_user du on du.user_id=eu.user_id
+        left join department d on d.enterprise_id=eu.enterprise_id and d.id=du.department_id
+        where 1=1
+        <if test="enterpriseId != null">
+            and eu.enterprise_id=#{enterpriseId}
+        </if>
+        <if test="sgname != null and sgname != ''">
+            and p.sgname like concat('%',#{sgname},'%')
+        </if>
+        <if test="departmentId != null">
+            and d.id=#{departmentId}
+        </if>
+        order by d.id desc
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*)

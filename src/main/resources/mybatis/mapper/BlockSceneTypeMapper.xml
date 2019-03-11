@@ -31,6 +31,24 @@
         </if>
         order by name
     </select>
+    <resultMap id="SceneTypeProjectSceneMap" type="BlockSceneType" >
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="block_id" column="blockId" />
+        <collection property="sceneList" ofType="Scene" column="scene_type_id">
+            <id column="sceneId" property="id"/>
+            <result column="sceneName" property="name"/>
+            <result column="code" property="code"/>
+        </collection>
+    </resultMap>
+    <select id="findSceneTypeProjectScene" resultMap="SceneTypeProjectSceneMap" parameterType="Query">
+        select t.name, t.id,t.block_id, s.name as sceneName, s.id as sceneId, s.code from block_scene_type t, scene s
+        where t.id=s.scene_type_id and t.delete_flg=0 and s.delete_flg=0
+        <if test="blockId != null">
+            and t.block_id = #{blockId}
+        </if>
+        order by id desc
+    </select>
     <select id="findAll" resultType="BlockSceneType" parameterType="Query">
         select * from block_scene_type
         where delete_flg=0

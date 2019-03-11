@@ -31,7 +31,10 @@ public enum ErrorCode {
 	PROJECT_VERIFY_VERIFIED("4001", "项目状态错误，编辑状态下才能提交审核"),
 	PROJECT_VERIFY_ONSHELFED("4002", "项目状态错误，提交审核后才能上架"),
 	PROJECT_VERIFY_OFFSHELFED("4003", "项目状态错误，上架的项目才能下架"),
+	PROJECT_VERIFY_REMODIFY("4004", "项目状态错误，下架的项目才能退回编辑"),
 
+	// 项目相关
+	PROJECT_DELETE_DENIED("5001", "项目已经编辑过，无法删除"),
 
 	//权限不够
 	AUTH_PROJECT_FAILED("2001", "无权访问该项目"),

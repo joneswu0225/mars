@@ -17,7 +17,7 @@ public class User extends BaseObject {
     private String mobile;
     private String sgname;
     private String password;
-    private Integer userType = COMMON;
+    private Integer userType;
     private String verifyCode;
     private String ip;
     private Date lastLoginTime;

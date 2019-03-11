@@ -3,10 +3,10 @@
 <mapper namespace="com.jones.mars.repository.BlockMapper" >
     <resultMap id="BlockMap" type="Block" >
         <id column="blockId" property="id" />
-        <id column="enterprise_id" property="enterpriseId" />
-        <id column="blockName" property="name" />
-        <id column="blockDetail" property="detail" />
-        <id column="blockStatus" property="status" />
+        <result column="enterprise_id" property="enterpriseId" />
+        <result column="blockName" property="name" />
+        <result column="blockDetail" property="detail" />
+        <result column="blockStatus" property="status" />
         <collection property="moduleList" ofType="BlockModule" column="blockId">
             <id column="moduleId" property="id"/>
             <result column="blockId" property="blockId"/>

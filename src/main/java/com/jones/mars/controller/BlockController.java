@@ -74,7 +74,7 @@ public class BlockController extends BaseController {
     @ApiOperation(value = "模块下所有场景类型列表", notes = "模块下所有场景类型列表")
     @GetMapping("{blockId}/sceneType")
     public BaseResponse sceneType(@PathVariable @ApiParam(required=true) Integer blockId) {
-        return blockSceneTypeService.allName(blockId);
+        return blockSceneTypeService.findSceneTypeProjectScene(blockId);
     }
 
 }

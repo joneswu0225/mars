@@ -73,14 +73,14 @@
             and p.status=#{status}
         </if>
         <if test="publishFlg != null and publishFlg==1">
-            and p.status=2
+            and p.status=3
         </if>
         <if test="publishFlg != null and publishFlg!=1">
-            and p.status!=2
+            and p.status!=3
         </if>
         <!-- 过滤下架的项目 -->
         <if test="filterDownShelf != null and filterDownShelf == 1">
-            and p.status != 3
+            and p.status != 4
         </if>
         order by p.id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />

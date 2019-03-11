@@ -58,6 +58,7 @@ public class ProjectService extends BaseService {
     public BaseResponse add(ProjectParam param) {
         User currentUser = LoginUtil.getInstance().getUser();
         log.info("新增项目");
+        param.setStatus(Project.CREATING);
         mapper.insert(param);
         Integer projectId = param.getId();
         log.info("关联模块与项目关系");
@@ -83,6 +84,7 @@ public class ProjectService extends BaseService {
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse update(ProjectParam param) {
         log.info("更新项目{} {}", param.getId(), param.getName());
+        param.setStatus(Project.EDITIND);
         mapper.update(param);
         Integer projectId = param.getId();
         log.info("添加项目共建人");
@@ -108,9 +110,13 @@ public class ProjectService extends BaseService {
      */
     @Transactional
     public BaseResponse delete(Integer projectId){
-        blockProjectMapper.delete(projectId);
-        mapper.delete(projectId);
-        return BaseResponse.builder().build();
+        if(mapper.findOne(projectId).getStatus() == Project.CREATING) {
+            blockProjectMapper.delete(projectId);
+            mapper.delete(projectId);
+            return BaseResponse.builder().build();
+        } else {
+            return BaseResponse.builder().code(ErrorCode.PROJECT_DELETE_DENIED).build();
+        }
     }
 
     /**
@@ -126,7 +132,7 @@ public class ProjectService extends BaseService {
     public BaseResponse findOne(Integer projectId){
         Project project = mapper.findOne(projectId);
         List<ProjectUser> projectUsers = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).build());
-        project.setUserIds(projectUsers);
+        project.setUserList(projectUsers);
         return BaseResponse.builder().data(project).build();
     }
 
@@ -230,5 +236,17 @@ public class ProjectService extends BaseService {
         return BaseResponse.builder().build();
     }
 
+    public BaseResponse remodifyProject(Integer projectId) {
+        BaseResponse response  = BaseResponse.builder().build();
+        Project project = mapper.findOne(projectId);
+        if(project.getStatus().equals(Project.DOWNSHELF)){
+            project = Project.builder().status(Project.EDITIND).publishDate(new Date()).build();
+            project.setId(projectId);
+            mapper.update(project);
+        } else {
+            response.setErrorCode(ErrorCode.PROJECT_VERIFY_REMODIFY);
+        }
+        return response;
+    }
 }
 

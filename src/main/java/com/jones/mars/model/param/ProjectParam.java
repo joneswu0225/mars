@@ -41,7 +41,7 @@ public class ProjectParam extends BaseObject {
     @ApiModelProperty(value="项目共建人ID列表",name="userIds")
     private List<Integer> userIds = new ArrayList<>();
     @ApiParam(hidden = true)
-    private Integer status = Project.EDITIND;
+    private Integer status = Project.CREATING;
     @ApiParam(hidden = true)
     private Date publishDate;
     @ApiModelProperty(value="是否定制项目",name="customFlg")
