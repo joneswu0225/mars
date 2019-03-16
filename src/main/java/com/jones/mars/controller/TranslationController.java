@@ -3,6 +3,7 @@ package com.jones.mars.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.util.YoudaoUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping({"/translation"})
+@Api(value = "语音相关", tags = {"语音相关"})
 public class TranslationController extends BaseController {
     @Autowired
     private YoudaoUtil translator;
