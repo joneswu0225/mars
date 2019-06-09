@@ -16,4 +16,9 @@
     <delete id="deleteByRoleId">
         delete from role_permission where role_id=#{roleId}
     </delete>
+    <select id="findGrantedUserByClassId" resultType="EnterpriseUser" parameterType="RolePermissionQuery">
+        select distinct(ur.user_id) as userId, up.sgname as userSgname from user_role ur left join role_permission p on ur.role_id=p.role_id left join user_profile up on ur.user_id=up.user_id
+        where p.operation = #{operation} and p.class_id=#{classId}
+    </select>
+
 </mapper>

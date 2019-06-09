@@ -68,17 +68,17 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
             log.info("authorization in request header is :" + request.getHeader("Authorization"));
             if (LoginUtil.getInstance().getUser() == null) {
                 log.info("request address: " + request.getRemoteAddr());
-//                if("127.0.0.1".equals(request.getRemoteAddr())){
+                if("127.0.0.1".equals(request.getRemoteAddr())){
                     log.info("当前请求为内部接口请求，且无登录状态，设置默认用户为：13564332436");
                     UserLoginParam user = new UserLoginParam();
                     user.setMobile("13564332436");
                     user.setPassword("12345678");
                     service.doLogin(user);
-//                } else {
-//                    log.info("当前用户未登陆");
-//                    response.sendError(HttpStatus.FORBIDDEN.value(), "请登录后进行操作");
-//                    return false;
-//                }
+                } else {
+                    log.info("当前用户未登陆");
+                    response.sendError(HttpStatus.UNAUTHORIZED.value(), "请登录后进行操作");
+                    return false;
+                }
             } else {
                 log.info("当前访问： {}, 用户：{}", url, LoginUtil.getInstance().getUser().getMobile());
             }

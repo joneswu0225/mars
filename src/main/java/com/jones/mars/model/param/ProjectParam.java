@@ -48,6 +48,8 @@ public class ProjectParam extends BaseObject {
     private Integer customFlg;
     @ApiModelProperty(value="是否公开项目",name="publicFlg")
     private Integer publicFlg;
+    @ApiParam(hidden = true)
+    private Integer creatorId;
 
 }
 

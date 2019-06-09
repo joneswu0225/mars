@@ -4,6 +4,7 @@ import com.jones.mars.model.param.HotspotContentParam;
 import com.jones.mars.model.param.HotspotContentParams;
 import com.jones.mars.model.param.HotspotContentSeqParam;
 import com.jones.mars.model.param.HotspotParam;
+import com.jones.mars.model.query.HotspotContentQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.HotspotContentService;
 import io.swagger.annotations.Api;
@@ -26,8 +27,8 @@ public class HotspotContentController extends BaseController {
 
     @ApiOperation(value = "获取热点下所有热点内容", notes = "")
     @GetMapping("/all")
-    public BaseResponse all(@RequestParam @ApiParam(required=true) Integer hotspotId) {
-        return service.findAll(hotspotId);
+    public BaseResponse all(@ApiParam HotspotContentQuery query) {
+        return service.findAll(query);
     }
 
     @ApiOperation(value = "批量新增/更新热点内容", notes = "")

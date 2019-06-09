@@ -2,10 +2,10 @@ package com.jones.mars.controller;
 
 import com.jones.mars.model.ProjectScene;
 import com.jones.mars.model.ProjectUser;
-import com.jones.mars.model.param.HotspotContentSeqParam;
 import com.jones.mars.model.param.ProjectParam;
 import com.jones.mars.model.param.ProjectSceneParam;
 import com.jones.mars.model.param.ProjectUserParam;
+import com.jones.mars.model.query.HotspotQuery;
 import com.jones.mars.model.query.ProjectQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.ProjectService;
@@ -56,8 +56,9 @@ public class ProjectController extends BaseController {
 
     @ApiOperation(value = "项目全景信息", notes = "项目全景信息")
     @GetMapping("{projectId}/panoInfo")
-    public BaseResponse findPanoInfo(@PathVariable Integer projectId) {
-        return sceneService.findPanoInfo(projectId);
+    public BaseResponse findPanoInfo(@PathVariable Integer projectId, @ApiParam HotspotQuery query) {
+        query.setProjectId(projectId);
+        return sceneService.findPanoInfo(query);
     }
 
     @ApiOperation(value = "更新项目", notes = "更新项目")

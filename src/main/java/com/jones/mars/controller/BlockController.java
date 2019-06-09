@@ -49,6 +49,12 @@ public class BlockController extends BaseController {
         return service.allName(enterpriseId);
     }
 
+    @ApiOperation(value = "企业共建人列表", notes = "")
+    @GetMapping("{blockId}/user/{classId}")
+    public BaseResponse findBlockUser(@PathVariable Integer blockId,@PathVariable Integer classId) {
+        return service.findClassPartner(classId);
+    }
+
     @ApiOperation(value = "模块详情", notes = "")
     @GetMapping("{blockId}")
     public BaseResponse findOne(@PathVariable Integer blockId) {

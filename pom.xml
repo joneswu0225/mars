@@ -97,7 +97,12 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.47</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

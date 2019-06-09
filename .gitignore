@@ -5,4 +5,5 @@ target/
 *.iml
 *.ipr
 logs/
+files/
 src/main/resources/static/pano/*

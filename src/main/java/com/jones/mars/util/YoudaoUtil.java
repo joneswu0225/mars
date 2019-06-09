@@ -10,6 +10,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -102,6 +104,10 @@ public class YoudaoUtil {
         } catch (NoSuchAlgorithmException e) {
             return null;
         }
+    }
+    public static String getTranslateInfo(String text, MultipartFile file) throws Exception {
+        BASE64Encoder base64Encoder =new BASE64Encoder();
+        return getTranslateInfo(text, base64Encoder.encode(file.getBytes()));
     }
 
     public static String getTranslateInfo(String text, String base64) throws Exception {

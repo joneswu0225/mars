@@ -1,6 +1,5 @@
 package com.jones.mars.controller;
 
-import com.jones.mars.model.EnterpriseUser;
 import com.jones.mars.model.param.EnterpriseParam;
 import com.jones.mars.model.param.EnterpriseUserParam;
 import com.jones.mars.model.query.EnterpriseUserQuery;
@@ -75,6 +74,7 @@ public class EnterpriseController extends BaseController {
     public BaseResponse findEnterpriseUser(@PathVariable Integer enterpriseId) {
         return service.findEnterpriseUser(enterpriseId);
     }
+
 
     @ApiOperation(value = "企业添加员工", notes = "")
     @PostMapping("{enterpriseId}/user")

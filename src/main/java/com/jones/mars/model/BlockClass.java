@@ -10,5 +10,7 @@ public class BlockClass extends BaseObject {
     private String name;
     private Integer moduleId;
     private Integer operation;
+    private Integer id;
+    private Integer permissionId;
 }
 

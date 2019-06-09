@@ -3,8 +3,8 @@ package com.jones.mars.service;
 import com.jones.mars.model.Hotspot;
 import com.jones.mars.model.ProjectScene;
 import com.jones.mars.model.Scene;
-import com.jones.mars.model.query.HotspotQuery;
 import com.jones.mars.model.param.ProjectSceneParam;
+import com.jones.mars.model.query.HotspotQuery;
 import com.jones.mars.model.query.SceneQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
@@ -13,7 +13,6 @@ import com.jones.mars.repository.ProjectSceneMapper;
 import com.jones.mars.repository.SceneMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -43,12 +42,12 @@ public class SceneService extends BaseService {
         return BaseResponse.builder().data(sceneMapper.findAllName(query)).build();
     }
 
-    public BaseResponse findPanoInfo(Integer projectId){
-        List<Scene> sceneList = sceneMapper.findAll(SceneQuery.builder().projectId(projectId).build());
+    public BaseResponse findPanoInfo(HotspotQuery query){
+        List<Scene> sceneList = sceneMapper.findAll(SceneQuery.builder().projectId(query.getProjectId()).build());
         Map<Integer, Scene> sceneMap = sceneList.stream().sorted(Comparator.comparing(Scene::getSeq)).collect(Collectors.toMap(Scene::getId, p->p));
         if(sceneMap.size() > 0){
 //            List<Hotspot> hotspotList = hotspotMapper.findAll(HotspotQuery.builder().sceneIds(sceneMap.keySet()).build());
-            List<Hotspot> hotspotList = hotspotMapper.findAll(HotspotQuery.builder().projectId(projectId).build());
+            List<Hotspot> hotspotList = hotspotMapper.findAllByQuery(query);
             hotspotList.forEach(p->{
                 if(sceneMap.containsKey(p.getSceneId())){
                     sceneMap.get(p.getSceneId()).getHotspots().add(p);

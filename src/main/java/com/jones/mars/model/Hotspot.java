@@ -11,7 +11,10 @@ import java.util.List;
 @Data
 @Builder
 public class Hotspot extends BaseObject {
+    public static final String TYPE_DEFAULT = "DEFAULT";
+    private Integer id;
     private String code;
+    private String type = TYPE_DEFAULT;
     private String title;
     private String name;
     private Float locationX;

@@ -29,7 +29,7 @@ import java.util.Map;
 @Service
 public class FileUploadService extends BaseService{
 
-    @Value("${app.file.upload.path}")
+    @Value("${app.file.path.upload}")
     private String fileUploadPath;
 
     @PostConstruct

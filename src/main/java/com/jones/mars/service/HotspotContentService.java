@@ -28,10 +28,6 @@ public class HotspotContentService extends BaseService{
         return this.mapper;
     }
 
-    public BaseResponse findAll(Integer hotspotId){
-        return BaseResponse.builder().data(mapper.findByHotspotId(hotspotId)).build();
-    }
-
     public BaseResponse save(HotspotContentParams params){
         List<HotspotContentParam> updateParam = new ArrayList<>();
         List<HotspotContentParam> insertParam = new ArrayList<>();

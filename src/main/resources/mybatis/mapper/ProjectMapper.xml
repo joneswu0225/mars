@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.ProjectMapper" >
     <insert id="insert" parameterType="ProjectParam" useGeneratedKeys="true" keyProperty="id">
-        insert into project(`name`, `detail`, `image_url`, `module_id`, `class_id`, `status`, `ori_enterprise_id`,`ori_block_id`, `create_time`, `update_time`)
-        values(#{name}, #{detail}, #{imageUrl}, #{moduleId}, #{classId}, #{status}, #{oriEnterpriseId}, #{blockId}, now(), now())
+        insert into project(`name`, `detail`, `image_url`, `module_id`, `class_id`, `status`, `ori_enterprise_id`,`ori_block_id`,`creator_id`, `create_time`, `update_time`)
+        values(#{name}, #{detail}, #{imageUrl}, #{moduleId}, #{classId}, #{status}, #{oriEnterpriseId}, #{blockId}, #{creatorId}, now(), now())
     </insert>
     <insert id="update" parameterType="ProjectParam">
         update project
@@ -43,10 +43,11 @@
     </insert>
     <select id="findList" resultType="Project" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select p.*, e.name as oriEnterpriseName, e.avatar as oriEnterpriseAvatar, e.base_path as oriEnterpriseBasePath, b.id as blockId, b.name as blockName, m.name as moduleName, c.name as className
+        select p.*, u.sgname as creatorSgname, u.avatar as creatorAvator, e.name as oriEnterpriseName, e.avatar as oriEnterpriseAvatar, e.base_path as oriEnterpriseBasePath, b.id as blockId, b.name as blockName, m.name as moduleName, c.name as className
         from project p left join block_project bp on bp.project_id=p.id left join block b on bp.block_id = b.id
         left join block_module m on p.module_id = m.id left join block_class c on p.class_id=c.id
         left join enterprise e on p.ori_enterprise_id = e.id
+        left join user_profile u on p.creator_id = u.user_id
         where p.delete_flg=0
         <if test="name != null and name !=''">
             and p.name like concat('%',#{name},'%')
@@ -150,10 +151,11 @@
         order by p.id desc
     </select>
     <select id="findOne" resultType="Project" parameterType="ProjectQuery">
-        select p.*,b.id as blockId, b.name as blockName, e.name as oriEnterpriseName,e.avatar as oriEnterpriseAvatar, e.base_path as oriEnterpriseBasePath, m.name as moduleName, c.name as className
+        select p.*,u.sgname as creatorSgname, u.avatar as creatorAvator,b.id as blockId, b.name as blockName, e.name as oriEnterpriseName,e.avatar as oriEnterpriseAvatar, e.base_path as oriEnterpriseBasePath, m.name as moduleName, c.name as className
         from  project p left join block_module m on p.module_id = m.id left join block_class c on p.class_id=c.id
         left join enterprise e on p.ori_enterprise_id = e.id
         left join block b on b.id=p.ori_block_id
+        left join user_profile u on p.creator_id = u.user_id
         where p.id=#{id}
     </select>
     <update id="delete">

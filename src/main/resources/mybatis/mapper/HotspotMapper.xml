@@ -3,13 +3,30 @@
 <mapper namespace="com.jones.mars.repository.HotspotMapper" >
     <resultMap id="HotspotMap" type="Hotspot" >
         <id property="id" column="id" />
-        <association property="baseContents" column="bhotspot_id" select="com.jones.mars.repository.HotspotContentMapper.findByHotspotId"/>
-        <association property="contents" column="id" select="com.jones.mars.repository.HotspotContentMapper.findByHotspotId"/>
+        <result column="code" property="code"/>
+        <result column="type" property="type"/>
+        <result column="title" property="title"/>
+        <result column="name" property="name"/>
+        <result column="location_x" property="locationX"/>
+        <result column="location_y" property="locationY"/>
+        <result column="base_flg" property="baseFlg"/>
+        <result column="scene_id" property="sceneId"/>
+        <result column="project_id" property="projectId"/>
+        <collection property="contents" ofType="HotspotContent" column="hotspotId">
+            <id column="contentId" property="id"/>
+            <result column="contentType" property="type"/>
+            <result column="contentModule" property="module"/>
+            <result column="seq" property="seq"/>
+            <result column="extra" property="extra"/>
+            <result column="content" property="content"/>
+            <result column="contentTitle" property="title"/>
+            <result column="hotspotId" property="hotspotId"/>
+        </collection>
     </resultMap>
 
     <insert id="insert" parameterType="Hotspot" useGeneratedKeys="true" keyProperty="id">
-        insert into hotspot(`code`, `name`, `title`, `location_x`, `location_y`, `bhotspot_id`, `base_flg`, `scene_id`,`project_id`, `create_time`, `update_time`)
-        values(#{code}, #{name}, #{title}, #{locationX}, #{locationY}, #{bhotspotId}, #{baseFlg}, #{sceneId},#{projectId}, now(), now())
+        insert into hotspot(`code`, `name`, `title`, `location_x`, `location_y`, `bhotspot_id`, `base_flg`, `scene_id`,`project_id`,`type`, `create_time`, `update_time`)
+        values(#{code}, #{name}, #{title}, #{locationX}, #{locationY}, #{bhotspotId}, #{baseFlg}, #{sceneId},#{projectId}, #{type},now(), now())
     </insert>
     <insert id="update" parameterType="Hotspot">
         update hotspot
@@ -45,6 +62,9 @@
         <if test="projectId != null">
             and project_id=#{projectId}
         </if>
+        <if test="type != null">
+            and type=#{type}
+        </if>
         order by id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
@@ -58,6 +78,9 @@
         <if test="projectId != null">
             and project_id=#{projectId}
         </if>
+        <if test="type != null">
+            and type=#{type}
+        </if>
     </select>
 
     <select id="findAll" resultMap="HotspotMap" parameterType="Query">
@@ -68,6 +91,31 @@
         </if>
         <if test="sceneId != null">
             and scene_id = #{sceneId}
+        </if>
+        <if test="sceneIds != null">
+            and scene_id in
+            <foreach collection="sceneIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        order by id desc
+    </select>
+
+    <select id="findAllByQuery" resultMap="HotspotMap" parameterType="Query">
+        select h.*, c.hotspot_id as hotspotId, c.title as contentTitle, c.id as contentId, c.content,c.type as contentType, c.module as contentModule, c.seq, c.extra
+        from hotspot h left join hotspot_content c on h.id=c.hotspot_id
+        where 1=1
+        <if test="projectId != null">
+            and h.project_id=#{projectId}
+        </if>
+        <if test="sceneId != null">
+            and h.scene_id = #{sceneId}
+        </if>
+        <if test="type != null">
+            and h.type = #{type}
+        </if>
+        <if test="type != null and type=='DEFAULT'">
+            and c.module = #{type}
         </if>
         <if test="sceneIds != null">
             and scene_id in

@@ -58,6 +58,7 @@ public class ProjectService extends BaseService {
     public BaseResponse add(ProjectParam param) {
         User currentUser = LoginUtil.getInstance().getUser();
         log.info("新增项目");
+        param.setCreatorId(currentUser.getId());
         param.setStatus(Project.CREATING);
         mapper.insert(param);
         Integer projectId = param.getId();
@@ -160,7 +161,7 @@ public class ProjectService extends BaseService {
         if(project.getStatus().equals(Project.EDITIND)){
             Project updateProject = Project.builder().status(Project.VERIFYING).build();
             updateProject.setId(projectId);
-            mapper.update(project);
+            mapper.update(updateProject);
             Integer managerId = enterpriseMapper.findOne(project.getOriEnterpriseId()).getManagerId();
             service.sendSubmitVerifyProject(LoginUtil.getLoginSgname(), project.getName(), managerId);
         } else {
@@ -178,7 +179,7 @@ public class ProjectService extends BaseService {
                 response = onshelfProject(projectId, false);
                 service.sendVerifyPassProject(project.getName(), oriUserIds);
             } else {
-                Project updateProject = Project.builder().status(Project.NOTPASS).reason(reason).build();
+                Project updateProject = Project.builder().status(Project.EDITIND).reason(reason).build();
                 updateProject.setId(projectId);
                 mapper.update(updateProject);
                 service.sendVerifyFailProject(project.getName(), oriUserIds);

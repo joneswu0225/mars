@@ -1,5 +1,6 @@
 package com.jones.mars.controller;
 
+import com.jones.mars.model.Hotspot;
 import com.jones.mars.model.param.HotspotParam;
 import com.jones.mars.model.query.HotspotQuery;
 import com.jones.mars.object.BaseResponse;
@@ -36,7 +37,10 @@ public class HotspotController extends BaseController {
     @ApiOperation(value = "新增热点", notes = "")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) HotspotParam param) {
-        param.setCode("hs_" + System.currentTimeMillis());
+//        param.setCode("hs_" + System.currentTimeMillis());
+        if(StringUtils.isEmpty(param.getType())){
+            param.setType(Hotspot.TYPE_DEFAULT);
+        }
         return service.add(param);
     }
 

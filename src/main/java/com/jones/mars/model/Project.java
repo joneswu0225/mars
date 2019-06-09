@@ -41,8 +41,11 @@ public class Project extends BaseObject {
     private Integer status = EDITIND;
     private String reason;
     private Date publishDate;
-    private Date createTime;
+    private Integer creatorId;
+    private String creatorSgname;
+    private String creatorAvator;
     private Date updateTime;
+    private Date createTime;
     private Integer deleteFlg;
     private List<ProjectUser> userList = new ArrayList<>();
 //

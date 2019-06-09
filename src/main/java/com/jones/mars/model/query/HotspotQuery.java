@@ -17,4 +17,6 @@ public class HotspotQuery extends Query {
     private Integer projectId;
     @ApiModelProperty(hidden = true)
     private Set<Integer> sceneIds;
+    @ApiModelProperty(value="热点类型",name="type")
+    private String type;
 }

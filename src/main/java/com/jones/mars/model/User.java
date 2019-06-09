@@ -14,6 +14,7 @@ public class User extends BaseObject {
     public static final int ENTMANAGER = 1;
     public static final int ADMIN = 2;
 
+    private Integer id;
     private String mobile;
     private String sgname;
     private String password;

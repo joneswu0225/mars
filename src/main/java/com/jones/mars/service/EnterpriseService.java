@@ -3,6 +3,7 @@ package com.jones.mars.service;
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.DepartmentUser;
 import com.jones.mars.model.Enterprise;
+import com.jones.mars.model.RolePermission;
 import com.jones.mars.model.param.DepartmentParam;
 import com.jones.mars.model.param.DepartmentUserParam;
 import com.jones.mars.model.param.EnterpriseParam;
@@ -32,11 +33,13 @@ public class EnterpriseService extends BaseService {
     private DepartmentUserMapper departmentUserMapper;
     @Autowired
     private UserRoleMapper userRoleMapper;
+    @Autowired
+    private RolePermissionMapper rolePermissionMapper;
 
     @Autowired
     private MessageService service;
 
-    @Value("${app.file.pano.path}")
+    @Value("${app.file.path.pano}")
     private String panoBasePath;
 
     @PostConstruct
@@ -66,6 +69,11 @@ public class EnterpriseService extends BaseService {
         return BaseResponse.builder().data(enterpriseUserMapper.findEnterpriseUser(enterpriseId)).build();
     }
 
+    /**
+     * 获取企业员工
+     * @param enterpriseId
+     * @return
+     */
     public BaseResponse findEnterpriseUser(Integer enterpriseId){
         return BaseResponse.builder().data(enterpriseUserMapper.findEnterpriseUser(enterpriseId)).build();
     }
