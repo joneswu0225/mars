@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.ProjectHotspotMapper" >
+    <insert id="insert" parameterType="ProjectHotspotParam">
+            insert into project_hotspot(`project_id`, `hotspot_id`, `seq`) values
+        <foreach collection="hotspotIds" item="hotspotId" index="index" separator=",">
+        (#{projectId}, #{hotspotId}, #{index})
+        </foreach>
+            ON DUPLICATE KEY UPDATE
+        <foreach collection="hotspotIds" item="hotspotId" index="index" separator=",">
+        seq = #{index}
+        </foreach>
+    </insert>
+    <update id="updateProjectHotspotSeq" parameterType="ProjectHotspotParam">
+        update project_hotspot set seq=case
+        <foreach collection="hotspotIds" item="hotspotId" index="index">
+            when hotspot_id=#{hotspotId} then #{index}
+        </foreach>
+        end
+        where project_id=#{projectId} and hotspot_id in
+        <foreach collection="hotspotIds" item="hotspotId" index="index" separator="," open="(" close=")">
+            #{hotspotId}
+        </foreach>
+    </update>
+    <delete id="delete" parameterType="ProjectHotspot">
+        delete from project_hotspot where hotspot_id=#{hotspotId}
+    </delete>
+</mapper>

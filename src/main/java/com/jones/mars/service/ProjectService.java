@@ -1,11 +1,10 @@
 package com.jones.mars.service;
 
 import com.jones.mars.constant.ErrorCode;
-import com.jones.mars.model.BlockProject;
-import com.jones.mars.model.Project;
-import com.jones.mars.model.ProjectUser;
-import com.jones.mars.model.User;
+import com.jones.mars.model.*;
+import com.jones.mars.model.param.ProjectHotspotParam;
 import com.jones.mars.model.param.ProjectParam;
+import com.jones.mars.model.param.ProjectSceneParam;
 import com.jones.mars.model.query.ProjectUserQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.model.param.ProjectUserParam;
@@ -34,6 +33,10 @@ public class ProjectService extends BaseService {
     private EnterpriseMapper enterpriseMapper;
     @Autowired
     private ProjectUserMapper projectUserMapper;
+    @Autowired
+    private ProjectHotspotMapper projectHotspotMapper;
+    @Autowired
+    private ProjectSceneMapper projectSceneMapper;
     @Value("${app.public.block.id}")
     private Integer publicBlockId;
 
@@ -106,6 +109,8 @@ public class ProjectService extends BaseService {
      * 删除项目：
      * 1. 删除模块项目的关联关系
      * 2. 删除项目
+     * //3. 删除项目热点关联
+     * //4. 删除项目场景关联
      * @param projectId
      * @return
      */
@@ -248,6 +253,34 @@ public class ProjectService extends BaseService {
             response.setErrorCode(ErrorCode.PROJECT_VERIFY_REMODIFY);
         }
         return response;
+    }
+
+    public BaseResponse insertProjectScene(ProjectSceneParam param) {
+        projectSceneMapper.insert(param);
+        return BaseResponse.builder().build();
+    }
+
+    public BaseResponse deleteProjectScene(ProjectScene param){
+        projectSceneMapper.delete(param);
+        return BaseResponse.builder().build();
+    }
+
+    public BaseResponse updateProjectSceneSeq(ProjectSceneParam param) {
+        projectSceneMapper.updateProjectSceneSeq(param);
+        return BaseResponse.builder().build();
+    }
+    public BaseResponse insertProjectHotspot(ProjectHotspotParam param) {
+        projectHotspotMapper.insert(param);
+        return BaseResponse.builder().build();
+    }
+
+    public BaseResponse deleteProjectHotspot(ProjectHotspot param){
+        projectHotspotMapper.delete(param);
+        return BaseResponse.builder().build();
+    }
+    public BaseResponse updateProjectHotspotSeq(ProjectHotspotParam param) {
+        projectHotspotMapper.updateProjectHotspotSeq(param);
+        return BaseResponse.builder().build();
     }
 }
 

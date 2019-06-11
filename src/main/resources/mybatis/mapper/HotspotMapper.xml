@@ -9,6 +9,7 @@
         <result column="name" property="name"/>
         <result column="location_x" property="locationX"/>
         <result column="location_y" property="locationY"/>
+        <result column="location_fov" property="locationFov"/>
         <result column="base_flg" property="baseFlg"/>
         <result column="scene_id" property="sceneId"/>
         <result column="project_id" property="projectId"/>
@@ -25,8 +26,8 @@
     </resultMap>
 
     <insert id="insert" parameterType="Hotspot" useGeneratedKeys="true" keyProperty="id">
-        insert into hotspot(`code`, `name`, `title`, `location_x`, `location_y`, `bhotspot_id`, `base_flg`, `scene_id`,`project_id`,`type`, `create_time`, `update_time`)
-        values(#{code}, #{name}, #{title}, #{locationX}, #{locationY}, #{bhotspotId}, #{baseFlg}, #{sceneId},#{projectId}, #{type},now(), now())
+        insert into hotspot(`code`, `name`, `title`, `location_x`, `location_y`, `location_fov`, `bhotspot_id`, `base_flg`, `scene_id`,`project_id`,`type`, `create_time`, `update_time`)
+        values(#{code}, #{name}, #{title}, #{locationX}, #{locationY}, #{locationFov}, #{bhotspotId}, #{baseFlg}, #{sceneId},#{projectId}, #{type},now(), now())
     </insert>
     <insert id="update" parameterType="Hotspot">
         update hotspot
@@ -45,6 +46,9 @@
         </if>
         <if test="locationY != null">
             , location_y = #{locationY}
+        </if>
+        <if test="locationFov != null">
+            , location_fov = #{locationFov}
         </if>
         <if test="bhotspotId != null">
             , bhotspot_id = #{bhotspotId}
@@ -103,7 +107,7 @@
 
     <select id="findAllByQuery" resultMap="HotspotMap" parameterType="Query">
         select h.*, c.hotspot_id as hotspotId, c.title as contentTitle, c.id as contentId, c.content,c.type as contentType, c.module as contentModule, c.seq, c.extra
-        from hotspot h left join hotspot_content c on h.id=c.hotspot_id
+        from hotspot h left join project_hotspot ph on h.project_id=ph.project_id left join hotspot_content c on h.id=c.hotspot_id
         where 1=1
         <if test="projectId != null">
             and h.project_id=#{projectId}
@@ -114,8 +118,11 @@
         <if test="type != null">
             and h.type = #{type}
         </if>
-        <if test="type != null and type=='DEFAULT'">
-            and c.module = #{type}
+        <if test="types != null">
+            and h.type in
+            <foreach collection="types" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
         </if>
         <if test="sceneIds != null">
             and scene_id in
@@ -123,7 +130,7 @@
                 #{item}
             </foreach>
         </if>
-        order by id desc
+        order by ph.seq, h.id desc
     </select>
 
     <select id="findOne" resultMap="HotspotMap">

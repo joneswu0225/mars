@@ -1,8 +1,7 @@
 package com.jones.mars.controller;
 
-import com.jones.mars.model.BlockImage;
-import com.jones.mars.model.query.Query;
 import com.jones.mars.model.param.BlockImageParam;
+import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.BlockImageService;
 import io.swagger.annotations.Api;

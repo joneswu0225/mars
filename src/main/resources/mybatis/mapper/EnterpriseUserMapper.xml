@@ -29,7 +29,7 @@
     <select id="findList" resultMap="EnterpriseUserMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select eu.id, eu.enterprise_id as enterpriseId, eu.user_id as userId,eu.create_time as createTime, eu.update_time as updateTime, p.sgname as userSgname, d.id as departmentId, d.name as departmentName, d.parent_id as parentId, d.manager_id as managerId
-        from enterprise_user eu left join user_profile p on eu.user_id=p.user_id left join department d on d.enterprise_id=eu.enterprise_id
+        from enterprise_user eu left join user_profile p on eu.user_id=p.user_id left join department_user du on du.user_id=eu.user_id left join department d on du.department_id=d.id
         where 1=1
         <if test="enterpriseId != null">
             and eu.enterprise_id=#{enterpriseId}

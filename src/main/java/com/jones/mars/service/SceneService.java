@@ -24,8 +24,6 @@ public class SceneService extends BaseService {
     @Autowired
     private SceneMapper sceneMapper;
     @Autowired
-    private ProjectSceneMapper projectSceneMapper;
-    @Autowired
     private HotspotMapper hotspotMapper;
 
 
@@ -57,19 +55,5 @@ public class SceneService extends BaseService {
         return BaseResponse.builder().data(sceneMap.values()).build();
     }
 
-    public BaseResponse insertProjectScene(ProjectSceneParam param) {
-        projectSceneMapper.insert(param);
-        return BaseResponse.builder().build();
-    }
-
-    public BaseResponse deleteProjectScene(ProjectScene param){
-        projectSceneMapper.delete(param);
-        return BaseResponse.builder().build();
-    }
-
-    public BaseResponse updateProjectSceneSeq(ProjectSceneParam param) {
-        projectSceneMapper.updateProjectSceneSeq(param);
-        return BaseResponse.builder().build();
-    }
 
 }

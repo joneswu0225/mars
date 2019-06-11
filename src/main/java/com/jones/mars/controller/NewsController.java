@@ -1,6 +1,5 @@
 package com.jones.mars.controller;
 
-import com.jones.mars.model.News;
 import com.jones.mars.model.param.NewsParam;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
@@ -11,8 +10,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/news")

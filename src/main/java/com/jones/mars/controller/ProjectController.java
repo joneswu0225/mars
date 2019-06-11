@@ -1,7 +1,9 @@
 package com.jones.mars.controller;
 
+import com.jones.mars.model.ProjectHotspot;
 import com.jones.mars.model.ProjectScene;
 import com.jones.mars.model.ProjectUser;
+import com.jones.mars.model.param.ProjectHotspotParam;
 import com.jones.mars.model.param.ProjectParam;
 import com.jones.mars.model.param.ProjectSceneParam;
 import com.jones.mars.model.param.ProjectUserParam;
@@ -84,13 +86,13 @@ public class ProjectController extends BaseController {
             @PathVariable Integer projectId,
             @RequestBody @ApiParam(required=true) ProjectSceneParam param) {
         param.setProjectId(projectId);
-        return sceneService.insertProjectScene(param);
+        return projectService.insertProjectScene(param);
     }
 
     @ApiOperation(value = "调整项目场景顺序", notes = "")
     @PostMapping("/{projectId}/scene/changeSeq")
     public BaseResponse changeSceneSeq(@RequestBody @ApiParam(required=true) ProjectSceneParam param) {
-        return sceneService.updateProjectSceneSeq(param);
+        return projectService.updateProjectSceneSeq(param);
     }
 
     @ApiOperation(value = "删除项目场景", notes = "删除项目场景")
@@ -98,7 +100,21 @@ public class ProjectController extends BaseController {
     public BaseResponse deleteScene(
             @PathVariable Integer projectId,
             @PathVariable Integer sceneId) {
-        return sceneService.deleteProjectScene(ProjectScene.builder().projectId(projectId).sceneId(sceneId).build());
+        return projectService.deleteProjectScene(ProjectScene.builder().projectId(projectId).sceneId(sceneId).build());
+    }
+
+    @ApiOperation(value = "调整引导播放顺序", notes = "")
+    @PostMapping("/{projectId}/hotspot/changeSeq")
+    public BaseResponse changeHotspotSeq(@RequestBody @ApiParam(required=true) ProjectHotspotParam param) {
+        return projectService.insertProjectHotspot(param);
+    }
+
+    @ApiOperation(value = "删除项目引导播放热点", notes = "删除项目引导播放热点")
+    @DeleteMapping("{projectId}/hotspot/{hotspotId}")
+    public BaseResponse deleteProjectHotspot(
+            @PathVariable Integer projectId,
+            @PathVariable Integer hotspotId) {
+        return projectService.deleteProjectHotspot(ProjectHotspot.builder().projectId(projectId).hotspotId(hotspotId).build());
     }
 
     // TODO 增加后台注解

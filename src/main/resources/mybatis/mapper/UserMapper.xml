@@ -106,6 +106,7 @@
         <result property="userType" column="userType" />
         <result property="job" column="job" />
         <result property="email" column="email" />
+        <result property="mobile" column="mobile" />
         <result property="province" column="province" />
         <result property="city" column="city" />
         <result property="address" column="address" />

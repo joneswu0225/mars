@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 public class Hotspot extends BaseObject {
     public static final String TYPE_DEFAULT = "DEFAULT";
+    public static final String TYPE_GUIDE = "GUIDE";
     private Integer id;
     private String code;
     private String type = TYPE_DEFAULT;
@@ -19,6 +20,7 @@ public class Hotspot extends BaseObject {
     private String name;
     private Float locationX;
     private Float locationY;
+    private Float locationFov;
     private Integer baseFlg;
     private Integer bhotspotId;
     private Integer sceneId;
