@@ -13,6 +13,8 @@ import java.util.List;
 public class RolePermissionParam {
   @ApiParam(hidden = true)
   private Integer roleId;
+  @ApiParam(hidden = true)
+  private Integer classId;
   @NotNull(message = "二级分类ID不能为空")
   @ApiModelProperty(value="二级分类ID",name="classIds")
   private List<Integer> classIds;

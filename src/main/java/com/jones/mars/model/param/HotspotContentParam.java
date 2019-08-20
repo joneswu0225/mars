@@ -1,6 +1,5 @@
 package com.jones.mars.model.param;
 
-import com.jones.mars.model.HotspotContent;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.Builder;
@@ -14,8 +13,6 @@ public class HotspotContentParam {
     @NotNull
     @ApiModelProperty(value="类型",name="type")
     private String type;
-    @ApiModelProperty(value="热点内容大分类",name="module")
-    private String module = HotspotContent.MODULE_DEFAULT;
     @ApiModelProperty(value="额外信息",name="extra")
     private String extra;
     @ApiModelProperty(value="内容",name="content")
@@ -27,5 +24,7 @@ public class HotspotContentParam {
     private Integer hotspotId;
     @ApiParam(hidden = true)
     private Integer id;
+    @ApiParam(hidden = true)
+    private Integer seq;
 }
 

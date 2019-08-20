@@ -39,7 +39,7 @@ public class BlockController extends BaseController {
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) BlockParam param) {
         param.setOperatorId(getLoginUser().getId());
-        return service.add(Block.blockBuilder(param).build());
+        return service.add(param);
     }
 
     @ApiOperation(value = "获取公司下所有模块名称", notes = "")
@@ -50,7 +50,7 @@ public class BlockController extends BaseController {
     }
 
     @ApiOperation(value = "企业共建人列表", notes = "")
-    @GetMapping("{blockId}/user/{classId}")
+    @GetMapping("{blockId}/class/{classId}/user") 
     public BaseResponse findBlockUser(@PathVariable Integer blockId,@PathVariable Integer classId) {
         return service.findClassPartner(classId);
     }

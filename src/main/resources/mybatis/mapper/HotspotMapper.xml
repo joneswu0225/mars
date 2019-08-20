@@ -4,21 +4,22 @@
     <resultMap id="HotspotMap" type="Hotspot" >
         <id property="id" column="id" />
         <result column="code" property="code"/>
+        <result column="hotspot_seq" property="seq"/>
         <result column="type" property="type"/>
         <result column="title" property="title"/>
+        <result column="sceneCode" property="sceneCode"/>
         <result column="name" property="name"/>
         <result column="location_x" property="locationX"/>
         <result column="location_y" property="locationY"/>
         <result column="location_fov" property="locationFov"/>
-        <result column="base_flg" property="baseFlg"/>
         <result column="scene_id" property="sceneId"/>
         <result column="project_id" property="projectId"/>
         <collection property="contents" ofType="HotspotContent" column="hotspotId">
             <id column="contentId" property="id"/>
             <result column="contentType" property="type"/>
             <result column="contentModule" property="module"/>
-            <result column="seq" property="seq"/>
             <result column="extra" property="extra"/>
+            <result column="content_seq" property="seq"/>
             <result column="content" property="content"/>
             <result column="contentTitle" property="title"/>
             <result column="hotspotId" property="hotspotId"/>
@@ -26,14 +27,14 @@
     </resultMap>
 
     <insert id="insert" parameterType="Hotspot" useGeneratedKeys="true" keyProperty="id">
-        insert into hotspot(`code`, `name`, `title`, `location_x`, `location_y`, `location_fov`, `bhotspot_id`, `base_flg`, `scene_id`,`project_id`,`type`, `create_time`, `update_time`)
-        values(#{code}, #{name}, #{title}, #{locationX}, #{locationY}, #{locationFov}, #{bhotspotId}, #{baseFlg}, #{sceneId},#{projectId}, #{type},now(), now())
+        insert into hotspot(`code`, `title`, `location_x`, `location_y`, `location_fov`, `scene_id`,`project_id`,`type`, `create_time`, `update_time`)
+        values(#{code}, #{title}, #{locationX}, #{locationY}, #{locationFov}, #{sceneId}, #{projectId}, #{type},now(), now())
     </insert>
     <insert id="update" parameterType="Hotspot">
         update hotspot
         set id = #{id}
-        <if test="name != null and name !=''">
-            , name = #{name}
+        <if test="type != null and type !=''">
+            , type = #{type}
         </if>
         <if test="code != null and code !=''">
             , code = #{code}
@@ -50,9 +51,6 @@
         <if test="locationFov != null">
             , location_fov = #{locationFov}
         </if>
-        <if test="bhotspotId != null">
-            , bhotspot_id = #{bhotspotId}
-        </if>
         where id = #{id}
     </insert>
 
@@ -66,8 +64,14 @@
         <if test="projectId != null">
             and project_id=#{projectId}
         </if>
-        <if test="type != null">
+        <if test="type != null and type != ''">
             and type=#{type}
+        </if>
+        <if test="sceneIds != null">
+            and scene_id in
+            <foreach collection="sceneIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
         </if>
         order by id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
@@ -82,12 +86,12 @@
         <if test="projectId != null">
             and project_id=#{projectId}
         </if>
-        <if test="type != null">
+        <if test="type != null and type != ''">
             and type=#{type}
         </if>
     </select>
 
-    <select id="findAll" resultMap="HotspotMap" parameterType="Query">
+    <select id="findAll" resultType="Hotspot" parameterType="Query">
         select * from hotspot
         where 1=1
         <if test="projectId != null">
@@ -96,18 +100,22 @@
         <if test="sceneId != null">
             and scene_id = #{sceneId}
         </if>
-        <if test="sceneIds != null">
-            and scene_id in
-            <foreach collection="sceneIds" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+        <if test="type != null and type != ''">
+            and type=#{type}
         </if>
         order by id desc
     </select>
 
     <select id="findAllByQuery" resultMap="HotspotMap" parameterType="Query">
-        select h.*, c.hotspot_id as hotspotId, c.title as contentTitle, c.id as contentId, c.content,c.type as contentType, c.module as contentModule, c.seq, c.extra
-        from hotspot h left join project_hotspot ph on h.project_id=ph.project_id left join hotspot_content c on h.id=c.hotspot_id
+        select h.*,
+        <if test="hasSceneCode != null">
+            s.code as sceneCode,
+        </if>
+        c.hotspot_id as hotspotId, ph.seq as hotspot_seq, c.title as contentTitle, c.id as contentId, c.content,c.type as contentType, c.module as contentModule, c.seq as content_seq, c.extra
+        from hotspot h left join project_hotspot ph on h.id=ph.hotspot_id left join hotspot_content c on h.id=c.hotspot_id
+        <if test="hasSceneCode != null">
+            left join scene s on h.scene_id=s.id
+        </if>
         where 1=1
         <if test="projectId != null">
             and h.project_id=#{projectId}
@@ -130,7 +138,7 @@
                 #{item}
             </foreach>
         </if>
-        order by ph.seq, h.id desc
+        order by ph.seq
     </select>
 
     <select id="findOne" resultMap="HotspotMap">

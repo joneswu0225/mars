@@ -28,8 +28,8 @@
         </if>
     </select>
     <insert id="insert" parameterType="Block" useGeneratedKeys="true" keyProperty="id">
-        insert into block(`name`, `enterprise_id`, `create_time`, `update_time`, `operator_id`, `detail`, `plateform_flg`)
-        values(#{name}, #{enterpriseId}, now(), now(), #{operatorId}, #{detail}, #{plateformFlg})
+        insert into block(`name`, `enterprise_id`, `create_time`, `update_time`, `operator_id`, `detail`)
+        values(#{name}, #{enterpriseId}, now(), now(), #{operatorId}, #{detail})
     </insert>
     <insert id="update" parameterType="Block" >
         update block
@@ -56,17 +56,14 @@
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select * from block
         where delete_flg=0
-        <if test="query != null and query.name != null and query.name !=''">
-            and name like concat('%',#{query.name},'%')
+        <if test="name != null and name !=''">
+            and name like concat('%',#{name},'%')
         </if>
-        <if test="query != null and query.plateformFlg != null">
-            and plateform_flg=#{query.plateformFlg}
+        <if test="status != null">
+            and status=#{status}
         </if>
-        <if test="query != null and query.status != null">
-            and status=#{query.status}
-        </if>
-        <if test="query != null and query.enterpriseId != null">
-            and enterprise_id=#{query.enterpriseId}
+        <if test="enterpriseId != null">
+            and enterprise_id=#{enterpriseId}
         </if>
         order by id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
@@ -74,35 +71,47 @@
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from block
         where delete_flg=0
-        <if test="query != null and query.name != null and query.name !=''">
-            and name like concat('%',#{query.name},'%')
+        <if test="name != null and name !=''">
+            and name like concat('%',#{name},'%')
         </if>
-        <if test="query != null and query.plateformFlg != null">
-            and plateform_flg=#{query.plateformFlg}
+        <if test="status != null">
+            and status=#{status}
         </if>
-        <if test="query != null and query.status != null">
-            and status=#{query.status}
-        </if>
-        <if test="query != null and query.enterpriseId != null">
-            and enterprise_id=#{query.enterpriseId}
+        <if test="enterpriseId != null">
+            and enterprise_id=#{enterpriseId}
         </if>
     </select>
-    <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
+    <select id="findAllName" resultType="Block" parameterType="Query">
         select id, name from block
         where delete_flg=0
-        <if test="query != null and query.status != null">
-            and name like concat('%',#{query.name},'%')
+        <if test="status != null">
+            and name like concat('%',#{name},'%')
         </if>
-        <if test="query != null and query.plateformFlg != null">
-            and plateform_flg=#{query.plateformFlg}
-        </if>
-        <if test="query != null and query.enterpriseId != null">
-            and enterprise_id=#{query.enterpriseId}
+        <if test="enterpriseId != null">
+            and enterprise_id=#{enterpriseId}
         </if>
         order by id
     </select>
-    <select id="findAll" resultType="Block">
-        select * from block where delete_flg=0 order by id desc
+    <select id="findAll" resultType="Block" parameterType="Query">
+        select * from block
+        where delete_flg=0
+        <if test="name != null and name !=''">
+            and name like concat('%',#{name},'%')
+        </if>
+        <if test="status != null">
+            and status=#{status}
+        </if>
+        <if test="enterpriseId != null">
+            and enterprise_id=#{enterpriseId}
+        </if>
+        <if test="enterpriseIds != null">
+            and enterprise_id in (
+            <foreach collection="enterpriseIds" item="eid" index="index" separator=",">
+                #{eid}
+            </foreach>
+            )
+        </if>
+        order by id desc
     </select>
     <select id="findOne" resultType="Block">
         select * from block where id=#{id}

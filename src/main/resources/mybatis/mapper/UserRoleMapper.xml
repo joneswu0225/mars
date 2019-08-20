@@ -10,6 +10,12 @@
             role_id = #{roleId}, user_id=#{userId}, create_time=now(), update_time=now()
         </foreach>
     </insert>
+    <select id="findAll" parameterType="java.lang.Integer" resultType="UserRole">
+        select * from user_role where 1=1
+        <if test="role_id != null">
+            and role_id=#{role_id}
+        </if>
+    </select>
     <delete id="delete">
         <if test="enterpriseId != null">
             delete from user_role where role_id in (select id from role where enterprise_id=#{enterpriseId})

@@ -28,16 +28,18 @@ public class HotspotController extends BaseController {
         return service.findByPage(query);
     }
 
-    @ApiOperation(value = "获取场景下所有热点", notes = "后台接口")
+    @ApiOperation(value = "获取所有热点", notes = "后台接口")
     @GetMapping("/all")
     public BaseResponse all(@ApiParam HotspotQuery query) {
-        return service.findAll(query);
+        return service.findAllByQuery(query);
     }
 
     @ApiOperation(value = "新增热点", notes = "")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) HotspotParam param) {
-//        param.setCode("hs_" + System.currentTimeMillis());
+        if(StringUtils.isEmpty(param.getCode())){
+            param.setCode("hs_" + System.currentTimeMillis());
+        }
         if(StringUtils.isEmpty(param.getType())){
             param.setType(Hotspot.TYPE_DEFAULT);
         }

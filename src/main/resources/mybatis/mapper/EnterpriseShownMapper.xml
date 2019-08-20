@@ -29,8 +29,16 @@
         where delete_flg=0
         order by id desc
     </select>
-    <select id="findAll" resultType="EnterpriseShown">
-        select * from enterprise_shown order by id desc
+    <select id="findAll" resultType="EnterpriseShown" parameterType="Query">
+        select * from enterprise_shown
+        where 1=1
+        <if test="ids != null">
+            and id in (
+            <foreach collection="ids" item="shownId" index="index" separator=",">
+                #{shownId}
+            </foreach>
+            )
+        </if>
     </select>
     <select id="findOne" resultType="EnterpriseShown">
         select * from enterprise_shown

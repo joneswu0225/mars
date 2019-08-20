@@ -2,11 +2,11 @@ package com.jones.mars.service;
 
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.*;
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.ProjectHotspotParam;
 import com.jones.mars.model.param.ProjectParam;
 import com.jones.mars.model.param.ProjectSceneParam;
-import com.jones.mars.model.query.ProjectUserQuery;
-import com.jones.mars.model.query.Query;
+import com.jones.mars.model.query.*;
 import com.jones.mars.model.param.ProjectUserParam;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.*;
@@ -34,9 +34,13 @@ public class ProjectService extends BaseService {
     @Autowired
     private ProjectUserMapper projectUserMapper;
     @Autowired
+    private RolePermissionMapper rolePermissionMapper;
+    @Autowired
     private ProjectHotspotMapper projectHotspotMapper;
     @Autowired
     private ProjectSceneMapper projectSceneMapper;
+    @Autowired
+    private HotspotMapper hotspotMapper;
     @Value("${app.public.block.id}")
     private Integer publicBlockId;
 
@@ -47,6 +51,7 @@ public class ProjectService extends BaseService {
     public BaseMapper getMapper(){
         return this.mapper;
     }
+
 
     /**
      * 新增项目：
@@ -137,8 +142,32 @@ public class ProjectService extends BaseService {
 
     public BaseResponse findOne(Integer projectId){
         Project project = mapper.findOne(projectId);
-        List<ProjectUser> projectUsers = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).build());
-        project.setUserList(projectUsers);
+        User loginUser = LoginUtil.getInstance().getUser();
+        if(project.getPublicFlg().equals(Project.UNPUBLIC) && project.getEnterprisePlateformFlg().equals(CommonConstant.NOPLATEFROM)){
+            if(loginUser == null) {
+                return BaseResponse.builder().code(ErrorCode.AUTH_PROJECT_UNPUBLIC_NOLOGIN).build();
+            } else {
+                if(loginUser.getUserType().equals(User.COMMON)){
+                    List<RolePermission> permissions = rolePermissionMapper.findAll(RolePermissionQuery.builder().classId(project.getClassId()).userId(loginUser.getId()).build());
+                    if(permissions.size() == 0){
+                        return BaseResponse.builder().code(ErrorCode.AUTH_PROJECT_UNAUTH).build();
+                    }
+                } else if(loginUser.getUserType().equals(User.ENTMANAGER)) {
+                    List<Integer> enterpriseIds = loginUser.getEnterprises().stream().map(p->p.getId()).collect(Collectors.toList());
+                    if(!enterpriseIds.contains(project.getOriEnterpriseId())) {
+                        return BaseResponse.builder().code(ErrorCode.AUTH_PROJECT_UNAUTH).build();
+                    }
+                }
+            }
+        }
+        if(loginUser != null){
+            List<ProjectUser> projectUsers = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).build());
+            project.setUserList(projectUsers);
+        }
+        List<Hotspot> attachments = hotspotMapper.findAllByQuery(HotspotQuery.builder().projectId(projectId).type(Hotspot.TYPE_ATTACHMENT).build());
+        List<Hotspot> guidances = hotspotMapper.findAllByQuery(HotspotQuery.builder().projectId(projectId).type(Hotspot.TYPE_GUIDE).hasSceneCode(true).build());
+        project.setAttachments(attachments);
+        project.setGuidances(guidances);
         return BaseResponse.builder().data(project).build();
     }
 
@@ -256,7 +285,15 @@ public class ProjectService extends BaseService {
     }
 
     public BaseResponse insertProjectScene(ProjectSceneParam param) {
-        projectSceneMapper.insert(param);
+        if(param.getSceneIds() != null && param.getSceneIds().size() == 1){
+            Integer maxSeq = projectSceneMapper.findMaxSeqByProjectId(param.getProjectId());
+            param.setSeq(maxSeq == null ? 0 : maxSeq + 1);
+            param.setSceneId(param.getSceneIds().get(0));
+            projectSceneMapper.insertOne(param);
+            return BaseResponse.builder().data(param.getId()).build();
+        }else{
+            projectSceneMapper.insert(param);
+        }
         return BaseResponse.builder().build();
     }
 
@@ -267,10 +304,6 @@ public class ProjectService extends BaseService {
 
     public BaseResponse updateProjectSceneSeq(ProjectSceneParam param) {
         projectSceneMapper.updateProjectSceneSeq(param);
-        return BaseResponse.builder().build();
-    }
-    public BaseResponse insertProjectHotspot(ProjectHotspotParam param) {
-        projectHotspotMapper.insert(param);
         return BaseResponse.builder().build();
     }
 

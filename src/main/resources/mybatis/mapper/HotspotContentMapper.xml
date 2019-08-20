@@ -2,22 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.HotspotContentMapper" >
     <insert id="insert" parameterType="HotspotContentParams" useGeneratedKeys="true" keyProperty="id">
-        insert into hotspot_content(`hotspot_id`, `content`, `title`, `extra`, `seq`, `type`, `module`) values
+        insert into hotspot_content(`hotspot_id`, `content`, `title`, `extra`, `seq`, `type`) values
         <foreach collection="hotspotContentList" item="param" index="index" separator=",">
-            (#{param.hotspotId}, #{param.content}, #{param.title}, #{param.extra}, #{index}, #{param.type}, #{param.module})
+            (#{param.hotspotId}, #{param.content}, #{param.title}, #{param.extra}, #{index}, #{param.type})
         </foreach>
     </insert>
     <insert id="insertOne" parameterType="HotspotContentParam" useGeneratedKeys="true" keyProperty="id">
-        insert into hotspot_content(`hotspot_id`, `content`, `title`, `extra`, `seq`, `type`, `module`) values
-        (#{hotspotId}, #{content}, #{title}, #{extra}, 0, #{type}, #{module})
+        insert into hotspot_content(`hotspot_id`, `content`, `title`, `extra`, `seq`, `type`) values
+        (#{hotspotId}, #{content}, #{title}, #{extra}, #{seq}, #{type})
     </insert>
+    <update id="updateOne" parameterType="HotspotContentParam">
+        update hotspot_content
+        set content = #{content}, title = #{title}, type = #{type}, extra = #{extra}
+        where id = #{id}
+    </update>
     <update id="update" parameterType="HotspotContentParams">
         <foreach collection="hotspotContentList" item="param" index="index" separator=";">
         update hotspot_content
-        set content = #{param.content}, title = #{param.title}, type = #{param.type}, extra = #{param.extra}, seq=#{index}
+        set content = #{param.content}, title = #{param.title}, type = #{param.type}, extra = #{param.extra}
         where id = #{param.id}
         </foreach>
     </update>
+    <select id="findMaxSeqByhotspotId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select max(seq) from hotspot_content where hotspot_id=#{hotspotId}
+    </select>
     <update id="updateHotspotContentSeq">
         update hotspot_content set seq=case
         <foreach collection="hotspotContentIds" item="hotspotContentId" index="index">
@@ -35,13 +43,10 @@
         <if test="hotspotId != null">
             and hotspot_id=#{hotspotId}
         </if>
-        <if test="module != null and module != ''">
-            and module=#{module}
-        </if>
         <if test="type != null and type != ''">
             and type=#{type}
         </if>
-        order by seq, id
+        order by seq
     </select>
 
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
@@ -61,13 +66,10 @@
         <if test="hotspotId != null">
             and hotspot_id=#{hotspotId}
         </if>
-        <if test="module != null and module != ''">
-            and module=#{module}
-        </if>
         <if test="type != null and type != ''">
             and type=#{type}
         </if>
-        order by seq, id
+        order by seq
     </select>
 
     <select id="findOne" resultType="HotspotContent">
@@ -76,5 +78,8 @@
 
     <delete id="delete">
         delete from hotspot_content where id=#{id}
+    </delete>
+    <delete id="deleteByHotspotId">
+        delete from hotspot_content where hotspot_id=#{id}
     </delete>
 </mapper>

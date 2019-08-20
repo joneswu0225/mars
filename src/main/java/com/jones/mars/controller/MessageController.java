@@ -5,6 +5,7 @@ import com.jones.mars.model.query.MessageQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.MessageService;
+import com.jones.mars.util.LoginUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,6 +25,7 @@ public class MessageController extends BaseController {
     @ApiOperation(value = "通知列表", notes = "通知列表")
     @GetMapping("")
     public BaseResponse list(@ApiParam MessageQuery query) {
+        query.setReceiver(LoginUtil.getInstance().getUser().getId());
         return service.findByPage(query);
     }
 

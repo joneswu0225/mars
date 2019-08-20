@@ -1,17 +1,17 @@
 package com.jones.mars.controller;
 
-import com.jones.mars.model.ProjectHotspot;
-import com.jones.mars.model.ProjectScene;
-import com.jones.mars.model.ProjectUser;
+import com.jones.mars.model.*;
 import com.jones.mars.model.param.ProjectHotspotParam;
 import com.jones.mars.model.param.ProjectParam;
 import com.jones.mars.model.param.ProjectSceneParam;
 import com.jones.mars.model.param.ProjectUserParam;
+import com.jones.mars.model.query.EnterpriseQuery;
 import com.jones.mars.model.query.HotspotQuery;
 import com.jones.mars.model.query.ProjectQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.ProjectService;
 import com.jones.mars.service.SceneService;
+import com.jones.mars.util.LoginUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -19,7 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/project")
@@ -32,9 +34,19 @@ public class ProjectController extends BaseController {
     @Autowired
     private SceneService sceneService;
 
+    /**
+     * 如果当前用户为
+     * operation: 1: 我的项目 0： 企业项目
+     * 普通用户： operation=1：当前用户为共建人并且处于编辑状态的项目
+     *          operation=0：处于发布状态的项目
+     * @param query
+     * @return
+     */
     @ApiOperation(value = "项目列表", notes = "项目列表")
     @GetMapping("")
     public BaseResponse list(@ApiParam ProjectQuery query) {
+        query.setUserId(LoginUtil.getInstance().getUser().getId());
+//        query.setUserId(28);
         return projectService.findByPage(query);
     }
 
@@ -106,7 +118,7 @@ public class ProjectController extends BaseController {
     @ApiOperation(value = "调整引导播放顺序", notes = "")
     @PostMapping("/{projectId}/hotspot/changeSeq")
     public BaseResponse changeHotspotSeq(@RequestBody @ApiParam(required=true) ProjectHotspotParam param) {
-        return projectService.insertProjectHotspot(param);
+        return projectService.updateProjectHotspotSeq(param);
     }
 
     @ApiOperation(value = "删除项目引导播放热点", notes = "删除项目引导播放热点")

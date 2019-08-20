@@ -37,9 +37,13 @@ public enum ErrorCode {
 	PROJECT_DELETE_DENIED("5001", "项目已经编辑过，无法删除"),
 
 	//权限不够
-	AUTH_PROJECT_FAILED("2001", "无权访问该项目"),
+	AUTH_PROJECT_UNPUBLIC_NOLOGIN("2001", "非登录状态无权访问非公开项目"),
+	AUTH_PROJECT_UNAUTH("2002", "无权访问该项目"),
 	//业务错误
 	ENT_USER_EXISTS("3001", "企业用户已存在"),
+	//角色错误
+	ROLE_DELETE_EXIST_USER("5001", "该角色仍存在被授予的用户，无法删除"),
+	ROLE_PERMISSION_DELETE_NOAUTH("5101", "请联系管理员进行权限删除"),
 
 	INTERNAL_ERROR("9000", "系统内部错误"),
 	;

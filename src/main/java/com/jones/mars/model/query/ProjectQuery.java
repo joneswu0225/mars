@@ -3,9 +3,13 @@ package com.jones.mars.model.query;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
+@Builder
 @ApiModel(value="项目查询参数")
 public class ProjectQuery extends Query {
     @ApiModelProperty(value="模块ID",name="blockId")
@@ -28,4 +32,10 @@ public class ProjectQuery extends Query {
     private Integer filterDownShelf;
     @ApiParam(hidden = true)
     private Integer plateformFlg;
+    @ApiParam(hidden = true)
+    private Integer userId;
+    @ApiParam(hidden = true)
+    private List<Integer> ids;
+    @ApiModelProperty(value="是否可编辑，1：可编辑，我的项目，0：不可编辑企业项目",name="operation")
+    private Integer operation;
 }

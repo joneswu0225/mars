@@ -176,7 +176,7 @@ public class UserService extends BaseService<User>{
 //                List<Block> roleList = roleMapper.findGrantedBlock(user_db.getId());
 //                result.put("roles", roleList);
 //            }
-            result.put("expireTime", new Date(now.getTime() + LoginUtil.SESSION_MAX_INACTIVE_INTERVAL));
+            result.put("expireTime", new Date(now.getTime() + LoginUtil.COOKIE_MAX_INACTIVE_INTERVAL));
             result.put("userType", user_db.getUserType());
             LoginUtil.getInstance().setUser(authorization, user_db);
             result.put("authorization", user_db.getAuth());

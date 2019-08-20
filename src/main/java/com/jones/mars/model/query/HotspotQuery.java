@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -17,8 +18,10 @@ public class HotspotQuery extends Query {
     private Integer projectId;
     @ApiModelProperty(hidden = true)
     private Set<Integer> sceneIds;
+    @ApiModelProperty(hidden = true)
+    private Boolean hasSceneCode;
     @ApiModelProperty(value="热点类型集合",name="types")
-    private Set<String> types;
+    private List<String> types;
     @ApiModelProperty(value="热点类型",name="type")
     private String type;
 }

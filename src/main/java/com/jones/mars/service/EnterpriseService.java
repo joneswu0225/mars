@@ -1,10 +1,7 @@
 package com.jones.mars.service;
 
 import com.jones.mars.constant.ErrorCode;
-import com.jones.mars.model.DepartmentUser;
 import com.jones.mars.model.Enterprise;
-import com.jones.mars.model.RolePermission;
-import com.jones.mars.model.param.DepartmentParam;
 import com.jones.mars.model.param.DepartmentUserParam;
 import com.jones.mars.model.param.EnterpriseParam;
 import com.jones.mars.model.param.EnterpriseUserParam;
@@ -33,6 +30,8 @@ public class EnterpriseService extends BaseService {
     private DepartmentUserMapper departmentUserMapper;
     @Autowired
     private UserRoleMapper userRoleMapper;
+    @Autowired
+    private ProjectUserMapper projectUserMapper;
     @Autowired
     private RolePermissionMapper rolePermissionMapper;
 
@@ -108,6 +107,7 @@ public class EnterpriseService extends BaseService {
         departmentUserMapper.delete(param);
         userRoleMapper.delete(param);
         enterpriseUserMapper.delete(param);
+        projectUserMapper.deleteByEnterpriseUser(param);
         return BaseResponse.builder().build();
     }
 

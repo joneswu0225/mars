@@ -28,4 +28,20 @@
     <delete id="delete">
         delete from project_user where project_id=#{projectId} and user_id=#{userId}
     </delete>
+    <delete id="deleteByEnterpriseUser">
+        delete from project_user where project_id in (select id from project where ori_enterprise_id=#{enterprise_id}) and user_id=#{userId}
+    </delete>
+    <delete id="deleteByUserRole" parameterType="UserRoleParam">
+        delete from project_user pu left join project p on pu.project_id=p.id where pu.user_id=#{userId} and p.class_id in (
+        select DISTINCT(rpo.class_id) as class_id from role_permission rpo left join user_role uro on uro.role_id=rpo.role_id where rpo.class_id not in (
+        SELECT DISTINCT(rp.class_id) as class_id FROM user_role ur left join role_permission rp on ur.role_id=rp.role_id where ur.user_id=#{userId} and ur.role_id!=#{roleId} and operation=1
+        )and uro.user_id=#{userId} and uro.role_id=#{roleId} and operation=1)
+    </delete>
+    <delete id="deleteByRolePermission" parameterType="RolePermissionParam">
+        select * from project_user pu left join project p on pu.project_id=p.id where p.class_id=#{classId} and pu.user_id in (
+        select DISTINCT(uro.user_id) as class_id from role_permission rpo left join user_role uro on uro.role_id=rpo.role_id where uro.user_id not in (
+        SELECT DISTINCT(ur.user_id) as class_id FROM user_role ur left join role_permission rp on ur.role_id=rp.role_id where rp.class_id=#{classId} and ur.role_id!=#{roleId} and operation=1
+        )and rpo.class_id=#{classId} and uro.role_id=#{roleId} and operation=1)
+    </delete>
+
 </mapper>

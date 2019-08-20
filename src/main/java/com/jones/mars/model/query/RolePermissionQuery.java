@@ -14,4 +14,6 @@ public class RolePermissionQuery{
     private Integer classId;
     @ApiModelProperty(value="操作类型，0：VIEW，1：CREATE   ",name="operation")
     private Integer operation;
+    @ApiParam(hidden = true)
+    private Integer userId;
 }

@@ -26,31 +26,19 @@
         <if test="blockId != null">
             and m.block_id = #{blockId}
         </if>
-        <if test="blockIdIn != null">
-            and m.block_id in
-            <foreach collection="blockIdIn" item="id" index="index" open="(" close=")" separator=",">
-                #{id}
-            </foreach>
-        </if>
         order by m.name, c.name
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from block_module
-        where delete_flg=0
+        where m.delete_flg=0
         <if test="blockId != null">
             and block_id = #{blockId}
-        </if>
-        <if test="blockIdIn != null">
-            and m.block_id in
-            <foreach collection="blockIdIn" item="id" index="index" open="(" close=")" separator=",">
-                #{id}
-            </foreach>
         </if>
     </select>
     <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
         select id, name from block_module
-        where delete_flg=0
+        where m.delete_flg=0
         <if test="publicFlg != null">
             and public_flg = #{publicFlg}
         </if>
@@ -58,15 +46,9 @@
     </select>
     <select id="findAll" resultMap="BlockModuleMap" parameterType="Query">
         select m.*, c.id as classId, c.name as className, c.module_id from block_module m left join block_class c on m.id=c.module_id
-        where delete_flg=0
+        where m.delete_flg=0
         <if test="blockId != null">
             and m.block_id = #{blockId}
-        </if>
-        <if test="blockIdIn != null">
-            and m.block_id in
-            <foreach collection="blockIdIn" item="id" index="index" open="(" close=")" separator=",">
-                #{id}
-            </foreach>
         </if>
         order by name
     </select>

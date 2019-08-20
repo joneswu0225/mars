@@ -111,6 +111,7 @@
         <result property="city" column="city" />
         <result property="address" column="address" />
         <result property="description" column="description" />
+        <result property="birthday" column="birthday" />
         <result property="avatar" column="avatar" />
         <result property="namecard" column="namecard" />
         <result property="block_id" column="blockId" />

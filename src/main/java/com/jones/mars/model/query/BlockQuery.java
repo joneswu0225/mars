@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @ApiModel(value="模块查询参数")
 @Builder
@@ -21,5 +23,5 @@ public class BlockQuery extends Query {
     @ApiParam(hidden = true)
     private Integer userId;
     @ApiParam(hidden = true)
-    private Integer plateformFlg;
+    private List<Integer> enterpriseIds;
 }

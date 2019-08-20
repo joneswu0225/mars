@@ -62,8 +62,8 @@
             and s.name = #{name}
         </if>
     </select>
-    <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
-        select distinct(s.id), s.name from scene s left join project_scene ps on ps.scene_id = s.id left join project p on ps.project_id=p.id
+    <select id="findAllName" resultType="Scene" parameterType="Query">
+        select distinct(s.id), s.name, s.scene_type_id as sceneTypeId, s.code from scene s left join project_scene ps on ps.scene_id = s.id left join project p on ps.project_id=p.id
         where s.delete_flg=0
         <if test="blockId != null">
             and s.block_id = #{blockId}

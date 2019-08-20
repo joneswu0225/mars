@@ -26,6 +26,8 @@ public class BlockService extends BaseService{
     @Autowired
     private RoleMapper roleMapper;
     @Autowired
+    private UserMapper userMapper;
+    @Autowired
     private RolePermissionMapper rolePermissionMapper;
 
     @Override
@@ -34,7 +36,6 @@ public class BlockService extends BaseService{
     }
 
     public BaseResponse allName(Integer enterpriseId){
-        List<Object> l =new LinkedList<>();
         Query query = new Query(Block.builder().enterpriseId(enterpriseId).build());
         List<Object> list = mapper.findAllName(query);
         return BaseResponse.builder().data(list).build();
@@ -43,7 +44,7 @@ public class BlockService extends BaseService{
     public BaseResponse findBlocks(BlockQuery query){
         User user = LoginUtil.getInstance().getUser();
 //        if(user == null){
-//            user = userMapper.findOne(11);
+//            user = userMapper.findOne(18);
 //        }
         Integer userType = user.getUserType();
         List<Block> blockList = null;

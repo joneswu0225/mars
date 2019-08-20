@@ -28,7 +28,7 @@ public class Project extends BaseObject {
     private Integer blockId;
     private String blockName;
     private Integer moduleId;
-    private Integer blockPlateformFlg;
+    private Integer enterprisePlateformFlg;
     private Integer oriEnterpriseId;
     private String oriEnterpriseAvatar;
     private String oriEnterpriseName;
@@ -48,6 +48,8 @@ public class Project extends BaseObject {
     private Date createTime;
     private Integer deleteFlg;
     private List<ProjectUser> userList = new ArrayList<>();
+    private List<Hotspot> attachments = new ArrayList<>();
+    private List<Hotspot> guidances = new ArrayList<>();
 //
 //    public static ProjectBuilder projectBuilder(ProjectParam param){
 //        return builder().name(param.getName()).detail(param.getDetail()).imageUrl(param.getImageUrl())

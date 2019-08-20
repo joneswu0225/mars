@@ -13,21 +13,20 @@ import java.util.List;
 public class Hotspot extends BaseObject {
     public static final String TYPE_DEFAULT = "DEFAULT";
     public static final String TYPE_GUIDE = "GUIDE";
+    public static final String TYPE_ATTACHMENT = "ATTACHMENT";
     private Integer id;
     private String code;
+    private String sceneCode;
     private String type = TYPE_DEFAULT;
     private String title;
-    private String name;
     private Float locationX;
     private Float locationY;
     private Float locationFov;
-    private Integer baseFlg;
-    private Integer bhotspotId;
     private Integer sceneId;
+    private Integer seq;
     private Integer projectId;
     private Date createTime;
     private Date updateTime;
-    private List<HotspotContent> baseContents = new ArrayList<>();
     private List<HotspotContent> contents = new ArrayList<>();
 
 //    public static Hotspot.HotspotBuilder hotspotBuilder(HotspotParam param){

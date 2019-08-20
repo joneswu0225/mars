@@ -3,11 +3,13 @@ package com.jones.mars.controller;
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.Project;
 import com.jones.mars.model.constant.CommonConstant;
+import com.jones.mars.model.query.HotspotQuery;
 import com.jones.mars.model.query.ProjectQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.HomePageService;
 import com.jones.mars.service.ProjectModuleService;
 import com.jones.mars.service.ProjectService;
+import com.jones.mars.service.SceneService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,6 +30,8 @@ public class HomePageController{
     private HomePageService service;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private SceneService sceneService;
 
     @ApiOperation(value = "获取船福专题、全景船舶、全景设备下所有子模块名称", notes = "")
     @GetMapping("moduleInfo")
@@ -47,15 +51,29 @@ public class HomePageController{
         return service.enterpriseShown();
     }
 
+    @ApiOperation(value = "首页服务优势", notes = "")
+    @GetMapping("service")
+    public BaseResponse serviceSuperiority() {
+        return service.serviceSuperiority();
+    }
+
+    @ApiOperation(value = "首页信息", notes = "")
+    @GetMapping("pageInfo")
+    public BaseResponse pageInfo() {
+        return service.homePageInfo();
+    }
+
     @ApiOperation(value = "项目详情", notes = "项目详情")
     @GetMapping("project/{projectId}")
     public BaseResponse findOne(@PathVariable Integer projectId) {
-        BaseResponse resp = projectService.findById(projectId);
-        // project 非平台公开
-        if(!((Project)resp.getData()).getBlockPlateformFlg().equals(CommonConstant.PLATEFROM)){
-            resp = BaseResponse.builder().code(ErrorCode.AUTH_PROJECT_FAILED).build();
-        }
-        return resp;
+        return projectService.findOne(projectId);
+    }
+
+    @ApiOperation(value = "项目全景信息", notes = "项目全景信息")
+    @GetMapping("project/{projectId}/panoInfo")
+    public BaseResponse findPanoInfo(@PathVariable Integer projectId, @ApiParam HotspotQuery query) {
+        query.setProjectId(projectId);
+        return sceneService.findPanoInfo(query);
     }
 
     @ApiOperation(value = "船福专题、全景船舶、全景设备", notes = "")

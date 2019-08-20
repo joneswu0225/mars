@@ -10,12 +10,25 @@
             role_id = #{roleId}, class_id=#{classId}, operation=#{operation}, create_time=now(), update_time=now()
         </foreach>
     </insert>
+    <select id="findOne" resultType="RolePermission">
+        select * from role_permission where id = #{id}
+    </select>
     <delete id="delete">
         delete from role_permission where id=#{id}
     </delete>
     <delete id="deleteByRoleId">
         delete from role_permission where role_id=#{roleId}
     </delete>
+    <select id="findAll" resultType="RolePermission" parameterType="RolePermissionQuery">
+        select * from role_permission rp left join user_role ur on rp.role_id=ur.role_id
+        where 1=1
+        <if test="classId != null">
+            and rp.class_id=#{classId}
+        </if>
+        <if test="userId != null">
+            and ur.user_id = #{userId}
+        </if>
+    </select>
     <select id="findGrantedUserByClassId" resultType="EnterpriseUser" parameterType="RolePermissionQuery">
         select distinct(ur.user_id) as userId, up.sgname as userSgname from user_role ur left join role_permission p on ur.role_id=p.role_id left join user_profile up on ur.user_id=up.user_id
         where p.operation = #{operation} and p.class_id=#{classId}

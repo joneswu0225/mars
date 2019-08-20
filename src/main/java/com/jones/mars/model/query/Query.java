@@ -3,9 +3,11 @@ package com.jones.mars.model.query;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Data
 @ApiModel(value="分页参数")

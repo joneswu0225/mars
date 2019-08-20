@@ -11,6 +11,13 @@
         seq = #{index}
         </foreach>
     </insert>
+    <insert id="insertOne" parameterType="ProjectSceneParam" useGeneratedKeys="true" keyProperty="id">
+        insert into project_scene(`project_id`, `scene_id`, `seq`) values
+        (#{projectId}, #{sceneId}, #{seq}) ON DUPLICATE KEY UPDATE seq=#{seq}
+    </insert>
+    <select id="findMaxSeqByProjectId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select max(seq) from project_scene where project_id=#{projdectId}
+    </select>
     <update id="updateProjectSceneSeq" parameterType="ProjectSceneParam">
         update project_scene set seq=case
         <foreach collection="sceneIds" item="sceneId" index="index">

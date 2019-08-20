@@ -9,6 +9,6 @@ import java.util.Map;
 
 @Repository
 public interface SceneMapper extends BaseMapper<Scene> {
-    List<Map<Integer, String>> findAllName(Query query);
+    List<Scene> findAllName(Query query);
 }
 

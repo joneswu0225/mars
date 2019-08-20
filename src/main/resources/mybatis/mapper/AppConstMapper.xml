@@ -17,6 +17,15 @@
         order by name
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
+    <resultMap id="AppConstMap" type="AppConst" >
+        <result column="name" property="name" />
+        <collection property="values" ofType="java.lang.String" column="name">
+            <result column="group_value" property="blockId"/>
+        </collection>
+    </resultMap>
+    <select id="findGroup" resultMap="AppConstMap">
+        select name, value as group_value from app_const
+    </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from app_const where 1=1
         <if test="name != null and name !=''">

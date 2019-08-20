@@ -10,8 +10,10 @@ import java.util.List;
 @Repository
 public interface HotspotContentMapper extends BaseMapper<HotspotContent> {
     List<HotspotContent> findByHotspotId(Integer hotspotId);
-
+    void deleteByHotspotId(Integer hotspotId);
     void updateHotspotContentSeq(HotspotContentSeqParam param);
     void insertOne(HotspotContentParam param);
+    void updateOne(HotspotContentParam param);
+    Integer findMaxSeqByhotspotId(Integer hotspotId);
 
 }

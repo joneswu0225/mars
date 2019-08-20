@@ -12,11 +12,10 @@ public class RolePermission extends BaseObject {
 
   private Integer roleId;
   private Integer userId;
-  private Integer userSgname;
   private Integer moduleId;
-  private String moduleName;
   private Integer classId;
   private String className;
+  private String moduleName;
   private Integer operation;
   private Date updateTime;
   private Date createTime;
