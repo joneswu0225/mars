@@ -22,6 +22,8 @@ public class ProjectQuery extends Query {
     private String name;
     @ApiModelProperty(value="一级分类ID",name="moduleId")
     private Integer moduleId;
+    @ApiModelProperty(value="一级分类名称",name="moduleName")
+    private String moduleName;
     @ApiModelProperty(value="二级分类ID",name="classId")
     private Integer classId;
     @ApiModelProperty(value="查询状态",name="status")

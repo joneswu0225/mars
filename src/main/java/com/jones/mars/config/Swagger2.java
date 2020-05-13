@@ -1,5 +1,6 @@
 package com.jones.mars.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -14,6 +15,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
 public class Swagger2 implements WebMvcConfigurer {
+	@Value("${swagger.host}")
+	private String baseUrl;
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {

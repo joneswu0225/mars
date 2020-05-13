@@ -26,6 +26,9 @@
         <if test="enterpriseId != null">
             and b.enterprise_id=#{enterpriseId}
         </if>
+        <if test="moduleName != null and moduleName != ''">
+            and m.name=#{moduleName}
+        </if>
     </select>
     <insert id="insert" parameterType="Block" useGeneratedKeys="true" keyProperty="id">
         insert into block(`name`, `enterprise_id`, `create_time`, `update_time`, `operator_id`, `detail`)

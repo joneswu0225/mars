@@ -73,6 +73,9 @@
         <if test="classId != null">
             and p.class_id=#{classId}
         </if>
+        <if test="moduleName != null and moduleName != ''">
+            and m.name=#{moduleName}
+        </if>
         <if test="status != null">
             and p.status=#{status}
         </if>
@@ -116,8 +119,8 @@
         <if test="oriEnterpriseId != null">
             and p.ori_enterprise_id=#{oriEnterpriseId}
         </if>
-        <if test="moduleId != null">
-            and p.module_id=#{moduleId}
+        <if test="moduleName != null and moduleName != ''">
+            and m.name=#{moduleName}
         </if>
         <if test="classId != null">
             and p.class_id=#{classId}
@@ -193,6 +196,9 @@
         </if>
         <if test="classId != null">
             and p.class_id=#{classId}
+        </if>
+        <if test="moduleName != null and moduleName != ''">
+            and m.name=#{moduleName}
         </if>
         <if test="status != null">
             and p.status=#{status}

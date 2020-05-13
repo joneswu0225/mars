@@ -17,5 +17,8 @@ public class TranslationParam {
     private String content;
     @ApiModelProperty(value="发音人参数",name="voiceName")
     private String voiceName;
+    @ApiModelProperty(value="微信媒体ID",name="wechatMediaId")
+    private String wechatMediaId;
+
 }
 

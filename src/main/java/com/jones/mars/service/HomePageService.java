@@ -26,6 +26,8 @@ public class HomePageService{
     private EnterpriseShownMapper enterpriseShownMapper;
     @Autowired
     private AppConstMapper appConstMapper;
+    @Autowired
+    private NewsMapper newsMapper;
 
     private Map<Integer, Enterprise> plateformEnterpriseMap;
     private List<Project> recommendProjects;
@@ -34,6 +36,8 @@ public class HomePageService{
     private List<String> choiceReason;
     private List<String> serviceProvide;
     private List<String> guideHotspotImage;
+    private List<String> navImage;
+    private List<BlockModule> blockModuleList;
     private Map<String, List<String>> constMap = new HashMap<>();
     private Map<String, String> contactInfo;
     private String icpInfo;
@@ -44,6 +48,7 @@ public class HomePageService{
     public void refreshInitData(){
         refreshAppConst();
         refreshPlateformEnterprise();
+        refreshNavImage();
         refreshRecommendProjects();
         refreshEnterpriseShowns();
         refreshICPInfo();
@@ -52,17 +57,20 @@ public class HomePageService{
         refreshServiceProvide();
         refreshServiceSuperiority();
         refreshChoiceReason();
+        refreshBlockModule();
     }
 
     private void refreshPlateformEnterprise(){
         Map<Integer, Enterprise> plateformEnterpriseMap = mapper.findAllName(EnterpriseQuery.builder().plateformFlg(CommonConstant.PLATEFROM).build())
                 .stream().collect(Collectors.toMap(Enterprise::getId, p->p));
-        List<Block> blockList = blockMapper.findAll(BlockQuery.builder().enterpriseIds(new ArrayList<>(plateformEnterpriseMap.keySet())).build());
-        blockList.forEach(p->{
-            if(plateformEnterpriseMap.containsKey(p.getEnterpriseId())){
-                plateformEnterpriseMap.get(p.getEnterpriseId()).getBlockList().add(p);
-            }
-        });
+        if(plateformEnterpriseMap.keySet().size() > 0) {
+            List<Block> blockList = blockMapper.findAll(BlockQuery.builder().enterpriseIds(new ArrayList<>(plateformEnterpriseMap.keySet())).build());
+            blockList.forEach(p -> {
+                if (plateformEnterpriseMap.containsKey(p.getEnterpriseId())) {
+                    plateformEnterpriseMap.get(p.getEnterpriseId()).getBlockList().add(p);
+                }
+            });
+        }
         this.plateformEnterpriseMap = plateformEnterpriseMap;
     }
 
@@ -102,6 +110,13 @@ public class HomePageService{
         this.choiceReason = constMap.get(AppConst.HOME_CHOICE_REASON);
     }
 
+    /**
+     * 选择理由
+     */
+    private void refreshNavImage(){
+        this.navImage = constMap.get(AppConst.HOME_NAV_IMAGE);
+    }
+
     private void refreshContactInfo(){
         Map<String, String> contactInfo = new HashMap<>();
         contactInfo.put("name", constMap.get(AppConst.HOME_CONTACT_ENTERPRISE_NAME).get(0));
@@ -118,6 +133,17 @@ public class HomePageService{
 
     private void refreshGuideHotspotImage(){
         this.guideHotspotImage = constMap.get(AppConst.PROJECT_GUIDE_HOTSPOT_IMAGE);
+    }
+    private void refreshBlockModule(){
+        List<Block> blocks = blockMapper.findBlockModule(BlockQuery.builder().build());
+        List<BlockModule> modules = new ArrayList<>();
+        for(Block block:blocks){
+            for(BlockModule module: block.getModuleList()){
+                module.setBlockName(block.getName());
+            }
+            modules.addAll(block.getModuleList());
+        }
+        this.blockModuleList = modules;
     }
     /**
      * 企业入驻
@@ -165,6 +191,17 @@ public class HomePageService{
         pageInfo.put("guideHotspotImage", this.guideHotspotImage);
         pageInfo.put("icpInfo", this.icpInfo);
         pageInfo.put("contactInfo", this.contactInfo);
+        return BaseResponse.builder().data(pageInfo).build();
+    }
+
+    public BaseResponse appPageInfo(){
+        Map<String, Object> pageInfo = new HashMap<>();
+        Query newsQuery = new Query();
+        newsQuery.setSize(3);
+        pageInfo.put("newsList", newsMapper.findList(newsQuery));
+        pageInfo.put("blockModuleList", this.blockModuleList);
+        pageInfo.put("recommendProject", this.recommendProjects);
+        pageInfo.put("navImage", this.navImage);
         return BaseResponse.builder().data(pageInfo).build();
     }
 

@@ -16,6 +16,8 @@ public class BlockQuery extends Query {
     private Integer enterpriseId;
     @ApiModelProperty(value="模块名称",name="name")
     private String name;
+    @ApiModelProperty(value="一级分类名称",name="moduleName")
+    private String moduleName;
     @ApiModelProperty(value="模块状态",name="status")
     private Integer status;
     @ApiModelProperty(value="操作类型，0：企业项目，1：我的项目",name="operation")

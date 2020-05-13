@@ -12,6 +12,7 @@ import java.util.List;
 public class BlockModule extends BaseObject {
     private String name;
     private Integer blockId;
+    private String blockName;
     private List<BlockClass> classList = new ArrayList<>();
 }
 

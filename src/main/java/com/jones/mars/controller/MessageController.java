@@ -22,10 +22,16 @@ public class MessageController extends BaseController {
     @Autowired
     private MessageService service;
 
+    @ApiOperation(value = "个人通知列表", notes = "个人通知列表")
+    @GetMapping("private")
+    public BaseResponse privateMessage(@ApiParam MessageQuery query) {
+        query.setReceiver(LoginUtil.getInstance().getUser().getId());
+        return service.findByPage(query);
+    }
+
     @ApiOperation(value = "通知列表", notes = "通知列表")
     @GetMapping("")
     public BaseResponse list(@ApiParam MessageQuery query) {
-        query.setReceiver(LoginUtil.getInstance().getUser().getId());
         return service.findByPage(query);
     }
 

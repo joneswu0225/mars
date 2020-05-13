@@ -1,4 +1,5 @@
 package com.jones.mars.util;
+import com.jones.mars.model.param.TranslationParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -9,7 +10,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
 
@@ -108,6 +111,15 @@ public class YoudaoUtil {
     public static String getTranslateInfo(String text, MultipartFile file) throws Exception {
         BASE64Encoder base64Encoder =new BASE64Encoder();
         return getTranslateInfo(text, base64Encoder.encode(file.getBytes()));
+    }
+
+    public static String getTranslateInfo(TranslationParam param) throws Exception {
+        String text = param.getText();
+        String base64 = param.getContent();
+        if(!StringUtils.isEmpty(param.getWechatMediaId())){
+            base64 = WechatApiUtil.getMediaBase64(param.getWechatMediaId());
+        }
+        return getTranslateInfo(text, base64);
     }
 
     public static String getTranslateInfo(String text, String base64) throws Exception {

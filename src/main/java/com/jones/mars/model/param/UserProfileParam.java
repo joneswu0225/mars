@@ -8,8 +8,10 @@ import lombok.Data;
 @Data
 @ApiModel(value="用户状态参数")
 public class UserProfileParam {
-    @ApiModelProperty(value="姓名",name="userType")
+    @ApiModelProperty(value="姓名",name="sgname")
     private String sgname;
+    @ApiModelProperty(value="昵称",name="nickname")
+    private String nickname;
     @ApiModelProperty(value="职业",name="job")
     private String job;
     @ApiModelProperty(value="城市",name="city")

@@ -10,11 +10,14 @@ import java.util.List;
 @Data
 @Builder
 public class Message extends BaseObject {
+    public static final String DEFAULT_MESSAGE_TYPE = "PROJECT";
     private String title;
     private String content;
     private Date createTime;
     private Integer status;
     private Integer receiver;
+    private Integer poster = 0;
+    private String messageType = DEFAULT_MESSAGE_TYPE;
     private List<Integer> receiverList;
 
     public static final int STATUS_UNREAD = 0;

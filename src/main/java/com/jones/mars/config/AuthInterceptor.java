@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 @Slf4j
 @Configuration
@@ -27,7 +28,7 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
 
     @Autowired
     private UserService service;
-
+    private static CountDownLatch tets = new CountDownLatch(1);
     @Bean
     public SecurityInterceptor getSecurityInterceptor() {
         return new SecurityInterceptor();
@@ -53,6 +54,8 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
         addInterceptor.excludePathPatterns("/companyJoin/**");
         addInterceptor.excludePathPatterns("/home/**");
         addInterceptor.excludePathPatterns("/xunfei/**");
+        addInterceptor.excludePathPatterns("/wechat/**");
+        addInterceptor.excludePathPatterns("/translation/**");
         addInterceptor.excludePathPatterns("/enterpriseShown**");
         addInterceptor.excludePathPatterns("/swagger-ui.html");
 

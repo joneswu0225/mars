@@ -11,6 +11,8 @@ import lombok.Data;
 public class UserQuery extends Query {
     @ApiModelProperty(value="姓名",name="sgname")
     private String sgname;
+    @ApiModelProperty(value="昵称",name="nickname")
+    private String nickname;
     @ApiModelProperty(value="手机号",name="mobile")
     private String mobile;
     @ApiModelProperty(value="密码",name="password")

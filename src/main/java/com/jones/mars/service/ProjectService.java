@@ -140,6 +140,7 @@ public class ProjectService extends BaseService {
         return BaseResponse.builder().data(list).build();
     }
 
+    //TODO split authority
     public BaseResponse findOne(Integer projectId){
         Project project = mapper.findOne(projectId);
         User loginUser = LoginUtil.getInstance().getUser();

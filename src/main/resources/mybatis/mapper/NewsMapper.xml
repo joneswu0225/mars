@@ -7,12 +7,12 @@
     </insert>
     <update id="update" parameterType="News">
         update news set title = #{title}
-        , summary = #{summary} , author = #{author} , content = #{contentUrl} , image_url = #{image_url} , publish_time = #{publishTime}
+        , summary = #{summary} , author = #{author} , content_url = #{contentUrl} , image_url = #{image_url} , publish_time = #{publishTime}, content_html=#{content_html}
         where id=#{id}
     </update>
     <select id="findList" resultType="News" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select * from news
+        select id, title, summary, author, content_url, image_url, publish_time from news
         order by publish_time desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>

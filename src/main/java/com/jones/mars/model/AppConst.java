@@ -17,6 +17,7 @@ public class AppConst extends BaseObject {
     public static final String HOME_CONTACT_MOBILE = "HOME_CONTACT_MOBILE";
     public static final String HOME_CONTACT_ADDRESS = "HOME_CONTACT_ADDRESS";
     public static final String HOME_CONTACT_EMAIL = "HOME_CONTACT_EMAIL";
+    public static final String HOME_NAV_IMAGE = "HOME_NAV_IMAGE";
     public static final String HOME_INTERNET_CONTENT_PROVIDER = "HOME_INTERNET_CONTENT_PROVIDER";
     public static final String PROJECT_GUIDE_HOTSPOT_IMAGE = "PROJECT_GUIDE_HOTSPOT_IMAGE";
     private String name;

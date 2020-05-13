@@ -5,11 +5,9 @@ import com.jones.mars.model.Project;
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.query.HotspotQuery;
 import com.jones.mars.model.query.ProjectQuery;
+import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.service.HomePageService;
-import com.jones.mars.service.ProjectModuleService;
-import com.jones.mars.service.ProjectService;
-import com.jones.mars.service.SceneService;
+import com.jones.mars.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -32,6 +30,8 @@ public class HomePageController{
     private ProjectService projectService;
     @Autowired
     private SceneService sceneService;
+    @Autowired
+    private NewsService newsService;
 
     @ApiOperation(value = "获取船福专题、全景船舶、全景设备下所有子模块名称", notes = "")
     @GetMapping("moduleInfo")
@@ -74,6 +74,24 @@ public class HomePageController{
     public BaseResponse findPanoInfo(@PathVariable Integer projectId, @ApiParam HotspotQuery query) {
         query.setProjectId(projectId);
         return sceneService.findPanoInfo(query);
+    }
+
+    @ApiOperation(value = "新闻详情", notes = "新闻详情")
+    @GetMapping("news/{newsId}")
+    public BaseResponse findNewsById(@PathVariable Integer newsId) {
+        return newsService.findById(newsId);
+    }
+
+    @ApiOperation(value = "新闻列表", notes = "新闻列表")
+    @GetMapping("news")
+    public BaseResponse findNewsList(@ApiParam Query query) {
+        return newsService.findByPage(query);
+    }
+
+    @ApiOperation(value = "app主页信息", notes = "app主页信息")
+    @GetMapping("app/pageInfo")
+    public BaseResponse appPageInfo() {
+        return service.appPageInfo();
     }
 
     @ApiOperation(value = "船福专题、全景船舶、全景设备", notes = "")

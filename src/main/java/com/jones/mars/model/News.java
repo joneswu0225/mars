@@ -7,7 +7,8 @@ import java.util.Date;
 
 @Data
 public class News extends BaseObject {
-    private String content;
+    private String contentUrl;
+    private String contentHtml;
     private String author;
     private Date publishTime;
     private String summary;
