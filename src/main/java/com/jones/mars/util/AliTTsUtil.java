@@ -148,9 +148,9 @@ public class AliTTsUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        String appKey = "boq9tsQ7DJAdaViK";//"填写你的appkey";
-        String id = "LTAIRewzXEkBmHq3";//"填写你在阿里云网站上的AccessKeyId";
-        String secret = "hGtegJLwgFzZFncg7toO2QKTwlko6A";//"填写你在阿里云网站上的AccessKeySecret";
+        String appKey = "";//"填写你的appkey";
+        String id = "";//"填写你在阿里云网站上的AccessKeyId";
+        String secret = "";//"填写你在阿里云网站上的AccessKeySecret";
         String url = ""; // 默认即可，默认值：wss://nls-gateway.cn-shanghai.aliyuncs.com/ws/v1
 
         if (args.length == 3) {

@@ -37,6 +37,7 @@ public class HomePageService{
     private List<String> serviceProvide;
     private List<String> guideHotspotImage;
     private List<String> navImage;
+    private List<String> newsDefaultImage;
     private List<BlockModule> blockModuleList;
     private Map<String, List<String>> constMap = new HashMap<>();
     private Map<String, String> contactInfo;
@@ -58,6 +59,7 @@ public class HomePageService{
         refreshServiceSuperiority();
         refreshChoiceReason();
         refreshBlockModule();
+        refreshNewsDefaultImage();
     }
 
     private void refreshPlateformEnterprise(){
@@ -108,6 +110,12 @@ public class HomePageService{
      */
     private void refreshChoiceReason(){
         this.choiceReason = constMap.get(AppConst.HOME_CHOICE_REASON);
+    }
+    /**
+     * 资讯默认图片
+     */
+    private void refreshNewsDefaultImage(){
+        this.newsDefaultImage = constMap.get(AppConst.NEWS_DEFAULT_IMAGE);
     }
 
     /**
@@ -202,6 +210,7 @@ public class HomePageService{
         pageInfo.put("blockModuleList", this.blockModuleList);
         pageInfo.put("recommendProject", this.recommendProjects);
         pageInfo.put("navImage", this.navImage);
+        pageInfo.put("newsDefaultImage", this.newsDefaultImage);
         return BaseResponse.builder().data(pageInfo).build();
     }
 

@@ -35,11 +35,15 @@
     </select>
 
     <insert id="insert" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
-        insert into role(`name`, `block_id`, `enterprise_id`, `create_time`, `update_time`)
-        values(#{name}, #{blockId}, #{enterpriseId}, now(), now())
+        insert into role(`name`, `block_id`, `image`, `enterprise_id`, `create_time`, `update_time`)
+        values(#{name}, #{blockId},#{image}, #{enterpriseId}, now(), now())
     </insert>
     <insert id="update" parameterType="Role">
-        update role set name = #{name}, update_time=now() where id=#{id}
+        update role set name = #{name},
+        <if test="name != null and name !=''">
+            name = #{name},
+        </if>
+        update_time=now() where id=#{id}
     </insert>
     <resultMap id="RolePermissionMap" type="Role" >
         <id column="id" property="id" />
@@ -56,7 +60,7 @@
 
     </resultMap>
     <select id="findPermissionList" resultMap="RolePermissionMap" parameterType="Query">
-        select r.id, r.name, r.block_id,r.update_time, r.create_time, p.id as permissionId, p.role_id, p.class_id, p.operation
+        select r.id, r.name,r.image, r.block_id,r.update_time, r.create_time, p.id as permissionId, p.role_id, p.class_id, p.operation
         from role r left join role_permission p on r.id=p.role_id
         where r.delete_flg=0
         <if test="blockId != null">
@@ -91,7 +95,7 @@
     </resultMap>
     <select id="findList" resultMap="RoleUserMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select r.id, r.name, r.block_id as blockId, b.name as blockName,b.enterprise_id as enterpriseId,r.update_time, r.create_time,  p.id as permissionId, p.role_id, p.class_id, c.name as className, c.module_id, m.name as moduleName, p.operation, u.sgname, u.user_id as user_id
+        select r.id, r.name,r.image, r.block_id as blockId, b.name as blockName,b.enterprise_id as enterpriseId,r.update_time, r.create_time,  p.id as permissionId, p.role_id, p.class_id, c.name as className, c.module_id, m.name as moduleName, p.operation, u.sgname, u.user_id as user_id
         from role r left join user_role ur on r.id=ur.role_id left join user_profile u on ur.user_id=u.user_id
         left join block b on r.block_id=b.id LEFT JOIN role_permission p on p.role_id=r.id
         left join block_class c on p.class_id=c.id left join block_module m on c.module_id=m.id
@@ -125,7 +129,7 @@
         select * from role order by name
     </select>
     <select id="findOne" resultMap="RolePermissionMap">
-        select r.id, r.name, r.block_id,r.update_time, r.create_time, p.id as permissionId, p.role_id, p.class_id, p.operation
+        select r.id, r.name, r.image,r.block_id,r.update_time, r.create_time, p.id as permissionId, p.role_id, p.class_id, p.operation
         from role r left join role_permission p on r.id=p.role_id
         where id=#{id}
     </select>

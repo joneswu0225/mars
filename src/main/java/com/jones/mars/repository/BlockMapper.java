@@ -10,4 +10,5 @@ import java.util.List;
 public interface BlockMapper extends BaseMapper<Block> {
     List<Object> findAllName(Query query);
     List<Block> findBlockModule(Query query);
+    List<Block> findBlockUserPermission(Query query);
 }

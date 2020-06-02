@@ -20,6 +20,7 @@ public class AppConst extends BaseObject {
     public static final String HOME_NAV_IMAGE = "HOME_NAV_IMAGE";
     public static final String HOME_INTERNET_CONTENT_PROVIDER = "HOME_INTERNET_CONTENT_PROVIDER";
     public static final String PROJECT_GUIDE_HOTSPOT_IMAGE = "PROJECT_GUIDE_HOTSPOT_IMAGE";
+    public static final String NEWS_DEFAULT_IMAGE = "NEWS_DEFAULT_IMAGE";
     private String name;
     private String value;
     private String detail;

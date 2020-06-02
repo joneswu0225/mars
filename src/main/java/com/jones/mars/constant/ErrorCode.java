@@ -6,10 +6,7 @@ import com.jones.mars.exception.MarsException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author yue.su
- * @date 2018年3月28日
- */
+
 public enum ErrorCode {
 
 	OK("0", "成功"),

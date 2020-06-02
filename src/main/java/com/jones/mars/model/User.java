@@ -37,6 +37,7 @@ public class User extends BaseObject {
     private String description;
     private String auth;
     private List<Enterprise> enterprises;
+    private List<Block> blocks;
     private List<Role> roleList;
 }
 

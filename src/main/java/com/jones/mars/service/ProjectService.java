@@ -3,11 +3,8 @@ package com.jones.mars.service;
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.*;
 import com.jones.mars.model.constant.CommonConstant;
-import com.jones.mars.model.param.ProjectHotspotParam;
-import com.jones.mars.model.param.ProjectParam;
-import com.jones.mars.model.param.ProjectSceneParam;
+import com.jones.mars.model.param.*;
 import com.jones.mars.model.query.*;
-import com.jones.mars.model.param.ProjectUserParam;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.*;
 import com.jones.mars.util.LoginUtil;
@@ -27,6 +24,8 @@ public class ProjectService extends BaseService {
 
     @Autowired
     private ProjectMapper mapper;
+    @Autowired
+    private TaskMapper taskMapper;
     @Autowired
     private BlockProjectMapper blockProjectMapper;
     @Autowired
@@ -185,7 +184,10 @@ public class ProjectService extends BaseService {
         return BaseResponse.builder().build();
     }
 
+    @Transactional
     public BaseResponse deleteUser(ProjectUser param){
+        //TODO 删除任务时区分任务类型
+        taskMapper.deleteCurrentTask(TaskParam.builder().currentFlg(Task.CURRENT_TASK).projectId(param.getProjectId()).userId(param.getUserId()).build());
         projectUserMapper.delete(param);
         return BaseResponse.builder().build();
     }

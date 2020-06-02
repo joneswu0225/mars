@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 public class Role extends BaseObject {
   private String name;
+  private String image;
   private Integer enterpriseId;
   private String enterpriseName;
   private String enterpriseAvatar;

@@ -2,17 +2,17 @@ package com.jones.mars.service;
 
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.exception.InternalException;
+import com.jones.mars.model.Block;
 import com.jones.mars.model.Enterprise;
 import com.jones.mars.model.User;
 import com.jones.mars.model.param.UserLoginParam;
 import com.jones.mars.model.param.UserProfileParam;
+import com.jones.mars.model.query.BlockQuery;
 import com.jones.mars.model.query.EnterpriseQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.model.query.UserQuery;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
-import com.jones.mars.repository.EnterpriseMapper;
-import com.jones.mars.repository.UserMapper;
+import com.jones.mars.repository.*;
 import com.jones.mars.util.AliMnsSender;
 import com.jones.mars.util.LoginUtil;
 import com.jones.mars.util.RandomString;
@@ -34,6 +34,8 @@ public class UserService extends BaseService<User>{
     private UserMapper mapper;
     @Autowired
     private EnterpriseMapper enterpriseMapper;
+    @Autowired
+    private BlockMapper blockMapper;
 
     @Override
     public BaseMapper getMapper() {
@@ -43,6 +45,24 @@ public class UserService extends BaseService<User>{
     private boolean exists(String mobile){
         Integer count = mapper.findCount(UserQuery.builder().mobile(mobile).build());
         return count > 0;
+    }
+
+
+    public BaseResponse personal(Integer userId){
+        // base info
+        User user = mapper.findOne(userId);
+        // enterprise
+        if(user.getUserType().equals(User.COMMON)){
+            List<Enterprise> enterprises = enterpriseMapper.findUserEnterprise(EnterpriseQuery.builder().userId(userId).build());
+            user.setEnterprises(enterprises);
+        } else if(user.getUserType().equals(User.ENTMANAGER)) {
+            List<Enterprise> enterprises = enterpriseMapper.findList(EnterpriseQuery.builder().managerId(userId).build());
+            user.setEnterprises(enterprises);
+        }
+        // block
+        List<Block> userBlockPermission = blockMapper.findBlockUserPermission(BlockQuery.builder().userId(userId).build());
+        user.setBlocks(userBlockPermission);
+        return BaseResponse.builder().data(user).build();
     }
 
     /**
@@ -157,7 +177,7 @@ public class UserService extends BaseService<User>{
             user_update.setId(user_db.getId());
             mapper.update(user_update);
             Map<String, Object> result = new HashMap<>();
-            String authorization = "Basic " + UuidUtil.generate().toUpperCase();
+            String authorization = "Basic" + UuidUtil.generate().toUpperCase();
             result.put("id", user_db.getId());
             result.put("avatar", user_db.getAvatar());
             // 返回用户基本信息

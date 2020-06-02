@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.TaskMapper" >
+    <resultMap id="TaskMap" type="Task" >
+        <id property="id" column="id" />
+        <result column="name" property="name"/>
+        <result column="detail" property="detail"/>
+        <result column="type" property="type"/>
+        <result column="block_id" property="blockId"/>
+        <result column="user_id" property="userId"/>
+        <result column="status" property="status"/>
+        <result column="start_date" property="startDate"/>
+        <result column="expire_date" property="expireDate"/>
+        <result column="current_flg" property="currentFlg"/>
+        <result column="creator_sgname" property="creatorSgname"/>
+        <result column="updater_sgname" property="updaterSgname"/>
+        <association property="project" javaType="Project" column="project_id">
+            <id column="project_id" property="id"/>
+            <result column="project_name" property="name"/>
+            <result column="project_image_url" property="imageUrl"/>
+            <result column="project_detail" property="detail"/>
+            <collection property="userList" ofType="ProjectUser" column="project_id">
+                <result column="pu_sgname" property="sgname"/>
+                <result column="pu_manager_flg" property="managerFlg"/>
+            </collection>
+        </association>
+    </resultMap>
+
+    <insert id="insert" parameterType="TaskParam" useGeneratedKeys="true" keyProperty="id">
+        <foreach collection="userIds" item="userId" index="index" separator=";">
+        insert into task(`name`, `detail`, `type`, `status`, `start_date`, `expire_date`,`block_id`,`project_id`,`user_id`,`version`,`current_flg`,`create_time`, `update_time`,`create_by`,`update_by`)
+        values(#{name}, #{detail}, #{type}, #{status}, #{startDate}, #{expireDate}, #{blockId}, #{projectId}, #{userId}, #{currentFlg}, #{version}, now(), now(), #{createBy}, #{updateBy})
+            ON DUPLICATE KEY UPDATE
+            `name` = #{name}, detail=#{detail}, `type`=#{type}, status = #{status}, start_date=#{startDate}, expire_date=#{expireDate},
+            block_id = #{blockId}, project_id=#{projectId}, user_id=#{userId}, current_flg = #{currentFlg},version = #{version},
+            start_date=now(), expire_date=now(), create_by=#{createBy}, update_by=#{updateBy}
+        </foreach>
+    </insert>
+    <insert id="update" parameterType="TaskParam">
+        update task
+        set update_time = now(), update_by=#{updateBy}
+        <if test="name != null and name != ''">
+            , name = #{name}
+        </if>
+        <if test="detail != null and detail != ''">
+            , detail = #{detail}
+        </if>
+        <if test="type != null and type != ''">
+            , type = #{type}
+        </if>
+        <if test="start_date != null">
+            , start_date = #{startDate}
+        </if>
+        <if test="expire_date != null">
+            , expire_date = #{expireDate}
+        </if>
+        <if test="block_id != null">
+            , block_id = #{blockId}
+        </if>
+        <if test="project_id != null">
+            , project_id = #{projectId}
+        </if>
+        <if test="status != null">
+            , status = #{status}
+        </if>
+        <if test="updateBy != null">
+            , update_by = #{updateBy}
+        </if>
+        <if test="version != null">
+            , version = #{version}
+        </if>
+        <if test="currentFlg != null">
+            , current_flg = #{currentFlg}
+        </if>
+        where id=#{id}
+    </insert>
+    <select id="findList" resultMap="TaskMap" parameterType="Query">
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select t.*, p.name as project_name,p.image_url as project_image_url, p.detail as project_detail, pu.user_id as pu_user_id, up.sgname as pu_sgname, pu.manager_flg as pu_manager_flg, uc.sgname as creator_sgname, uu.sgname as updater_sgname
+        from task t left join project p on t.project_id=p.id
+        left join user_profile uc on t.create_by = uc.user_id
+        left join user_profile uu on t.update_by = uu.user_id
+        left join project_user pu on pu.project_id=p.id
+        left join user_profile up on pu.user_id=up.user_id
+        where t.current_flg=1 and t.delete_flg=0
+        <if test="type != null and type !=''">
+            and t.type = #{type}
+        </if>
+        <if test="status != null">
+            and t.status = #{status}
+        </if>
+        <if test="userId != null">
+            and t.user_id = #{userId}
+        </if>
+        <if test="expireDateLte != null">
+            and t.expire_date &lt;= #{expireDateLte}
+        </if>
+        <if test="expireDateGte != null">
+            and t.expire_date &gt;= #{expireDateGte}
+        </if>
+        order by t.update_time desc, t.expire_date
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*)
+        from task t left join project p on t.project_id=p.id
+        left join user_profile u on p.creator_id = u.user_id
+        left join project_user pu on pu.project_id=p.id
+        left join user_profile up on pu.user_id=up.user_id
+        where t.current_flg=1 and t.delete_flg=0
+        <if test="type != null and type !=''">
+            and t.type = #{type}
+        </if>
+        <if test="status != null">
+            and t.status = #{status}
+        </if>
+        <if test="userId != null">
+            and t.user_id = #{userId}
+        </if>
+        <if test="expireDateLte != null">
+            and t.expire_date &lt;= #{expireDateLte}
+        </if>
+        <if test="expireDateGte != null">
+            and t.expire_date &gt;= #{expireDateGte}
+        </if>
+    </select>
+    <select id="findMaxVersionTask" resultType="Task" parameterType="Query">
+        select version, project_id as projectId, `type`, current_flg as currentFlg from task t
+        where t.delete_flg=0 and t.type = #{type} and t.project_id=#{projectId}
+        and t.version = (
+          select max(version) from task a where a.delete_flg=0 and a.type = #{type} and a.project_id=#{projectId}
+        ) limit 1
+    </select>
+    <select id="findAllName" resultMap="TaskMap" parameterType="Query">
+        select id, name from task t
+        where 1=1
+        <if test="type != null and type !=''">
+            and t.type = #{type}
+        </if>
+        <if test="status != null">
+            and t.status = #{status}
+        </if>
+        <if test="userId != null">
+            and t.user_id = #{userId}
+        </if>
+        order by id desc
+    </select>
+    <select id="findAll" resultType="Enterprise">
+        select * from task order by id desc
+    </select>
+    <select id="findOne" resultMap="TaskMap">
+        select t.*, p.name as project_name,p.image_url as project_image_url, p.detail as project_detail, pu.user_id as pu_user_id, up.sgname as pu_sgname, u.sgname as creatorSgname
+        from task t left join project p on t.project_id=p.id
+        left join user_profile u on p.creator_id = u.user_id
+        left join project_user pu on pu.project_id=p.id
+        left join user_profile up on pu.user_id=up.user_id
+        where e.id=#{id}
+    </select>
+    <update id="delete">
+        update task set delete_flg=1  where id=#{id}
+    </update>
+    <update id="deleteCurrentTask" parameterType="TaskParam">
+        update task set delete_flg=1  where project_id=#{projectId} and type=#{type} and user_id=#{userId} and current_flg=1
+    </update>
+</mapper>

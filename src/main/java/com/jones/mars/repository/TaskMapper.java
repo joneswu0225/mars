@@ -1,0 +1,15 @@
+package com.jones.mars.repository;
+
+import com.jones.mars.model.Task;
+import com.jones.mars.model.param.TaskParam;
+import com.jones.mars.model.query.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface TaskMapper extends BaseMapper<Task> {
+    List<Object> findAllName(Query query);
+    Task findMaxVersionTask(Query query);
+    Integer deleteCurrentTask(TaskParam param);
+}

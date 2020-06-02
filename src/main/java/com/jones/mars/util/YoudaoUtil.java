@@ -11,6 +11,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,11 +34,25 @@ import java.util.Map;
 @Slf4j
 @Component
 public class YoudaoUtil {
-    private static final String YOUDAO_URL = "https://openapi.youdao.com/iseapi";
+    
+    private static String YOUDAO_URL;
 
-    private static final String APP_KEY = "7a19ae0161050256";
-    private static final String APP_SECRET = "Aqo72kCzADtOl6B4l87bzzyLtQXlhsJa";
+    private static String APP_KEY;
+    private static String APP_SECRET;
 
+    @Value("${youdao.tts.url}")
+    public void setYoudaoUrl(String youdaoUrl) {
+        YoudaoUtil.YOUDAO_URL = youdaoUrl;
+    }
+    @Value("${youdao.tts.key}")
+    public void setAppKey(String appKey) {
+        YoudaoUtil.APP_KEY = appKey;
+    }
+    @Value("${youdao.tts.secret}")
+    public void setAppSecret(String appSecret) {
+        YoudaoUtil.APP_SECRET = appSecret;
+    }
+    
     public static String truncate(String q) {
         if (q == null) {
             return null;

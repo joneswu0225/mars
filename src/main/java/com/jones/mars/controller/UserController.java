@@ -48,13 +48,13 @@ public class UserController extends BaseController {
     @ApiOperation(value = "查看个人信息", notes = "")
     @GetMapping("personal")
     public BaseResponse personal() {
-        return service.findById(getLoginUser().getId());
+        return service.personal(getLoginUser().getId());
     }
 
     @ApiOperation(value = "查看用户信息", notes = "")
     @GetMapping("{userId}")
     public BaseResponse userInfo(@PathVariable Integer userId) {
-        return service.findById(userId);
+        return service.personal(userId);
     }
 
     @ApiOperation(value = "更新用户信息", notes = "")
