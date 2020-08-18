@@ -35,8 +35,8 @@ public class HotspotService  extends BaseService{
     @Transactional
     public BaseResponse add(HotspotParam param){
         mapper.insert(param);
-        if(param.getType().equals(Hotspot.TYPE_GUIDE)) {
-            Integer maxSeq = projectHotspotMapper.findMaxSeqByProjectId(param.getProjectId());
+        if(param.getType().equals(Hotspot.TYPE_GUIDE) || param.getType().equals(Hotspot.TYPE_ATTACHMENT)) {
+            Integer maxSeq = projectHotspotMapper.findMaxSeqByHotspot(Hotspot.builder().projectId(param.getProjectId()).type(param.getType()).build());
             projectHotspotMapper.insert(ProjectHotspot.builder().hotspotId(param.getId()).seq(maxSeq == null ? 0 : (maxSeq + 1)).projectId(param.getProjectId()));
         }
         Map<String, String> result = new HashMap<>();

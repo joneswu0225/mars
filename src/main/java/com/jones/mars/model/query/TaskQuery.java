@@ -21,9 +21,9 @@ public class TaskQuery extends Query {
     @ApiModelProperty(value="任务类型",name="type")
     private String type;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @ApiModelProperty(value="任务到期时间大于",name="expireDateGte")
-    private Date expireDateGte;
+    @ApiModelProperty(value="开始日期",name="startDate")
+    private Date startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @ApiModelProperty(value="任务到期时间小于",name="expireDateLte")
-    private Date expireDateLte;
+    @ApiModelProperty(value="结束日期",name="endDate")
+    private Date endDate;
 }

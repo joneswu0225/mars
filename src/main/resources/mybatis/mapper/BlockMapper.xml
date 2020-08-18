@@ -11,16 +11,18 @@
             <id column="moduleId" property="id"/>
             <result column="blockId" property="blockId"/>
             <result column="moduleName" property="name"/>
+            <result column="moduleSeq" property="seq"/>
             <collection property="classList" ofType="BlockClass" column="moduleId">
                 <id column="classId" property="id"/>
                 <result column="module_id" property="moduleId"/>
                 <result column="className" property="name"/>
+                <result column="classSeq" property="seq"/>
                 <result column="operation" property="operation"/>
             </collection>
         </collection>
     </resultMap>
     <select id="findBlockModule" resultMap="BlockMap" parameterType="Query">
-        select m.id as moduleId, m.block_id as blockId, m.name as moduleName, c.id as classId, c.name as className, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail
+        select m.id as moduleId, m.block_id as blockId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail
         from block b left join block_module m on b.id=m.block_id left join block_class c on m.id=c.module_id
         where m.delete_flg=0
         <if test="enterpriseId != null">
@@ -29,9 +31,10 @@
         <if test="moduleName != null and moduleName != ''">
             and m.name=#{moduleName}
         </if>
+        order by b.enterprise_id, b.id,m.seq,c.seq
     </select>
     <select id="findBlockUserPermission" resultMap="BlockMap" parameterType="Query">
-        select rp.operation, m.id as moduleId, m.name as moduleName, c.id as classId, c.name as className, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail
+        select rp.operation, m.id as moduleId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail
         from user_role ur left join role_permission rp on ur.role_id=rp.role_id
         left join block_class c on rp.class_id=c.id
         left join block_module m on c.module_id=m.id
@@ -46,6 +49,7 @@
         <if test="userId">
             and ur.user_id=#{userId}
         </if>
+        order by b.enterprise_id, b.id, m.seq, c.seq
     </select>
     <insert id="insert" parameterType="Block" useGeneratedKeys="true" keyProperty="id">
         insert into block(`name`, `enterprise_id`, `create_time`, `update_time`, `operator_id`, `detail`)

@@ -10,6 +10,7 @@ import lombok.Data;
 public class FileUpload extends BaseObject {
     private String path;
     private String name;
+    private String domain;
     private Integer userId;
     private Integer relatedId;
     private FileType type;

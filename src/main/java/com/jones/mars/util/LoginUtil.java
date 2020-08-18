@@ -1,6 +1,8 @@
 package com.jones.mars.util;
 
 import com.jones.mars.model.User;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -12,13 +14,19 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Component
 public class LoginUtil {
     public static final String APP_AUTH = "authorization";
     public static final String USER_MOBILE = "userId";
-    public static final String APP_DOMAIN = "vr2shipping.com";
+    public static String APP_DOMAIN;
     public static final int COOKIE_MAX_INACTIVE_INTERVAL = 86400;
     public static LoginUtil INSTANCE = null;
     private ConcurrentHashMap<String, User> loginUser = new ConcurrentHashMap<>();
+
+    @Value("${app.domain:vr2shipping.com}")
+    private void setAppDomain(String appDomain){
+        LoginUtil.APP_DOMAIN = appDomain;
+    }
 
     public static LoginUtil getInstance() {
         if (INSTANCE == null) {

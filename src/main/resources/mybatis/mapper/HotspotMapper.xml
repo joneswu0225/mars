@@ -45,6 +45,9 @@
         <if test="locationX != null">
             , location_x = #{locationX}
         </if>
+        <if test="sceneId != null and type !=null and type=='GUIDE'">
+            , scene_id = #{sceneId}
+        </if>
         <if test="locationY != null">
             , location_y = #{locationY}
         </if>
@@ -92,18 +95,19 @@
     </select>
 
     <select id="findAll" resultType="Hotspot" parameterType="Query">
-        select * from hotspot
+        select h.*,ph.seq from hotspot h
+        left join project_hotspot ph on h.id=ph.hotspot_id
         where 1=1
         <if test="projectId != null">
-            and project_id=#{projectId}
+            and h.project_id=#{projectId}
         </if>
         <if test="sceneId != null">
-            and scene_id = #{sceneId}
+            and h.scene_id = #{sceneId}
         </if>
         <if test="type != null and type != ''">
-            and type=#{type}
+            and h.type=#{type}
         </if>
-        order by id desc
+        order by ph.seq, id desc
     </select>
 
     <select id="findAllByQuery" resultMap="HotspotMap" parameterType="Query">

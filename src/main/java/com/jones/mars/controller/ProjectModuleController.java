@@ -1,6 +1,8 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.model.BlockModule;
+import com.jones.mars.model.param.BlockModuleParam;
+import com.jones.mars.model.param.ProjectHotspotParam;
 import com.jones.mars.model.param.ProjectModuleParam;
 import com.jones.mars.model.query.ProjectModuleQuery;
 import com.jones.mars.object.BaseResponse;
@@ -33,7 +35,13 @@ public class ProjectModuleController extends BaseController {
         return service.add(param);
     }
 
-    @ApiOperation(value = "更新一级分类", notes = "更新一级分类")
+    @ApiOperation(value = "调整一级分类顺序", notes = "")
+    @PostMapping("/changeSeq")
+    public BaseResponse changeHotspotSeq(@RequestBody @ApiParam(required=true) BlockModuleParam param) {
+        return service.updateBlockModuleSeq(param);
+    }
+
+    @ApiOperation(value = "更新一级分类顺序", notes = "更新一级分类")
     @PutMapping("{projectModuleId}")
     public BaseResponse update(
             @PathVariable Integer projectModuleId,

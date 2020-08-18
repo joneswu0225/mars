@@ -31,7 +31,7 @@ public class CommentController extends BaseController {
     private CommentService service;
 
     @ApiOperation(value = "分页评论列表", notes = "分页评论列表")
-    @GetMapping("/list")
+    @GetMapping("")
     public BaseResponse list(@ApiParam CommentQuery query) {
         return service.findByPage(query);
     }
@@ -46,7 +46,7 @@ public class CommentController extends BaseController {
     @ApiOperation(value = "添加评论", notes = "添加评论")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) CommentParam param) {
-        param.setUserId(LoginUtil.getInstance().getUser().getId());
+//        param.setUserId(LoginUtil.getInstance().getUser().getId());
         return service.add(param);
     }
 

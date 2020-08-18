@@ -1,11 +1,6 @@
 package com.jones.mars.controller;
 
-import com.jones.mars.constant.ErrorCode;
-import com.jones.mars.model.Project;
-import com.jones.mars.model.constant.CommonConstant;
-import com.jones.mars.model.query.HotspotQuery;
-import com.jones.mars.model.query.ProjectQuery;
-import com.jones.mars.model.query.Query;
+import com.jones.mars.model.query.*;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.*;
 import io.swagger.annotations.Api;
@@ -32,6 +27,10 @@ public class HomePageController{
     private SceneService sceneService;
     @Autowired
     private NewsService newsService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private UserLikeService userLikeService;
 
     @ApiOperation(value = "获取船福专题、全景船舶、全景设备下所有子模块名称", notes = "")
     @GetMapping("moduleInfo")
@@ -98,6 +97,24 @@ public class HomePageController{
     @GetMapping("project")
     public BaseResponse project(@ApiParam ProjectQuery query) {
         return projectService.findByPage(query);
+    }
+
+    @ApiOperation(value = "分页评论列表", notes = "分页评论列表")
+    @GetMapping("comment")
+    public BaseResponse list(@ApiParam CommentQuery query) {
+        return commentService.findByPage(query);
+    }
+
+    @ApiOperation(value = "所有评论列表", notes = "所有评论列表")
+    @GetMapping("comment/all")
+    public BaseResponse all(@ApiParam CommentQuery query) {
+        return commentService.findAll(query);
+    }
+
+    @ApiOperation(value = "点赞结果", notes = "点赞结果")
+    @GetMapping("userLike/result")
+    public BaseResponse userLikeResult(@ApiParam UserLikeQuery query) {
+        return userLikeService.findLikeResult(query);
     }
 
     @ApiOperation(value = "刷新首页缓存", notes = "")

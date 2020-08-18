@@ -115,7 +115,7 @@ public class ProjectController extends BaseController {
         return projectService.deleteProjectScene(ProjectScene.builder().projectId(projectId).sceneId(sceneId).build());
     }
 
-    @ApiOperation(value = "调整引导播放顺序", notes = "")
+    @ApiOperation(value = "调整热点顺序", notes = "")
     @PostMapping("/{projectId}/hotspot/changeSeq")
     public BaseResponse changeHotspotSeq(@RequestBody @ApiParam(required=true) ProjectHotspotParam param) {
         return projectService.updateProjectHotspotSeq(param);

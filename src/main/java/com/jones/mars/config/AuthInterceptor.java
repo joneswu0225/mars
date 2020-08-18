@@ -43,6 +43,7 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
         addInterceptor.excludePathPatterns("/error");
         addInterceptor.excludePathPatterns("/user/login");
         addInterceptor.excludePathPatterns("/user/regist");
+        addInterceptor.excludePathPatterns("/userLike/**");
         addInterceptor.excludePathPatterns("/user/auth/**");
         addInterceptor.excludePathPatterns("/comment/list");
         addInterceptor.excludePathPatterns("/comment/all");

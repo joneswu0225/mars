@@ -17,7 +17,7 @@
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select c.*, p.sgname as userName, p.avatar as userAvatar from comment c left join user_profile p on c.user_id = p.user_id
         where c.delete_flg=0
-        <if test="type != null and type !=''">
+        <if test="type != null">
             and c.type = #{type}
         </if>
         <if test="relatedId != null">
@@ -29,7 +29,7 @@
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from comment c
         where c.delete_flg=0
-        <if test="type != null and type !=''">
+        <if test="type != null">
             and c.type = #{type}
         </if>
         <if test="relatedId != null">
@@ -39,7 +39,7 @@
     <select id="findAll" resultType="Comment">
         select c.*, p.sgname as userName, p.avatar as userAvatar from comment c left join user_profile p on c.user_id = p.user_id
         where c.delete_flg=0
-        <if test="type != null and type !=''">
+        <if test="type != null">
             and c.type = #{type}
         </if>
         <if test="relatedId != null">

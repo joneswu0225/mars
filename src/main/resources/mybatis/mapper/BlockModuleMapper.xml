@@ -5,10 +5,12 @@
         <id property="id" column="id" />
         <result property="name" column="name" />
         <result property="block_id" column="blockId" />
+        <result property="seq" column="seq" />
         <collection property="classList" ofType="BlockClass" column="module_id">
             <id column="classId" property="id"/>
             <result column="module_id" property="moduleId"/>
             <result column="className" property="name"/>
+            <result column="classSeq" property="seq"/>
         </collection>
     </resultMap>
     <insert id="insert" parameterType="BlockModule" useGeneratedKeys="true" keyProperty="id">
@@ -20,13 +22,13 @@
     </insert>
     <select id="findList" resultMap="BlockModuleMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select m.*, c.id as classId, c.name as className, c.module_id
+        select m.*, c.id as classId, c.name as className, c.module_id, c.seq as classSeq
         from block_module m left join block_class c on m.id=c.module_id
         where m.delete_flg=0
         <if test="blockId != null">
             and m.block_id = #{blockId}
         </if>
-        order by m.name, c.name
+        order by m.seq,c.seq,m.name,c.name
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
@@ -36,6 +38,17 @@
             and block_id = #{blockId}
         </if>
     </select>
+    <update id="updateBlockModuleSeq" parameterType="BlockModuleParam">
+        update block_module set seq=case
+        <foreach collection="moduleIds" item="moduleId" index="index">
+            when id=#{moduleId} then #{index}
+        </foreach>
+        end
+        where block_id=#{blockId} and id in
+        <foreach collection="moduleIds" item="moduleId" index="index" separator="," open="(" close=")">
+            #{moduleId}
+        </foreach>
+    </update>
     <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
         select id, name from block_module
         where m.delete_flg=0
@@ -45,12 +58,13 @@
         order by name
     </select>
     <select id="findAll" resultMap="BlockModuleMap" parameterType="Query">
-        select m.*, c.id as classId, c.name as className, c.module_id from block_module m left join block_class c on m.id=c.module_id
+        select m.*, c.id as classId, c.name as className, c.module_id, c.seq as classSeq
+        from block_module m left join block_class c on m.id=c.module_id
         where m.delete_flg=0
         <if test="blockId != null">
             and m.block_id = #{blockId}
         </if>
-        order by name
+        order by m.seq,c.seq,m.name,c.name
     </select>
     <select id="findOne" resultType="BlockModule">
         select * from block_module where id=#{id}

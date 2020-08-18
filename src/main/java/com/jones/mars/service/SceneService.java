@@ -52,7 +52,8 @@ public class SceneService extends BaseService {
                 }
             });
         }
-        return BaseResponse.builder().data(sceneMap.values()).build();
+        List<Scene> result = sceneMap.values().stream().sorted(Comparator.comparing(Scene::getSeq)).collect(Collectors.toList());
+        return BaseResponse.builder().data(result).build();
     }
 
 

@@ -14,8 +14,8 @@
         seq = #{index}
         </foreach>
     </insert>
-    <select id="findMaxSeqByProjectId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        select max(seq) from project_hotspot where project_id=#{projdectId}
+    <select id="findMaxSeqByHotspot" parameterType="Hotspot" resultType="java.lang.Integer">
+        select max(ph.seq) from project_hotspot ph left join hotspot h on ph.hotspot_id=h.id where ph.project_id=#{projectId} and h.type=#{type}
     </select>
     <update id="updateProjectHotspotSeq" parameterType="ProjectHotspotParam">
         update project_hotspot set seq=case

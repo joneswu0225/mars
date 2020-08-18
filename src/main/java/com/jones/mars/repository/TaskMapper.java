@@ -11,5 +11,6 @@ import java.util.List;
 public interface TaskMapper extends BaseMapper<Task> {
     List<Object> findAllName(Query query);
     Task findMaxVersionTask(Query query);
+    Task findPrivateTask(Object query);
     Integer deleteCurrentTask(TaskParam param);
 }

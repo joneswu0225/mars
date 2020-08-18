@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.FileUploadMapper" >
     <insert id="insert" parameterType="FileUpload" useGeneratedKeys="true" keyProperty="id">
-        insert into file_upload(`name`, `path`, `related_id`,`type`, `create_time`, `update_time`)
-        values(#{name}, #{path}, #{relatedId}, #{type}, now(), now())
+        insert into file_upload(`name`, `path`, `related_id`,`type`,`user_id`,`domain`, `create_time`, `update_time`)
+        values(#{name}, #{path}, #{relatedId}, #{type},#{userId},#{domain}, now(), now())
     </insert>
     <insert id="update" parameterType="FileUpload">
         update file_upload set name = #{name},path = #{path},related_id = #{relatedId},type = #{type}, update_time=now()  where id=#{id}

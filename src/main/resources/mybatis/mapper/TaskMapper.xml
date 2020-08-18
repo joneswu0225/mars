@@ -92,11 +92,11 @@
         <if test="userId != null">
             and t.user_id = #{userId}
         </if>
-        <if test="expireDateLte != null">
-            and t.expire_date &lt;= #{expireDateLte}
+        <if test="startDate != null">
+            and t.expire_date &gt;= #{startDate}
         </if>
-        <if test="expireDateGte != null">
-            and t.expire_date &gt;= #{expireDateGte}
+        <if test="endDate != null">
+            and t.create_time &lt;= #{endDate}
         </if>
         order by t.update_time desc, t.expire_date
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
@@ -117,11 +117,11 @@
         <if test="userId != null">
             and t.user_id = #{userId}
         </if>
-        <if test="expireDateLte != null">
-            and t.expire_date &lt;= #{expireDateLte}
+        <if test="startDate != null">
+            and t.expire_date &gt;= #{startDate}
         </if>
-        <if test="expireDateGte != null">
-            and t.expire_date &gt;= #{expireDateGte}
+        <if test="endDate != null">
+            and t.create_time &lt;= #{endDate}
         </if>
     </select>
     <select id="findMaxVersionTask" resultType="Task" parameterType="Query">
@@ -145,8 +145,25 @@
         </if>
         order by id desc
     </select>
-    <select id="findAll" resultType="Enterprise">
-        select * from task order by id desc
+    <select id="findAll" resultType="Task" parameterType="Query">
+        select * from task t
+        where 1=1
+        <if test="type != null and type !=''">
+            and t.type = #{type}
+        </if>
+        <if test="status != null">
+            and t.status = #{status}
+        </if>
+        <if test="userId != null">
+            and t.user_id = #{userId}
+        </if>
+        <if test="startDate != null">
+            and t.expire_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and t.create_time &lt;= #{endDate}
+        </if>
+        order by id desc
     </select>
     <select id="findOne" resultMap="TaskMap">
         select t.*, p.name as project_name,p.image_url as project_image_url, p.detail as project_detail, pu.user_id as pu_user_id, up.sgname as pu_sgname, u.sgname as creatorSgname
@@ -154,7 +171,15 @@
         left join user_profile u on p.creator_id = u.user_id
         left join project_user pu on pu.project_id=p.id
         left join user_profile up on pu.user_id=up.user_id
-        where e.id=#{id}
+        where t.id=#{id}
+    </select>
+    <select id="findPrivateTask" resultMap="TaskMap">
+        select t.*, p.name as project_name,p.image_url as project_image_url, p.detail as project_detail, pu.user_id as pu_user_id, up.sgname as pu_sgname, u.sgname as creatorSgname
+        from task t left join project p on t.project_id=p.id
+        left join user_profile u on p.creator_id = u.user_id
+        left join project_user pu on pu.project_id=p.id
+        left join user_profile up on pu.user_id=up.user_id
+        where t.id=#{id} and (pu.user_id=#{userId} or t.create_by=#{userId})
     </select>
     <update id="delete">
         update task set delete_flg=1  where id=#{id}

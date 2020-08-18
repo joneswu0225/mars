@@ -18,7 +18,7 @@
         <if test="blockId != null">
             and m.block_id = #{blockId}
         </if>
-        order by name
+        order by c.seq,c.name
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
@@ -32,7 +32,7 @@
         </if>
     </select>
     <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
-        select id, name from block_class c left join block_module m on c.module_id = m.id
+        select c.* from block_class c left join block_module m on c.module_id = m.id
         where delete_flg=0
         <if test="moduleId != null">
             and module_id = #{moduleId}
@@ -40,8 +40,19 @@
         <if test="blockId != null">
             and m.block_id = #{blockId}
         </if>
-        order by name
+        order by c.seq,c.name
     </select>
+    <update id="updateBlockClassSeq" parameterType="BlockClassParam">
+        update block_class set seq=case
+        <foreach collection="classIds" item="classId" index="index">
+            when id=#{classId} then #{index}
+        </foreach>
+        end
+        where module_id=#{moduleId} and id in
+        <foreach collection="classIds" item="classId" index="index" separator="," open="(" close=")">
+            #{classId}
+        </foreach>
+    </update>
     <select id="findAll" resultType="BlockClass" parameterType="Query">
         select * from block_class where delete_flg=0
         <if test="moduleId != null">

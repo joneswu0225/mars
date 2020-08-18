@@ -1,5 +1,6 @@
 package com.jones.mars.service;
 
+import com.jones.mars.model.param.BlockModuleParam;
 import com.jones.mars.model.query.ProjectModuleQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
@@ -11,14 +12,19 @@ import org.springframework.stereotype.Service;
 public class ProjectModuleService extends BaseService{
 
     @Autowired
-    private BlockModuleMapper projectModuleMapper;
+    private BlockModuleMapper blockModuleMapper;
     @Override
     public BaseMapper getMapper(){
-        return this.projectModuleMapper;
+        return this.blockModuleMapper;
     }
 
     public BaseResponse findAllProjectModule(ProjectModuleQuery query){
-        return BaseResponse.builder().data(projectModuleMapper.findAll(query)).build();
+        return BaseResponse.builder().data(blockModuleMapper.findAll(query)).build();
+    }
+
+    public BaseResponse updateBlockModuleSeq(BlockModuleParam param){
+        blockModuleMapper.updateBlockModuleSeq(param);
+        return BaseResponse.builder().build();
     }
 
 

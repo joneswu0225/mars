@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.jones.mars.model.constant.CommentType;
 import com.jones.mars.object.BaseObject;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,7 @@ public class Comment extends BaseObject {
     private String userName;
     private String userAvatar;
     private Date createTime;
-    private String type;
+    private CommentType type;
     private Integer relatedId;
 }
 

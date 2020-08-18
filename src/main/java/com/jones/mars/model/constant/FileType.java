@@ -6,9 +6,13 @@ public enum FileType {
     HOTSPOT_IMAGE("热点内容图片"),
     HOTSPOT_AUDIO("热点内容音频"),
     HOTSPOT_HTML("热点内容HTML"),
+    HOTSPOT_VIDEO("热点内容视频"),
+    HOTSPOT_MEDIA("热点内容富文本"),
     PROJECT_IMAGE("项目封面"),
     PROJECT_VIDEO("项目视频"),
+    PROJECT_MEDIA("项目富文本"),
     BLOCK_STRUCTURE("船体平面图"),
+    NEWS_MEDIA("新闻富文本"),
     USER_NAMECARD("用户名片"),
     USER_AVATAR("用户头像"),
     ENTERPRIISE_IMAGE("企业图标"),
@@ -38,14 +42,24 @@ public enum FileType {
             case PROJECT_IMAGE:
                 relPath = "enterprise" + File.separator + relatedId + File.separator + "project" + File.separator + name;
                 break;
+            case PROJECT_MEDIA:
+                relPath = "enterprise" + File.separator + relatedId + File.separator + "project_media" + File.separator + name;
+                break;
             case ENTERPRIISE_IMAGE:
             case ENTERPRISE_LOGO:
                 relPath = "enterprise" + File.separator + relatedId + File.separator + "image" + File.separator + name;
                 break;
             case HOTSPOT_IMAGE:
             case HOTSPOT_AUDIO:
+            case HOTSPOT_VIDEO:
             case HOTSPOT_HTML:
                 relPath = "enterprise" + File.separator + relatedId + File.separator + "hotspot" + File.separator + name;
+                break;
+            case HOTSPOT_MEDIA:
+                relPath = "enterprise" + File.separator + relatedId + File.separator + "hotspot_media" + File.separator + name;
+                break;
+            case NEWS_MEDIA:
+                relPath = "news" + File.separator + relatedId + File.separator + "news_media" + File.separator + name;
                 break;
             default:
                 relPath = "";

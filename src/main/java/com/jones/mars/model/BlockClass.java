@@ -11,6 +11,7 @@ public class BlockClass extends BaseObject {
     private Integer moduleId;
     private Integer operation;
     private Integer id;
+    private Integer seq;
     private Integer permissionId;
 }
 

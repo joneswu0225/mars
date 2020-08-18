@@ -91,6 +91,14 @@ public class DateUtil {
 		return cal.getTime();
 	}
 
+	public static Date parseDate(String dateStr) throws ParseException {
+		return parseDate(dateStr, DAY_FORMAT.get());
+	}
+
+	public static Date parseDate(String dateStr, DateFormat format) throws ParseException {
+		return format.parse(dateStr);
+	}
+
 	public static Date parseRequestTime(String requestTime) {
 		// 因之前的文档错误，有的调用方传递了毫秒数，而有的调用方传递的是秒数，所以，这里我们需要根据长度做
 		// 自动判断是秒数还是毫秒数

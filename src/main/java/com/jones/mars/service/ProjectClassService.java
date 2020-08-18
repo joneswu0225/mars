@@ -1,5 +1,6 @@
 package com.jones.mars.service;
 
+import com.jones.mars.model.param.BlockClassParam;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
@@ -21,5 +22,10 @@ public class ProjectClassService extends BaseService{
         return BaseResponse.builder().data(mapper.findAll(query)).build();
     }
 
+    public BaseResponse updateBlockClassSeq(BlockClassParam param){
+        mapper.updateBlockClassSeq(param);
+        return BaseResponse.builder().build();
+    }
 }
+
 

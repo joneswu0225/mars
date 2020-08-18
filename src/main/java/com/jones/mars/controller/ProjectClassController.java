@@ -1,6 +1,7 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.model.BlockClass;
+import com.jones.mars.model.param.BlockClassParam;
 import com.jones.mars.model.param.ProjectClassParam;
 import com.jones.mars.model.query.ProjectClassQuery;
 import com.jones.mars.object.BaseResponse;
@@ -11,8 +12,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/projectClass")
@@ -43,6 +42,13 @@ public class ProjectClassController extends BaseController {
         BlockClass blockClass = BlockClass.builder().moduleId(param.getModuleId()).name(param.getName()).build();
         blockClass.setId(projectClassId);
         return service.update(blockClass);
+    }
+
+
+    @ApiOperation(value = "调整二级分类顺序", notes = "")
+    @PostMapping("/changeSeq")
+    public BaseResponse changeBlockClassSeq(@RequestBody @ApiParam(required=true) BlockClassParam param) {
+        return service.updateBlockClassSeq(param);
     }
 
     // TODO 增加后台注解
