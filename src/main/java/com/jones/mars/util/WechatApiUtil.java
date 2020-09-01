@@ -32,6 +32,7 @@ public class WechatApiUtil {
     private String jsTicket;
     public static final String WECHAT_API_URL_BASE = "https://api.weixin.qq.com";
     public static String URL_GET_ACCESS_TOKEN = WECHAT_API_URL_BASE + "/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
+    public static String URL_CODE_TO_SESSION = WECHAT_API_URL_BASE + "/sns/jscode2session?grant_type=authorization_code&appid=%s&secret=%s";
     public static String URL_GET_JS_TICKET = WECHAT_API_URL_BASE + "/cgi-bin/ticket/getticket?type=jsapi&access_token=%s";
     public static String URL_GET_MEDIA = WECHAT_API_URL_BASE + "/cgi-bin/media/get?access_token=%s&media_id=%s";
     public static String FFMPEG_PATH = "/usr/local/ffmpeg/bin/ffmpeg";

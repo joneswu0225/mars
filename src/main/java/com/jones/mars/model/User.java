@@ -17,6 +17,7 @@ public class User extends BaseObject {
     private Integer id;
     private String mobile;
     private String nickname;
+    private String departmentName;
     private String sgname;
     private String password;
     private Integer userType;

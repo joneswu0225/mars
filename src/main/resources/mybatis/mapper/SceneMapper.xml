@@ -29,7 +29,14 @@
     </insert>
     <select id="findList" resultType="Scene" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select s.*,si.path as imageUrl, ps.seq from scene s left join block_image si on s.image_id=si.id left join project_scene ps on s.id=ps.scene_id
+        select s.*,si.path as imageUrl
+        <if test="projectId != null">
+        , ps.seq
+        </if>
+        from scene s left join block_image si on s.image_id=si.id
+        <if test="projectId != null">
+        left join project_scene ps on s.id=ps.scene_id
+        </if>
         where s.delete_flg=0
         <if test="projectId != null">
             and ps.project_id = #{projectId}
@@ -43,11 +50,16 @@
         <if test="name != null and name !=''">
             and s.name = #{name}
         </if>
+        <if test="projectId != null">
         order by seq
+        </if>
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
-        select count(*) from scene s left join project_scene ps on s.id=ps.scene_id
+        select count(*) from scene s
+        <if test="projectId != null">
+        left join project_scene ps on s.id=ps.scene_id
+        </if>
         where s.delete_flg=0
         <if test="projectId != null">
             and ps.project_id = #{projectId}
@@ -63,7 +75,9 @@
         </if>
     </select>
     <select id="findAllName" resultType="Scene" parameterType="Query">
-        select distinct(s.id), s.name, s.scene_type_id as sceneTypeId, s.code from scene s left join project_scene ps on ps.scene_id = s.id left join project p on ps.project_id=p.id
+        select distinct(s.id), s.name, s.scene_type_id as sceneTypeId, s.code from scene s
+        left join project_scene ps on ps.scene_id = s.id
+        left join project p on ps.project_id=p.id
         where s.delete_flg=0
         <if test="blockId != null">
             and s.block_id = #{blockId}
@@ -83,7 +97,14 @@
         order by s.name
     </select>
     <select id="findAll" resultType="Scene" parameterType="Query">
-        select s.*,si.path as imageUrl, ps.seq from scene s left join block_image si on s.image_id=si.id left join project_scene ps on s.id=ps.scene_id
+        select s.*,si.path as imageUrl
+        <if test="projectId != null">
+            , ps.seq
+        </if>
+        from scene s left join block_image si on s.image_id=si.id
+        <if test="projectId != null">
+            left join project_scene ps on s.id=ps.scene_id
+        </if>
         where s.delete_flg=0
         <if test="projectId != null">
             and ps.project_id = #{projectId}
@@ -97,7 +118,9 @@
         <if test="name != null and name !=''">
             and s.name = #{name}
         </if>
+        <if test="projectId != null">
         order by seq
+        </if>
     </select>
     <select id="findOne" resultType="Scene">
         select * from scene where id=#{id}
