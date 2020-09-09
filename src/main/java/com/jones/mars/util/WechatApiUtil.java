@@ -30,16 +30,13 @@ import java.util.*;
 @Component
 @Slf4j
 public class WechatApiUtil {
-//    private static String appId = "wxaa750edf0afd9bd6";
-//    private static String appSecret = "44a0a56e3f611e031f85f547801dc9fd";
-    public static String appId = "wxff2a14ab973dffe0";
-    private static String appSecret = "22489a930bd2b48ff8865fc7c1b6312c";
+    public static String appId;
+    private static String appSecret;
     private static String accessToken;
     private String jsTicket;
     public static final String WECHAT_API_URL_BASE = "https://api.weixin.qq.com";
     public static String URL_GET_ACCESS_TOKEN = WECHAT_API_URL_BASE + "/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
     public static String URL_CODE_TO_SESSION = WECHAT_API_URL_BASE + "/sns/jscode2session?grant_type=authorization_code&appid=%s&secret=%s&js_code=";
-//    public static String URL_CODE_TO_SESSION = WECHAT_API_URL_BASE + "/sns/jscode2session?grant_type=authorization_code&appid=wxff2a14ab973dffe0&secret=22489a930bd2b48ff8865fc7c1b6312c&js_code=";
     public static String URL_GET_JS_TICKET = WECHAT_API_URL_BASE + "/cgi-bin/ticket/getticket?type=jsapi&access_token=%s";
     public static String URL_GET_MEDIA = WECHAT_API_URL_BASE + "/cgi-bin/media/get?access_token=%s&media_id=%s";
     public static String FFMPEG_PATH = "/usr/local/ffmpeg/bin/ffmpeg";
@@ -217,7 +214,6 @@ public class WechatApiUtil {
         String encryptedData = "jxme4Eg3tWEA0EobDQTfMvfzfhEqSK0Rqat49Vzo3W70WRemby6nK3UcDPZ5PeQgPpvtvsUoMvtJWSbH3NqLy40gXPcGBWsehPCiVu53X3wTMqi1ByyGVel8nXsMW1Il0l8afTQiyotSnbExu/9EfCevP7tUPnXfSSt/KMLFqBYQ7EvU8o/Or/4NSobIDZqoxtDJRPUp7fX6BzvB3iTzxiXcdR7YiOLPR+8fegnXngzwwVFWFpAeUrbo/C8WRgFuLGBdS4601ru04smlgXld+ekfZhO3+FXHx/41z9jjfi/WAhcSBZ9e4PHsF7THnzwqhBd/Xm7P1Ufd5ZsPJ+/UxLw1LbnvgGAkUHey7knBB/yXrrAyDhVuT7+afyYMPtjjQFhb5EEoc/RvaN0417dIXPnST/ggVaZH9X9NI2uBEvNB2r0YGVxQdB759QzAbLTCR0DEPiescIgSIezKAqmtmJM02yw8+VHiQIGl2TLJxts=";
         String iv= "4+5ZrMc/Fyd42cjMSGmN2g==";
         System.out.println(JSONObject.toJSONString(getSessionKey("0018MKFa1OEWAz0tKRIa1jbapn48MKFc")));
-        appId = "wx4f4bc4dec97d474b";
         String sessionKey = "tiihtNczf5v6AKRyjwEUhQ==";
         encryptedData = "CiyLU1Aw2KjvrjMdj8YKliAjtP4gsMZMQmRzooG2xrDcvSnxIMXFufNstNGTyaGS9uT5geRa0W4oTOb1WT7fJlAC+oNPdbB+3hVbJSRgv+4lGOETKUQz6OYStslQ142dNCuabNPGBzlooOmB231qMM85d2/fV6ChevvXvQP8Hkue1poOFtnEtpyxVLW1zAo6/1Xx1COxFvrc2d7UL/lmHInNlxuacJXwu0fjpXfz/YqYzBIBzD6WUfTIF9GRHpOn/Hz7saL8xz+W//FRAUid1OksQaQx4CMs8LOddcQhULW4ucetDf96JcR3g0gfRK4PC7E/r7Z6xNrXd2UIeorGj5Ef7b1pJAYB6Y5anaHqZ9J6nKEBvB4DnNLIVWSgARns/8wR2SiRS7MNACwTyrGvt9ts8p12PKFdlqYTopNHR1Vf7XjfhQlVsAJdNiKdYmYVoKlaRv85IfVunYzO0IKXsyl7JCUjCpoG20f0a04COwfneQAGGwd5oa+T8yO5hzuyDb/XcxxmK01EpqOyuxINew==";
         iv = "r7BXXKkLb8qrSNn05n0qiA==";
@@ -269,18 +265,6 @@ public class WechatApiUtil {
 
 
 class Sign {
-    public static void main(String[] args) {
-//        String jsapi_ticket = "jsapi_ticket";
-        String jsapi_ticket = "HoagFKDcsGMVCIY2vOjf9k-DY8Nlea81VCjEWDOuq4RZP9VbNWb3kiKZiynZo1587skOxbK0-1fs1fkIeoFWDg";
-
-        // 注意 URL 一定要动态获取，不能 hardcode
-        String url = "https://pano.vr2shipping.com/default.html?id=246";
-        Map<String, String> ret = sign(jsapi_ticket, url);
-        for (Map.Entry entry : ret.entrySet()) {
-            System.out.println(entry.getKey() + ", " + entry.getValue());
-        }
-    }
-
     public static Map<String, String> sign(String jsapi_ticket, String url) {
         Map<String, String> ret = new HashMap<String, String>();
         String nonce_str = create_nonce_str();
