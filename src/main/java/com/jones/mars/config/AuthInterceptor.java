@@ -13,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import sun.rmi.runtime.Log;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +43,8 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
         // 排除配置
         addInterceptor.excludePathPatterns("/error");
         addInterceptor.excludePathPatterns("/user/login");
+        addInterceptor.excludePathPatterns("/user/wxlogin");
+        addInterceptor.excludePathPatterns("/user/wxUpdatePassword");
         addInterceptor.excludePathPatterns("/user/regist");
         addInterceptor.excludePathPatterns("/userLike/**");
         addInterceptor.excludePathPatterns("/user/auth/**");
@@ -76,13 +79,16 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
                 url += "?" + request.getQueryString();
             }
             log.info("authorization in request header is :" + request.getHeader("authorization"));
+            if(request.getHeader("authorization") != null && LoginUtil.getInstance().getUser() == null){
+                String authorization = request.getHeader("authorization");
+                authorization = authorization.split(" ")[0];
+                LoginUtil.getInstance().refreshLoginUser(authorization);
+            }
             if (request.getCookies() == null || LoginUtil.getInstance().getUser() == null) {
                 log.info("request address: " + request.getRemoteAddr());
                 if("127.0.0.1".equals(getIp(request)) || (request.getHeader("referer") != null && request.getHeader("referer").contains("swagger-ui.html"))){
                     log.info("当前请求为内部接口请求，且无登录状态，设置默认用户为：13564332436");
-                    UserLoginParam user = new UserLoginParam();
-                    user.setMobile("13564332436");
-                    user.setPassword("1234567801");
+                    UserLoginParam user = UserLoginParam.builder().mobile("13564332436").password("1234567801").build();
                     request.setAttribute("authorization", ((Map<String, String>)service.doLogin(user).getData()).get("authorization"));
                 } else {
                     log.info("当前用户未登陆");

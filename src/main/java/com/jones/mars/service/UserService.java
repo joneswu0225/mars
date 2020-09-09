@@ -7,16 +7,14 @@ import com.jones.mars.model.Enterprise;
 import com.jones.mars.model.User;
 import com.jones.mars.model.param.UserLoginParam;
 import com.jones.mars.model.param.UserProfileParam;
+import com.jones.mars.model.param.UserWXLoginParam;
 import com.jones.mars.model.query.BlockQuery;
 import com.jones.mars.model.query.EnterpriseQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.model.query.UserQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.*;
-import com.jones.mars.util.AliMnsSender;
-import com.jones.mars.util.LoginUtil;
-import com.jones.mars.util.RandomString;
-import com.jones.mars.util.UuidUtil;
+import com.jones.mars.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -206,6 +204,34 @@ public class UserService extends BaseService<User>{
         } else {
             throw new InternalException("手机及验证码重复");
         }
+    }
+
+    public BaseResponse doWxLogin(UserWXLoginParam param){
+        Map<String, String> wechatInfo = WechatApiUtil.getUserInfo(param.getCode(),param.getEncryptedData(), param.getIv());
+        if(wechatInfo == null) {
+            return BaseResponse.builder().code(ErrorCode.WECHAT_LOGIN_VERIFY_FAIL).build();
+        }
+        User user = mapper.findOneByMobile(wechatInfo.get("mobile"));
+        if(user == null){
+            mapper.insert(User.builder().mobile(wechatInfo.get("mobile")).openid(wechatInfo.get("openid")).unionid(wechatInfo.get("unionid")));
+        } else if (StringUtils.isEmpty(user.getOpenid()) || StringUtils.isEmpty(user.getUnionid())) {
+            mapper.updateByMobile(wechatInfo);
+        }
+        if(user == null || StringUtils.isEmpty(user.getPassword())){
+            return BaseResponse.builder().code(ErrorCode.WECHAT_NO_PASSWD).build();
+        } else {
+            return doLogin(UserLoginParam.builder().mobile(user.getMobile()).password(user.getPassword()).build());
+        }
+    }
+
+    public BaseResponse wxUpdatePassword(UserWXLoginParam param){
+        Map<String, String> wechatInfo = WechatApiUtil.getUserInfo(param.getCode(),param.getEncryptedData(), param.getIv());
+        if(wechatInfo == null) {
+            return BaseResponse.builder().code(ErrorCode.WECHAT_LOGIN_VERIFY_FAIL).build();
+        }
+        wechatInfo.put("password", param.getPassword());
+        mapper.updateByMobile(wechatInfo);
+        return BaseResponse.builder().code(ErrorCode.WECHAT_NO_PASSWD).build();
     }
 
 

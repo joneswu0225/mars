@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 public interface UserMapper extends BaseMapper<User> {
     void insertProfile(User paramUser);
     void updateProfile(Object paramUser);
+    void updateByMobile(Object paramUser);
+    User findOneByMobile(String mobile);
 }

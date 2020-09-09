@@ -17,6 +17,8 @@ public enum ErrorCode {
 	//登录错误
 	LOGIN_MOBILE_NOTEXISTS("1002", "手机号不存在"),
 	LOGIN_FAIL("1003", "验证码或密码错误"),
+	WECHAT_LOGIN_VERIFY_FAIL("1004", "微信小程序登录验证失败"),
+	WECHAT_NO_PASSWD("1005", "微信小程序注册没有密码"),
 
 	//请求错误
 	VALIDATION_FAILED("1011", "参数校验失败"),

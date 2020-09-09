@@ -5,6 +5,7 @@ import com.jones.mars.model.User;
 import com.jones.mars.model.param.UserLoginParam;
 import com.jones.mars.model.param.UserPasswordRestParam;
 import com.jones.mars.model.param.UserRegistParam;
+import com.jones.mars.model.param.UserWXLoginParam;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.UserService;
 import com.jones.mars.support.ValidMobile;
@@ -69,6 +70,18 @@ public class LoginController extends BaseController {
     @PostMapping("login")
     public BaseResponse login(@RequestBody @ApiParam(required=true) UserLoginParam param) {
         return userService.doLogin(param);
+    }
+
+    @ApiOperation(value = "小程序登录", notes = "登录")
+    @PostMapping("wxlogin")
+    public BaseResponse wxLogin(@RequestBody @ApiParam(required=true) UserWXLoginParam param) {
+        return userService.doWxLogin(param);
+    }
+
+    @ApiOperation(value = "小程序更新密码", notes = "小程序更新密码")
+    @PostMapping("wxUpdatePassword")
+    public BaseResponse wxUpdatePassword(@RequestBody @ApiParam(required=true) UserWXLoginParam param) {
+        return userService.wxUpdatePassword(param);
     }
 
     @ApiOperation(value = "注销", notes = "注销")

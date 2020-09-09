@@ -3,11 +3,13 @@ package com.jones.mars.model.param;
 import com.jones.mars.support.ValidMobile;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
+@Builder
 @ApiModel(value="重置密码参数", description = "验证码，密码不能同时为空")
 public class UserLoginParam {
     @ValidMobile

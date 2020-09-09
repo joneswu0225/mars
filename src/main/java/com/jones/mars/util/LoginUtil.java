@@ -3,6 +3,7 @@ package com.jones.mars.util;
 import com.jones.mars.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -22,6 +23,7 @@ public class LoginUtil {
     public static final int COOKIE_MAX_INACTIVE_INTERVAL = 86400;
     public static LoginUtil INSTANCE = null;
     private ConcurrentHashMap<String, User> loginUser = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, String> userIdAuth = new ConcurrentHashMap<>();
 
     @Value("${app.domain:vr2shipping.com}")
     private void setAppDomain(String appDomain){
@@ -103,6 +105,14 @@ public class LoginUtil {
         setLoginUser(authorization, user);
     }
 
+    public User refreshLoginUser(String authorization){
+        User user = getLoginUser(authorization);
+        if(user != null){
+            setLoginUser(authorization, user);
+        }
+        return user;
+    }
+
     private User getLoginUser(String authorization){
         User user = loginUser.get(authorization);
         if(user != null){
@@ -114,9 +124,15 @@ public class LoginUtil {
         }
     }
 
+    @Transactional
     private void setLoginUser(String authorization, User user){
+        // 只能单点登录，互踢机制
+        if(userIdAuth.containsKey(user.getId())){
+            loginUser.remove(user.getId());
+        }
         user.setAuth(authorization);
         loginUser.put(authorization, user);
+        userIdAuth.put(user.getId(), authorization);
     }
 
 }

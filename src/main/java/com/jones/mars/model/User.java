@@ -20,6 +20,8 @@ public class User extends BaseObject {
     private String departmentName;
     private String sgname;
     private String password;
+    private String openid;
+    private String unionid;
     private Integer userType;
     private String verifyCode;
     private String ip;

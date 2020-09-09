@@ -54,4 +54,34 @@ public class WechatController extends BaseController {
         return BaseResponse.builder().data(wechatApiUtil.getMediaBase64(mediaId)).build();
     }
 
+    /**
+     * 小程序Code2SessionKey
+     * @return
+     */
+    @ApiOperation(value = "小程序Code2SessionKey", notes = "小程序Code2SessionKey")
+    @GetMapping(value="/wxCode2SessionKey")
+    public BaseResponse wxCode2SessionKey(@RequestParam(name="code", required = true) String code){
+        return BaseResponse.builder().data(WechatApiUtil.getSessionKey(code)).build();
+    }
+    /**
+     * 小程序wxDecryptedUserInfo
+     * @return
+     */
+    @ApiOperation(value = "小程序wxDecryptedUserInfo", notes = "小程序wxDecryptedUserInfo")
+    @GetMapping(value="/wxDecryptedUserInfo")
+    public BaseResponse wxDecryptedUserInfo(@RequestParam(name="sessionKey", required = true) String sessionKey,
+                                            @RequestParam(name="encryptedData", required = true) String encryptedData,
+                                            @RequestParam(name="iv", required = true) String iv){
+        return BaseResponse.builder().data(WechatApiUtil.getDecryptedUserInfo(sessionKey, encryptedData,iv)).build();
+    }
+    /**
+     * 小程序appid
+     * @return
+     */
+    @ApiOperation(value = "小程序appid", notes = "小程序appid")
+    @GetMapping(value="/wxAppid")
+    public BaseResponse wxAppid(){
+        return BaseResponse.builder().data(WechatApiUtil.appId).build();
+    }
+
 }
