@@ -11,7 +11,7 @@
     <select id="findList" resultType="BlockClass" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select c.* from block_class c left join block_module m on c.module_id = m.id
-        where delete_flg=0
+        where c.delete_flg=0
         <if test="moduleId != null">
             and module_id = #{moduleId}
         </if>
@@ -23,7 +23,7 @@
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from block_class c left join block_module m on c.module_id = m.id
-        where delete_flg=0
+        where c.delete_flg=0
         <if test="moduleId != null">
             and module_id = #{moduleId}
         </if>
@@ -33,7 +33,7 @@
     </select>
     <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
         select c.* from block_class c left join block_module m on c.module_id = m.id
-        where delete_flg=0
+        where c.delete_flg=0
         <if test="moduleId != null">
             and module_id = #{moduleId}
         </if>
@@ -54,14 +54,15 @@
         </foreach>
     </update>
     <select id="findAll" resultType="BlockClass" parameterType="Query">
-        select * from block_class where delete_flg=0
+        select c.* from block_class c left join block_module m on c.module_id = m.id
+        where c.delete_flg=0
         <if test="moduleId != null">
             and module_id = #{moduleId}
         </if>
         <if test="blockId != null">
             and m.block_id = #{blockId}
         </if>
-        order by name
+        order by c.seq,c.name
     </select>
     <select id="findOne" resultType="BlockClass">
         select * from block_class where id=#{id}

@@ -88,7 +88,7 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
                 log.info("request address: " + request.getRemoteAddr());
                 if("127.0.0.1".equals(getIp(request)) || (request.getHeader("referer") != null && request.getHeader("referer").contains("swagger-ui.html"))){
                     log.info("当前请求为内部接口请求，且无登录状态，设置默认用户为：13564332436");
-                    UserLoginParam user = UserLoginParam.builder().mobile("13564332436").password("1234567801").build();
+                    UserLoginParam user = UserLoginParam.builder().mobile("13564332436").password("12345678").build();
                     request.setAttribute("authorization", ((Map<String, String>)service.doLogin(user).getData()).get("authorization"));
                 } else {
                     log.info("当前用户未登陆");

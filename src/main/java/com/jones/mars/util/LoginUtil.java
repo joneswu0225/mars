@@ -128,7 +128,7 @@ public class LoginUtil {
     private void setLoginUser(String authorization, User user){
         // 只能单点登录，互踢机制
         if(userIdAuth.containsKey(user.getId())){
-            loginUser.remove(user.getId());
+            loginUser.remove(userIdAuth.get(user.getId()));
         }
         user.setAuth(authorization);
         loginUser.put(authorization, user);

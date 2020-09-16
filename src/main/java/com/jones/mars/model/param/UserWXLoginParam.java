@@ -18,7 +18,5 @@ public class UserWXLoginParam {
     @NotBlank(message = "登录凭证code不能为空")
     @ApiModelProperty(value="登录凭证",name="code")
     private String code;
-    @ApiModelProperty(value="密码",name="password")
-    private String password;
 }
 

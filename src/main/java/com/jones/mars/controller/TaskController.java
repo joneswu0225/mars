@@ -25,7 +25,7 @@ public class TaskController extends BaseController {
     @ApiOperation(value = "任务列表", notes = "任务列表")
     @GetMapping("")
     public BaseResponse list(@ApiParam TaskQuery query) {
-        return service.findByPage(query);
+        return service.findTaskList(query);
     }
 
     @ApiOperation(value = "新增任务", notes = "新增任务")

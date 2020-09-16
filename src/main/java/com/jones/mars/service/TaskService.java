@@ -14,6 +14,7 @@ import com.jones.mars.repository.ProjectUserMapper;
 import com.jones.mars.repository.TaskMapper;
 import com.jones.mars.util.DateUtil;
 import com.jones.mars.util.LoginUtil;
+import com.jones.mars.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,19 @@ public class TaskService extends BaseService{
         return BaseResponse.builder().build();
     }
 
+
+    public BaseResponse findTaskList(TaskQuery query){
+        Page<Task> taskPage = findPage(query);
+        if(taskPage.getContent().size() > 0){
+            List<Integer> projectIds = taskPage.getContent().parallelStream().map(p->p.getProject().getId()).collect(Collectors.toList());
+            List<ProjectUser> projectUsers = projectUserMapper.findList(ProjectUserQuery.builder().projectIds(projectIds).build());
+            Map<Integer, List<ProjectUser>> projectUserMap = new HashMap<>();
+            projectIds.forEach(p->projectUserMap.put(p, new ArrayList<>()));
+            projectUsers.forEach(p->projectUserMap.get(p.getProjectId()).add(p));
+            taskPage.getContent().forEach(task -> task.getProject().setUserList(projectUserMap.get(task.getProject().getId())));
+        }
+        return BaseResponse.builder().data(taskPage).build();
+    }
 
     public BaseResponse findPrivateTask(Integer taskId){
         Map<String, Object> query = new HashMap<>();

@@ -2,10 +2,7 @@ package com.jones.mars.controller;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.jones.mars.model.User;
-import com.jones.mars.model.param.UserLoginParam;
-import com.jones.mars.model.param.UserPasswordRestParam;
-import com.jones.mars.model.param.UserRegistParam;
-import com.jones.mars.model.param.UserWXLoginParam;
+import com.jones.mars.model.param.*;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.UserService;
 import com.jones.mars.support.ValidMobile;
@@ -80,7 +77,7 @@ public class LoginController extends BaseController {
 
     @ApiOperation(value = "小程序更新密码", notes = "小程序更新密码")
     @PostMapping("wxUpdatePassword")
-    public BaseResponse wxUpdatePassword(@RequestBody @ApiParam(required=true) UserWXLoginParam param) {
+    public BaseResponse wxUpdatePassword(@RequestBody @ApiParam(required=true) UserWXUpdatePasswordParam param) {
         return userService.wxUpdatePassword(param);
     }
 

@@ -19,7 +19,7 @@
             <result column="project_name" property="name"/>
             <result column="project_image_url" property="imageUrl"/>
             <result column="project_detail" property="detail"/>
-            <collection property="userList" ofType="ProjectUser" column="project_id">
+            <collection property="userList" javaType="ProjectUser" column="project_id">
                 <result column="pu_sgname" property="sgname"/>
                 <result column="pu_manager_flg" property="managerFlg"/>
             </collection>

@@ -13,7 +13,17 @@
     </insert>
     <select id="findList" resultType="ProjectUser">
         select pu.*, up.sgname from project_user pu left join user_profile up on pu.user_id=up.user_id
-        where project_id=#{projectId}
+        where 1=1
+        <if test="projectId != null">
+            and project_id=#{projectId}
+        </if>
+        <if test="projectIds != null">
+            and project_id in (
+            <foreach collection="projectIds" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
         <if test="managerFlg != null">
             and manager_flg=#{managerFlg}
         </if>

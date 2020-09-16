@@ -8,6 +8,7 @@ import com.jones.mars.model.User;
 import com.jones.mars.model.param.UserLoginParam;
 import com.jones.mars.model.param.UserProfileParam;
 import com.jones.mars.model.param.UserWXLoginParam;
+import com.jones.mars.model.param.UserWXUpdatePasswordParam;
 import com.jones.mars.model.query.BlockQuery;
 import com.jones.mars.model.query.EnterpriseQuery;
 import com.jones.mars.model.query.Query;
@@ -95,6 +96,7 @@ public class UserService extends BaseService<User>{
                 user.setUserType(User.COMMON);
             }
             mapper.insert(user);
+            user.setSgname("新用户" + user.getMobile().substring(user.getMobile().length()-4));
             mapper.insertProfile(user);
             return BaseResponse.builder().data(user.getId()).build();
         } else {
@@ -213,25 +215,28 @@ public class UserService extends BaseService<User>{
         }
         User user = mapper.findOneByMobile(wechatInfo.get("mobile"));
         if(user == null){
-            mapper.insert(User.builder().mobile(wechatInfo.get("mobile")).openid(wechatInfo.get("openid")).unionid(wechatInfo.get("unionid")));
+            add(User.builder().mobile(wechatInfo.get("mobile")).userType(User.COMMON).openid(wechatInfo.get("openid")).unionid(wechatInfo.get("unionid")).build());
         } else if (StringUtils.isEmpty(user.getOpenid()) || StringUtils.isEmpty(user.getUnionid())) {
             mapper.updateByMobile(wechatInfo);
         }
         if(user == null || StringUtils.isEmpty(user.getPassword())){
-            return BaseResponse.builder().code(ErrorCode.WECHAT_NO_PASSWD).build();
+            return BaseResponse.builder().code(ErrorCode.WECHAT_NO_PASSWD).data(wechatInfo).build();
         } else {
             return doLogin(UserLoginParam.builder().mobile(user.getMobile()).password(user.getPassword()).build());
         }
     }
 
-    public BaseResponse wxUpdatePassword(UserWXLoginParam param){
-        Map<String, String> wechatInfo = WechatApiUtil.getUserInfo(param.getCode(),param.getEncryptedData(), param.getIv());
-        if(wechatInfo == null) {
+    public BaseResponse wxUpdatePassword(UserWXUpdatePasswordParam param){
+        User user = mapper.findOneByMobile(param.getMobile());
+        if(user != null && param.getOpenid().equals(user.getOpenid())){
+            Map<String, String> wechatInfo = new HashMap<>();
+            wechatInfo.put("mobile", param.getMobile());
+            wechatInfo.put("password", param.getPassword());
+            mapper.updateByMobile(wechatInfo);
+            return doLogin(UserLoginParam.builder().mobile(param.getMobile()).password(param.getPassword()).build());
+        } else {
             return BaseResponse.builder().code(ErrorCode.WECHAT_LOGIN_VERIFY_FAIL).build();
         }
-        wechatInfo.put("password", param.getPassword());
-        mapper.updateByMobile(wechatInfo);
-        return BaseResponse.builder().code(ErrorCode.WECHAT_NO_PASSWD).build();
     }
 
 
