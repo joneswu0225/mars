@@ -140,7 +140,7 @@ public class UserService extends BaseService<User>{
      */
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse resetPassword(User param){
-        List<User> users = mapper.findList(new Query(param));
+        List<User> users = mapper.findList(UserQuery.builder().mobile(param.getMobile()).verifyCode(param.getVerifyCode()).build());
         if(users.size() == 1){
             User user_db = users.get(0);
             User user_update = User.builder().password(param.getPassword()).build();
