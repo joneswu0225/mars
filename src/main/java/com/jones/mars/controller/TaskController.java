@@ -50,6 +50,12 @@ public class TaskController extends BaseController {
         return service.update(param);
     }
 
+    @ApiOperation(value = "所有任务", notes = "所有任务")
+    @GetMapping("all")
+    public BaseResponse all(@ApiParam TaskQuery query) {
+        return service.findAllTasks(query);
+    }
+
     @ApiOperation(value = "任务日历", notes = "任务日历")
     @GetMapping("calendar")
     public BaseResponse findCalendar(@ApiParam TaskQuery query) {

@@ -76,12 +76,10 @@
     </insert>
     <select id="findList" resultMap="TaskMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select t.*, p.name as project_name,p.image_url as project_image_url, p.detail as project_detail, pu.user_id as pu_user_id, up.sgname as pu_sgname, pu.manager_flg as pu_manager_flg, uc.sgname as creator_sgname, uu.sgname as updater_sgname
+        select t.*, p.name as project_name,p.image_url as project_image_url, p.detail as project_detail, uc.sgname as creator_sgname, uu.sgname as updater_sgname
         from task t left join project p on t.project_id=p.id
         left join user_profile uc on t.create_by = uc.user_id
         left join user_profile uu on t.update_by = uu.user_id
-        left join project_user pu on pu.project_id=p.id
-        left join user_profile up on pu.user_id=up.user_id
         where t.current_flg=1 and t.delete_flg=0
         <if test="type != null and type !=''">
             and t.type = #{type}
@@ -98,15 +96,13 @@
         <if test="endDate != null">
             and t.create_time &lt;= #{endDate}
         </if>
-        order by t.update_time desc, t.expire_date
+        order by t.update_time desc, t.expire_date, t.id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*)
         from task t left join project p on t.project_id=p.id
         left join user_profile u on p.creator_id = u.user_id
-        left join project_user pu on pu.project_id=p.id
-        left join user_profile up on pu.user_id=up.user_id
         where t.current_flg=1 and t.delete_flg=0
         <if test="type != null and type !=''">
             and t.type = #{type}
@@ -146,8 +142,11 @@
         order by id desc
     </select>
     <select id="findAll" resultType="Task" parameterType="Query">
-        select * from task t
-        where 1=1
+        select t.*, p.name as project_name,p.image_url as project_image_url, p.detail as project_detail, uc.sgname as creator_sgname, uu.sgname as updater_sgname
+        from task t left join project p on t.project_id=p.id
+        left join user_profile uc on t.create_by = uc.user_id
+        left join user_profile uu on t.update_by = uu.user_id
+        where t.current_flg=1 and t.delete_flg=0
         <if test="type != null and type !=''">
             and t.type = #{type}
         </if>
@@ -163,7 +162,7 @@
         <if test="endDate != null">
             and t.create_time &lt;= #{endDate}
         </if>
-        order by id desc
+        order by t.update_time desc, t.expire_date
     </select>
     <select id="findOne" resultMap="TaskMap">
         select t.*, p.name as project_name,p.image_url as project_image_url, p.detail as project_detail, pu.user_id as pu_user_id, up.sgname as pu_sgname, u.sgname as creatorSgname

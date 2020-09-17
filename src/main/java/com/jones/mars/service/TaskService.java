@@ -71,6 +71,19 @@ public class TaskService extends BaseService{
         return BaseResponse.builder().data(taskPage).build();
     }
 
+    public BaseResponse findAllTasks(TaskQuery query){
+        List<Task> taskList = mapper.findAll(query);
+        if(taskList.size() > 0){
+            List<Integer> projectIds = taskList.parallelStream().map(p->p.getProject().getId()).collect(Collectors.toList());
+            List<ProjectUser> projectUsers = projectUserMapper.findList(ProjectUserQuery.builder().projectIds(projectIds).build());
+            Map<Integer, List<ProjectUser>> projectUserMap = new HashMap<>();
+            projectIds.forEach(p->projectUserMap.put(p, new ArrayList<>()));
+            projectUsers.forEach(p->projectUserMap.get(p.getProjectId()).add(p));
+            taskList.forEach(task -> task.getProject().setUserList(projectUserMap.get(task.getProject().getId())));
+        }
+        return BaseResponse.builder().data(taskList).build();
+    }
+
     public BaseResponse findPrivateTask(Integer taskId){
         Map<String, Object> query = new HashMap<>();
         query.put("id", taskId);
