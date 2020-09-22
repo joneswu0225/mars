@@ -113,9 +113,8 @@ public class UserService extends BaseService<User>{
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse getVerifyCode(String mobile){
         String verifyCode = RandomString.generateVerifyCode();
-        AliMnsSender.sendMns(mobile, verifyCode);
-        return BaseResponse.builder().build();
-/*
+//        AliMnsSender.sendMns(mobile, verifyCode);
+//        return BaseResponse.builder().build();
         List<User> users = mapper.findList(UserQuery.builder().mobile(mobile).build());
         if(users.size() == 1){
             User user_db = users.get(0);
@@ -130,7 +129,7 @@ public class UserService extends BaseService<User>{
             return BaseResponse.builder().code(ErrorCode.LOGIN_MOBILE_NOTEXISTS).build();
         } else {
             throw new InternalException("手机号重复");
-        }*/
+        }
     }
 
     /**
@@ -140,17 +139,18 @@ public class UserService extends BaseService<User>{
      */
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse resetPassword(User param){
-        List<User> users = mapper.findList(UserQuery.builder().mobile(param.getMobile()).verifyCode(param.getVerifyCode()).build());
-        if(users.size() == 1){
-            User user_db = users.get(0);
+        User user = mapper.findOneByMobile(param.getMobile());
+        if(user == null){
+            return BaseResponse.builder().code(ErrorCode.LOGIN_MOBILE_NOTEXISTS).build();
+        }
+        if(param.getVerifyCode() != null && param.getVerifyCode().equals(user.getVerifyCode())) {
             User user_update = User.builder().password(param.getPassword()).build();
-            user_update.setId(user_db.getId());
+            user_update.setId(user.getId());
             mapper.update(user_update);
             return BaseResponse.builder().data(user_update.getId()).build();
-        } else if(users.size() < 1){
-            return BaseResponse.builder().code(ErrorCode.LOGIN_MOBILE_NOTEXISTS).build();
-        } else {
-            throw new InternalException("手机号重复");
+        } else{
+            return BaseResponse.builder().code(ErrorCode.VERIFY_CODE_FAILED).build();
+
         }
     }
 
@@ -217,7 +217,7 @@ public class UserService extends BaseService<User>{
         if(user == null){
             add(User.builder().mobile(wechatInfo.get("mobile")).userType(User.COMMON).openid(wechatInfo.get("openid")).unionid(wechatInfo.get("unionid")).build());
         } else if (StringUtils.isEmpty(user.getOpenid()) || StringUtils.isEmpty(user.getUnionid())) {
-            mapper.updateByMobile(wechatInfo);
+            mapper.update(User.builder().id(user.getId()).openid(wechatInfo.get("openid")).unionid(wechatInfo.get("unionid")).build());
         }
         if(user == null || StringUtils.isEmpty(user.getPassword())){
             return BaseResponse.builder().code(ErrorCode.WECHAT_NO_PASSWD).data(wechatInfo).build();
@@ -229,10 +229,7 @@ public class UserService extends BaseService<User>{
     public BaseResponse wxUpdatePassword(UserWXUpdatePasswordParam param){
         User user = mapper.findOneByMobile(param.getMobile());
         if(user != null && param.getOpenid().equals(user.getOpenid())){
-            Map<String, String> wechatInfo = new HashMap<>();
-            wechatInfo.put("mobile", param.getMobile());
-            wechatInfo.put("password", param.getPassword());
-            mapper.updateByMobile(wechatInfo);
+            mapper.update(User.builder().id(user.getId()).password(param.getPassword()).build());
             return doLogin(UserLoginParam.builder().mobile(param.getMobile()).password(param.getPassword()).build());
         } else {
             return BaseResponse.builder().code(ErrorCode.WECHAT_LOGIN_VERIFY_FAIL).build();

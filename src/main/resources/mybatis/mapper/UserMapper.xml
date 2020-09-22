@@ -60,7 +60,7 @@
         where user_id=#{userId}
     </insert>
     <insert id="update" parameterType="User">
-        update user set id=#{id}
+        update user set id=#{id}, verify_code=null
         <if test="userType != null and userType !=''">
             ,user_type = #{userType}
         </if>
@@ -76,10 +76,19 @@
         <if test="lastLoginTime != null">
             ,last_login_time = #{lastLoginTime}
         </if>
+        <if test="unionid != null and unionid !=''">
+            ,unionid = #{unionid}
+        </if>
+        <if test="openid != null and openid !=''">
+            ,openid = #{openid}
+        </if>
+        <if test="password != null and password !=''">
+            ,password = #{password}
+        </if>
         where id=#{id}
     </insert>
     <insert id="updateByMobile" parameterType="java.util.Map">
-        update user set mobile=#{mobile}
+        update user set mobile=#{mobile}, verify_code=null
         <if test="unionid != null and unionid !=''">
             ,unionid = #{unionid}
         </if>

@@ -45,6 +45,7 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
         addInterceptor.excludePathPatterns("/user/login");
         addInterceptor.excludePathPatterns("/user/wxlogin");
         addInterceptor.excludePathPatterns("/user/wxUpdatePassword");
+        addInterceptor.excludePathPatterns("/user/password/reset");
         addInterceptor.excludePathPatterns("/user/regist");
         addInterceptor.excludePathPatterns("/userLike/**");
         addInterceptor.excludePathPatterns("/user/auth/**");
