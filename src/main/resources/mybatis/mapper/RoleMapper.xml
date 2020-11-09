@@ -84,6 +84,10 @@
         <collection property="userList" ofType="User" column="user_id">
             <id column="user_id" property="id"/>
             <result column="sgname" property="sgname"/>
+            <result column="email" property="email"/>
+            <result column="description" property="description"/>
+            <result column="mobile" property="mobile"/>
+            <result column="departmentName" property="departmentName"/>
         </collection>
         <collection property="permissionList" ofType="RolePermission" column="role_id">
             <id column="permissionId" property="id"/>
@@ -97,8 +101,9 @@
     </resultMap>
     <select id="findList" resultMap="RoleUserMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select r.id, r.name,r.image, r.block_id as blockId, b.name as blockName,b.enterprise_id as enterpriseId,r.update_time, r.create_time,  p.id as permissionId, p.role_id, p.class_id, c.name as className, c.module_id, m.name as moduleName, p.operation, u.sgname, u.user_id as user_id
-        from role r left join user_role ur on r.id=ur.role_id left join user_profile u on ur.user_id=u.user_id
+        select r.id, r.name,r.image, r.block_id as blockId, b.name as blockName,b.enterprise_id as enterpriseId,r.update_time, r.create_time,  p.id as permissionId, p.role_id, p.class_id, c.name as className, c.module_id, m.name as moduleName, p.operation,
+        up.sgname, up.user_id as user_id,up.description, up.email,u.mobile, d.name as departmentName
+        from role r left join user_role ur on r.id=ur.role_id left join user_profile up on ur.user_id=up.user_id left join user u on up.user_id=u.id left join department_user du on du.user_id=ur.user_id left join department d on du.department_id=d.id
         left join block b on r.block_id=b.id LEFT JOIN role_permission p on p.role_id=r.id
         left join block_class c on p.class_id=c.id left join block_module m on c.module_id=m.id
         where r.delete_flg=0
@@ -127,8 +132,20 @@
         where delete_flg=0
         order by name
     </select>
-    <select id="findAll" resultType="Role">
-        select * from role order by name
+    <select id="findAll" resultMap="RoleUserMap">
+        select r.id, r.name,r.image, r.block_id as blockId, b.name as blockName,b.enterprise_id as enterpriseId,r.update_time, r.create_time,  p.id as permissionId, p.role_id, p.class_id, c.name as className, c.module_id, m.name as moduleName, p.operation,
+        up.sgname, up.user_id as user_id,up.description, up.email,u.mobile, d.name as departmentName
+        from role r left join user_role ur on r.id=ur.role_id left join user_profile up on ur.user_id=up.user_id left join user u on up.user_id=u.id left join department_user du on du.user_id=ur.user_id left join department d on du.department_id=d.id
+        left join block b on r.block_id=b.id LEFT JOIN role_permission p on p.role_id=r.id
+        left join block_class c on p.class_id=c.id left join block_module m on c.module_id=m.id
+        where r.delete_flg=0
+        <if test="blockId != null">
+            and r.block_id = #{blockId}
+        </if>
+        <if test="enterpriseId != null">
+            and r.enterprise_id = #{enterpriseId}
+        </if>
+        order by id desc
     </select>
     <select id="findOne" resultMap="RolePermissionMap">
         select r.id, r.name, r.image,r.block_id,r.update_time, r.create_time, p.id as permissionId, p.role_id, p.class_id, p.operation

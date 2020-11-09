@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/task")
 @Slf4j
@@ -30,7 +32,7 @@ public class TaskController extends BaseController {
 
     @ApiOperation(value = "新增任务", notes = "新增任务")
     @PostMapping("")
-    public BaseResponse add(@RequestBody @ApiParam(required=true) TaskParam param) {
+    public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) TaskParam param) {
         return service.add(param);
     }
 
@@ -56,6 +58,14 @@ public class TaskController extends BaseController {
         return service.findAllTasks(query);
     }
 
+
+    @ApiOperation(value = "触发任务过期提醒", notes = "触发任务过期提醒")
+    @GetMapping("refreshExpiredTaskStatusAndNotify")
+    public BaseResponse refreshExpiredTaskStatusAndNotify() {
+        service.refreshExpiredTaskStatusAndNotify();
+        return BaseResponse.builder().build();
+    }
+
     @ApiOperation(value = "任务日历", notes = "任务日历")
     @GetMapping("calendar")
     public BaseResponse findCalendar(@ApiParam TaskQuery query) {
@@ -67,6 +77,12 @@ public class TaskController extends BaseController {
     @DeleteMapping("{taskId}")
     public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer taskId) {
         return service.delete(taskId);
+    }
+
+    @ApiOperation(value = "删除当前激活中的任务", notes = "后台调用")
+    @DeleteMapping("deleteCurrentTask")
+    public BaseResponse delete(@ApiParam TaskParam param) {
+        return service.deleteCurrentTask(param);
     }
 
 }

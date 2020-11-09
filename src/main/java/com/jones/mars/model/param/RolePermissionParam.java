@@ -2,6 +2,7 @@ package com.jones.mars.model.param;
 
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -10,11 +11,16 @@ import java.util.Date;
 import java.util.List;
 
 @Data
+@Builder
 public class RolePermissionParam {
-  @ApiParam(hidden = true)
+  @ApiModelProperty(value="角色ID",name="roleId")
   private Integer roleId;
   @ApiParam(hidden = true)
   private Integer classId;
+  @ApiParam(hidden = true)
+  private Integer userId;
+  @ApiParam(hidden = true)
+  private Integer permissionId;
   @NotNull(message = "二级分类ID不能为空")
   @ApiModelProperty(value="二级分类ID",name="classIds")
   private List<Integer> classIds;

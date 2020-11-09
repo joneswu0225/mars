@@ -10,10 +10,25 @@
             role_id = #{roleId}, user_id=#{userId}, create_time=now(), update_time=now()
         </foreach>
     </insert>
-    <select id="findAll" parameterType="java.lang.Integer" resultType="UserRole">
+    <select id="findList" parameterType="UserRoleQuery" resultType="UserRole">
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select * from user_role where 1=1
-        <if test="role_id != null">
-            and role_id=#{role_id}
+        <if test="roleId != null">
+            and role_id=#{roleId}
+        </if>
+        order by id desc
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from user_role where 1=1
+        <if test="roleId != null">
+            and role_id=#{roleId}
+        </if>
+    </select>
+    <select id="findAll" parameterType="UserRoleQuery" resultType="UserRole">
+        select * from user_role where 1=1
+        <if test="roleId != null">
+            and role_id=#{roleId}
         </if>
     </select>
     <delete id="delete">

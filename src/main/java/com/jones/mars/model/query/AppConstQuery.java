@@ -11,4 +11,6 @@ import lombok.Data;
 public class AppConstQuery extends Query {
     @ApiModelProperty(value="常量名",name="name")
     private String name;
+    @ApiModelProperty(value="常量名",name="nameLike")
+    private String nameLike;
 }

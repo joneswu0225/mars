@@ -6,8 +6,9 @@
         values(#{enterpriseId}, #{userId}, now(), now());
     </insert>
     <select id="findEnterpriseUser" parameterType="java.lang.Integer" resultType="EnterpriseUser">
-        select eu.*, p.sgname as userSgname
+        select eu.*, p.sgname as userSgname, u.mobile, p.avatar,p.email, p.description
         from enterprise_user eu left join user_profile p on eu.user_id=p.user_id
+        left join user u on eu.user_id=u.id
         where enterprise_id=#{enterpriseId}
         order by id desc
     </select>

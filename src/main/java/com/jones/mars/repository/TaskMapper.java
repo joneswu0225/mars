@@ -13,4 +13,5 @@ public interface TaskMapper extends BaseMapper<Task> {
     Task findMaxVersionTask(Query query);
     Task findPrivateTask(Object query);
     Integer deleteCurrentTask(TaskParam param);
+    void updateExpiredTaskStatus();
 }

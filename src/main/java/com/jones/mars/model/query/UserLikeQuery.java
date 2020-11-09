@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
-public class UserLikeQuery extends BaseObject {
+public class UserLikeQuery extends Query {
     @NotBlank(message = "点赞目标的ID不能为空")
     @ApiModelProperty(value="点赞目标的ID",name="likeId")
     private Integer likeId;

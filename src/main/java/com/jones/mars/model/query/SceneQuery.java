@@ -13,6 +13,8 @@ public class SceneQuery extends Query {
     private Integer blockId;
     @ApiModelProperty(value="项目ID",name="projectId")
     private Integer projectId;
+    @ApiModelProperty(value="是否为公开的场景,0:非公开,1:公开",name="publicFlg")
+    private Integer publicFlg;
     @ApiModelProperty(value="一级分类ID",name="moduleId")
     private Integer moduleId;
     @ApiModelProperty(value="二级分类ID",name="classId")

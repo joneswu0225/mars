@@ -7,10 +7,25 @@
             (#{departmentId}, #{userId}, now(), now())
         </foreach>
     </insert>
-    <select id="findDepartmentUser" parameterType="java.lang.Integer" resultType="DepartmentUser">
-        select eu.*, p.sgname as userSgname
-        from department_user eu left join user_profile p on eu.user_id=p.user_id
+    <select id="findList" parameterType="java.lang.Integer" resultType="DepartmentUser">
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select du.*, p.sgname as userSgname
+        from department_user du left join user_profile p on du.user_id=p.user_id
         where department_id=#{departmentId}
+        order by id desc
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from department_user du
+        where department_id=#{departmentId}
+    </select>
+    <select id="findAll" parameterType="java.lang.Integer" resultType="DepartmentUser">
+        select du.*, p.sgname as userSgname
+        from department_user du left join user_profile p on du.user_id=p.user_id
+        where 1=1
+        <if test="departmentId != null">
+            and department_id=#{departmentId}
+        </if>
         order by id desc
     </select>
     <delete id="deleteByDepartmentParam">
@@ -28,6 +43,13 @@
             <if test="userId != null">
                 and user_id=#{userId}
             </if>
+        </if>
+        <!-- todo 仅限海事局项目　-->
+        <if test="userIds != null">
+            delete from department_user where user_id in (
+            <foreach collection="userIds" item="userId" index="index" separator=",">
+                #{userId}
+            </foreach>)
         </if>
     </delete>
 </mapper>

@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.SceneMapper" >
     <insert id="insert" parameterType="Scene" useGeneratedKeys="true" keyProperty="id">
-        insert into scene(`name`, `detail`, `code`,`block_id`, `image_id`, `location_x`, `location_y`)
-        values(#{name}, #{detail}, #{code}, #{blockId}, #{imageId}, #{locationX}, #{locationY})
+        insert into scene(`name`, `detail`, `code`,`block_id`,`public_flg`, `image_id`, `location_x`, `location_y`)
+        values(#{name}, #{detail}, #{code}, #{blockId}, #{publicFlg}, #{imageId}, #{locationX}, #{locationY})
     </insert>
-    <insert id="update" parameterType="Scene">
+    <update id="update" parameterType="Scene">
         update scene set id=#{id}
         <if test="name != null and name !=''">
             ,name = #{name}
@@ -15,6 +15,9 @@
         </if>
         <if test="imageId != null">
             ,image_id = #{imageId}
+        </if>
+        <if test="publicFlg != null">
+            ,public_flg = #{publicFlg}
         </if>
         <if test="locationY != null">
             ,location_y = #{locationY}
@@ -26,14 +29,15 @@
             ,scene_type_id = #{sceneTypeId}
         </if>
         where id=#{id}
-    </insert>
+    </update>
     <select id="findList" resultType="Scene" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select s.*,si.path as imageUrl
+        select s.*,si.path as imageUrl, bst.name as sceneTypeName
         <if test="projectId != null">
         , ps.seq
         </if>
         from scene s left join block_image si on s.image_id=si.id
+        left join block_scene_type bst on bst.id=s.scene_type_id
         <if test="projectId != null">
         left join project_scene ps on s.id=ps.scene_id
         </if>
@@ -43,6 +47,9 @@
         </if>
         <if test="blockId != null">
             and s.block_id = #{blockId}
+        </if>
+        <if test="publicFlg != null">
+            and s.public_flg = #{publicFlg}
         </if>
         <if test="sceneTypeId != null">
             and s.scene_type_id = #{sceneTypeId}
@@ -64,6 +71,9 @@
         <if test="projectId != null">
             and ps.project_id = #{projectId}
         </if>
+        <if test="publicFlg != null">
+            and s.public_flg = #{publicFlg}
+        </if>
         <if test="sceneTypeId != null">
             and s.scene_type_id = #{sceneTypeId}
         </if>
@@ -75,15 +85,19 @@
         </if>
     </select>
     <select id="findAllName" resultType="Scene" parameterType="Query">
-        select distinct(s.id), s.name, s.scene_type_id as sceneTypeId, s.code from scene s
+        select distinct(s.id), s.name, s.scene_type_id as sceneTypeId, bst.name as sceneTypeName, s.code from scene s
         left join project_scene ps on ps.scene_id = s.id
         left join project p on ps.project_id=p.id
+        left join block_scene_type bst on bst.id=s.scene_type_id
         where s.delete_flg=0
         <if test="blockId != null">
             and s.block_id = #{blockId}
         </if>
         <if test="projectId != null">
             and ps.project_id = #{projectId}
+        </if>
+        <if test="publicFlg != null">
+            and s.public_flg = #{publicFlg}
         </if>
         <if test="sceneTypeId != null">
             and s.scene_type_id = #{sceneTypeId}
@@ -97,17 +111,21 @@
         order by s.name
     </select>
     <select id="findAll" resultType="Scene" parameterType="Query">
-        select s.*,si.path as imageUrl
+        select s.*,si.path as imageUrl, bst.name as sceneTypeName
         <if test="projectId != null">
             , ps.seq
         </if>
         from scene s left join block_image si on s.image_id=si.id
+        left join block_scene_type bst on bst.id=s.scene_type_id
         <if test="projectId != null">
             left join project_scene ps on s.id=ps.scene_id
         </if>
         where s.delete_flg=0
         <if test="projectId != null">
             and ps.project_id = #{projectId}
+        </if>
+        <if test="publicFlg != null">
+            and s.public_flg = #{publicFlg}
         </if>
         <if test="sceneTypeId != null">
             and s.scene_type_id = #{sceneTypeId}

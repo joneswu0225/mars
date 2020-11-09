@@ -5,6 +5,7 @@ import com.jones.mars.model.DepartmentUser;
 import com.jones.mars.model.param.DepartmentParam;
 import com.jones.mars.model.param.DepartmentUserParam;
 import com.jones.mars.model.param.EnterpriseUserParam;
+import com.jones.mars.model.query.DepartmentQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.BaseMapper;
@@ -53,7 +54,7 @@ public class DepartmentService extends BaseService {
 
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse update(DepartmentParam param){
-        List<Integer> users = departmentUserMapper.findDepartmentUser(param.getDepartmentId()).parallelStream().map(p->p.getUserId()).collect(Collectors.toList());
+        List<Integer> users = departmentUserMapper.findAll(DepartmentQuery.builder().departmentId(param.getDepartmentId()).build()).parallelStream().map(p->p.getUserId()).collect(Collectors.toList());
         List<Integer> userIds = new ArrayList<>(users);
         // 传入的去掉已有的=仍需添加的
         param.getUserIds().removeAll(users);
@@ -70,19 +71,23 @@ public class DepartmentService extends BaseService {
     }
 
 
+    @Transactional
     public BaseResponse addDepartmentUser(DepartmentUserParam param){
+        //TODO 仅限海事局项目
+        departmentUserMapper.delete(DepartmentUserParam.builder().userIds(param.getUserIds()));
         departmentUserMapper.insert(param);
         return BaseResponse.builder().build();
     }
 
-    public BaseResponse removeDepartmentUser(DepartmentUser param){
+    public BaseResponse removeDepartmentUser(DepartmentUserParam param){
         departmentUserMapper.delete(param);
         return BaseResponse.builder().build();
     }
 
+
     public BaseResponse findOne(Integer departmentId){
         Department department = mapper.findOne(departmentId);
-        department.setUserList(departmentUserMapper.findDepartmentUser(departmentId));
+        department.setUserList(departmentUserMapper.findAll(DepartmentQuery.builder().departmentId(departmentId).build()));
         return BaseResponse.builder().data(department).build();
     }
 

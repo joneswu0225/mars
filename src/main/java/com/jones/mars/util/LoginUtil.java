@@ -18,7 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class LoginUtil {
     public static final String APP_AUTH = "authorization";
-    public static final String USER_MOBILE = "userId";
+    public static final String USER_MOBILE = "mobile";
+    public static final String USER_ID = "userId";
     public static String APP_DOMAIN;
     public static final int COOKIE_MAX_INACTIVE_INTERVAL = 86400;
     public static LoginUtil INSTANCE = null;
@@ -99,8 +100,13 @@ public class LoginUtil {
         mobileCookie.setPath("/");
         mobileCookie.setMaxAge(3600*24*1000);
         mobileCookie.setDomain(APP_DOMAIN);
+        Cookie userIdCookie =new Cookie(USER_ID, user.getId().toString());
+        userIdCookie.setPath("/");
+        userIdCookie.setMaxAge(3600*24*1000);
+        userIdCookie.setDomain(APP_DOMAIN);
         getResponse().addCookie(cookie);
         getResponse().addCookie(mobileCookie);
+        getResponse().addCookie(userIdCookie);
 //        getResponse().addHeader("Set-cookie", "authorization=" + authorization + ";domain=vr2shipping.com;path=/");
         setLoginUser(authorization, user);
     }

@@ -12,6 +12,11 @@ import javax.annotation.PostConstruct;
 public class CommonConstant {
     public static final int PLATEFROM = 1;
     public static final int NOPLATEFROM = 0;
+    public static final String APP_SOURCE_FIELD = "App-Source";
+    public static final String APP_SOURCE_ADMIN = "ADMIN";
+    public static final String APP_SOURCE_H5 = "H5";
+    public static final String APP_SOURCE_PC = "PC";
+    public static final String APP_SOURCE_WEIXIN = "WEIXIN";
     public static String APP_COOKIE_DOMAIN;
 
     @Value("${app.cookie.domain:chickai-tech.cn}")

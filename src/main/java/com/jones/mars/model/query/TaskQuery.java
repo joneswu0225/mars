@@ -2,6 +2,7 @@ package com.jones.mars.model.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,6 +19,8 @@ public class TaskQuery extends Query {
     private Integer projectId;
     @ApiModelProperty(value="任务状态",name="status")
     private Integer status;
+    @ApiModelProperty(value="任务状态列表",name="statusIn")
+    private Integer[] statusIn;
     @ApiModelProperty(value="任务类型",name="type")
     private String type;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -26,4 +29,8 @@ public class TaskQuery extends Query {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value="结束日期",name="endDate")
     private Date endDate;
+    @ApiParam(hidden = true)
+    private Date expireDateLt;
+    @ApiParam(hidden = true)
+    private Integer currentFlg;
 }

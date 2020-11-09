@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.valueextraction.UnwrapByDefault;
@@ -19,8 +20,10 @@ public class TaskParam extends BaseObject {
   private String name;
   @ApiModelProperty(value="任务详情",name="detail")
   private String detail;
+  @DateTimeFormat(pattern="yyyy-MM-dd")
   @ApiModelProperty(value="开始时间",name="startDate")
   private Date startDate;
+  @DateTimeFormat(pattern="yyyy-MM-dd")
   @ApiModelProperty(value="到期时间",name="startDate")
   private Date expireDate;
   @NotNull(message = "任务类型不能为空")
@@ -28,6 +31,7 @@ public class TaskParam extends BaseObject {
   private String type = TaskType.PROJECT_MODIFY.name();
   @ApiModelProperty(value="模块ID",name="blockId")
   private Integer blockId;
+  @NotNull(message = "项目ID不能为空")
   @ApiModelProperty(value="项目ID",name="projectId")
   private Integer projectId;
   @ApiParam(hidden = true)
@@ -46,5 +50,7 @@ public class TaskParam extends BaseObject {
   private Integer createBy;
   @ApiParam(hidden = true)
   private Integer updateBy;
+  @ApiParam(hidden = true)
+  private Integer id;
 }
 

@@ -18,7 +18,7 @@ public class ExceptionProcess {
     @ExceptionHandler(MultipartException.class)
     @ResponseBody
     public BaseResponse handleAll(Throwable t){
-//        log.error("文件上传失败", t);
+        log.error("文件上传失败", t);
         return BaseResponse.builder().code(ErrorCode.UPLOAD_FAILED).data(t.getMessage()).build();
     }
 }

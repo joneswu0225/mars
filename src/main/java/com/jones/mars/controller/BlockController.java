@@ -66,7 +66,7 @@ public class BlockController extends BaseController {
     public BaseResponse update(
             @PathVariable Integer blockId,
             @RequestBody @ApiParam(required=true) BlockParam param) {
-//        param.setOperatorId(getLoginUser().getId());
+        param.setOperatorId(getLoginUser().getId());
         param.setId(blockId);
         return service.update(param);
     }

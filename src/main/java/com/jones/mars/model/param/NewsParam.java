@@ -16,6 +16,8 @@ import java.util.Date;
 public class NewsParam extends BaseObject {
     @ApiModelProperty(value="内容url",name="contentUrl")
     private String contentUrl;
+    @ApiModelProperty(value="内容html",name="contentHtml")
+    private String contentHtml;
     @NotBlank(message = "作者不能为空")
     @ApiModelProperty(value="作者",name="author")
     private String author;
@@ -29,9 +31,15 @@ public class NewsParam extends BaseObject {
     @NotBlank(message = "标题不能为空")
     @ApiModelProperty(value = "标题",name="title")
     private String title;
+    @ApiModelProperty(value = "机构",name="institution")
+    private String institution;
     @NotBlank(message = "封面图片不能为空")
     @ApiModelProperty(value = "封面图片URL",name="imageUrl")
     private String imageUrl;
+    @ApiModelProperty(value = "是否置顶",name="topFlg")
+    private String topFlg;
+    @ApiParam(hidden = true)
+    private Integer status;
 
 }
 

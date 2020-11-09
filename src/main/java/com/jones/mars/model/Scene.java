@@ -10,7 +10,11 @@ import java.util.List;
 @Data
 @Builder
 public class Scene extends BaseObject {
+    public static final int UNPUBLIC = 0;
+    public static final int PUBLIC = 1;
+
     private Integer sceneTypeId;
+    private String sceneTypeName;
     private String code;
     private String name;
     private String detail;
@@ -20,6 +24,7 @@ public class Scene extends BaseObject {
     private Float locationX;
     private Float locationY;
     private Integer seq;
+    private Integer publicFlg = UNPUBLIC;
     private List<Hotspot> hotspots = new ArrayList<>();
 
 //    public static Scene.SceneBuilder sceneBuilder(SceneParam param){

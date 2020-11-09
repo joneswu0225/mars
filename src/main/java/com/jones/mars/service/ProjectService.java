@@ -3,11 +3,13 @@ package com.jones.mars.service;
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.*;
 import com.jones.mars.model.constant.CommonConstant;
+import com.jones.mars.model.constant.TaskType;
 import com.jones.mars.model.param.*;
 import com.jones.mars.model.query.*;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.*;
 import com.jones.mars.util.LoginUtil;
+import com.jones.mars.util.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +42,13 @@ public class ProjectService extends BaseService {
     private ProjectSceneMapper projectSceneMapper;
     @Autowired
     private HotspotMapper hotspotMapper;
-    @Value("${app.public.block.id}")
+    @Value("${app.public.block.id:3}")
     private Integer publicBlockId;
 
     @Autowired
     private MessageService service;
+    @Autowired
+    private ProjectUserService projectUserService;
 
     @Override
     public BaseMapper getMapper(){
@@ -89,8 +93,42 @@ public class ProjectService extends BaseService {
         return BaseResponse.builder().data(result).build();
     }
 
+
+    public ErrorCode projectModifyAuthError(Integer projectId){
+        Project project = mapper.findOne(projectId);
+        User loginUser = LoginUtil.getInstance().getUser();
+        if(loginUser.getUserType().equals(User.COMMON)){
+            // 被取消编辑授权的也要报错
+            List<RolePermission> permissions = rolePermissionMapper.findAll(RolePermissionQuery.builder().operation(RolePermission.CREATE).classId(project.getClassId()).userId(loginUser.getId()).build());
+            if(permissions.size() == 0){
+                log.info("用户[ %s ] 因无编辑权限无法修改项目信息", loginUser.getMobile());
+                return ErrorCode.AUTH_PROJECT_EDIT_UNAUTH;
+            }
+            Integer count = projectUserMapper.findCount(ProjectUserQuery.builder().projectId(project.getId()).userId(loginUser.getId()).build());
+            if(count == 0){
+                log.info("用户[ %s ] 因非共建人无法修改项目信息", loginUser.getMobile());
+                return ErrorCode.AUTH_PROJECT_EDIT_NOTPARTNER;
+            }
+        } else if(loginUser.getUserType().equals(User.ENTMANAGER)) {
+            List<Integer> enterpriseIds = loginUser.getEnterprises().stream().map(p->p.getId()).collect(Collectors.toList());
+            if(!enterpriseIds.contains(project.getOriEnterpriseId())) {
+                log.info("用户[ %s ] 因非该企业管理员无法修改项目信息", loginUser.getMobile());
+                return ErrorCode.AUTH_PROJECT_EDIT_UNAUTH;
+            }
+        }
+        return null;
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse update(ProjectParam param) {
+//        ErrorCode projectModifyAuthError = projectModifyAuthError(param.getId());
+//        if(projectModifyAuthError != null){
+//            return BaseResponse.builder().code(projectModifyAuthError).build();
+//        }
+        Project project = mapper.findOne(param.getId());
+        if(equals(project.getStatus().equals(Project.ONSHELF))){
+            return BaseResponse.builder().code(ErrorCode.PROJECT_MODIFY_DENIED_PUBLISHED).build();
+        }
         log.info("更新项目{} {}", param.getId(), param.getName());
         param.setStatus(Project.EDITIND);
         mapper.update(param);
@@ -120,8 +158,13 @@ public class ProjectService extends BaseService {
      */
     @Transactional
     public BaseResponse delete(Integer projectId){
+//        ErrorCode projectModifyAuthError = projectModifyAuthError(projectId);
+//        if(projectModifyAuthError != null){
+//            return BaseResponse.builder().code(projectModifyAuthError).build();
+//        }
         if(mapper.findOne(projectId).getStatus() == Project.CREATING) {
             blockProjectMapper.delete(projectId);
+            taskMapper.deleteCurrentTask(TaskParam.builder().projectId(projectId).currentFlg(Task.CURRENT_TASK).build());
             mapper.delete(projectId);
             return BaseResponse.builder().build();
         } else {
@@ -137,6 +180,18 @@ public class ProjectService extends BaseService {
     public BaseResponse allName(Query query){
         List<Object> list = mapper.findAllName(query);
         return BaseResponse.builder().data(list).build();
+    }
+
+    public BaseResponse findProjectUserValidPartnerPage(RolePermissionQuery query){
+        List<ProjectUser> userList = rolePermissionMapper.findGrantedUserInfoList(query);
+        Integer count = rolePermissionMapper.findGrantedUserInfoCount(query);
+        Page<ProjectUser> userPage = new Page(query, count, userList);
+        return BaseResponse.builder().data(userPage).build();
+    }
+
+    public BaseResponse findProjectUserValidPartner(RolePermissionQuery query){
+        List<ProjectUser> userList = rolePermissionMapper.findGrantedUserInfoAll(query);
+        return BaseResponse.builder().data(userList).build();
     }
 
     //TODO split authority
@@ -161,7 +216,7 @@ public class ProjectService extends BaseService {
             }
         }
         if(loginUser != null){
-            List<ProjectUser> projectUsers = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).build());
+            List<ProjectUser> projectUsers = projectUserService.findAllData(ProjectUserQuery.builder().projectId(projectId).build());
             project.setUserList(projectUsers);
         }
         List<Hotspot> attachments = hotspotMapper.findAllByQuery(HotspotQuery.builder().projectId(projectId).type(Hotspot.TYPE_ATTACHMENT).build());
@@ -185,8 +240,8 @@ public class ProjectService extends BaseService {
     }
 
     @Transactional
-    public BaseResponse deleteUser(ProjectUser param){
-        //TODO 删除任务时区分任务类型
+    public BaseResponse deleteUser(ProjectUserParam param){
+        //删除任务时区分任务类型
         taskMapper.deleteCurrentTask(TaskParam.builder().currentFlg(Task.CURRENT_TASK).projectId(param.getProjectId()).userId(param.getUserId()).build());
         projectUserMapper.delete(param);
         return BaseResponse.builder().build();
@@ -207,6 +262,7 @@ public class ProjectService extends BaseService {
         return response;
     }
 
+    @Transactional
     public BaseResponse verifyProject(Integer projectId, Boolean isPass, String reason){
         BaseResponse response  = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);
@@ -214,6 +270,11 @@ public class ProjectService extends BaseService {
             List<Integer> oriUserIds = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
             if (isPass) {
                 response = onshelfProject(projectId, false);
+                // 获取项目当前处理中的任务
+                List<Task> tasks = taskMapper.findAll(TaskQuery.builder().projectId(projectId).currentFlg(Task.CURRENT_TASK).build());
+                for(Task task: tasks){
+                    taskMapper.update(TaskParam.builder().id(task.getId()).status(Task.FINISHED).build());
+                }
                 service.sendVerifyPassProject(project.getName(), oriUserIds);
             } else {
                 Project updateProject = Project.builder().status(Project.EDITIND).reason(reason).build();
@@ -234,9 +295,10 @@ public class ProjectService extends BaseService {
             project = Project.builder().status(Project.ONSHELF).publishDate(new Date()).build();
             project.setId(projectId);
             mapper.update(project);
-            if (publicFlag != null && publicFlag) {
-                blockProjectMapper.insert(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
-            }
+            // 往公共企业模块中插入该项目的引用
+//            if (publicBlockId != null && publicFlag != null && publicFlag) {
+//                blockProjectMapper.insert(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
+//            }
         } else {
             response.setErrorCode(ErrorCode.PROJECT_VERIFY_ONSHELFED);
         }
@@ -262,7 +324,7 @@ public class ProjectService extends BaseService {
         Project project = Project.builder().publicFlg(Project.UNPUBLIC).build();
         project.setId(projectId);
         mapper.update(project);
-        blockProjectMapper.delete(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
+//        blockProjectMapper.delete(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
         return BaseResponse.builder().build();
     }
     @Transactional
@@ -270,7 +332,7 @@ public class ProjectService extends BaseService {
         Project project = Project.builder().publicFlg(Project.PUBLIC).build();
         project.setId(projectId);
         mapper.update(project);
-        blockProjectMapper.insert(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
+//        blockProjectMapper.insert(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
         return BaseResponse.builder().build();
     }
 

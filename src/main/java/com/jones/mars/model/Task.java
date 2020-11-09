@@ -32,6 +32,7 @@ public class Task extends BaseObject {
     private Integer currentFlg;
     private Integer deleteFlg;
     private Integer version;
+    private Integer createBy;
     private Date createTime;
     private Date updateTime;
     private String creatorSgname;

@@ -48,7 +48,7 @@
         left join block_module m on p.module_id = m.id left join block_class c on p.class_id=c.id
         left join enterprise e on p.ori_enterprise_id = e.id
         left join user_profile u on p.creator_id = u.user_id
-        <if test="operation != null and userId != null and operation==1">
+        <if test="operation != null and userId != null">
             left join project_user pu on pu.project_id=p.id
         </if>
         where p.delete_flg=0
@@ -79,6 +79,9 @@
         <if test="status != null">
             and p.status=#{status}
         </if>
+        <if test="publicFlg != null">
+            and p.public_flg=#{publicFlg}
+        </if>
         <if test="publishFlg != null and publishFlg==1">
             and p.status=3
         </if>
@@ -92,7 +95,10 @@
         <if test="operation != null and userId !=null and operation==1">
             and pu.user_id=#{userId} and p.status &lt;=1
         </if>
-        order by p.id desc
+        <if test="operation != null and userId !=null and operation==0">
+            and pu.user_id=#{userId} and p.status =3
+        </if>
+        order by p.update_time desc, p.id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
@@ -100,7 +106,7 @@
         from project p left join block_project bp on bp.project_id=p.id left join block b on bp.block_id = b.id
         left join block_module m on p.module_id = m.id left join block_class c on p.class_id=c.id
         left join enterprise e on p.ori_enterprise_id = e.id
-        <if test="operation != null and userId != null and operation==1">
+        <if test="operation != null and userId != null">
             left join project_user pu on pu.project_id=p.id
         </if>
         where p.delete_flg=0
@@ -128,6 +134,9 @@
         <if test="status != null">
             and p.status=#{status}
         </if>
+        <if test="publicFlg != null">
+            and p.public_flg=#{publicFlg}
+        </if>
         <if test="publishFlg != null and publishFlg==1">
             and p.status=3
         </if>
@@ -140,6 +149,9 @@
         </if>
         <if test="operation != null and userId !=null and operation==1">
             and pu.user_id=#{userId} and p.status &lt;=1
+        </if>
+        <if test="operation != null and userId !=null and operation==0">
+            and pu.user_id=#{userId} and p.status =3
         </if>
     </select>
     <select id="findAllName" resultType="Project" parameterType="Query">
@@ -165,7 +177,7 @@
         left join block_module m on p.module_id = m.id left join block_class c on p.class_id=c.id
         left join enterprise e on p.ori_enterprise_id = e.id
         left join user_profile u on p.creator_id = u.user_id
-        <if test="operation != null and userId != null and operation==1">
+        <if test="operation != null and userId != null">
             left join project_user pu on pu.project_id=p.id
         </if>
         where p.delete_flg=0
@@ -203,6 +215,9 @@
         <if test="status != null">
             and p.status=#{status}
         </if>
+        <if test="publicFlg != null">
+            and p.public_flg=#{publicFlg}
+        </if>
         <if test="publishFlg != null and publishFlg==1">
             and p.status=3
         </if>
@@ -216,6 +231,9 @@
         <if test="operation != null and userId !=null and operation==1">
             and pu.user_id=#{userId} and p.status &lt;=1
         </if>
+        <if test="operation != null and userId !=null and operation==0">
+            and pu.user_id=#{userId} and p.status =3
+        </if>
         order by p.id desc
     </select>
     <select id="findOne" resultType="Project" parameterType="ProjectQuery">
@@ -227,6 +245,6 @@
         where p.id=#{id}
     </select>
     <update id="delete">
-        update project set delete_flg=1 where id=#{id}
+        update project set delete_flg=1, update_time=now() where id=#{id}
     </update>
 </mapper>

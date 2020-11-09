@@ -11,8 +11,13 @@
             manager_flg = <if test="managerFlg == null">0</if><if test="managerFlg!=null">#{managerFlg}</if>
         </foreach>
     </insert>
+    <!-- TODO 所属部门　department_user 在一对多情况下会有隐患，list与count的数量不匹配 -->
     <select id="findList" resultType="ProjectUser">
-        select pu.*, up.sgname from project_user pu left join user_profile up on pu.user_id=up.user_id
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select pu.*,u.mobile, up.sgname, up.email, up.description, d.name as departmentName from project_user pu
+        left join user_profile up on pu.user_id=up.user_id left join user u on pu.user_id=u.id
+        left join department_user du on du.user_id=pu.user_id
+        left join department d on du.department_id=d.id
         where 1=1
         <if test="projectId != null">
             and project_id=#{projectId}
@@ -27,7 +32,52 @@
         <if test="managerFlg != null">
             and manager_flg=#{managerFlg}
         </if>
-        order by manager_flg desc
+        order by manager_flg desc, pu.user_id
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from project_user pu
+        left join user_profile up on pu.user_id=up.user_id left join user u on pu.user_id=u.id
+        left join department_user du on du.user_id=pu.user_id
+        left join department d on du.department_id=d.id
+        where 1=1
+        <if test="projectId != null">
+            and pu.project_id=#{projectId}
+        </if>
+        <if test="userId != null">
+            and pu.user_id=#{userId}
+        </if>
+        <if test="projectIds != null">
+            and pu.project_id in (
+            <foreach collection="projectIds" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="managerFlg != null">
+            and manager_flg=#{managerFlg}
+        </if>
+    </select>
+    <select id="findAll" resultType="ProjectUser">
+        select pu.*,u.mobile, up.sgname, up.email, up.description, d.name as departmentName from project_user pu
+        left join user_profile up on pu.user_id=up.user_id left join user u on pu.user_id=u.id
+        left join department_user du on du.user_id=pu.user_id
+        left join department d on du.department_id=d.id
+        where 1=1
+        <if test="projectId != null">
+            and project_id=#{projectId}
+        </if>
+        <if test="projectIds != null">
+            and project_id in (
+            <foreach collection="projectIds" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="managerFlg != null">
+            and manager_flg=#{managerFlg}
+        </if>
+        order by manager_flg desc, pu.user_id
     </select>
     <update id="update" parameterType="ProjectUserParam">
         update project_user set manager_flg=#{managerFlg} where project_id=#{projectId}
@@ -36,22 +86,35 @@
         </if>
     </update>
     <delete id="delete">
-        delete from project_user where project_id=#{projectId} and user_id=#{userId}
+        delete from project_user where
+        <if test="ids != null">
+            id in (
+                <foreach collection="ids" item="item" separator=",">
+                    #{item}
+                </foreach>
+            )
+        </if>
+        <if test="projectId != null">
+            project_id=#{projectId} and user_id=#{userId}
+        </if>
     </delete>
     <delete id="deleteByEnterpriseUser">
         delete from project_user where project_id in (select id from project where ori_enterprise_id=#{enterprise_id}) and user_id=#{userId}
     </delete>
-    <delete id="deleteByUserRole" parameterType="UserRoleParam">
-        delete from project_user pu left join project p on pu.project_id=p.id where pu.user_id=#{userId} and p.class_id in (
-        select DISTINCT(rpo.class_id) as class_id from role_permission rpo left join user_role uro on uro.role_id=rpo.role_id where rpo.class_id not in (
-        SELECT DISTINCT(rp.class_id) as class_id FROM user_role ur left join role_permission rp on ur.role_id=rp.role_id where ur.user_id=#{userId} and ur.role_id!=#{roleId} and operation=1
-        )and uro.user_id=#{userId} and uro.role_id=#{roleId} and operation=1)
-    </delete>
-    <delete id="deleteByRolePermission" parameterType="RolePermissionParam">
-        select * from project_user pu left join project p on pu.project_id=p.id where p.class_id=#{classId} and pu.user_id in (
-        select DISTINCT(uro.user_id) as class_id from role_permission rpo left join user_role uro on uro.role_id=rpo.role_id where uro.user_id not in (
-        SELECT DISTINCT(ur.user_id) as class_id FROM user_role ur left join role_permission rp on ur.role_id=rp.role_id where rp.class_id=#{classId} and ur.role_id!=#{roleId} and operation=1
-        )and rpo.class_id=#{classId} and uro.role_id=#{roleId} and operation=1)
-    </delete>
+
+    <select id="findProjectUserByRolePermission" resultType="ProjectUser" parameterType="RolePermissionParam">
+        SELECT DISTINCT pu.id, pu.project_id, pu.user_id FROM `role_permission` rp , role r ,user_role ur,project p, project_user pu
+        where rp.role_id=r.id and ur.role_id=rp.role_id and p.class_id=rp.class_id and rp.operation=1 and
+        pu.project_id=p.id and pu.user_id=ur.user_id
+        <if test="roleId != null">
+            and r.id=#{roleId}
+        </if>
+        <if test="userId != null">
+            and pu.user_id=#{userId}
+        </if>
+        <if test="permissionId != null">
+            and rp.id=#{permissionId}
+        </if>
+    </select>
 
 </mapper>

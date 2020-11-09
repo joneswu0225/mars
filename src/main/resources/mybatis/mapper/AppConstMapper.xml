@@ -8,13 +8,27 @@
     <insert id="update" parameterType="AppConst">
         update app_const set name = #{name}, value=#{value}, detail=#{detail} where id=#{id}
     </insert>
+    <update id="updateAppConstSeq" parameterType="AppConstParam">
+        update app_const set seq=case
+        <foreach collection="appConstIds" item="appConstId" index="index">
+            when id=#{appConstId} then #{index}
+        </foreach>
+        end
+        where name=#{name} and id in
+        <foreach collection="appConstIds" item="appConstId" index="index" separator="," open="(" close=")">
+            #{appConstId}
+        </foreach>
+    </update>
     <select id="findList" resultType="AppConst" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select * from app_const where 1=1
         <if test="name != null and name !=''">
             and name = #{name}
         </if>
-        order by name
+        <if test="nameLike != null and nameLike !=''">
+            and name like concat('%', #{nameLike}, '%')
+        </if>
+        order by name,seq
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <resultMap id="AppConstMap" type="AppConst" >
@@ -41,7 +55,7 @@
         <if test="name != null and name !=''">
             and name = #{name}
         </if>
-        order by name
+        order by name,seq,id
     </select>
     <select id="findOne" resultType="AppConst">
         select * from app_const where id=#{id}

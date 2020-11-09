@@ -61,12 +61,16 @@ public class DateUtil {
 
 	}
 
-	public static String dateToStr(Date date) {
-		return dateToStr(date, DEFAULT_FORMAT.get());
+	public static String dateToDateTimeStr(Date date) {
+		return dateToDateTimeStr(date, DEFAULT_FORMAT.get());
 	}
 
-	public static String dateToStr(Date date, DateFormat dateFormat) {
+	public static String dateToDateTimeStr(Date date, DateFormat dateFormat) {
 		return dateFormat.format(date);
+	}
+
+	public static String dateToDateStr(Date date) {
+		return dateToDateTimeStr(date, DAY_FORMAT.get());
 	}
 
 	public static int daysBetween(Date smdate, Date bdate) throws ParseException {

@@ -4,10 +4,12 @@ import com.jones.mars.model.DepartmentUser;
 import com.jones.mars.model.param.DepartmentParam;
 import com.jones.mars.model.param.DepartmentUserParam;
 import com.jones.mars.model.query.DepartmentQuery;
+import com.jones.mars.model.query.DepartmentUserQuery;
 import com.jones.mars.model.query.EnterpriseUserQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.DepartmentService;
+import com.jones.mars.service.DepartmentUserService;
 import com.jones.mars.service.EnterpriseUserService;
 import com.jones.mars.util.LoginUtil;
 import io.swagger.annotations.Api;
@@ -29,12 +31,20 @@ public class DepartmentController extends BaseController {
     @Autowired
     private DepartmentService service;
     @Autowired
+    private DepartmentUserService departmentUserService;
+    @Autowired
     private EnterpriseUserService enterpriseUserService;
 
     @ApiOperation(value = "部门列表", notes = "部门列表")
     @GetMapping("")
     public BaseResponse list(@ApiParam DepartmentQuery query) {
         return service.findByPage(query);
+    }
+
+    @ApiOperation(value = "部门列表", notes = "部门列表")
+    @GetMapping("all")
+    public BaseResponse all(@ApiParam DepartmentQuery query) {
+        return service.findAll(query);
     }
 
     @ApiOperation(value = "新增部门", notes = "新增部门")
@@ -66,6 +76,23 @@ public class DepartmentController extends BaseController {
         return service.delete(departmentId);
     }
 
+    @ApiOperation(value = "部门人员列表", notes = "")
+    @GetMapping("{departmentId}/user")
+    public BaseResponse departmentUser(
+            @PathVariable Integer departmentId,
+            @ApiParam(required=true) DepartmentUserQuery query) {
+        query.setDepartmentId(departmentId);
+        return departmentUserService.findByPage(query);
+    }
+
+    @ApiOperation(value = "部门所有人员列表", notes = "")
+    @GetMapping("{departmentId}/user/all")
+    public BaseResponse departmentUserAll(
+            @PathVariable Integer departmentId) {
+        DepartmentUserQuery query = DepartmentUserQuery.builder().departmentId(departmentId).build();
+        return departmentUserService.findAll(query);
+    }
+
     @ApiOperation(value = "部门加人", notes = "")
     @PostMapping("{departmentId}/user")
     public BaseResponse addUser(
@@ -79,7 +106,7 @@ public class DepartmentController extends BaseController {
     @DeleteMapping("{departmentId}/user/{userId}")
     public BaseResponse removeUser(@PathVariable @ApiParam(required=true) Integer departmentId,
                                    @PathVariable @ApiParam(required=true) Integer userId) {
-        return service.removeDepartmentUser(DepartmentUser.builder().departmentId(departmentId).userId(userId).build());
+        return service.removeDepartmentUser(DepartmentUserParam.builder().departmentId(departmentId).userId(userId).build());
     }
 
 }

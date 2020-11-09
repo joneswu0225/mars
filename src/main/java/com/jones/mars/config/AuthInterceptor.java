@@ -1,6 +1,11 @@
 package com.jones.mars.config;
 
+import com.alibaba.fastjson.JSONObject;
+import com.jones.mars.constant.ErrorCode;
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.UserLoginParam;
+import com.jones.mars.object.BaseResponse;
+import com.jones.mars.service.ProjectService;
 import com.jones.mars.service.UserService;
 import com.jones.mars.util.LoginUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -18,8 +24,10 @@ import sun.rmi.runtime.Log;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
@@ -29,16 +37,30 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
 
     @Autowired
     private UserService service;
+    @Autowired
+    private ProjectService projectService;
     private static CountDownLatch tets = new CountDownLatch(1);
     @Bean
     public SecurityInterceptor getSecurityInterceptor() {
         return new SecurityInterceptor();
     }
+    @Bean
+    public ProjectModifyInterceptor getProjectModifyInterceptor() {
+        return new ProjectModifyInterceptor();
+    }
+    @Bean
+    public TotalInterceptor getTotalInterceptor() {
+        return new TotalInterceptor();
+    }
 
     public void addInterceptors(InterceptorRegistry registry) {
         InterceptorRegistration addInterceptor = registry.addInterceptor(getSecurityInterceptor());
+        InterceptorRegistration projectAuthInterceptor = registry.addInterceptor(getProjectModifyInterceptor());
+        InterceptorRegistration totalInterceptor = registry.addInterceptor(getTotalInterceptor());
         // 拦截配置
         addInterceptor.addPathPatterns("/**");
+        projectAuthInterceptor.addPathPatterns("/project/**");
+        totalInterceptor.addPathPatterns("/**");
 
         // 排除配置
         addInterceptor.excludePathPatterns("/error");
@@ -56,6 +78,7 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
         addInterceptor.excludePathPatterns("/user/logout");
         addInterceptor.excludePathPatterns("/pano**");
         addInterceptor.excludePathPatterns("/file/**");
+        addInterceptor.excludePathPatterns("/jsrecord/**");
         addInterceptor.excludePathPatterns("/companyJoin/**");
         addInterceptor.excludePathPatterns("/home/**");
         addInterceptor.excludePathPatterns("/xunfei/**");
@@ -66,6 +89,18 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
 
     }
 
+    private class TotalInterceptor extends HandlerInterceptorAdapter {
+        @Override
+        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+                throws Exception {
+            String appSource = request.getHeader(CommonConstant.APP_SOURCE_FIELD);
+            log.info("appSource: " + appSource);
+            if("/user/login".equals(request.getRequestURI())){
+                request.setAttribute("appSource", appSource);
+            }
+            return true;
+        }
+    }
     private class SecurityInterceptor extends HandlerInterceptorAdapter {
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -88,8 +123,8 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
             if (request.getCookies() == null || LoginUtil.getInstance().getUser() == null) {
                 log.info("request address: " + request.getRemoteAddr());
                 if("127.0.0.1".equals(getIp(request)) || (request.getHeader("referer") != null && request.getHeader("referer").contains("swagger-ui.html"))){
-                    log.info("当前请求为内部接口请求，且无登录状态，设置默认用户为：13564332436");
-                    UserLoginParam user = UserLoginParam.builder().mobile("13564332436").password("12345678").build();
+                    log.info("当前请求为内部接口请求，且无登录状态，设置默认用户为：18801908791");
+                    UserLoginParam user = UserLoginParam.builder().mobile("18801908791").password("1234567801").build();
                     request.setAttribute("authorization", ((Map<String, String>)service.doLogin(user).getData()).get("authorization"));
                 } else {
                     log.info("当前用户未登陆");
@@ -100,17 +135,35 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
                 log.info("当前访问： {}, 用户：{}", url, LoginUtil.getInstance().getUser().getMobile());
             }
 
-            //跳转登录
-//             has login, handle permission
-//            if (hasPermission(handler)) {
-//                return true;
-//            } else {
-//                response.sendError(HttpStatus.FORBIDDEN.value(), "没有权限");
-//                log.warn("User {} are trying to access {}, but (s)he has no permission", LoginUtil.getInstance().getUser().getMobile(), url);
-//                return false;
-//            }
             return true;
         }
+    }
+
+    private class ProjectModifyInterceptor extends HandlerInterceptorAdapter {
+        @Override
+        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+                throws Exception {
+            log.info(String.format("用户[ %s ] %s 访问　%s", LoginUtil.getInstance().getUser().getMobile(), request.getMethod(), request.getRequestURI()));
+            List<RequestMethod> httpMethods = Arrays.asList(new RequestMethod[]{RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT,RequestMethod.PATCH});
+            if(httpMethods.contains(RequestMethod.valueOf(request.getMethod()))){
+                String requestUri = request.getRequestURI().replace("//","/");
+                String[] pathParams = requestUri.split("/");
+                if(pathParams.length > 2 && pathParams[2].matches("\\d+")){
+                    String projectId = pathParams[2];
+                    ErrorCode errorCode = projectService.projectModifyAuthError(Integer.parseInt(projectId));
+                    if(errorCode != null){
+                        response.setContentType("application/json; charset=utf-8");
+                        PrintWriter writer = response.getWriter();
+                        writer.print(JSONObject.toJSONString(BaseResponse.builder().code(errorCode).build()));
+                        writer.close();
+                        response.flushBuffer();
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
     }
 
     private boolean hasPermission(Object handler) {

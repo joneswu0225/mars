@@ -29,18 +29,28 @@
         <result column="name" property="name" />
         <result column="manager_id" property="managerId" />
         <result column="parentName" property="parentName" />
+        <result column="parent_id" property="parentId" />
         <result column="managerName" property="managerName" />
+        <result column="managerEmail" property="managerEmail" />
+        <result column="managerMobile" property="managerMobile" />
+        <result column="managerDescription" property="managerDescription" />
         <collection property="userList" ofType="departmentUser" column="department_id">
             <id column="departmentUserId" property="id"/>
             <result column="userId" property="userId"/>
             <result column="userSgname" property="userSgname"/>
+            <result column="userEmail" property="userEmail"/>
+            <result column="userMobile" property="userMobile"/>
+            <result column="userDescription" property="userDescription"/>
+            <result column="description" property="description"/>
         </collection>
     </resultMap>
-    <select id="findList" resultMap="DepartmentMap" parameterType="Query">
+    <select id="findList" resultType="Department" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select d.id, d.enterprise_id, d.name, d.parent_id, d.manager_id,up1.sgname as managerName, p.name as parentName,du.id as departmentUserId, du.department_id, up2.user_id as userId, up2.sgname as userSgname
-        from department d left join department p on d.parent_id = p.id left join user_profile up1 on d.manager_id=up1.user_id
-          left join department_user du on du.department_id=d.id left join user_profile up2 on du.user_id=up2.user_id
+        select d.id, d.enterprise_id as enterpriseId, d.name, d.parent_id as parentId, p.name as parentName, d.manager_id as managerId,
+        u1.mobile as managerMobile, up1.sgname as managerName, up1.email as managerEmail, up1.description as managerDescription, count(DISTINCT du.user_id) as userCount
+        from department d left join department p on d.parent_id = p.id
+        left join user_profile up1 on d.manager_id=up1.user_id left join user u1 on d.manager_id=u1.id
+        left join department_user du on du.department_id=d.id
         where d.delete_flg=0
         <if test="name != null and name !=''">
             and d.name like concat('%',#{name},'%')
@@ -48,6 +58,7 @@
         <if test="enterpriseId != null">
             and d.enterprise_id=#{enterpriseId}
         </if>
+        group by d.id
         order by d.id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
@@ -72,13 +83,33 @@
         </if>
         order by id desc
     </select>
-    <select id="findAll" resultType="Department">
-        select * from department where delete_flg=0 order by id desc
+    <select id="findAll" resultMap="DepartmentMap" parameterType="Query">
+        select d.id, d.enterprise_id, d.name, d.parent_id, d.manager_id,
+        u1.mobile as managerMobile, up1.sgname as managerName, up1.email as managerEmail, up1.description as managerDescription,
+        p.name as parentName, du.id as departmentUserId, du.department_id,
+        up2.user_id as userId,u2.mobile as userMobile,  up2.sgname as userSgname, up2.email as userEmail, up2.description as userDescription
+        from department d left join department p on d.parent_id = p.id
+        left join user_profile up1 on d.manager_id=up1.user_id left join user u1 on d.manager_id=u1.id
+        left join department_user du on du.department_id=d.id
+        left join user_profile up2 on du.user_id=up2.user_id left join user u2 on du.user_id=u2.id
+        where d.delete_flg=0
+        <if test="name != null and name !=''">
+            and d.name like concat('%',#{name},'%')
+        </if>
+        <if test="enterpriseId != null">
+            and d.enterprise_id=#{enterpriseId}
+        </if>
+        order by d.id desc
     </select>
     <select id="findOne" resultMap="DepartmentMap">
-        select d.id, d.enterprise_id, d.name, d.parent_id, d.manager_id,up1.sgname as managerName, p.name as parentName,du.id as departmentUserId, du.department_id, up2.user_id as userId, up2.sgname as userSgname
-        from department d left join department p on d.parent_id = p.id left join user_profile up1 on d.manager_id=up1.user_id
-        left join department_user du on du.department_id=d.id left join user_profile up2 on du.user_id=up2.user_id
+        select d.id, d.enterprise_id, d.name, d.parent_id, d.manager_id,
+        u1.mobile as managerMobile, up1.sgname as managerName, up1.email as managerEmail, up1.description as managerDescription,
+        p.name as parentName,du.id as departmentUserId, du.department_id,
+        up2.user_id as userId,u2.mobile as userMobile,  up2.sgname as userSgname, up2.email as userEmail, up2.description as userDescription
+        from department d left join department p on d.parent_id = p.id
+        left join user_profile up1 on d.manager_id=up1.user_id left join user u1 on d.manager_id=u1.id
+        left join department_user du on du.department_id=d.id
+        left join user_profile up2 on du.user_id=up2.user_id left join user u2 on du.user_id=u2.id
         where d.id=#{id}
     </select>
     <delete id="delete">

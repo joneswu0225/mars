@@ -81,8 +81,10 @@ public class YoudaoController extends BaseController {
     @ApiOperation(value = "有道语音合成", notes = "有道语音合成")
     @PostMapping("/tts")
     @ResponseBody
-    public BaseResponse getTTSInfo(@NotNull(message = "语音不能为空") @ApiParam(value="内容",name="text") String text) throws Exception {
-        String result = YoudaoUtil.getTTSInfo(text);
+    public BaseResponse getTTSInfo(@RequestParam(name="text", required = true) @ApiParam(value="内容",name="text") String text,
+                                   @RequestParam(name="langType", required = false) @ApiParam(value="中英文,zh-CHS/en",name="langType") String langType,
+                                   @RequestParam(name="voice", required = false) @ApiParam(value="",name="voice") String voice) throws Exception {
+        String result = YoudaoUtil.getTTSInfo(text, langType, voice);
         result = AUDIO_TMP_PATH + result;
         return BaseResponse.builder().data(result).build();
     }

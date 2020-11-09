@@ -113,7 +113,7 @@
     <select id="findAllByQuery" resultMap="HotspotMap" parameterType="Query">
         select h.*,
         <if test="hasSceneCode != null">
-            s.code as sceneCode,
+            s.code as sceneCode, s.name as sceneName,
         </if>
         c.hotspot_id as hotspotId, ph.seq as hotspot_seq, c.title as contentTitle, c.id as contentId, c.content,c.type as contentType, c.module as contentModule, c.seq as content_seq, c.extra
         from hotspot h left join project_hotspot ph on h.id=ph.hotspot_id left join hotspot_content c on h.id=c.hotspot_id

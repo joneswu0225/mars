@@ -1,5 +1,7 @@
 package com.jones.mars.controller;
 
+import com.jones.mars.model.News;
+import com.jones.mars.model.Project;
 import com.jones.mars.model.query.*;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.*;
@@ -56,6 +58,12 @@ public class HomePageController{
         return service.serviceSuperiority();
     }
 
+    @ApiOperation(value = "系统默认信息", notes = "")
+    @GetMapping("defaultInfo")
+    public BaseResponse appDefaultInfo() {
+        return service.appDefaultInfo();
+    }
+
     @ApiOperation(value = "首页信息", notes = "")
     @GetMapping("pageInfo")
     public BaseResponse pageInfo() {
@@ -81,9 +89,10 @@ public class HomePageController{
         return newsService.findById(newsId);
     }
 
-    @ApiOperation(value = "新闻列表", notes = "新闻列表")
+    @ApiOperation(value = "新闻列表", notes = "发布中的新闻")
     @GetMapping("news")
-    public BaseResponse findNewsList(@ApiParam Query query) {
+    public BaseResponse findNewsList(@ApiParam NewsQuery query) {
+        query.setStatus(News.STATUS_PUBLISHED);
         return newsService.findByPage(query);
     }
 
@@ -96,6 +105,7 @@ public class HomePageController{
     @ApiOperation(value = "船福专题、全景船舶、全景设备", notes = "")
     @GetMapping("project")
     public BaseResponse project(@ApiParam ProjectQuery query) {
+        query.setPublishFlg(Project.PUBLIC);
         return projectService.findByPage(query);
     }
 

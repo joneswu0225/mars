@@ -63,17 +63,17 @@ public class YoudaoUtil {
         // https://ai.youdao.com/DOCSIRMA/html/%E8%AF%AD%E9%9F%B3%E5%90%88%E6%88%90TTS/API%E6%96%87%E6%A1%A3/%E8%AF%AD%E9%9F%B3%E5%90%88%E6%88%90%E6%9C%8D%E5%8A%A1/%E8%AF%AD%E9%9F%B3%E5%90%88%E6%88%90%E6%9C%8D%E5%8A%A1-API%E6%96%87%E6%A1%A3.html
         public static final String URL = BASE_URL + "/ttsapi";
         public static final String FORMAT = "mp3";
-        public static final String VOICE = "0";
+        public static final String VOICE = "9";
         public static final String SPEED = "1";
         public static final String VOLUME = "1";
         // https://ai.youdao.com/DOCSIRMA/html/%E8%AF%AD%E9%9F%B3%E5%90%88%E6%88%90TTS/API%E6%96%87%E6%A1%A3/%E8%AF%AD%E9%9F%B3%E5%90%88%E6%88%90%E6%9C%8D%E5%8A%A1/%E8%AF%AD%E9%9F%B3%E5%90%88%E6%88%90%E6%9C%8D%E5%8A%A1-API%E6%96%87%E6%A1%A3.html#section-9
-        public static final String LANG_TYPE = "zh-CHS";
+        public static final String LANG_TYPE = "en-BGS";
 
-        public static Map<String, String> buildHttpParam(String q) throws UnsupportedEncodingException {
+        public static Map<String, String> buildHttpParam(String q, String langType, String voice) throws UnsupportedEncodingException {
             Map<String, String> param = new HashMap<>();
-            param.put("langType", LANG_TYPE);
+            param.put("langType", langType == null ? LANG_TYPE : langType);
             param.put("appKey", APP_KEY);
-            param.put("voice", VOICE);
+            param.put("voice", voice == null ? VOICE : voice);
             param.put("format", FORMAT);
             param.put("speed", SPEED);
             param.put("volume", VOLUME);
@@ -247,11 +247,16 @@ public class YoudaoUtil {
      * @return
      * @throws UnsupportedEncodingException
      */
-    public static String getTTSInfo(String text) throws Exception {
-        Map<String, String> param = TTS.buildHttpParam(text);
+    public static String getTTSInfo(String text, String langType, String voice) throws Exception {
+        Map<String, String> param = TTS.buildHttpParam(text, langType, voice);
         String result = doRequest(TTS.URL, param);
         return result;
     }
+
+    public static String getTTSInfo(String text, String langType) throws Exception {
+        return getTTSInfo(text, langType, null);
+    }
+
 
 //    public static void main(String[] args) throws Exception {
 //        System.out.println(getTTSInfo("我天天去上学"));

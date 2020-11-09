@@ -52,41 +52,61 @@ public class MessageService extends BaseService{
         return BaseResponse.builder().data(result).build();
     }
 
-    private void sendMessage(String title, String content, List<Integer> receivers){
+    private void sendMessage(String title, String messageType, List<Integer> receivers, String content){
         if(receivers.size() > 0) {
             log.info(String.format("发送消息给： %s， 标题： %s， 内容：%s", String.join(",", receivers.stream().map(p->p.toString()).collect(Collectors.toList())), title, content));
-            Message message = Message.builder().title(title).content(content).receiverList(receivers).build();
+            Message message = Message.builder().title(title).content(content).messageType(messageType).receiverList(receivers).build();
             mapper.insert(message);
         }
     }
 
+    private void sendMessage(MessageInfo info, List<Integer> receivers, String content){
+        sendMessage(info.title, info.messageType, receivers, content);
+    }
+
     public void sendInvitedToEnterprise(String enterpriseName, Integer receiver){
         MessageInfo info = MessageInfo.INVITED_TO_ENTERPRISE;
-        sendMessage(info.title, String.format(info.content, enterpriseName), Arrays.asList(receiver));
+        sendMessage(info, Arrays.asList(receiver), String.format(info.content, enterpriseName));
     }
     public void sendAddToProject(String projectName, List<Integer> receivers){
         MessageInfo info = MessageInfo.ADD_TO_PROJECT;
-        sendMessage(info.title, String.format(info.content, projectName), receivers);
+        sendMessage(info, receivers, String.format(info.content, projectName));
     }
     public void sendAddToProjectManager(String projectName, Integer receiver){
         MessageInfo info = MessageInfo.ADD_TO_PROJECT_MANAGER;
-        sendMessage(info.title, String.format(info.content, projectName), Arrays.asList(receiver));
+        sendMessage(info, Arrays.asList(receiver), String.format(info.content, projectName));
     }
     public void sendModifyProject(String sgname, String projectName, List<Integer> receivers){
         MessageInfo info = MessageInfo.MODIFY_PROJECT;
-        sendMessage(info.title, String.format(info.content, sgname, projectName), receivers);
+        sendMessage(info, receivers, String.format(info.content, sgname, projectName));
     }
     public void sendSubmitVerifyProject(String sgname, String projectName, Integer receiver){
         MessageInfo info = MessageInfo.SUBMIT_VERIFY_PROJECT;
-        sendMessage(info.title, String.format(info.content, sgname, projectName), Arrays.asList(receiver));
+        sendMessage(info, Arrays.asList(receiver), String.format(info.content, sgname, projectName));
     }
     public void sendVerifyPassProject(String projectName, List<Integer> receivers){
         MessageInfo info = MessageInfo.VERIFY_PASS_PROJECT;
-        sendMessage(info.title, String.format(info.content, projectName), receivers);
+        sendMessage(info, receivers, String.format(info.content, projectName));
     }
     public void sendVerifyFailProject(String projectName, List<Integer> receivers){
         MessageInfo info = MessageInfo.VERIFY_FAIL_PROJECT;
-        sendMessage(info.title, String.format(info.content, projectName), receivers);
+        sendMessage(info, receivers, String.format(info.content, projectName));
+    }
+    public void sendTaskExpiredAdmin(String projectName, List<Integer> receivers){
+        MessageInfo info = MessageInfo.TASK_EXPIRED_ADMIN;
+        sendMessage(info, receivers, String.format(info.content, projectName));
+    }
+    public void sendTaskExpiredWorker(String projectName, List<Integer> receivers){
+        MessageInfo info = MessageInfo.TASK_EXPIRED_WORKER;
+        sendMessage(info, receivers, String.format(info.content, projectName));
+    }
+    public void sendTaskProjectModify(String projectName, String expireDate, List<Integer> receivers){
+        MessageInfo info = MessageInfo.TASK_PROJECT_MODIFY;
+        sendMessage(info, receivers, String.format(info.content, projectName, expireDate));
+    }
+    public void sendTaskProjectTrainning(String projectName, String expireDate, List<Integer> receivers){
+        MessageInfo info = MessageInfo.TASK_PROJECT_TRAINNING;
+        sendMessage(info, receivers, String.format(info.content, projectName, expireDate));
     }
 }
 

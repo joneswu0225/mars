@@ -3,6 +3,7 @@ package com.jones.mars.model.param;
 import com.jones.mars.support.ValidMobile;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,5 +22,7 @@ public class UserLoginParam {
     @NotBlank(message = "验证码不能为空")
     @ApiModelProperty(value="验证码",name="verifyCode")
     private String verifyCode;
+    @ApiParam(hidden = true)
+    private Integer appSource;
 }
 

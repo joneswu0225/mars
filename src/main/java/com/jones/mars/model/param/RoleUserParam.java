@@ -23,6 +23,8 @@ public class RoleUserParam {
     @NotBlank(message = "权限名称不能为空")
     @ApiModelProperty(value="权限名称",name="name")
     private String name;
+    @ApiModelProperty(value="图片路径",name="image")
+    private String image;
     @ApiModelProperty(value="权限列表（classId, operation）",name="permissionList")
     private List<RolePermissionParam> permissionList;
     @ApiModelProperty(value="被授权用户id",name="userIds")

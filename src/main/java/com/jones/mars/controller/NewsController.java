@@ -1,6 +1,8 @@
 package com.jones.mars.controller;
 
+import com.jones.mars.model.News;
 import com.jones.mars.model.param.NewsParam;
+import com.jones.mars.model.query.NewsQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.NewsService;
@@ -22,7 +24,7 @@ public class NewsController extends BaseController {
 
     @ApiOperation(value = "新闻动态列表", notes = "新闻动态列表")
     @GetMapping("")
-    public BaseResponse list(@ApiParam Query query) {
+    public BaseResponse list(@ApiParam NewsQuery query) {
         return service.findByPage(query);
     }
 
@@ -44,7 +46,30 @@ public class NewsController extends BaseController {
             @PathVariable Integer newsId,
             @RequestBody @ApiParam(required=true) NewsParam param) {
         param.setId(newsId);
+        param.setStatus(News.STATUS_EDITING);
         return service.update(param);
+    }
+    @ApiOperation(value = "发布新闻动态", notes = "发布新闻动态")
+    @PutMapping("{newsId}/publish")
+    public BaseResponse publish(@PathVariable Integer newsId) {
+        return service.updateStatus(newsId, News.STATUS_PUBLISHED);
+    }
+    @ApiOperation(value = "下架新闻动态", notes = "下架新闻动态")
+    @PutMapping("{newsId}/downshelf")
+    public BaseResponse downshelf(@PathVariable Integer newsId) {
+        return service.updateStatus(newsId, News.STATUS_DOWNSHELF);
+    }
+
+    @ApiOperation(value = "置顶新闻动态", notes = "置顶新闻动态")
+    @PutMapping("{newsId}/settop")
+    public BaseResponse setTop(@PathVariable Integer newsId) {
+        return service.updateTopFlg(newsId, News.TOP_SET);
+    }
+
+    @ApiOperation(value = "取消置顶新闻动态", notes = "取消置顶新闻动态")
+    @PutMapping("{newsId}/canceltop")
+    public BaseResponse cancelTop(@PathVariable Integer newsId) {
+        return service.updateTopFlg(newsId, News.TOP_CANCEL);
     }
 
     // TODO 增加后台注解

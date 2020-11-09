@@ -5,11 +5,11 @@ import com.jones.mars.model.param.ProjectHotspotParam;
 import com.jones.mars.model.param.ProjectParam;
 import com.jones.mars.model.param.ProjectSceneParam;
 import com.jones.mars.model.param.ProjectUserParam;
-import com.jones.mars.model.query.EnterpriseQuery;
-import com.jones.mars.model.query.HotspotQuery;
-import com.jones.mars.model.query.ProjectQuery;
+import com.jones.mars.model.query.*;
 import com.jones.mars.object.BaseResponse;
+import com.jones.mars.service.BlockService;
 import com.jones.mars.service.ProjectService;
+import com.jones.mars.service.ProjectUserService;
 import com.jones.mars.service.SceneService;
 import com.jones.mars.util.LoginUtil;
 import io.swagger.annotations.Api;
@@ -32,6 +32,10 @@ public class ProjectController extends BaseController {
     @Autowired
     private ProjectService projectService;
     @Autowired
+    private BlockService blockService;
+    @Autowired
+    private ProjectUserService projectUserService;
+    @Autowired
     private SceneService sceneService;
 
     /**
@@ -45,8 +49,9 @@ public class ProjectController extends BaseController {
     @ApiOperation(value = "项目列表", notes = "项目列表")
     @GetMapping("")
     public BaseResponse list(@ApiParam ProjectQuery query) {
-        query.setUserId(LoginUtil.getInstance().getUser().getId());
-//        query.setUserId(28);
+        if(LoginUtil.getInstance().getUser().getUserType() == User.COMMON){
+            query.setUserId(LoginUtil.getInstance().getUser().getId());
+        }
         return projectService.findByPage(query);
     }
 
@@ -58,7 +63,7 @@ public class ProjectController extends BaseController {
 
     @ApiOperation(value = "新增项目", notes = "新增项目")
     @PostMapping("")
-    public BaseResponse add(@RequestBody @ApiParam(required=true) ProjectParam param) {
+    public BaseResponse add(@Valid @RequestBody @ApiParam(required=true) ProjectParam param) {
         return projectService.add(param);
     }
 
@@ -136,6 +141,39 @@ public class ProjectController extends BaseController {
         return projectService.delete(projectId);
     }
 
+    @ApiOperation(value = "获取项目共建人", notes = "")
+    @GetMapping("{projectId}/user")
+    public BaseResponse findProjectPartner(@PathVariable @ApiParam(required=true) Integer projectId,
+                                           @ApiParam(required=true) ProjectUserQuery query) {
+        query.setProjectId(projectId);
+        return projectUserService.findPage(query);
+    }
+
+    @ApiOperation(value = "获取项目共建人候选项-分页", notes = "")
+    @GetMapping("{projectId}/user/validPartner")
+    public BaseResponse findProjectPartnerAvailablePage(@PathVariable @ApiParam(required=true) Integer projectId,
+                                                    @ApiParam(required=true) RolePermissionQuery query) {
+
+        query.setProjectId(projectId);
+        return projectService.findProjectUserValidPartnerPage(query);
+    }
+
+    @ApiOperation(value = "获取项目共建人候选项-全部", notes = "")
+    @GetMapping("{projectId}/user/validPartner/all")
+    public BaseResponse findProjectPartnerAvailableAll(@PathVariable @ApiParam(required=true) Integer projectId,
+                                                       @ApiParam(required=true) RolePermissionQuery query) {
+        query.setProjectId(projectId);
+        return projectService.findProjectUserValidPartner(query);
+    }
+
+    @ApiOperation(value = "获取项目共建人", notes = "")
+    @GetMapping("{projectId}/user/all")
+    public BaseResponse findProjectPartnerAll(@PathVariable @ApiParam(required=true) Integer projectId,
+                                           @ApiParam(required=true) ProjectUserQuery query) {
+        query.setProjectId(projectId);
+        return projectUserService.findAll(query);
+    }
+
     @ApiOperation(value = "添加项目共建人", notes = "")
     @PostMapping("{projectId}/user")
     public BaseResponse addPartner(@PathVariable @ApiParam(required=true) Integer projectId,
@@ -155,7 +193,7 @@ public class ProjectController extends BaseController {
     @DeleteMapping("{projectId}/user/{userId}")
     public BaseResponse deletePartner(@PathVariable @ApiParam(required=true) Integer projectId,
                                       @PathVariable @ApiParam(required=true) Integer userId) {
-        return projectService.deleteUser(ProjectUser.builder().projectId(projectId).userId(userId).build());
+        return projectService.deleteUser(ProjectUserParam.builder().projectId(projectId).userId(userId).build());
     }
 
     @ApiOperation(value = "上架项目", notes = "")

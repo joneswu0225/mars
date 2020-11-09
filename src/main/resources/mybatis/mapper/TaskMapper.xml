@@ -29,14 +29,14 @@
     <insert id="insert" parameterType="TaskParam" useGeneratedKeys="true" keyProperty="id">
         <foreach collection="userIds" item="userId" index="index" separator=";">
         insert into task(`name`, `detail`, `type`, `status`, `start_date`, `expire_date`,`block_id`,`project_id`,`user_id`,`version`,`current_flg`,`create_time`, `update_time`,`create_by`,`update_by`)
-        values(#{name}, #{detail}, #{type}, #{status}, #{startDate}, #{expireDate}, #{blockId}, #{projectId}, #{userId}, #{currentFlg}, #{version}, now(), now(), #{createBy}, #{updateBy})
+        values(#{name}, #{detail}, #{type}, #{status}, #{startDate}, #{expireDate}, #{blockId}, #{projectId}, #{userId}, #{version}, #{currentFlg}, now(), now(), #{createBy}, #{updateBy})
             ON DUPLICATE KEY UPDATE
             `name` = #{name}, detail=#{detail}, `type`=#{type}, status = #{status}, start_date=#{startDate}, expire_date=#{expireDate},
-            block_id = #{blockId}, project_id=#{projectId}, user_id=#{userId}, current_flg = #{currentFlg},version = #{version},
-            start_date=now(), expire_date=now(), create_by=#{createBy}, update_by=#{updateBy}
+            block_id = #{blockId}, project_id=#{projectId}, user_id=#{userId}, current_flg = #{currentFlg},version = #{version},delete_flg=0,
+            update_time=now(), create_by=#{createBy}, update_by=#{updateBy}
         </foreach>
     </insert>
-    <insert id="update" parameterType="TaskParam">
+    <update id="update" parameterType="TaskParam">
         update task
         set update_time = now(), update_by=#{updateBy}
         <if test="name != null and name != ''">
@@ -48,16 +48,16 @@
         <if test="type != null and type != ''">
             , type = #{type}
         </if>
-        <if test="start_date != null">
+        <if test="startDate != null">
             , start_date = #{startDate}
         </if>
-        <if test="expire_date != null">
+        <if test="expireDate != null">
             , expire_date = #{expireDate}
         </if>
-        <if test="block_id != null">
+        <if test="blockId != null">
             , block_id = #{blockId}
         </if>
-        <if test="project_id != null">
+        <if test="projectId != null">
             , project_id = #{projectId}
         </if>
         <if test="status != null">
@@ -73,7 +73,10 @@
             , current_flg = #{currentFlg}
         </if>
         where id=#{id}
-    </insert>
+    </update>
+    <update id="updateExpiredTaskStatus">
+      update task set update_time = now(), status=3 where expire_date &lt; now() and status=1 and delete_flg=0
+    </update>
     <select id="findList" resultMap="TaskMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select t.*, p.name as project_name,p.image_url as project_image_url, p.detail as project_detail, uc.sgname as creator_sgname, uu.sgname as updater_sgname
@@ -86,6 +89,12 @@
         </if>
         <if test="status != null">
             and t.status = #{status}
+        </if>
+        <if test="statusIn != null">
+            and t.status in(<foreach collection="statusIn" item="item" index="index" separator=",">#{item}</foreach>)
+        </if>
+        <if test="projectId != null">
+            and t.project_id = #{projectId}
         </if>
         <if test="userId != null">
             and t.user_id = #{userId}
@@ -110,6 +119,12 @@
         <if test="status != null">
             and t.status = #{status}
         </if>
+        <if test="statusIn != null">
+            and t.status in(<foreach collection="statusIn" item="item" index="index" separator=",">#{item}</foreach>)
+        </if>
+        <if test="projectId != null">
+            and t.project_id = #{projectId}
+        </if>
         <if test="userId != null">
             and t.user_id = #{userId}
         </if>
@@ -124,7 +139,7 @@
         select version, project_id as projectId, `type`, current_flg as currentFlg from task t
         where t.delete_flg=0 and t.type = #{type} and t.project_id=#{projectId}
         and t.version = (
-          select max(version) from task a where a.delete_flg=0 and a.type = #{type} and a.project_id=#{projectId}
+          select max(version) from task a where a.delete_flg=0 and a.status>=2 and a.type = #{type} and a.project_id=#{projectId}
         ) limit 1
     </select>
     <select id="findAllName" resultMap="TaskMap" parameterType="Query">
@@ -136,6 +151,9 @@
         <if test="status != null">
             and t.status = #{status}
         </if>
+        <if test="statusIn != null">
+            and t.status in(<foreach collection="statusIn" item="item" index="index" separator=",">#{item}</foreach>)
+        </if>
         <if test="userId != null">
             and t.user_id = #{userId}
         </if>
@@ -146,18 +164,30 @@
         from task t left join project p on t.project_id=p.id
         left join user_profile uc on t.create_by = uc.user_id
         left join user_profile uu on t.update_by = uu.user_id
-        where t.current_flg=1 and t.delete_flg=0
+        where t.delete_flg=0
         <if test="type != null and type !=''">
             and t.type = #{type}
         </if>
         <if test="status != null">
             and t.status = #{status}
         </if>
+        <if test="statusIn != null">
+            and t.status in(<foreach collection="statusIn" item="item" index="index" separator=",">#{item}</foreach>)
+        </if>
+        <if test="currentFlg != null">
+            and t.current_flg = #{currentFlg}
+        </if>
+        <if test="projectId != null">
+            and t.project_id = #{projectId}
+        </if>
         <if test="userId != null">
             and t.user_id = #{userId}
         </if>
         <if test="startDate != null">
             and t.expire_date &gt;= #{startDate}
+        </if>
+        <if test="expireDateLt != null">
+            and t.expire_date &lt;= #{expireDateLt}
         </if>
         <if test="endDate != null">
             and t.create_time &lt;= #{endDate}
@@ -181,9 +211,15 @@
         where t.id=#{id} and (pu.user_id=#{userId} or t.create_by=#{userId})
     </select>
     <update id="delete">
-        update task set delete_flg=1  where id=#{id}
+        delete from task  where id=#{id} and current_flg=1
     </update>
     <update id="deleteCurrentTask" parameterType="TaskParam">
-        update task set delete_flg=1  where project_id=#{projectId} and type=#{type} and user_id=#{userId} and current_flg=1
+        delete from task where project_id=#{projectId} and current_flg=1
+        <if test="type != null">
+            and type=#{type}
+        </if>
+        <if test="userId != null">
+            and user_id=#{userId}
+        </if>
     </update>
 </mapper>

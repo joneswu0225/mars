@@ -13,6 +13,10 @@ import java.util.List;
 public class DepartmentUserParam {
     @ApiParam(hidden = true)
     private Integer departmentId;
+    @ApiParam(hidden = true)
+    private Integer enterpriseId;
+    @ApiParam(hidden = true)
+    private Integer userId;
     @NotEmpty
     @ApiModelProperty(value="用户ID",name="userIds")
     private List<Integer> userIds;

@@ -4,12 +4,14 @@ import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
+@Builder
 @ApiModel(value="场景参数")
 public class SceneParam extends BaseObject {
     @ApiModelProperty(value="场景名称",name="name")
@@ -18,6 +20,8 @@ public class SceneParam extends BaseObject {
     private String code;
     @ApiModelProperty(value="场景简介",name="detail")
     private String detail;
+    @ApiModelProperty(value="场景公开标识",name="publicFlg")
+    private Integer publicFlg;
     @NotNull(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")
     private Integer blockId;
@@ -30,6 +34,8 @@ public class SceneParam extends BaseObject {
     private Float locationX;
     @ApiModelProperty(value="全览图-y",name="locationY")
     private Float locationY;
+    @ApiParam(hidden = true)
+    private Integer sceneTypeId;
 
 }
 

@@ -20,6 +20,7 @@ public enum ErrorCode {
 	WECHAT_LOGIN_VERIFY_FAIL("1004", "微信小程序登录验证失败"),
 	WECHAT_NO_PASSWD("1005", "微信小程序注册没有密码"),
 	VERIFY_CODE_FAILED("1006", "验证码错误"),
+	ADMIN_LOGIN_DENIED("1007", "非管理员无法登录管理系统"),
 
 	//请求错误
 	VALIDATION_FAILED("1011", "参数校验失败"),
@@ -35,14 +36,17 @@ public enum ErrorCode {
 
 	// 项目相关
 	PROJECT_DELETE_DENIED("5001", "项目已经编辑过，无法删除"),
+	PROJECT_MODIFY_DENIED_PUBLISHED("5002", "项目已上架，无法编辑"),
 
 	//权限不够
 	AUTH_PROJECT_UNPUBLIC_NOLOGIN("2001", "非登录状态无权访问非公开项目"),
 	AUTH_PROJECT_UNAUTH("2002", "无权访问该项目"),
+	AUTH_PROJECT_EDIT_UNAUTH("2003", "无权修改该项目"),
+	AUTH_PROJECT_EDIT_NOTPARTNER("2004", "您不是该项目的共建人，无权修改该项目"),
 	//业务错误
 	ENT_USER_EXISTS("3001", "企业用户已存在"),
 	//角色错误
-	ROLE_DELETE_EXIST_USER("5001", "该角色仍存在被授予的用户，无法删除"),
+	ROLE_DELETE_EXIST_USER("5101", "该角色仍存在被授予的用户，无法删除"),
 	ROLE_PERMISSION_DELETE_NOAUTH("5101", "请联系管理员进行权限删除"),
 
 	INTERNAL_ERROR("9000", "系统内部错误"),

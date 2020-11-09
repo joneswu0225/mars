@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.CommentMapper" >
     <insert id="insert" parameterType="CommentParam" useGeneratedKeys="true" keyProperty="id">
-        insert into comment(`user_id`, `content`, `type`, `related_id`, `create_time`, `update_time`)
-        values(#{userId}, #{content}, #{type}, #{relatedId}, now(), now())
+        insert into comment(`user_id`, `content`,`content_type`, `type`, `related_id`, `create_time`, `update_time`)
+        values(#{userId}, #{content},#{contentType}, #{type}, #{relatedId}, now(), now())
     </insert>
     <insert id="update" parameterType="CommentParam">
         update comment

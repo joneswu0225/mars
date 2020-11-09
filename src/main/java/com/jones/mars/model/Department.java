@@ -16,7 +16,11 @@ public class Department extends BaseObject {
     private Integer parentId;
     private String parentName;
     private Integer managerId;
+    private Integer userCount;
     private String managerName;
+    private String managerEmail;
+    private String managerMobile;
+    private String managerDescription;
     private List<DepartmentUser> userList = new ArrayList<>();
     private Integer operatorId;
     private Date updateTime;

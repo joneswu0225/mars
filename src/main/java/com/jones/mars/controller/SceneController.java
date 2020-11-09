@@ -1,5 +1,6 @@
 package com.jones.mars.controller;
 
+import com.jones.mars.model.Scene;
 import com.jones.mars.model.param.SceneParam;
 import com.jones.mars.model.query.SceneQuery;
 import com.jones.mars.object.BaseResponse;
@@ -67,5 +68,21 @@ public class SceneController extends BaseController {
         return sceneService.delete(sceneId);
     }
 
+
+    @ApiOperation(value = "公开场景", notes = "")
+    @PatchMapping("{sceneId}/public")
+    public BaseResponse publicScene(@PathVariable @ApiParam(required=true) Integer sceneId) {
+        SceneParam param = SceneParam.builder().publicFlg(Scene.PUBLIC).build();
+        param.setId(sceneId);
+        return  sceneService.update(param);
+    }
+
+    @ApiOperation(value = "取消公开场景", notes = "")
+    @PatchMapping("{sceneId}/unpublic")
+    public BaseResponse unpublicScene(@PathVariable @ApiParam(required=true) Integer sceneId) {
+        SceneParam param = SceneParam.builder().publicFlg(Scene.UNPUBLIC).build();
+        param.setId(sceneId);
+        return  sceneService.update(param);
+    }
 
 }

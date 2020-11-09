@@ -6,9 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DepartmentUserMapper {
-    void insert(Object param);
-    void delete(Object param);
+public interface DepartmentUserMapper extends BaseMapper<DepartmentUser> {
     void deleteByDepartmentParam(Object param);
-    List<DepartmentUser> findDepartmentUser(Integer departmentId);
 }

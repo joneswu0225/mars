@@ -1,9 +1,8 @@
 package com.jones.mars.service;
 
 import com.jones.mars.config.LoginUser;
-import com.jones.mars.model.Project;
-import com.jones.mars.model.ProjectUser;
-import com.jones.mars.model.Task;
+import com.jones.mars.model.*;
+import com.jones.mars.model.constant.TaskType;
 import com.jones.mars.model.param.TaskParam;
 import com.jones.mars.model.query.ProjectUserQuery;
 import com.jones.mars.model.query.TaskQuery;
@@ -16,7 +15,9 @@ import com.jones.mars.util.DateUtil;
 import com.jones.mars.util.LoginUtil;
 import com.jones.mars.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.util.*;
@@ -32,15 +33,21 @@ public class TaskService extends BaseService{
     private ProjectMapper projectMapper;
     @Autowired
     private ProjectUserMapper projectUserMapper;
+    @Autowired
+    private MessageService messageService;
 
     @Override
     public BaseMapper getMapper(){
         return this.mapper;
     }
 
+    @Transactional
     public BaseResponse add(TaskParam param){
-        List<ProjectUser> projectUserList = projectUserMapper.findList(ProjectUserQuery.builder().projectId(param.getProjectId()).build());
-        if(projectUserList.size() > 0) {
+//        List<ProjectUser> projectUserList = projectUserMapper.findList(ProjectUserQuery.builder().projectId(param.getProjectId()).build());
+//        List<Integer> userIds = projectUserList.stream().map(p -> p.getUserId()).collect(Collectors.toList())
+        User loginUser = LoginUtil.getInstance().getUser();
+        List<Integer> userIds = (param.getUserIds() != null && param.getUserIds().size() > 0) ? param.getUserIds() : param.getUserId() != null ? Arrays.asList(param.getUserId()) : new ArrayList<>();
+        if(userIds.size() > 0) {
             Task task = mapper.findMaxVersionTask(TaskQuery.builder().type(param.getType()).projectId(param.getProjectId()).build());
             if(task == null || task.getCurrentFlg()==Task.OLD_TASK){
                 param.setVersion(task==null ? 0 : task.getVersion() + 1);
@@ -48,11 +55,17 @@ public class TaskService extends BaseService{
                 param.setVersion(task.getVersion());
             }
             param.setCurrentFlg(Task.CURRENT_TASK);
-            param.setStatus(Task.CREATING);
-            param.setUserIds(projectUserList.stream().map(p -> p.getUserId()).collect(Collectors.toList()));
-            param.setCreateBy(LoginUtil.getInstance().getUser().getId());
-            param.setUpdateBy(LoginUtil.getInstance().getUser().getId());
+            param.setStatus(Task.WORKING);
+            param.setUserIds(userIds);
+            param.setCreateBy(loginUser.getId());
+            param.setUpdateBy(loginUser.getId());
             mapper.insert(param);
+            String exipreDate = DateUtil.dateToDateTimeStr(param.getExpireDate());
+            if(TaskType.PROJECT_MODIFY.name().equals(param.getType())) {
+                messageService.sendTaskProjectModify(param.getName(), exipreDate, userIds);
+            } else if (TaskType.PROJECT_TRAINNING.name().equals(param.getType())){
+                messageService.sendTaskProjectTrainning(param.getName(), exipreDate, userIds);
+            }
         }
         return BaseResponse.builder().build();
     }
@@ -72,6 +85,7 @@ public class TaskService extends BaseService{
     }
 
     public BaseResponse findAllTasks(TaskQuery query){
+        query.setCurrentFlg(Task.CURRENT_TASK);
         List<Task> taskList = mapper.findAll(query);
         if(taskList.size() > 0){
             List<Integer> projectIds = taskList.parallelStream().map(p->p.getProject().getId()).collect(Collectors.toList());
@@ -84,6 +98,11 @@ public class TaskService extends BaseService{
         return BaseResponse.builder().data(taskList).build();
     }
 
+    public BaseResponse deleteCurrentTask(TaskParam param){
+        param.setCurrentFlg(Task.CURRENT_TASK);
+        mapper.deleteCurrentTask(param);
+        return BaseResponse.builder().build();
+    }
     public BaseResponse findPrivateTask(Integer taskId){
         Map<String, Object> query = new HashMap<>();
         query.put("id", taskId);
@@ -95,6 +114,7 @@ public class TaskService extends BaseService{
     public BaseResponse getCalendar(TaskQuery query){
         Date startDate = query.getStartDate();
         Date endDate = query.getEndDate();
+        query.setCurrentFlg(Task.CURRENT_TASK);
         List<Task> taskList = mapper.findAll(query);
         Set<Date> dates = new HashSet<>();
         for(Task task : taskList){
@@ -108,6 +128,27 @@ public class TaskService extends BaseService{
             }
         }
         return BaseResponse.builder().data(dates).build();
+    }
+
+    @Scheduled(cron = "0 0/2 * * * ?")
+    @Transactional
+    public void refreshExpiredTaskStatusAndNotify(){
+        List<Task> tasks = mapper.findAll(TaskQuery.builder().expireDateLt(new Date()).status(Task.WORKING).build());
+        mapper.updateExpiredTaskStatus();
+        Map<String, Set<Integer>> adminTask = new HashMap<>();
+        Map<String, Set<Integer>> workerTask = new HashMap<>();
+        for(Task task: tasks){
+            adminTask.putIfAbsent(task.getName(), new HashSet<>());
+            workerTask.putIfAbsent(task.getName(), new HashSet<>());
+            adminTask.get(task.getName()).add(task.getCreateBy());
+            workerTask.get(task.getName()).add(task.getUserId());
+        }
+        for(String taskName: adminTask.keySet()){
+            messageService.sendTaskExpiredAdmin(taskName, new ArrayList<>(adminTask.get(taskName)));
+        }
+        for(String taskName: workerTask.keySet()){
+            messageService.sendTaskExpiredWorker(taskName, new ArrayList<>(workerTask.get(taskName)));
+        }
     }
 
     /*public static void main(String[] args) throws ParseException {

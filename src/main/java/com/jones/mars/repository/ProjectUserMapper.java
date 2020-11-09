@@ -11,13 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProjectUserMapper {
-    void insert(Object param);
-    void delete(Object param);
-    void update(Object param);
-    List<ProjectUser> findList(ProjectUserQuery query);
+public interface ProjectUserMapper extends BaseMapper<ProjectUser> {
     void deleteByEnterpriseUser(EnterpriseUserParam param);
-    void deleteByUserRole(UserRoleParam param);
-    void deleteByRolePermission(RolePermission param);
-
+    List<ProjectUser> findProjectUserByRolePermission(RolePermissionParam param);
 }

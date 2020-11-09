@@ -30,6 +30,8 @@ public class ProjectQuery extends Query {
     private Integer status;
     @ApiModelProperty(value="发布状态",name="publishFlg")
     private Integer publishFlg;
+    @ApiModelProperty(value="公开状态",name="publicFlg")
+    private Integer publicFlg;
     @ApiModelProperty(value="隐藏下架，1：隐藏，0：显示",name="filterDownShelf")
     private Integer filterDownShelf;
     @ApiParam(hidden = true)

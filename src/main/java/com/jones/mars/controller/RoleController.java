@@ -33,6 +33,12 @@ public class RoleController extends BaseController {
         return service.findByPage(query);
     }
 
+    @ApiOperation(value = "所有角色", notes = "所有角色")
+    @GetMapping("all")
+    public BaseResponse all(@ApiParam RoleQuery query) {
+        return service.findAll(query);
+    }
+
     @ApiOperation(value = "新增角色", notes = "新增角色")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) RoleUserParam param) {

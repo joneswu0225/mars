@@ -12,6 +12,7 @@ import com.jones.mars.util.LoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,20 @@ public class NewsService extends BaseService{
         news.setTotalLikeInfo(likeInfo);
         news.setPrivateLikeInfo(privateLikeInfo);
         return BaseResponse.builder().data(news).build();
+    }
+
+    public BaseResponse updateTopFlg(Integer newsId, Integer topFlg) {
+        mapper.update(News.builder().id(newsId).topFlg(topFlg).build());
+        return BaseResponse.builder().build();
+    }
+
+    public BaseResponse updateStatus(Integer newsId, Integer status) {
+        News news = News.builder().id(newsId).status(status).build();
+        if(status.equals(News.STATUS_PUBLISHED)){
+            news.setPublishTime(new Date());
+        }
+        mapper.update(news);
+        return BaseResponse.builder().build();
     }
 
 }

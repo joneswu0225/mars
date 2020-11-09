@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -18,15 +19,17 @@ import java.util.List;
 @Builder
 @ApiModel(value="项目参数")
 public class ProjectParam extends BaseObject {
-    @NotEmpty(message = "项目名称不能为空")
+    @NotBlank(message = "项目名称不能为空")
     @ApiModelProperty(value="项目名称",name="name")
     private String name;
+    @NotBlank(message = "项目简介不能为空")
     @ApiModelProperty(value="项目简介",name="detail")
     private String detail;
     @ApiModelProperty(value="项目图片",name="imageUrl")
     private String imageUrl;
     @ApiModelProperty(value="驳回原因",name="reason")
     private String reason;
+    @NotNull(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")
     private Integer blockId;
     @NotNull(message = "一级分类ID不能为空")

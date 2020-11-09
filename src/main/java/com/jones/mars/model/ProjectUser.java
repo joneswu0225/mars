@@ -14,6 +14,11 @@ public class ProjectUser extends BaseObject {
   private Integer projectId;
   private Integer userId;
   private String sgname;
+  private String mobile;
+  private String avatar;
+  private String email;
+  private String description;
+  private String departmentName;
   private Integer managerFlg = PROJECT_NORMAL;
 }
 

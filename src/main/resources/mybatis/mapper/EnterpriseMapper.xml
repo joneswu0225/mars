@@ -28,6 +28,9 @@
     <select id="findList" resultType="Enterprise" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select d.*, p.sgname as managerName from enterprise d left join user_profile p on d.manager_id = p.user_id
+        <if test="managerId != null">
+            left join enterprise_user eu on d.id=eu.enterprise_id
+        </if>
         where 1=1
         <if test="name != null and name !=''">
             and d.name like concat('%',#{name},'%')
@@ -36,19 +39,25 @@
             and d.plateform_flg = #{plateformFlg}
         </if>
         <if test="managerId != null">
-            and d.manager_id = #{managerId}
+            and eu.manager_flg=1 and eu.user_id=#{managerId}
         </if>
         order by d.id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from enterprise d
+        <if test="managerId != null">
+            left join enterprise_user eu on d.id=eu.enterprise_id
+        </if>
         where 1=1
         <if test="name != null and name !=''">
             and d.name like concat('%',#{name},'%')
         </if>
         <if test="plateformFlg != null">
             and d.plateform_flg = #{plateformFlg}
+        </if>
+        <if test="managerId != null">
+            and eu.manager_flg=1 and eu.user_id=#{managerId}
         </if>
     </select>
     <select id="findAllName" resultType="Enterprise" parameterType="Query">
@@ -78,7 +87,21 @@
         order by id desc
     </select>
     <select id="findAll" resultType="Enterprise">
-        select * from enterprise order by id desc
+        select d.*, p.sgname as managerName from enterprise d left join user_profile p on d.manager_id = p.user_id
+        <if test="managerId != null">
+            left join enterprise_user eu on d.id=eu.enterprise_id
+        </if>
+        where 1=1
+        <if test="name != null and name !=''">
+            and d.name like concat('%',#{name},'%')
+        </if>
+        <if test="plateformFlg != null">
+            and d.plateform_flg = #{plateformFlg}
+        </if>
+        <if test="managerId != null">
+            and eu.manager_flg=1 and eu.user_id=#{managerId}
+        </if>
+        order by d.id desc
     </select>
     <select id="findOne" resultType="Enterprise">
         select e.*, p.sgname as managerName from enterprise e left join user_profile p on e.manager_id = p.user_id

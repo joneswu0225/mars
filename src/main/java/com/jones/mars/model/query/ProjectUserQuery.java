@@ -8,9 +8,11 @@ import java.util.List;
 
 @Data
 @Builder
-public class ProjectUserQuery {
+public class ProjectUserQuery extends Query {
   @ApiParam(hidden = true)
   private Integer projectId;
+  @ApiParam(hidden = true)
+  private Integer userId;
   @ApiParam(hidden = true)
   private List<Integer> projectIds;
   @ApiParam(hidden = true)

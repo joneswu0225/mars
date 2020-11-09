@@ -5,6 +5,7 @@ import com.jones.mars.exception.InternalException;
 import com.jones.mars.model.Block;
 import com.jones.mars.model.Enterprise;
 import com.jones.mars.model.User;
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.UserLoginParam;
 import com.jones.mars.model.param.UserProfileParam;
 import com.jones.mars.model.param.UserWXLoginParam;
@@ -16,6 +17,7 @@ import com.jones.mars.model.query.UserQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.*;
 import com.jones.mars.util.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class UserService extends BaseService<User>{
 
@@ -184,11 +187,17 @@ public class UserService extends BaseService<User>{
             // 从enterprise_user表中查询所有的企业
             // 如果是管理员则不返回
             if(user_db.getUserType().equals(User.COMMON)){
+                // 普通用户登录后台要拒绝
+                log.info("userparam appsource: " + userParam.getAppSource());
+                if(CommonConstant.APP_SOURCE_ADMIN.equals(userParam.getAppSource())){
+                    log.info("当前用户%s,　为普通用户无权限登录后台管理");
+                    return BaseResponse.builder().code(ErrorCode.ADMIN_LOGIN_DENIED).build();
+                }
                 List<Enterprise> enterprises = enterpriseMapper.findUserEnterprise(EnterpriseQuery.builder().userId(user_db.getId()).build());
                 result.put("enterprises", enterprises);
                 user_db.setEnterprises(enterprises);
             } else if(user_db.getUserType().equals(User.ENTMANAGER)) {
-                List<Enterprise> enterprises = enterpriseMapper.findList(EnterpriseQuery.builder().managerId(user_db.getId()).build());
+                List<Enterprise> enterprises = enterpriseMapper.findAll(EnterpriseQuery.builder().managerId(user_db.getId()).build());
                 result.put("enterprises", enterprises);
                 user_db.setEnterprises(enterprises);
             }
@@ -209,7 +218,7 @@ public class UserService extends BaseService<User>{
     }
 
     public BaseResponse doWxLogin(UserWXLoginParam param){
-        Map<String, String> wechatInfo = WechatApiUtil.getUserInfo(param.getCode(),param.getEncryptedData(), param.getIv());
+        Map<String, String> wechatInfo = WechatWeProgramUtil.getUserInfo(param.getCode(),param.getEncryptedData(), param.getIv());
         if(wechatInfo == null) {
             return BaseResponse.builder().code(ErrorCode.WECHAT_LOGIN_VERIFY_FAIL).build();
         }

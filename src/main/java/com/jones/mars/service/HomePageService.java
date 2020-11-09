@@ -41,6 +41,7 @@ public class HomePageService{
     private List<BlockModule> blockModuleList;
     private Map<String, List<String>> constMap = new HashMap<>();
     private Map<String, String> contactInfo;
+    private Map<String, String> appDefaultInfo;
     private String icpInfo;
 
 
@@ -60,6 +61,7 @@ public class HomePageService{
         refreshChoiceReason();
         refreshBlockModule();
         refreshNewsDefaultImage();
+        refreshAppDefaultInfo();
     }
 
     private void refreshPlateformEnterprise(){
@@ -82,13 +84,14 @@ public class HomePageService{
     private void refreshRecommendProjects(){
         List<Integer> ids = constMap.get(AppConst.HOME_RECOMMEND_PROJECT).stream().map(p-> Integer.parseInt(p)).collect(Collectors.toList());//.stream().map(p-> Integer.parseInt(p.getValue())).collect(Collectors.toList());
         List<Project> projects = projectMapper.findAll(ProjectQuery.builder().ids(ids).build());
-        Map<Integer, Project> projectMap = new HashMap<>();
-        projects.forEach(p-> {
-            if(!projectMap.containsKey(p.getId()) && (p.getEnterprisePlateformFlg().equals(CommonConstant.PLATEFROM) || p.getPublicFlg().equals(Project.PUBLIC))){
-                projectMap.put(p.getId(), p);
+        Map<Integer, Project> projectIdMap = projects.stream().collect(Collectors.toMap(Project::getId, p->p));
+        List<Project> results = new ArrayList<>();
+        ids.forEach(id->{
+            if(projectIdMap.get(id).getEnterprisePlateformFlg().equals(CommonConstant.PLATEFROM) || projectIdMap.get(id).getPublicFlg().equals(Project.PUBLIC)){
+                results.add(projectIdMap.get(id));
             }
         });
-        this.recommendProjects = new ArrayList<>(projectMap.values());
+        this.recommendProjects = results;
     }
 
     /**
@@ -161,6 +164,16 @@ public class HomePageService{
         this.enterpriseShowns = enterpriseShownMapper.findAll(EnterpriseShownQuery.builder().ids(ids).build());
     }
 
+    private void refreshAppDefaultInfo(){
+        Map<String, String> result = new HashMap<>();
+        for(String key : constMap.keySet()){
+            if(key.startsWith(AppConst.APP_DEFAULT_PREFIX)){
+                result.put(key, constMap.get(key).get(0));
+            }
+        }
+        this.appDefaultInfo = result;
+    }
+
     private void refreshAppConst(){
         List<AppConst> appConsts = appConstMapper.findAll(AppConstQuery.builder().build());
         Map<String, List<String>> result = new HashMap<>();
@@ -187,6 +200,9 @@ public class HomePageService{
     public BaseResponse recommendProjects(){
         return BaseResponse.builder().data(this.recommendProjects).build();
     }
+    public BaseResponse appDefaultInfo(){
+        return BaseResponse.builder().data(this.appDefaultInfo).build();
+    }
 
     public BaseResponse homePageInfo(){
         Map<String, Object> pageInfo = new HashMap<>();
@@ -199,18 +215,20 @@ public class HomePageService{
         pageInfo.put("guideHotspotImage", this.guideHotspotImage);
         pageInfo.put("icpInfo", this.icpInfo);
         pageInfo.put("contactInfo", this.contactInfo);
+        pageInfo.put("appDefaultInfo", this.appDefaultInfo);
         return BaseResponse.builder().data(pageInfo).build();
     }
 
     public BaseResponse appPageInfo(){
         Map<String, Object> pageInfo = new HashMap<>();
-        Query newsQuery = new Query();
+        NewsQuery newsQuery = NewsQuery.builder().status(News.STATUS_PUBLISHED).build();
         newsQuery.setSize(3);
         pageInfo.put("newsList", newsMapper.findList(newsQuery));
         pageInfo.put("blockModuleList", this.blockModuleList);
         pageInfo.put("recommendProject", this.recommendProjects);
         pageInfo.put("navImage", this.navImage);
         pageInfo.put("newsDefaultImage", this.newsDefaultImage);
+        pageInfo.put("appDefaultInfo", this.appDefaultInfo);
         return BaseResponse.builder().data(pageInfo).build();
     }
 

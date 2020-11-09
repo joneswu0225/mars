@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ser.Serializers;
 import com.jones.mars.model.param.TranslationParam;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.util.HttpUtil;
+import com.jones.mars.util.WechatApiUtil;
 import com.jones.mars.util.XunfeiUtil;
 import com.jones.mars.util.YoudaoUtil;
 import io.swagger.annotations.Api;
@@ -12,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,7 +44,14 @@ public class XunfeiController extends BaseController {
     @PostMapping("/ise/param")
     @ResponseBody
     public BaseResponse getISEInfo2(@RequestBody @ApiParam(required=true) TranslationParam param) throws UnsupportedEncodingException {
+        String base64 = null;
+        if(!StringUtils.isEmpty(param.getWechatMediaId())){
+            base64 = WechatApiUtil.getMediaBase64(param.getWechatMediaId());
+        } else {
+            base64 = param.getContent();
+        }
         String result = XunfeiUtil.getISEInfo(param.getContent(), param.getText());
+
         return BaseResponse.builder().data(JSONObject.parseObject(result)).build();
     }
 

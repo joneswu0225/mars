@@ -7,11 +7,15 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @ApiModel(value="评论参数")
 public class CommentParam extends BaseObject {
     @ApiModelProperty(value="评论内容",name="content")
     private String content;
+    @ApiModelProperty(value="评论内容类型,0:文本,1:图片",name="contentType")
+    private Integer contentType;
     @ApiModelProperty(value="评论类型",name="type")
     private CommentType type;
     @ApiModelProperty(value="评论关联ID",name="relatedId")

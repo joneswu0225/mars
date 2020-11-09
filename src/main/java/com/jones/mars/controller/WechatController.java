@@ -2,6 +2,7 @@ package com.jones.mars.controller;
 
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.util.WechatApiUtil;
+import com.jones.mars.util.WechatWeProgramUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class WechatController extends BaseController {
     @ApiOperation(value = "小程序Code2SessionKey", notes = "小程序Code2SessionKey")
     @GetMapping(value="/wxCode2SessionKey")
     public BaseResponse wxCode2SessionKey(@RequestParam(name="code", required = true) String code){
-        return BaseResponse.builder().data(WechatApiUtil.getSessionKey(code)).build();
+        return BaseResponse.builder().data(WechatWeProgramUtil.getSessionKey(code)).build();
     }
     /**
      * 小程序wxDecryptedUserInfo
@@ -72,7 +73,7 @@ public class WechatController extends BaseController {
     public BaseResponse wxDecryptedUserInfo(@RequestParam(name="sessionKey", required = true) String sessionKey,
                                             @RequestParam(name="encryptedData", required = true) String encryptedData,
                                             @RequestParam(name="iv", required = true) String iv){
-        return BaseResponse.builder().data(WechatApiUtil.getDecryptedUserInfo(sessionKey, encryptedData,iv)).build();
+        return BaseResponse.builder().data(WechatWeProgramUtil.getDecryptedUserInfo(sessionKey, encryptedData,iv)).build();
     }
     /**
      * 小程序appid

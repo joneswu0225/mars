@@ -17,6 +17,7 @@ public class Hotspot extends BaseObject {
     private Integer id;
     private String code;
     private String sceneCode;
+    private String sceneName;
     private String type = TYPE_DEFAULT;
     private String title;
     private Float locationX;

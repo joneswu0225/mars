@@ -34,4 +34,63 @@
         where p.operation = #{operation} and p.class_id=#{classId}
     </select>
 
+    <select id="findGrantedUserInfoList" resultType="ProjectUser" parameterType="RolePermissionQuery">
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select distinct(ur.user_id) as userId, u.mobile, up.sgname, up.avatar, up.email,up.description, d.name as departmentName
+        from user_role ur
+        left join role_permission rp on ur.role_id=rp.role_id left join user_profile up on ur.user_id=up.user_id
+        left join user u on u.id=ur.user_id
+        left join department_user du on ur.user_id=du.user_id
+        left join department d on du.department_id = d.id
+        <if test="projectId != null">
+          left join project p on p.class_id=rp.class_id
+        </if>
+        where rp.operation = #{operation}
+        <if test="projectId != null">
+            and p.id=#{projectId}
+        </if>
+        <if test="classId != null">
+            and rp.class_id=#{classId}
+        </if>
+        order by up.sgname desc
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+    </select>
+
+    <select id="findGrantedUserInfoAll" resultType="ProjectUser" parameterType="RolePermissionQuery">
+        select distinct(ur.user_id) as userId, u.mobile, up.sgname, up.avatar, up.email,up.description, d.name as departmentName
+        from user_role ur
+        left join role_permission rp on ur.role_id=rp.role_id left join user_profile up on ur.user_id=up.user_id
+        left join user u on u.id=ur.user_id
+        left join department_user du on ur.user_id=du.user_id
+        left join department d on du.department_id = d.id
+        <if test="projectId != null">
+          left join project p on p.class_id=rp.class_id
+        </if>
+        where rp.operation = #{operation}
+        <if test="projectId != null">
+            and p.id=#{projectId}
+        </if>
+        <if test="classId != null">
+            and rp.class_id=#{classId}
+        </if>
+        order by up.sgname desc
+    </select>
+
+    <select id="findGrantedUserInfoCount" resultType="Integer" parameterType="RolePermissionQuery">
+        select count(1)
+        from user_role ur
+        left join role_permission rp on ur.role_id=rp.role_id
+        left join department_user du on ur.user_id=du.user_id
+        <if test="projectId != null">
+          left join project p on p.class_id=rp.class_id
+        </if>
+        where rp.operation = #{operation}
+        <if test="projectId != null">
+            and p.id=#{projectId}
+        </if>
+        <if test="classId != null">
+            and rp.class_id=#{classId}
+        </if>
+    </select>
+
 </mapper>

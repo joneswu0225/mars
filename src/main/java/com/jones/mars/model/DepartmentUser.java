@@ -13,6 +13,9 @@ public class DepartmentUser extends BaseObject {
     private Date createTime;
     private Integer userId;
     private String userSgname;
+    private String userEmail;
+    private String userMobile;
+    private String userDescription;
     private Integer departmentId;
     private Integer enterpriseId;
 }
