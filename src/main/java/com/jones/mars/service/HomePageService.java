@@ -84,13 +84,15 @@ public class HomePageService{
     private void refreshRecommendProjects(){
         List<Integer> ids = constMap.get(AppConst.HOME_RECOMMEND_PROJECT).stream().map(p-> Integer.parseInt(p)).collect(Collectors.toList());//.stream().map(p-> Integer.parseInt(p.getValue())).collect(Collectors.toList());
         List<Project> projects = projectMapper.findAll(ProjectQuery.builder().ids(ids).build());
-        Map<Integer, Project> projectIdMap = projects.stream().collect(Collectors.toMap(Project::getId, p->p));
         List<Project> results = new ArrayList<>();
-        ids.forEach(id->{
-            if(projectIdMap.get(id).getEnterprisePlateformFlg().equals(CommonConstant.PLATEFROM) || projectIdMap.get(id).getPublicFlg().equals(Project.PUBLIC)){
-                results.add(projectIdMap.get(id));
-            }
-        });
+        if(projects.size() > 0) {
+            Map<Integer, Project> projectIdMap = projects.stream().collect(Collectors.toMap(Project::getId, p -> p));
+            ids.forEach(id -> {
+                if (projectIdMap.get(id).getEnterprisePlateformFlg().equals(CommonConstant.PLATEFROM) || projectIdMap.get(id).getPublicFlg().equals(Project.PUBLIC)) {
+                    results.add(projectIdMap.get(id));
+                }
+            });
+        }
         this.recommendProjects = results;
     }
 
