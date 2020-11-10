@@ -31,6 +31,12 @@ public class HotspotContentController extends BaseController {
         return service.findAll(query);
     }
 
+    @ApiOperation(value = "查看单个热点内容", notes = "")
+    @GetMapping("/{hotspotContentId}")
+    public BaseResponse findById(@PathVariable Integer hotspotContentId) {
+        return service.findById(hotspotContentId);
+    }
+
     @ApiOperation(value = "批量新增/更新热点内容", notes = "")
     @PostMapping("")
     public BaseResponse save(@RequestBody @ApiParam(required=true) HotspotContentParams param) {
