@@ -2,6 +2,7 @@ package com.jones.mars.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jones.mars.constant.ErrorCode;
+import com.jones.mars.model.User;
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.UserLoginParam;
 import com.jones.mars.object.BaseResponse;
@@ -118,7 +119,11 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
             if(request.getHeader("authorization") != null && LoginUtil.getInstance().getUser() == null){
                 String authorization = request.getHeader("authorization");
                 authorization = authorization.split(" ")[0];
-                LoginUtil.getInstance().refreshLoginUser(authorization);
+                User loginUser = LoginUtil.getInstance().refreshLoginUser(authorization);
+                if(loginUser == null){
+                    response.sendError(HttpStatus.UNAUTHORIZED.value(), "请登录后进行操作");
+                    return false;
+                }
             }
             if (request.getCookies() == null || LoginUtil.getInstance().getUser() == null) {
                 log.info("request address: " + request.getRemoteAddr());
