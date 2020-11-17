@@ -1,10 +1,9 @@
 package com.jones.mars.service;
 
+import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.Department;
-import com.jones.mars.model.DepartmentUser;
 import com.jones.mars.model.param.DepartmentParam;
 import com.jones.mars.model.param.DepartmentUserParam;
-import com.jones.mars.model.param.EnterpriseUserParam;
 import com.jones.mars.model.query.DepartmentQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
@@ -17,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,7 +46,7 @@ public class DepartmentService extends BaseService {
             departmentUserMapper.insert(param);
         }
         // TODO return id
-        return BaseResponse.builder().build();
+        return BaseResponse.builder().data(param.getId()).build();
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -93,11 +90,17 @@ public class DepartmentService extends BaseService {
 
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse delete(Integer departmentId){
-        EnterpriseUserParam param = EnterpriseUserParam.builder().departmentId(departmentId).build();
-        param.setId(departmentId);
-        mapper.delete(param);
-        departmentUserMapper.delete(param);
-        return BaseResponse.builder().build();
+        Integer userCount = mapper.findCount(DepartmentQuery.builder().departmentId(departmentId).build());
+        if(userCount > 0){
+            return BaseResponse.builder().code(ErrorCode.DEPARTMENT_DELETE_EXIST_USER).build();
+        } else {
+            DepartmentUserParam param = DepartmentUserParam.builder().departmentId(departmentId).build();
+            param.setId(departmentId);
+            mapper.delete(param);
+//            departmentUserMapper.delete(param);
+            return BaseResponse.builder().build();
+        }
+
     }
 
 

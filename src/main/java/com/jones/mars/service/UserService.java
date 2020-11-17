@@ -162,7 +162,7 @@ public class UserService extends BaseService<User>{
      * @param userParam
      * @return
      */
-    public BaseResponse doLogin(UserLoginParam userParam) {
+    public BaseResponse doLogin(UserLoginParam userParam, String appSource) {
         UserQuery.UserQueryBuilder builder = UserQuery.builder().mobile(userParam.getMobile());
         if(StringUtils.isEmpty(userParam.getVerifyCode()) & StringUtils.isEmpty(userParam.getPassword())) {
             return BaseResponse.builder().code(ErrorCode.VALIDATION_FAILED).message("验证码和密码不能同时为空").build();
@@ -188,8 +188,8 @@ public class UserService extends BaseService<User>{
             // 如果是管理员则不返回
             if(user_db.getUserType().equals(User.COMMON)){
                 // 普通用户登录后台要拒绝
-                log.info("userparam appsource: " + userParam.getAppSource());
-                if(CommonConstant.APP_SOURCE_ADMIN.equals(userParam.getAppSource())){
+                log.info("userparam appsource: " + appSource);
+                if(CommonConstant.APP_SOURCE_ADMIN.equals(appSource)){
                     log.info("当前用户%s,　为普通用户无权限登录后台管理");
                     return BaseResponse.builder().code(ErrorCode.ADMIN_LOGIN_DENIED).build();
                 }
@@ -231,7 +231,7 @@ public class UserService extends BaseService<User>{
         if(user == null || StringUtils.isEmpty(user.getPassword())){
             return BaseResponse.builder().code(ErrorCode.WECHAT_NO_PASSWD).data(wechatInfo).build();
         } else {
-            return doLogin(UserLoginParam.builder().mobile(user.getMobile()).password(user.getPassword()).build());
+            return doLogin(UserLoginParam.builder().mobile(user.getMobile()).password(user.getPassword()).build(), CommonConstant.APP_SOURCE_WEIXIN);
         }
     }
 
@@ -239,7 +239,7 @@ public class UserService extends BaseService<User>{
         User user = mapper.findOneByMobile(param.getMobile());
         if(user != null && param.getOpenid().equals(user.getOpenid())){
             mapper.update(User.builder().id(user.getId()).password(param.getPassword()).build());
-            return doLogin(UserLoginParam.builder().mobile(param.getMobile()).password(param.getPassword()).build());
+            return doLogin(UserLoginParam.builder().mobile(param.getMobile()).password(param.getPassword()).build(), CommonConstant.APP_SOURCE_WEIXIN);
         } else {
             return BaseResponse.builder().code(ErrorCode.WECHAT_LOGIN_VERIFY_FAIL).build();
         }

@@ -14,7 +14,7 @@
     <!-- TODO 所属部门　department_user 在一对多情况下会有隐患，list与count的数量不匹配 -->
     <select id="findList" resultType="ProjectUser">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select pu.*,u.mobile, up.sgname, up.email, up.description, d.name as departmentName from project_user pu
+        select pu.*,u.mobile, up.sgname, up.email,up.avatar, up.description, d.name as departmentName from project_user pu
         left join user_profile up on pu.user_id=up.user_id left join user u on pu.user_id=u.id
         left join department_user du on du.user_id=pu.user_id
         left join department d on du.department_id=d.id
@@ -59,7 +59,7 @@
         </if>
     </select>
     <select id="findAll" resultType="ProjectUser">
-        select pu.*,u.mobile, up.sgname, up.email, up.description, d.name as departmentName from project_user pu
+        select pu.*,u.mobile, up.sgname, up.email, up.avatar, up.description, d.name as departmentName from project_user pu
         left join user_profile up on pu.user_id=up.user_id left join user u on pu.user_id=u.id
         left join department_user du on du.user_id=pu.user_id
         left join department d on du.department_id=d.id

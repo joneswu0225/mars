@@ -16,6 +16,8 @@ public class EnterpriseUserParam extends BaseObject {
     private Integer enterpriseId;
     @ApiParam(hidden = true)
     private Integer roleId;
+    @ApiParam(hidden = true)
+    private List<Integer> userIds;
     @ApiModelProperty(value="用户ID",name="userId")
     private Integer userId;
     @ApiModelProperty(value="部门ID",name="departmentId")
