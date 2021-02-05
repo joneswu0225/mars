@@ -7,6 +7,8 @@
         <result column="blockName" property="name" />
         <result column="blockDetail" property="detail" />
         <result column="blockStatus" property="status" />
+        <result column="blockIcon" property="icon" />
+        <result column="blockImageUrl" property="imageUrl" />
         <collection property="moduleList" ofType="BlockModule" column="blockId">
             <id column="moduleId" property="id"/>
             <result column="blockId" property="blockId"/>
@@ -34,7 +36,7 @@
         order by b.enterprise_id, b.id,m.seq,c.seq
     </select>
     <select id="findBlockUserPermission" resultMap="BlockMap" parameterType="Query">
-        select rp.operation, m.id as moduleId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail
+        select rp.operation, m.id as moduleId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail, b.icon as blockIcon, b.image_url as blockImageUrl
         from user_role ur left join role_permission rp on ur.role_id=rp.role_id
         left join block_class c on rp.class_id=c.id
         left join block_module m on c.module_id=m.id
@@ -60,6 +62,12 @@
         set id =#{id}
         <if test="name != null and name != ''">
             ,name = #{name}
+        </if>
+        <if test="imageUrl != null and imageUrl != ''">
+            ,image_url = #{imageUrl}
+        </if>
+        <if test="icon != null and icon != ''">
+            ,icon = #{icon}
         </if>
         <if test="detail != null and detail != ''">
             ,detail = #{detail}
@@ -132,6 +140,13 @@
             and enterprise_id in (
             <foreach collection="enterpriseIds" item="eid" index="index" separator=",">
                 #{eid}
+            </foreach>
+            )
+        </if>
+        <if test="blockIds != null">
+            and id in (
+            <foreach collection="blockIds" item="bid" index="index" separator=",">
+                #{bid}
             </foreach>
             )
         </if>

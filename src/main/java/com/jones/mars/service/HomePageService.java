@@ -31,6 +31,7 @@ public class HomePageService{
 
     private Map<Integer, Enterprise> plateformEnterpriseMap;
     private List<Project> recommendProjects;
+    private List<Block> defaultBlocks;
     private List<EnterpriseShown> enterpriseShowns;
     private List<String> serviceSuperiority;
     private List<String> choiceReason;
@@ -41,7 +42,7 @@ public class HomePageService{
     private List<BlockModule> blockModuleList;
     private Map<String, List<String>> constMap = new HashMap<>();
     private Map<String, String> contactInfo;
-    private Map<String, String> appDefaultInfo;
+    private Map<String, List<String>> appDefaultInfo;
     private String icpInfo;
 
 
@@ -62,6 +63,7 @@ public class HomePageService{
         refreshBlockModule();
         refreshNewsDefaultImage();
         refreshAppDefaultInfo();
+        refreshDefaultBlocks();
     }
 
     private void refreshPlateformEnterprise(){
@@ -76,6 +78,23 @@ public class HomePageService{
             });
         }
         this.plateformEnterpriseMap = plateformEnterpriseMap;
+    }
+
+    /**
+     * 默认船只
+     */
+    private void refreshDefaultBlocks(){
+        List<Integer> ids = constMap.get(AppConst.APP_DEFAULT_BLOCK).stream().map(p-> Integer.parseInt(p)).collect(Collectors.toList());//.stream().map(p-> Integer.parseInt(p.getValue())).collect(Collectors.toList());
+        List<Block> blocks = blockMapper.findAll(BlockQuery.builder().blockIds(ids).build());
+        for(int i=0; i<ids.size(); i++){
+            for(Block block: blocks){
+                if(block.getId().equals(ids.get(i))){
+                    block.setSeq(i);
+                    break;
+                }
+            }
+        }
+        this.defaultBlocks = blocks;
     }
 
     /**
@@ -167,10 +186,10 @@ public class HomePageService{
     }
 
     private void refreshAppDefaultInfo(){
-        Map<String, String> result = new HashMap<>();
+        Map<String, List<String>> result = new HashMap<>();
         for(String key : constMap.keySet()){
             if(key.startsWith(AppConst.APP_DEFAULT_PREFIX)){
-                result.put(key, constMap.get(key).get(0));
+                result.put(key, constMap.get(key));
             }
         }
         this.appDefaultInfo = result;
@@ -205,6 +224,9 @@ public class HomePageService{
     public BaseResponse appDefaultInfo(){
         return BaseResponse.builder().data(this.appDefaultInfo).build();
     }
+    public BaseResponse appDefaultBlocks(){
+        return BaseResponse.builder().data(this.defaultBlocks).build();
+    }
 
     public BaseResponse homePageInfo(){
         Map<String, Object> pageInfo = new HashMap<>();
@@ -218,6 +240,7 @@ public class HomePageService{
         pageInfo.put("icpInfo", this.icpInfo);
         pageInfo.put("contactInfo", this.contactInfo);
         pageInfo.put("appDefaultInfo", this.appDefaultInfo);
+        pageInfo.put("defaultBlocks", this.defaultBlocks);
         return BaseResponse.builder().data(pageInfo).build();
     }
 
@@ -231,6 +254,7 @@ public class HomePageService{
         pageInfo.put("navImage", this.navImage);
         pageInfo.put("newsDefaultImage", this.newsDefaultImage);
         pageInfo.put("appDefaultInfo", this.appDefaultInfo);
+        pageInfo.put("defaultBlocks", this.defaultBlocks);
         return BaseResponse.builder().data(pageInfo).build();
     }
 

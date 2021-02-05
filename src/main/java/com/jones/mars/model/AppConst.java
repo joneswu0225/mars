@@ -23,6 +23,7 @@ public class AppConst extends BaseObject {
     public static final String HOME_INTERNET_CONTENT_PROVIDER = "HOME_INTERNET_CONTENT_PROVIDER";
     public static final String PROJECT_GUIDE_HOTSPOT_IMAGE = "PROJECT_GUIDE_HOTSPOT_IMAGE";
     public static final String NEWS_DEFAULT_IMAGE = "NEWS_DEFAULT_IMAGE";
+    public static final String APP_DEFAULT_BLOCK = "APP_DEFAULT_BLOCK";
     public static final String APP_DEFAULT_PREFIX = "APP_DEFAULT_";
     private String name;
     private String value;

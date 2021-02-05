@@ -64,6 +64,12 @@ public class HomePageController{
         return service.appDefaultInfo();
     }
 
+    @ApiOperation(value = "系统默认船只", notes = "")
+    @GetMapping("defaultBlocks")
+    public BaseResponse defaultBlocks() {
+        return service.appDefaultBlocks();
+    }
+
     @ApiOperation(value = "首页信息", notes = "")
     @GetMapping("pageInfo")
     public BaseResponse pageInfo() {
