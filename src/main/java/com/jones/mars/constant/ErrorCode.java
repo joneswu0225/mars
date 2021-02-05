@@ -48,6 +48,8 @@ public enum ErrorCode {
 	//角色错误
 	ROLE_DELETE_EXIST_USER("5101", "该角色仍存在被授予的用户，无法删除"),
 	ROLE_PERMISSION_DELETE_NOAUTH("5101", "请联系管理员进行权限删除"),
+	//部门错误
+	DEPARTMENT_DELETE_EXIST_USER("6001", "该部门存在其他用户，无法删除"),
 
 	INTERNAL_ERROR("9000", "系统内部错误"),
 	;

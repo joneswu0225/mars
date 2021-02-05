@@ -76,10 +76,10 @@ public class ProjectService extends BaseService {
         log.info("关联模块与项目关系");
         BlockProject blockProject = BlockProject.builder().blockId(param.getBlockId()).projectId(projectId).build();
         blockProjectMapper.insert(blockProject);
-        if (currentUser.getUserType().equals(User.COMMON)) {
-            log.info("当前用户为普通用户， 新增当前用户为项目负责人");
-            projectUserMapper.insert(ProjectUserParam.builder().projectId(projectId).userIds(Arrays.asList(currentUser.getId())).managerFlg(ProjectUser.PROJECT_MANAGER).build());
-        }
+//        if (currentUser.getUserType().equals(User.COMMON)) {
+        log.info("新增当前用户为项目负责人");
+        projectUserMapper.insert(ProjectUserParam.builder().projectId(projectId).userIds(Arrays.asList(currentUser.getId())).managerFlg(ProjectUser.PROJECT_MANAGER).build());
+//        }
         List<Integer> userIds = param.getUserIds();
         if (!CollectionUtils.isEmpty(userIds)) {
             userIds.remove(currentUser.getId());

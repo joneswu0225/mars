@@ -106,6 +106,7 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
                 throws Exception {
+            String appSource = request.getHeader(CommonConstant.APP_SOURCE_FIELD);
             Enumeration<String> headerNames = request.getHeaderNames();
             while (headerNames.hasMoreElements()){
                 String name = headerNames.nextElement();

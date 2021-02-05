@@ -25,5 +25,7 @@ public class BlockQuery extends Query {
     @ApiParam(hidden = true)
     private Integer userId;
     @ApiParam(hidden = true)
+    private List<Integer> blockIds;
+    @ApiParam(hidden = true)
     private List<Integer> enterpriseIds;
 }

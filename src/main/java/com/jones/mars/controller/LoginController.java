@@ -2,6 +2,7 @@ package com.jones.mars.controller;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.jones.mars.model.User;
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.*;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.UserService;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,8 +67,9 @@ public class LoginController extends BaseController {
 
     @ApiOperation(value = "登录", notes = "登录")
     @PostMapping("login")
-    public BaseResponse login(@RequestBody @ApiParam(required=true) UserLoginParam param) {
-        return userService.doLogin(param);
+    public BaseResponse login(@RequestBody @ApiParam(required=true) UserLoginParam param, HttpServletRequest request) {
+        String appSource = request.getHeader(CommonConstant.APP_SOURCE_FIELD);
+        return userService.doLogin(param, appSource);
     }
 
     @ApiOperation(value = "小程序登录", notes = "登录")
