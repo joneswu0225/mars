@@ -6,6 +6,9 @@
         <result column="enterpirse_id" property="enterpriseId" />
         <result column="blockName" property="name" />
         <result column="blockStatus" property="status" />
+        <result column="blockImageUrl" property="imageUrl" />
+        <result column="blockIcon" property="icon" />
+        <result column="blockSeq" property="seq" />
         <collection property="moduleList" ofType="BlockModule" column="blockId">
             <id column="moduleId" property="id"/>
             <result column="blockId" property="blockId"/>
@@ -22,7 +25,7 @@
         </collection>
     </resultMap>
     <select id="findGrantedBlock" resultMap="BlockMap">
-        select p.id pId, r.enterprise_id, r.block_id as blockId, b.name as blockName,b.status as blockStatus,
+        select p.id pId, r.enterprise_id, r.block_id as blockId, b.name as blockName,b.status as blockStatus,b.icon as blockIcon,b.image_url as blockImageUrl,b.seq as blockSeq,
         m.id as moduleId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, p.operation
         from user_role ur, role r, role_permission p, block_class c, block_module m, block b
         where ur.role_id=r.id and ur.role_id=p.role_id and p.class_id=c.id and c.module_id=m.id and r.block_id=b.id
@@ -33,7 +36,7 @@
         <if test="operation != null">
             and p.operation = #{operation}
         </if>
-        order by r.enterprise_id, r.block_id, m.seq,c.seq
+        order by r.enterprise_id, b.seq, r.block_id, m.seq,c.seq
     </select>
 
     <insert id="insert" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
