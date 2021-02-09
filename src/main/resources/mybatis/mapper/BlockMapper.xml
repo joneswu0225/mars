@@ -9,6 +9,7 @@
         <result column="blockStatus" property="status" />
         <result column="blockIcon" property="icon" />
         <result column="blockImageUrl" property="imageUrl" />
+        <result column="blockSeq" property="seq" />
         <collection property="moduleList" ofType="BlockModule" column="blockId">
             <id column="moduleId" property="id"/>
             <result column="blockId" property="blockId"/>
@@ -24,7 +25,7 @@
         </collection>
     </resultMap>
     <select id="findBlockModule" resultMap="BlockMap" parameterType="Query">
-        select m.id as moduleId, m.block_id as blockId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail
+        select b.seq as blockSeq, m.id as moduleId, m.block_id as blockId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail
         from block b left join block_module m on b.id=m.block_id left join block_class c on m.id=c.module_id
         where m.delete_flg=0 and c.delete_flg=0 and b.delete_flg=0
         <if test="enterpriseId != null">
@@ -33,7 +34,7 @@
         <if test="moduleName != null and moduleName != ''">
             and m.name=#{moduleName}
         </if>
-        order by b.enterprise_id, b.id,m.seq,c.seq
+        order by b.enterprise_id,b.seq, b.id,m.seq,c.seq
     </select>
     <select id="findBlockUserPermission" resultMap="BlockMap" parameterType="Query">
         select rp.operation, m.id as moduleId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail, b.icon as blockIcon, b.image_url as blockImageUrl
