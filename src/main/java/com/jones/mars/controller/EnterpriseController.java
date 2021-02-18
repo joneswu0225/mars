@@ -2,6 +2,7 @@ package com.jones.mars.controller;
 
 import com.jones.mars.model.param.EnterpriseParam;
 import com.jones.mars.model.param.EnterpriseUserParam;
+import com.jones.mars.model.query.EnterpriseQuery;
 import com.jones.mars.model.query.EnterpriseUserQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
@@ -27,7 +28,7 @@ public class EnterpriseController extends BaseController {
 
     @ApiOperation(value = "企业列表", notes = "企业列表")
     @GetMapping("")
-    public BaseResponse list(@ApiParam Query query) {
+    public BaseResponse list(@ApiParam EnterpriseQuery query) {
         return service.findByPage(query);
     }
 
