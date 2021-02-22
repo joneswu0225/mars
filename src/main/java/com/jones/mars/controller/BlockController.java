@@ -35,6 +35,12 @@ public class BlockController extends BaseController {
         return service.findBlocks(query);
     }
 
+    @ApiOperation(value = "模块列表", notes = "授权的模块列表")
+    @GetMapping("authBlocks")
+    public BaseResponse authBlocks(@ApiParam BlockQuery query) {
+        return service.findAuthBlocks(query);
+    }
+
     @ApiOperation(value = "新增模块", notes = "")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) BlockParam param) {

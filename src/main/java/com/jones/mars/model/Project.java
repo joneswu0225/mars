@@ -27,6 +27,7 @@ public class Project extends BaseObject {
     private String imageUrl;
     private Integer blockId;
     private String blockName;
+    private String blockPanoPath;
     private Integer moduleId;
     private Integer enterprisePlateformFlg;
     private Integer oriEnterpriseId;

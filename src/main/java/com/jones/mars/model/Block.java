@@ -21,6 +21,7 @@ public class Block extends BaseObject {
     private String status;
     private Integer enterpriseId;
     private String name;
+    private String panoPath;
     private Integer seq;
     private List<BlockModule> moduleList = new ArrayList<>();
 

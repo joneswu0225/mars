@@ -41,7 +41,7 @@ public class BlockService extends BaseService{
         return BaseResponse.builder().data(list).build();
     }
 
-    public BaseResponse findBlocks(BlockQuery query){
+    public BaseResponse findAuthBlocks(BlockQuery query){
         User user = LoginUtil.getInstance().getUser();
 //        if(user == null){
 //            user = userMapper.findOne(18);
@@ -58,6 +58,10 @@ public class BlockService extends BaseService{
             blockList = roleMapper.findGrantedBlock(query);
         }
         return BaseResponse.builder().data(blockList).build();
+    }
+
+    public BaseResponse findBlocks(BlockQuery query){
+        return findByPage(query);
     }
 
     /**
