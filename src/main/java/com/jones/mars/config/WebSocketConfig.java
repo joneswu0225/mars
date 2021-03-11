@@ -16,7 +16,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     }
 
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(new String[]{"/panopipe"}).withSockJS();
+        registry.addEndpoint(new String[]{"/panopipe"}).setAllowedOrigins("*").withSockJS();
     }
 
     @Bean
