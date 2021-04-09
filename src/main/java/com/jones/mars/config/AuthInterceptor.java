@@ -78,7 +78,7 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
         addInterceptor.excludePathPatterns("/user/**/exists");
         addInterceptor.excludePathPatterns("/user/logout");
         addInterceptor.excludePathPatterns("/pano**");
-        // socket接口                                                
+        // socket接口
         addInterceptor.excludePathPatterns("/ws/**");
         addInterceptor.excludePathPatterns("/wss/**");
         addInterceptor.excludePathPatterns("/user/client/**");

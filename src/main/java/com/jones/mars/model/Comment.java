@@ -16,7 +16,7 @@ public class Comment extends BaseObject {
     public static final int CONTENT_TYPE_IMAGE = 1;
 
     private String content;
-    private Integer content_type = CONTENT_TYPE_TEXT;
+    private Integer contentType = CONTENT_TYPE_TEXT;
     private Integer userId;
     private String userName;
     private String userAvatar;
