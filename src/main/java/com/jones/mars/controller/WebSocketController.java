@@ -5,6 +5,7 @@ import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.SocketMessage;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.util.RandomString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -28,6 +29,7 @@ import java.util.Map;
  * Created by jones on 18-1-16.
  */
 @Controller
+@Slf4j
 @RequestMapping("/ws")
 public class WebSocketController extends BaseController {
     private static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -40,6 +42,7 @@ public class WebSocketController extends BaseController {
     public SocketMessage send(SocketMessage message, @Header("code") String code,
                               @Headers Map<String, Object> headers) throws Exception {
         message.setDate(df.format(new Date()));
+        log.info("socket: code:" + code);
         webAgentSessionRegistry.getSessionIds(code).forEach(p -> {
             template.convertAndSendToUser(p, "/client/getLocation", message, createHeaders(p));
         });
