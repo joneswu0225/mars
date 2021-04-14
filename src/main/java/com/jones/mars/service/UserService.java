@@ -218,7 +218,7 @@ public class UserService extends BaseService<User>{
     }
 
     public BaseResponse doWxLogin(UserWXLoginParam param){
-        Map<String, String> wechatInfo = WechatWeProgramUtil.getUserInfo(param.getCode(),param.getEncryptedData(), param.getIv());
+        Map<String, String> wechatInfo = WechatWeProgramUtil.getUserInfo(param.getWeprogramId(), param.getCode(),param.getEncryptedData(), param.getIv());
         if(wechatInfo == null) {
             return BaseResponse.builder().code(ErrorCode.WECHAT_LOGIN_VERIFY_FAIL).build();
         }

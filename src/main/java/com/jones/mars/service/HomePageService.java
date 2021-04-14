@@ -66,6 +66,7 @@ public class HomePageService{
         refreshDefaultBlocks();
     }
 
+
     private void refreshPlateformEnterprise(){
         Map<Integer, Enterprise> plateformEnterpriseMap = mapper.findAllName(EnterpriseQuery.builder().plateformFlg(CommonConstant.PLATEFROM).build())
                 .stream().collect(Collectors.toMap(Enterprise::getId, p->p));

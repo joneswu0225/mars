@@ -6,10 +6,7 @@ import com.jones.mars.util.WechatWeProgramUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping({"/wechat"})
@@ -60,9 +57,9 @@ public class WechatController extends BaseController {
      * @return
      */
     @ApiOperation(value = "小程序Code2SessionKey", notes = "小程序Code2SessionKey")
-    @GetMapping(value="/wxCode2SessionKey")
-    public BaseResponse wxCode2SessionKey(@RequestParam(name="code", required = true) String code){
-        return BaseResponse.builder().data(WechatWeProgramUtil.getSessionKey(code)).build();
+    @GetMapping(value="/weprogram/{weprogramId}/wxCode2SessionKey")
+    public BaseResponse wxCode2SessionKey(@PathVariable Integer weprogramId, @RequestParam(name="code", required = true) String code){
+        return BaseResponse.builder().data(WechatWeProgramUtil.getSessionKey(weprogramId, code)).build();
     }
     /**
      * 小程序wxDecryptedUserInfo

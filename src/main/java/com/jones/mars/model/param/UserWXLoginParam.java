@@ -5,10 +5,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @ApiModel(value="微信登录参数", description = "")
 public class UserWXLoginParam {
+    @NotNull(message = "小程序ID不能为空")
+    @ApiModelProperty(value="小程序ID",name="weprogramId")
+    private Integer weprogramId;
     @NotBlank(message = "加密数据不能为空")
     @ApiModelProperty(value="加密数据",name="encryptedData")
     private String encryptedData;
