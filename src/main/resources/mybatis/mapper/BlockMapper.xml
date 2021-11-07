@@ -55,8 +55,8 @@
         order by b.enterprise_id, b.id, m.seq, c.seq
     </select>
     <insert id="insert" parameterType="Block" useGeneratedKeys="true" keyProperty="id">
-        insert into block(`name`, `enterprise_id`, `create_time`, `update_time`, `operator_id`, `detail`)
-        values(#{name}, #{enterpriseId}, now(), now(), #{operatorId}, #{detail})
+        insert into block(`name`, `enterprise_id`, `create_time`, `update_time`, `operator_id`, `detail`,`icon`,`image_url`,`pano_path`)
+        values(#{name}, #{enterpriseId}, now(), now(), #{operatorId}, #{detail},#{icon},#{imageUrl},#{panoPath})
     </insert>
     <insert id="update" parameterType="Block" >
         update block

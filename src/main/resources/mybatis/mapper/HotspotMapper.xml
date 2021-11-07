@@ -4,6 +4,7 @@
     <resultMap id="HotspotMap" type="Hotspot" >
         <id property="id" column="id" />
         <result column="code" property="code"/>
+        <result column="icon" property="icon"/>
         <result column="hotspot_seq" property="seq"/>
         <result column="type" property="type"/>
         <result column="title" property="title"/>
@@ -27,14 +28,17 @@
     </resultMap>
 
     <insert id="insert" parameterType="Hotspot" useGeneratedKeys="true" keyProperty="id">
-        insert into hotspot(`code`, `title`, `location_x`, `location_y`, `location_fov`, `scene_id`,`project_id`,`type`, `create_time`, `update_time`)
-        values(#{code}, #{title}, #{locationX}, #{locationY}, #{locationFov}, #{sceneId}, #{projectId}, #{type},now(), now())
+        insert into hotspot(`code`, `icon`, `title`, `location_x`, `location_y`, `location_fov`, `scene_id`,`project_id`,`type`, `create_time`, `update_time`)
+        values(#{code}, #{icon}, #{title}, #{locationX}, #{locationY}, #{locationFov}, #{sceneId}, #{projectId}, #{type},now(), now())
     </insert>
     <insert id="update" parameterType="Hotspot">
         update hotspot
         set id = #{id}
         <if test="type != null and type !=''">
             , type = #{type}
+        </if>
+        <if test="icon != null and icon !=''">
+            , icon = #{icon}
         </if>
         <if test="code != null and code !=''">
             , code = #{code}

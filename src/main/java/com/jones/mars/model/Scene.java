@@ -12,6 +12,8 @@ import java.util.List;
 public class Scene extends BaseObject {
     public static final int UNPUBLIC = 0;
     public static final int PUBLIC = 1;
+    public static final int SLICESTATUS_TODO = 0;
+    public static final int SLICESTATUS_FINISH = 1;
 
     private Integer sceneTypeId;
     private String sceneTypeName;
@@ -21,9 +23,11 @@ public class Scene extends BaseObject {
     private Integer blockId;
     private Integer imageId;
     private String imageUrl;
+    private String panoImageUrl;
     private Float locationX;
     private Float locationY;
     private Integer seq;
+    private Integer sliceStatus;
     private Integer publicFlg = UNPUBLIC;
     private List<Hotspot> hotspots = new ArrayList<>();
 

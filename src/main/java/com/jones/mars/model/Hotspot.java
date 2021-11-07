@@ -16,6 +16,7 @@ public class Hotspot extends BaseObject {
     public static final String TYPE_ATTACHMENT = "ATTACHMENT";
     private Integer id;
     private String code;
+    private String icon;
     private String sceneCode;
     private String sceneName;
     private String type = TYPE_DEFAULT;

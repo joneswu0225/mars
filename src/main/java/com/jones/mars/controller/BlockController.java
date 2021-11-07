@@ -1,8 +1,10 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.model.Block;
+import com.jones.mars.model.BlockHotspot;
 import com.jones.mars.model.BlockSceneType;
 import com.jones.mars.model.User;
+import com.jones.mars.model.param.BlockHotspotParam;
 import com.jones.mars.model.param.BlockParam;
 import com.jones.mars.model.query.BlockQuery;
 import com.jones.mars.model.query.BlockSceneTypeQuery;
@@ -64,7 +66,7 @@ public class BlockController extends BaseController {
     @ApiOperation(value = "模块详情", notes = "")
     @GetMapping("{blockId}")
     public BaseResponse findOne(@PathVariable Integer blockId) {
-        return service.findById(blockId);
+        return service.findBlockById(blockId);
     }
 
     @ApiOperation(value = "更新模块", notes = "")
@@ -87,6 +89,42 @@ public class BlockController extends BaseController {
     @GetMapping("{blockId}/sceneType")
     public BaseResponse sceneType(@PathVariable @ApiParam(required=true) Integer blockId) {
         return blockSceneTypeService.findSceneTypeProjectScene(blockId);
+    }
+
+    @ApiOperation(value = "新增漫游热点", notes = "")
+    @PostMapping("/{blockId}/blockHotspot")
+    public BaseResponse addBlockHotspot(@PathVariable @ApiParam(required=true) Integer blockId,
+                                        @RequestBody @ApiParam(required=true) BlockHotspotParam param) {
+        param.setBlockId(blockId);
+        service.insertBlockHotspot(param);
+        return BaseResponse.builder().build();
+    }
+
+    @ApiOperation(value = "删除漫游热点", notes = "")
+    @DeleteMapping("/blockHotspot/{blockHotspotId}")
+    public BaseResponse deleteBlockHotspot(@PathVariable @ApiParam(required=true) Integer blockHotspotId) {
+        service.deleteBlockHotspot(blockHotspotId);
+        return BaseResponse.builder().build();
+    }
+
+    @ApiOperation(value = "更新漫游热点", notes = "")
+    @PutMapping("/blockHotspot/{blockHotspotId}")
+    public BaseResponse updateblockHotspot(
+            @PathVariable Integer blockHotspotId,
+            @RequestBody @ApiParam(required=true) BlockHotspotParam param) {
+        param.setId(blockHotspotId);
+        service.updateblockHotspot(param);
+        return BaseResponse.builder().build();
+    }
+
+    @ApiOperation(value = "更新漫游热点排序", notes = "")
+    @PutMapping("/{blockId}/blockHotspot/changeSeq")
+    public BaseResponse updateblockHotspotSeq(
+            @PathVariable @ApiParam(required=true) Integer blockId,
+            @RequestBody @ApiParam(required=true) BlockHotspotParam param) {
+        param.setBlockId(blockId);
+        service.updateblockHotspotSeq(param);
+        return BaseResponse.builder().build();
     }
 
 }

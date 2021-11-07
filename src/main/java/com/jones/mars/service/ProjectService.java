@@ -45,6 +45,9 @@ public class ProjectService extends BaseService {
     @Value("${app.public.block.id:3}")
     private Integer publicBlockId;
 
+    private static final Integer FORCE_EXECUTE = 1;
+
+
     @Autowired
     private MessageService service;
     @Autowired
@@ -125,8 +128,9 @@ public class ProjectService extends BaseService {
 //        if(projectModifyAuthError != null){
 //            return BaseResponse.builder().code(projectModifyAuthError).build();
 //        }
+        Integer force = param.getForce() == null ? 0 : param.getForce();
         Project project = mapper.findOne(param.getId());
-        if(equals(project.getStatus().equals(Project.ONSHELF))){
+        if(force.equals(FORCE_EXECUTE) && project.getStatus().equals(Project.ONSHELF)){
             return BaseResponse.builder().code(ErrorCode.PROJECT_MODIFY_DENIED_PUBLISHED).build();
         }
         log.info("更新项目{} {}", param.getId(), param.getName());
@@ -289,16 +293,21 @@ public class ProjectService extends BaseService {
     }
 
     public BaseResponse onshelfProject(Integer projectId, Boolean publicFlag){
+        return onshelfProject(projectId, publicFlag, FORCE_EXECUTE);
+    }
+
+    public BaseResponse onshelfProject(Integer projectId, Boolean publicFlag, Integer force){
+        force = force == null ? 0 : force;
         BaseResponse response  = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);
-        if(project.getStatus() > Project.EDITIND) {
+        if(project.getStatus() > Project.EDITIND | (force > 0)) {
             project = Project.builder().status(Project.ONSHELF).publishDate(new Date()).build();
             project.setId(projectId);
+            if (publicFlag != null && publicFlag) {
+                project.setPublicFlg(Project.PUBLIC);
+                blockProjectMapper.insert(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
+            }
             mapper.update(project);
-            // 往公共企业模块中插入该项目的引用
-//            if (publicBlockId != null && publicFlag != null && publicFlag) {
-//                blockProjectMapper.insert(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
-//            }
         } else {
             response.setErrorCode(ErrorCode.PROJECT_VERIFY_ONSHELFED);
         }
@@ -319,6 +328,7 @@ public class ProjectService extends BaseService {
         }
         return response;
     }
+
     @Transactional
     public BaseResponse unpublicProject(Integer projectId){
         Project project = Project.builder().publicFlg(Project.UNPUBLIC).build();
@@ -327,6 +337,15 @@ public class ProjectService extends BaseService {
 //        blockProjectMapper.delete(BlockProject.builder().blockId(publicBlockId).projectId(projectId).build());
         return BaseResponse.builder().build();
     }
+
+    @Transactional
+    public BaseResponse backToEditProject(Integer projectId){
+        Project project = Project.builder().status(Project.EDITIND).build();
+        project.setId(projectId);
+        mapper.update(project);
+        return BaseResponse.builder().build();
+    }
+
     @Transactional
     public BaseResponse publicProject(Integer projectId){
         Project project = Project.builder().publicFlg(Project.PUBLIC).build();
@@ -336,10 +355,11 @@ public class ProjectService extends BaseService {
         return BaseResponse.builder().build();
     }
 
-    public BaseResponse remodifyProject(Integer projectId) {
+    public BaseResponse remodifyProject(Integer projectId, Integer force) {
+        force = force == null ? 0 : force;
         BaseResponse response  = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);
-        if(project.getStatus().equals(Project.DOWNSHELF)){
+        if(force > 0  || project.getStatus().equals(Project.DOWNSHELF)){
             project = Project.builder().status(Project.EDITIND).publishDate(new Date()).build();
             project.setId(projectId);
             mapper.update(project);

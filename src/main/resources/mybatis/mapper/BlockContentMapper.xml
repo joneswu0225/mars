@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.BlockContentMapper" >
+    <insert id="insert" parameterType="BlockContentParam" useGeneratedKeys="true" keyProperty="id">
+        insert into block_content(`block_id`, `content`, `title`, `extra`, `seq`, `type`) values
+        (#{blockId}, #{content}, #{title}, #{extra}, #{seq}, #{type})
+    </insert>
+    <update id="update" parameterType="BlockContentParam">
+        update block_content
+        set content = #{content}, title = #{title}, `type` = #{type}, extra = #{extra}
+        where id = #{id}
+    </update>
+    <select id="findMaxSeqByBlockId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select max(seq) from block_content where block_id=#{blockId}
+    </select>
+    <update id="updateBlockContentSeq">
+        update block_content set seq=case
+        <foreach collection="blockContentIds" item="blockContentId" index="index">
+            when id=#{blockContentId} then #{index}
+        </foreach>
+        end
+        where id in
+        <foreach collection="blockContentIds" item="blockContentId" index="index" separator="," open="(" close=")">
+            #{blockContentId}
+        </foreach>
+    </update>
+    <select id="findList" resultType="BlockContent" parameterType="Query">
+        select * from block_content
+        where 1=1
+        <if test="blockId != null">
+            and block_id=#{blockId}
+        </if>
+        <if test="type != null and type != ''">
+            and `type`=#{type}
+        </if>
+        order by `type`, seq
+    </select>
+
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from block_content
+        where block_id=#{blockId}
+    </select>
+
+    <select id="findByBlockId" resultType="BlockContent" parameterType="java.lang.Integer">
+        select * from block_content
+        where block_id=#{blockId}
+        order by seq
+    </select>
+
+    <select id="findAll" resultType="BlockContent">
+        select * from block_content
+        where 1=1
+        <if test="blockId != null">
+            and block_id=#{blockId}
+        </if>
+        <if test="type != null and type != ''">
+            and `type`=#{type}
+        </if>
+        order by seq
+    </select>
+
+    <select id="findOne" resultType="BlockContent">
+        select * from block_content where id=#{id}
+    </select>
+
+    <delete id="delete">
+        delete from block_content where id=#{id}
+    </delete>
+    <delete id="deleteByBlockId">
+        delete from block_content where block_id=#{id}
+    </delete>
+</mapper>

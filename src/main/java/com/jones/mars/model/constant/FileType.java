@@ -12,6 +12,7 @@ public enum FileType {
     PROJECT_VIDEO("项目视频"),
     PROJECT_MEDIA("项目富文本"),
     BLOCK_STRUCTURE("船体平面图"),
+    SCENE_PANO_IMG("场景原图"),
     NEWS_MEDIA("新闻富文本"),
     USER_NAMECARD("用户名片"),
     USER_AVATAR("用户头像"),
@@ -37,7 +38,10 @@ public enum FileType {
                 relPath = "user" + File.separator + "avatar" + File.separator + name;
                 break;
             case BLOCK_STRUCTURE:
-                relPath = "enterprise" + File.separator + relatedId + File.separator + "block" + File.separator + name;
+                relPath = "block" + File.separator + relatedId + File.separator + "structure_img" + File.separator + name;
+                break;
+            case SCENE_PANO_IMG:
+                relPath = "block" + File.separator + relatedId + File.separator + "scene_pano_img" + File.separator + fileName;
                 break;
             case PROJECT_IMAGE:
                 relPath = "enterprise" + File.separator + relatedId + File.separator + "project" + File.separator + name;

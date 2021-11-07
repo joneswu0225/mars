@@ -6,12 +6,10 @@ import com.jones.mars.model.query.WeprogramInfoQuery;
 import com.jones.mars.repository.WeprogramInfoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,16 +23,6 @@ public class WechatWeProgramUtil {
     @Autowired
     private WeprogramInfoMapper weprogramInfoMapper;
     private static Map<Integer, WeprogramInfo> weprogramInfoMap;
-
-    public static String appId;
-    private static String appSecret;
-    public static final String WECHAT_API_URL_BASE = "https://api.weixin.qq.com";
-    public static String URL_CODE_TO_SESSION = WECHAT_API_URL_BASE + "/sns/jscode2session?grant_type=authorization_code&appid=%s&secret=%s&js_code=";
-
-    @PostConstruct
-    public void init() {
-        URL_CODE_TO_SESSION = String.format(URL_CODE_TO_SESSION, appId, appSecret);
-    }
 
     @Scheduled(cron = "0 0/2 * * * ?")
     private void refreshWeprogramInfo(){
@@ -75,7 +63,7 @@ public class WechatWeProgramUtil {
             JSONObject decryptedResult = getDecryptedUserInfo(sessionKey, encrypedData, iv);
             String openid = sessionInfo.getString("openid");
 //            String unionid = sessionInfo.getString("unionid");
-            if (appId.equals(decryptedResult.getJSONObject("watermark").getString("appid"))) {
+            if (weprogramInfoMap.get(weprogramId).getAppId().equals(decryptedResult.getJSONObject("watermark").getString("appid"))) {
                 resultMap = new HashMap<>();
                 resultMap.put("mobile", decryptedResult.getString("purePhoneNumber"));
                 resultMap.put("openid", openid);
@@ -120,14 +108,6 @@ public class WechatWeProgramUtil {
 //        System.out.println(JSONObject.toJSONString(util.getUserInfo(code,encryptedData,iv)));
     }
 
-    @Value("${wechat.weprogram.app.id}")
-    private void setAppId(String appId){
-        WechatWeProgramUtil.appId = appId;
-    }
-    @Value("${wechat.weprogram.app.secret}")
-    private void setAppSecret(String appSecret){
-        WechatWeProgramUtil.appSecret = appSecret;
-    }
 }
 
 

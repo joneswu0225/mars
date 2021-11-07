@@ -1,5 +1,6 @@
 package com.jones.mars.model.param;
 
+import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.Builder;
@@ -9,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
-public class HotspotContentParam {
+public class BlockContentParam extends BaseObject {
     @NotNull
     @ApiModelProperty(value="类型",name="type")
     private String type;
@@ -20,8 +21,8 @@ public class HotspotContentParam {
     @ApiModelProperty(value="标题",name="title")
     private String title;
     @NotNull
-    @ApiModelProperty(value="热点ID",name="hotspotId")
-    private Integer hotspotId;
+    @ApiModelProperty(value="模块ID",name="blockId")
+    private Integer blockId;
     @ApiParam(hidden = true)
     private Integer id;
     @ApiParam(hidden = true)

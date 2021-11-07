@@ -199,8 +199,9 @@ public class ProjectController extends BaseController {
     @ApiOperation(value = "上架项目", notes = "")
     @PatchMapping("{projectId}/onshelf")
     public BaseResponse publishProject(@PathVariable @ApiParam(required=true) Integer projectId,
-                        @RequestParam(name="publicFlag", required = false) @ApiParam(value="是否公开发布",name="publicFlag")Boolean publicFlag) {
-        return  projectService.onshelfProject(projectId, publicFlag);
+                                       @RequestParam(name="publicFlag", required = false) @ApiParam(value="是否公开发布",name="publicFlag")Boolean publicFlag,
+                                       @RequestParam(name="force", required = false) @ApiParam(value="是否无视状态强制更新",name="force")Integer force) {
+        return  projectService.onshelfProject(projectId, publicFlag, force);
     }
 
     @ApiOperation(value = "提交审核项目", notes = "")
@@ -211,8 +212,9 @@ public class ProjectController extends BaseController {
 
     @ApiOperation(value = "下架的项目退回编辑", notes = "")
     @PatchMapping("{projectId}/remodify")
-    public BaseResponse remodifyProject(@PathVariable @ApiParam(required=true) Integer projectId) {
-        return  projectService.remodifyProject(projectId);
+    public BaseResponse remodifyProject(@PathVariable @ApiParam(required=true) Integer projectId,
+                                        @RequestParam(name="force", required = false) @ApiParam(value="是否无视状态强制退回",name="force")Integer force) {
+        return  projectService.remodifyProject(projectId, force);
     }
 
 

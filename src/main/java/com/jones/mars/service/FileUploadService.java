@@ -32,8 +32,11 @@ public class FileUploadService extends BaseService{
 
     @Value("${app.domain}")
     private String appDomain;
+    public static String fileUploadPath;
     @Value("${app.file.path.upload}")
-    private String fileUploadPath;
+    public void setFileUploadPath(String uploadPath){
+        FileUploadService.fileUploadPath = uploadPath;
+    }
 
     @PostConstruct
     private void init(){

@@ -51,7 +51,7 @@
 
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from hotspot_content
-        where hotspot_id=#{query.hotspotId}
+        where hotspot_id=#{hotspotId}
     </select>
 
     <select id="findByHotspotId" resultType="HotspotContent" parameterType="java.lang.Integer">

@@ -27,6 +27,8 @@ public class BlockParam extends BaseObject {
     private String icon;
     @ApiModelProperty(value="模块封面",name="imageUrl")
     private String imageUrl;
+    @ApiModelProperty(value="全景文件路径",name="panoPath")
+    private String panoPath;
     @ApiModelProperty(value="模块状态，0：配备，1：运行",name="detail")
     private Integer status;
     @ApiParam(hidden = true)

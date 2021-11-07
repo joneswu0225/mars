@@ -51,6 +51,11 @@ public enum ErrorCode {
 	//部门错误
 	DEPARTMENT_DELETE_EXIST_USER("6001", "该部门存在其他用户，无法删除"),
 
+	// KRPANO
+	KRPANO_SOURCE_IMAGE_NOT_EXIST("7001", "切图文件不存在"),
+	KRPANO_SLICE_PROCESS_INTERRUPTED("7002", "切图流程意外中止"),
+	KRPANO_SLICE_PROCESS_TIMEOUT("7003", "图片过大，切图流程超时"),
+	KRPANO_SLICE_PARAM_ERROR("7004", "切图参数不能全空"),
 	INTERNAL_ERROR("9000", "系统内部错误"),
 	;
 

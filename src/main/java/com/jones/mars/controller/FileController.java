@@ -40,7 +40,8 @@ public class FileController extends BaseController {
             @RequestParam(name="fileName", required = false) @ApiParam(value="文件名称",name="fileName") String fileName,
             @RequestParam(name="relatedId", required = false) @ApiParam(value="关联内容的id， 如上传名片为userId, 上传企业logo为enterpirseId",name="relatedId") Integer relatedId,
             @RequestParam(name="fileType") @ApiParam(value="文件类型",name="fileType") FileType fileType) throws Exception{
-        return service.uploadFile(file, fileName, fileType, relatedId);
+        BaseResponse resp = service.uploadFile(file, fileName, fileType, relatedId);
+        return resp;
     }
 
     @GetMapping("/download")

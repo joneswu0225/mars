@@ -21,6 +21,10 @@ public class SceneQuery extends Query {
     private Integer classId;
     @ApiModelProperty(value="场景名称",name="name")
     private String name;
+    @ApiModelProperty(value="场景Code",name="sceneCode")
+    private String sceneCode;
     @ApiModelProperty(value="场景类型ID",name="sceneTypeId")
     private Integer sceneTypeId;
+    @ApiModelProperty(value="场景切图状态",name="sliceStatus")
+    private Integer sliceStatus;
 }

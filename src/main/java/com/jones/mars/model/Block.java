@@ -24,6 +24,7 @@ public class Block extends BaseObject {
     private String panoPath;
     private Integer seq;
     private List<BlockModule> moduleList = new ArrayList<>();
+    private List<BlockHotspot> blockHotspotList = new ArrayList<>();
 
 }
 

@@ -1,13 +1,8 @@
 package com.jones.mars.service;
 
-import com.jones.mars.model.Block;
-import com.jones.mars.model.Enterprise;
-import com.jones.mars.model.RolePermission;
-import com.jones.mars.model.User;
-import com.jones.mars.model.query.BlockQuery;
-import com.jones.mars.model.query.EnterpriseQuery;
-import com.jones.mars.model.query.Query;
-import com.jones.mars.model.query.RolePermissionQuery;
+import com.jones.mars.model.*;
+import com.jones.mars.model.param.BlockHotspotParam;
+import com.jones.mars.model.query.*;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.*;
 import com.jones.mars.util.LoginUtil;
@@ -27,6 +22,8 @@ public class BlockService extends BaseService{
     private RoleMapper roleMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private BlockHotspotMapper blockHotspotMapper;
     @Autowired
     private RolePermissionMapper rolePermissionMapper;
 
@@ -64,6 +61,14 @@ public class BlockService extends BaseService{
         return findByPage(query);
     }
 
+
+    public BaseResponse findBlockById(Integer blockId){
+        Block block = mapper.findOne(blockId);
+        List<BlockHotspot> blockHotspotList = blockHotspotMapper.findAll(BlockHotspotQuery.builder().blockId(blockId).build());
+        block.setBlockHotspotList(blockHotspotList);
+        return BaseResponse.builder().data(block).build();
+    }
+
     /**
      * 获取企业下二级分类的共建人信息
      * @param classId
@@ -73,5 +78,26 @@ public class BlockService extends BaseService{
         return BaseResponse.builder().data(rolePermissionMapper.findGrantedUserByClassId(RolePermissionQuery.builder().classId(classId).operation(RolePermission.CREATE).build())).build();
     }
 
+    public BaseResponse insertBlockHotspot(BlockHotspotParam param) {
+        Integer maxSeq = blockHotspotMapper.findMaxSeqByBlockId(param.getBlockId());
+        param.setSeq(maxSeq == null ? 0 : maxSeq + 1);
+        blockHotspotMapper.insert(param);
+        return BaseResponse.builder().data(param.getId()).build();
+    }
+
+    public BaseResponse deleteBlockHotspot(Integer id){
+        blockHotspotMapper.delete(id);
+        return BaseResponse.builder().build();
+    }
+
+    public BaseResponse updateblockHotspot(BlockHotspotParam param) {
+        blockHotspotMapper.update(param);
+        return BaseResponse.builder().build();
+    }
+
+    public BaseResponse updateblockHotspotSeq(BlockHotspotParam param) {
+        blockHotspotMapper.updateBlockHotspotSeq(param);
+        return BaseResponse.builder().build();
+    }
 }
 

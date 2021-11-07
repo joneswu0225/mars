@@ -74,6 +74,7 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
         addInterceptor.excludePathPatterns("/user/auth/**");
         addInterceptor.excludePathPatterns("/comment/list");
         addInterceptor.excludePathPatterns("/comment/all");
+        addInterceptor.excludePathPatterns("/appConst/all");
         addInterceptor.excludePathPatterns("/user/verifyCode");
         addInterceptor.excludePathPatterns("/user/**/exists");
         addInterceptor.excludePathPatterns("/user/logout");
@@ -154,7 +155,12 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
                 throws Exception {
-            log.info(String.format("用户[ %s ] %s 访问　%s", LoginUtil.getInstance().getUser().getMobile(), request.getMethod(), request.getRequestURI()));
+            if(LoginUtil.getInstance().getUser() == null){
+                log.info("当前用户未登陆");
+                response.sendError(HttpStatus.UNAUTHORIZED.value(), "请登录后进行操作");
+                return false;
+            }
+            log.info(String.format("用户[ %s ] %s 访问　%s", LoginUtil.getInstance().getUser()==null ? "null" : LoginUtil.getInstance().getUser().getMobile(), request.getMethod(), request.getRequestURI()));
             List<RequestMethod> httpMethods = Arrays.asList(new RequestMethod[]{RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT,RequestMethod.PATCH});
             if(httpMethods.contains(RequestMethod.valueOf(request.getMethod()))){
                 String requestUri = request.getRequestURI().replace("//","/");

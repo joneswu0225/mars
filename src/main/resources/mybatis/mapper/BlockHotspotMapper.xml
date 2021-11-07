@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.BlockHotspotMapper" >
+    <resultMap id="BlockHotspotMap" type="BlockHotspot" >
+        <id property="id" column="id" />
+        <result column="block_id" property="blockId"/>
+        <result column="seq" property="seq"/>
+        <association property="srcHotspot" javaType="Hotspot" column="src_hotspot_id">
+            <id column="src_hotspot_id" property="id"/>
+            <result column="src_code" property="code"/>
+            <result column="src_title" property="title"/>
+            <result column="src_location_x" property="locationX"/>
+            <result column="src_location_y" property="locationY"/>
+            <result column="src_location_fov" property="locationFov"/>
+            <result column="src_icon" property="icon"/>
+            <result column="src_scene_id" property="sceneId"/>
+            <result column="src_type" property="type"/>
+        </association>
+        <association property="destHotspot" javaType="Hotspot" column="src_hotspot_id">
+            <id column="des_hotspot_id" property="id"/>
+            <result column="des_code" property="code"/>
+            <result column="des_title" property="title"/>
+            <result column="des_location_x" property="locationX"/>
+            <result column="des_location_y" property="locationY"/>
+            <result column="des_location_fov" property="locationFov"/>
+            <result column="des_icon" property="icon"/>
+            <result column="des_scene_id" property="sceneId"/>
+            <result column="des_type" property="type"/>
+        </association>
+    </resultMap>
+    <select id="findAll" resultMap="BlockHotspotMap" parameterType="Query">
+        SELECT bh.id, block_id, seq, src_hotspot_id, dest_hotspot_id,
+        src.`code` as src_code, src.title src_title, src.location_x src_location_x, src.location_y src_location_y, src.location_fov src_location_fov, src.icon src_icon, src.scene_id src_scene_id, src.type src_type,
+        des.`code` as des_code, des.title des_title, des.location_x des_location_x, des.location_y des_location_y, des.location_fov des_location_fov, des.icon des_icon, des.scene_id des_scene_id, des.type des_type
+        from block_hotspot bh left join hotspot src on bh.src_hotspot_id=src.id left join hotspot des on bh.dest_hotspot_id=des.id
+        <if test="blockId != null">
+            and bh.block_id = #{blockId}
+        </if>
+        order by block_id, seq
+    </select>
+    <insert id="insert" parameterType="BlockHotspotParam">
+        insert into block_hotspot(`block_id`, `src_hotspot_id`,`dest_hotspot_id`, `seq`) values (#{blockId}, #{srcHotspotId},#{destHotspotId}, #{seq})
+    </insert>
+    <update id="update" parameterType="BlockHotspotParam">
+        update block_hotspot set id=#{id}
+        <if test="blockId != null">
+            ,block_id=#{blockId}
+        </if>
+        <if test="srcHotspotId != null">
+            ,src_hotspot_id=#{srcHotspotId}
+        </if>
+        <if test="destHotspotId != null">
+            ,dest_hotspot_id=#{destHotspotId}
+        </if>
+        where id=#{id}
+    </update>
+    <select id="findMaxSeqByBlockId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select max(seq) from block_hotspot where block_id=#{blockId}
+    </select>
+    <update id="updateBlockHotspotSeq" parameterType="BlockHotspotParam">
+        update block_hotspot set seq=case
+        <foreach collection="blockHotspotIds" item="blockHotspotId" index="index">
+            when id=#{blockHotspotId} then #{index}
+        </foreach>
+        end
+        where block_id=#{blockId} and id in
+        <foreach collection="blockHotspotIds" item="blockHotspotId" index="index" separator="," open="(" close=")">
+            #{blockHotspotId}
+        </foreach>
+    </update>
+    <delete id="delete" parameterType="Integer">
+        delete from block_hotspot where id=#{id}
+    </delete>
+</mapper>

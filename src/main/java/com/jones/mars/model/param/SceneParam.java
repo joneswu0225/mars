@@ -20,6 +20,8 @@ public class SceneParam extends BaseObject {
     private String code;
     @ApiModelProperty(value="场景简介",name="detail")
     private String detail;
+    @ApiModelProperty(value="场景全景图",name="panoImageUrl")
+    private String panoImageUrl;
     @ApiModelProperty(value="场景公开标识",name="publicFlg")
     private Integer publicFlg;
     @NotNull(message = "模块ID不能为空")
@@ -36,6 +38,8 @@ public class SceneParam extends BaseObject {
     private Float locationY;
     @ApiParam(hidden = true)
     private Integer sceneTypeId;
+    @ApiParam(hidden = true)
+    private Integer sliceStatus;
 
 }
 
