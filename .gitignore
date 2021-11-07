@@ -7,3 +7,4 @@ target/
 logs/
 files/
 src/main/resources/static/pano/*
+application*.properties
