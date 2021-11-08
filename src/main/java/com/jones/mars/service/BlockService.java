@@ -38,7 +38,15 @@ public class BlockService extends BaseService{
         return BaseResponse.builder().data(list).build();
     }
 
+<<<<<<< HEAD
     public BaseResponse findAuthBlocks(BlockQuery query){
+=======
+    public BaseResponse findOneByCode(String code){
+        return BaseResponse.builder().data(mapper.findOneByCode(code)).build();
+    }
+
+    public BaseResponse findBlocks(BlockQuery query){
+>>>>>>> develop
         User user = LoginUtil.getInstance().getUser();
 //        if(user == null){
 //            user = userMapper.findOne(18);

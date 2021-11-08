@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface BlockMapper extends BaseMapper<Block> {
     List<Object> findAllName(Query query);
+    Block findOneByCode(String code);
     List<Block> findBlockModule(Query query);
     List<Block> findBlockUserPermission(Query query);
 }

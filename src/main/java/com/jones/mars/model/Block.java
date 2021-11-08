@@ -13,8 +13,12 @@ import java.util.List;
 @Builder
 public class Block extends BaseObject {
     private String detail;
+<<<<<<< HEAD
     private String icon;
     private String imageUrl;
+=======
+    private String code;
+>>>>>>> develop
     private Integer operatorId;
     private Date updateTime;
     private Date createTime;
