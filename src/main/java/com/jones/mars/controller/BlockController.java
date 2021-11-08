@@ -61,6 +61,12 @@ public class BlockController extends BaseController {
         return service.findById(blockId);
     }
 
+    @ApiOperation(value = "模块详情", notes = "")
+    @GetMapping("/code/{code}")
+    public BaseResponse findOneByCode(@PathVariable String code) {
+        return service.findOneByCode(code);
+    }
+
     @ApiOperation(value = "更新模块", notes = "")
     @PutMapping("{blockId}")
     public BaseResponse update(

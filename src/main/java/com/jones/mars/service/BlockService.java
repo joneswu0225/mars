@@ -41,6 +41,10 @@ public class BlockService extends BaseService{
         return BaseResponse.builder().data(list).build();
     }
 
+    public BaseResponse findOneByCode(String code){
+        return BaseResponse.builder().data(mapper.findOneByCode(code)).build();
+    }
+
     public BaseResponse findBlocks(BlockQuery query){
         User user = LoginUtil.getInstance().getUser();
 //        if(user == null){

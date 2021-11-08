@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 public class Block extends BaseObject {
     private String detail;
+    private String code;
     private Integer operatorId;
     private Date updateTime;
     private Date createTime;
