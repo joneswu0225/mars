@@ -56,6 +56,7 @@ public enum ErrorCode {
 	KRPANO_SLICE_PROCESS_INTERRUPTED("7002", "切图流程意外中止"),
 	KRPANO_SLICE_PROCESS_TIMEOUT("7003", "图片过大，切图流程超时"),
 	KRPANO_SLICE_PARAM_ERROR("7004", "切图参数不能全空"),
+	KRPANO_SLICE_TMPFILE_MOVE_ERROR("7005", "切图内部问题，联系管理员处理"),
 	INTERNAL_ERROR("9000", "系统内部错误"),
 	;
 

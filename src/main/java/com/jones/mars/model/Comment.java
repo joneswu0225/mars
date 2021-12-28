@@ -21,7 +21,9 @@ public class Comment extends BaseObject {
     private String userName;
     private String userAvatar;
     private Date createTime;
+    private CommentType extType;
     private CommentType type;
     private Integer relatedId;
+    private Integer extrelatedId;
 }
 

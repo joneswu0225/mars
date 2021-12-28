@@ -50,6 +50,16 @@ public class CommentController extends BaseController {
         return service.add(param);
     }
 
+    @ApiOperation(value = "更新评论", notes = "更新评论")
+    @PutMapping("{commentId}")
+    public BaseResponse update(
+            @PathVariable Integer commentId,
+            @RequestBody @ApiParam(required=true) CommentParam param) {
+//        param.setOperatorId(LoginUtil.getInstance().getUser().getId());
+        param.setId(commentId);
+        return service.update(param);
+    }
+
     @ApiOperation(value = "删除评论", notes = "删除评论")
     @DeleteMapping("/{commentId}")
     public BaseResponse updateStatus(

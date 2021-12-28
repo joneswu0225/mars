@@ -13,4 +13,8 @@ public class CommentQuery extends Query {
     private CommentType type;
     @ApiModelProperty(value="关联id",name="relatedId")
     private Integer relatedId;
+    @ApiModelProperty(value="额外的评论类型",name="extType")
+    private CommentType extType;
+    @ApiModelProperty(value="额外的关联id",name="extRelatedId")
+    private Integer extRelatedId;
 }

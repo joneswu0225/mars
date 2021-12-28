@@ -26,6 +26,10 @@ public class HomePageController{
     @Autowired
     private ProjectService projectService;
     @Autowired
+    private ProjectModuleService projectModuleService;
+    @Autowired
+    private BlockService blockService;
+    @Autowired
     private SceneService sceneService;
     @Autowired
     private NewsService newsService;
@@ -113,6 +117,37 @@ public class HomePageController{
     public BaseResponse project(@ApiParam ProjectQuery query) {
         query.setPublishFlg(Project.PUBLIC);
         return projectService.findByPage(query);
+    }
+
+    @ApiOperation(value = "一级分类列表", notes = "一级分类列表")
+    @GetMapping("/module/list")
+    public BaseResponse moduleList(@ApiParam ProjectModuleQuery query) {
+        return projectModuleService.findAllProjectModule(query);
+    }
+
+
+    @ApiOperation(value = "模块列表", notes = "模块列表")
+    @GetMapping("block")
+    public BaseResponse list(@ApiParam BlockQuery query) {
+        return blockService.findBlocks(query);
+    }
+
+    @ApiOperation(value = "跟据code查询模块详情", notes = "")
+    @GetMapping("/block/code/{code}")
+    public BaseResponse findOneByCode(@PathVariable String code) {
+        return blockService.findOneByCode(code);
+    }
+
+    @ApiOperation(value = "查询模块详情", notes = "")
+    @GetMapping("/block/{blockId}")
+    public BaseResponse findOneByBlockId(@PathVariable Integer blockId) {
+        return blockService.findBlockById(blockId);
+    }
+
+    @ApiOperation(value = "所有场景列表", notes = "所有场景列表")
+    @GetMapping("/scene/all")
+    public BaseResponse all(@ApiParam SceneQuery query) {
+        return sceneService.findAll(query);
     }
 
     @ApiOperation(value = "分页评论列表", notes = "分页评论列表")

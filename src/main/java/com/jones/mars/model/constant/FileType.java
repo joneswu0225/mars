@@ -8,12 +8,16 @@ public enum FileType {
     HOTSPOT_HTML("热点内容HTML"),
     HOTSPOT_VIDEO("热点内容视频"),
     HOTSPOT_MEDIA("热点内容富文本"),
+    HOTSPOT_ATTACH("热点附件"),
     PROJECT_IMAGE("项目封面"),
     PROJECT_VIDEO("项目视频"),
     PROJECT_MEDIA("项目富文本"),
+    PROJECT_ATTACH("项目附件"),
     BLOCK_STRUCTURE("船体平面图"),
+    BLOCK_ATTACH("模块附件"),
     SCENE_PANO_IMG("场景原图"),
     NEWS_MEDIA("新闻富文本"),
+    NEWS_ATTACH("新闻附件"),
     USER_NAMECARD("用户名片"),
     USER_AVATAR("用户头像"),
     ENTERPRIISE_IMAGE("企业图标"),
@@ -40,6 +44,9 @@ public enum FileType {
             case BLOCK_STRUCTURE:
                 relPath = "block" + File.separator + relatedId + File.separator + "structure_img" + File.separator + name;
                 break;
+            case BLOCK_ATTACH:
+                relPath = "block" + File.separator + relatedId + File.separator + "block_extra" + File.separator + name;
+                break;
             case SCENE_PANO_IMG:
                 relPath = "block" + File.separator + relatedId + File.separator + "scene_pano_img" + File.separator + fileName;
                 break;
@@ -47,7 +54,8 @@ public enum FileType {
                 relPath = "enterprise" + File.separator + relatedId + File.separator + "project" + File.separator + name;
                 break;
             case PROJECT_MEDIA:
-                relPath = "enterprise" + File.separator + relatedId + File.separator + "project_media" + File.separator + name;
+            case PROJECT_ATTACH:
+                relPath = "enterprise" + File.separator + relatedId + File.separator + "project_extra" + File.separator + name;
                 break;
             case ENTERPRIISE_IMAGE:
             case ENTERPRISE_LOGO:
@@ -60,10 +68,14 @@ public enum FileType {
                 relPath = "enterprise" + File.separator + relatedId + File.separator + "hotspot" + File.separator + name;
                 break;
             case HOTSPOT_MEDIA:
-                relPath = "enterprise" + File.separator + relatedId + File.separator + "hotspot_media" + File.separator + name;
+            case HOTSPOT_ATTACH:
+                relPath = "enterprise" + File.separator + relatedId + File.separator + "hotspot_extra" + File.separator + name;
                 break;
             case NEWS_MEDIA:
                 relPath = "news" + File.separator + relatedId + File.separator + "news_media" + File.separator + name;
+                break;
+            case NEWS_ATTACH:
+                relPath = "news" + File.separator + relatedId + File.separator + "news_extra" + File.separator + name;
                 break;
             default:
                 relPath = "";

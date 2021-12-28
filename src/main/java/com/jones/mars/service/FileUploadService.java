@@ -33,9 +33,15 @@ public class FileUploadService extends BaseService{
     @Value("${app.domain}")
     private String appDomain;
     public static String fileUploadPath;
-    @Value("${app.file.path.upload}")
+    @Value("${app.file.path.upload:./files/upload}")
     public void setFileUploadPath(String uploadPath){
         FileUploadService.fileUploadPath = uploadPath;
+    }
+
+    public static String fileUploadTempPath;
+    @Value("${app.file.path.upload.temp}")
+    public void setFileUploadTempPath(String uploadTempPath){
+        FileUploadService.fileUploadTempPath = uploadTempPath;
     }
 
     @PostConstruct
@@ -43,6 +49,10 @@ public class FileUploadService extends BaseService{
         File path = Paths.get(fileUploadPath).toFile();
         if(!path.exists()){
             path.mkdirs();
+        }
+        File tempPath = Paths.get(fileUploadTempPath).toFile();
+        if(!tempPath.exists()){
+            tempPath.mkdirs();
         }
     }
 

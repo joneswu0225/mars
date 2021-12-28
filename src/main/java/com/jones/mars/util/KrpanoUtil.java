@@ -6,8 +6,12 @@ import com.jones.mars.service.FileUploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.concurrent.*;
 
 /**
@@ -26,6 +30,13 @@ public class KrpanoUtil {
 
     public static String getOutPutPath(Integer blockId){
         return FileUploadService.fileUploadPath + File.separator + FileType.FILE_PATH_PREFIX + File.separator + "block" + File.separator + blockId + File.separator + "panos";
+    }
+
+    public static String getOutPutTempPath(Integer blockId){
+        if(StringUtils.isEmpty(FileUploadService.fileUploadTempPath)){
+            return null;
+        }
+        return FileUploadService.fileUploadTempPath + File.separator + FileType.FILE_PATH_PREFIX + File.separator + "block" + File.separator + blockId + File.separator + "panos";
     }
 
     public enum PanoType {
@@ -53,8 +64,76 @@ public class KrpanoUtil {
         KrpanoUtil.KRPANO_CONFIG = krpanoConfig;
     }
 
+    public static void copyFiles(File sourceFile, File destFile) {
+        String fileName = sourceFile.getName();
+        if(sourceFile.isFile()){
+            try {
+                Files.move(sourceFile.toPath(), destFile.isFile() ? destFile.toPath() : Paths.get(destFile.getAbsolutePath(), fileName), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Paths.get(destFile.getAbsolutePath(), sourceFile.getName()).toFile().mkdirs();
+            for (File file : sourceFile.listFiles()) {
+                copyFiles(file, Paths.get(destFile.getAbsolutePath(), fileName).toFile());
+            }
+        }
+    }
+
+
+    public static ErrorCode executeCommand(String command){
+        ErrorCode message = ErrorCode.OK;
+        try {
+            log.info("execute command: \n " + command);
+            Process pro = Runtime.getRuntime().exec(command);
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            Future<String> future = executorService.submit(() -> { return handleProcessBlock(pro.getInputStream());});
+            executorService.shutdown();
+            if(pro.waitFor(PROCESS_KRPANO_WAIT_TIME, TimeUnit.MILLISECONDS)){
+                if(pro.exitValue() != 0){
+                    message = ErrorCode.KRPANO_SOURCE_IMAGE_NOT_EXIST;
+                    log.info("Failed to call shell: " + future.get() + "command:" + command);
+                } else {
+                    log.info("succeed in execute command: \n " + command);
+                }
+            } else {
+                message = ErrorCode.KRPANO_SLICE_PROCESS_TIMEOUT;
+                log.error("Failed to call shell, for timeout: " + command);
+                executorService.shutdownNow();
+                pro.destroy();
+            }
+        } catch (IOException e) {
+            message = ErrorCode.KRPANO_SOURCE_IMAGE_NOT_EXIST;
+            log.error("fail to load source file: " + command);
+        } catch (InterruptedException e) {
+            message = ErrorCode.KRPANO_SLICE_PROCESS_INTERRUPTED;
+            log.error("command process has been interrupted: " + command);
+        } catch (ExecutionException e) {
+            message = ErrorCode.KRPANO_SLICE_PROCESS_INTERRUPTED;
+            log.error("command process has been interrupted: " + command);
+        }
+        return message;
+    }
+
+
     public static ErrorCode slice(String fileName, Integer blockId,  PanoType panoType){
-        return slice(fileName, getOutPutPath(blockId), panoType);
+        String tmpPath = getOutPutTempPath(blockId);
+        if (tmpPath == null) {
+            return slice(fileName, getOutPutPath(blockId), panoType);
+        }
+        // 切图到临时目录
+        String finalPath = getOutPutPath(blockId) + File.separator + fileName.substring(fileName.lastIndexOf("/")+1, fileName.lastIndexOf(".")) + ".tiles";
+        ErrorCode code = slice(fileName, tmpPath, panoType);
+        tmpPath = tmpPath + File.separator + fileName.substring(fileName.lastIndexOf("/")+1, fileName.lastIndexOf(".")) + ".tiles";
+        //　临时目录移动到实际目录
+        if (code.equals(ErrorCode.OK)) {
+            if(Paths.get(tmpPath).toFile().exists()) {
+                moveFile(tmpPath, finalPath);
+            } else {
+                log.error("sliced file cannot be found in tmp path : " + tmpPath);
+            }
+        }
+        return code;
     }
 
     private static String handleProcessBlock(InputStream inputStream){
@@ -81,48 +160,79 @@ public class KrpanoUtil {
     }
 
     public static ErrorCode slice(String fileName, String outputPath, PanoType panoType){
-        ErrorCode message = ErrorCode.OK;
         StringBuilder sb = new StringBuilder(" " + KrpanoUtil.KRPANO_HOME + "/").append(KrpanoUtil.KRPANO_COMMAND)
                 .append(" -config=" + KrpanoUtil.KRPANO_HOME + "/" + KrpanoUtil.KRPANO_CONFIG)
                 .append(" -license=" + KrpanoUtil.KRPANO_LICENSE)
                 .append(" -outputpath=" + outputPath)
                 .append(" -panotype=" + panoType).append(" " + fileName);
-        try {
-            log.info("execute command: \n " + sb.toString());
-            Process pro = Runtime.getRuntime().exec(sb.toString());
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
-            Future<String> future = executorService.submit(() -> { return handleProcessBlock(pro.getInputStream());});
-            executorService.shutdown();
-            if(pro.waitFor(PROCESS_KRPANO_WAIT_TIME, TimeUnit.MILLISECONDS)){
-                if(pro.exitValue() != 0){
-                    message = ErrorCode.KRPANO_SOURCE_IMAGE_NOT_EXIST;
-                    System.out.println("Failed to call shell: " + future.get() );
-                }
-            } else {
-                message = ErrorCode.KRPANO_SLICE_PROCESS_TIMEOUT;
-                log.error("Failed to call shell, for timeout: " + sb.toString() );
-                executorService.shutdownNow();
-                pro.destroy();
-            }
-        } catch (IOException e) {
-            message = ErrorCode.KRPANO_SOURCE_IMAGE_NOT_EXIST;
-            log.error("fail to load source image: " + fileName);
-        } catch (InterruptedException e) {
-            message = ErrorCode.KRPANO_SLICE_PROCESS_INTERRUPTED;
-            log.error("slice process has been interrupted: " + fileName);
-        } catch (ExecutionException e) {
-            message = ErrorCode.KRPANO_SLICE_PROCESS_INTERRUPTED;
-            log.error("slice process has been interrupted: " + fileName);
-        }
-        return message;
+
+        return executeCommand(sb.toString());
+    }
+
+    public static ErrorCode mkdirs(String path){
+        return executeCommand("mkdir -p " + path);
+    }
+
+    public static ErrorCode removeFile(String file){
+        return executeCommand("rm -rf " + file);
+    }
+
+    public static ErrorCode clearFile(String file){
+        File tmpFile = new File(file);
+        return executeCommand(String.format("rm -rf %s removeFile", tmpFile.getAbsolutePath(), tmpFile.getParentFile().getAbsolutePath()));
+    }
+
+    public static ErrorCode moveFile(String sourceFile, String destFile){
+        removeFile(destFile);
+        String parentPath = new File(destFile).getParent();
+        mkdirs(parentPath);
+        return executeCommand("mv " + sourceFile + " " + parentPath);
     }
 
 
-    public static void main(String[] args) {
-        Long blockId = 22l;
-        String fileName = "/media/jones/1f99b686-b16b-43ad-8aff-c7ec2cbfffc7/projects/pano/images/thumb_tour3d.jpg";
-        String outputPath = "%INPUTPATH%/panos/block_id_" + blockId;
-        ErrorCode result = KrpanoUtil.slice(fileName, outputPath, PanoType.FLAT);
-        System.out.println(result.description);
+    private static boolean deleteFile(File dir) {
+        if (dir.isDirectory()) {
+            File[] children = dir.listFiles();
+            for (int i=0; i<children.length; i++) {
+                boolean success = deleteFile(children[i]);
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
+    }
+
+//    public static void main(String[] args) throws IOException {
+////        Long blockId = 22l;
+////        String fileName = "/media/jones/1f99b686-b16b-43ad-8aff-c7ec2cbfffc7/projects/pano/images/thumb_tour3d.jpg";
+////        String outputPath = "%INPUTPATH%/panos/block_id_" + blockId;
+////        ErrorCode result = KrpanoUtil.slice(fileName, outputPath, PanoType.FLAT);
+////        System.out.println(result.description);
+//        Integer blockId=3;
+//        String fileName = "files/upload/static/block/3/scene_pano_img/s1635945028000.jpg";
+//        String tmpPath = "./pano_image_tmp/static//block/3/panos";
+//        String finalPath = "files/upload/static//block/3/panos/s1635945028000.tiles";
+//        System.out.println(fileName.substring(fileName.lastIndexOf("/")+1, fileName.lastIndexOf(".")));
+//        ErrorCode code = slice(fileName, tmpPath, PanoType.FLAT);
+//        tmpPath = tmpPath + File.separator + fileName.substring(fileName.lastIndexOf("/")+1, fileName.lastIndexOf(".")) + ".tiles";
+//        deleteFile(Paths.get(finalPath).toFile());
+//        if(Paths.get(tmpPath).toFile().exists()) {
+//            Paths.get(finalPath).toFile().getParentFile().mkdirs();
+//            Files.move(Paths.get(tmpPath), Paths.get(finalPath), StandardCopyOption.REPLACE_EXISTING);
+//        } else {
+//            System.out.println("file cannot be found in tmp path: " + tmpPath);
+//        }
+//    }
+
+
+
+    public static void main(String[] args) throws IOException {
+        String sourcePath = "/media/jones/0f4d395a-ee07-404e-a020-71a0180b204a/projects/mars/pano_image_tmp/static/block/3/panos/s1635945028000.tiles";
+        String destPath = "/home/jones/sinovat/zhongchuang/pano/static/block/3/panos/s1635945028000.tiles";
+        moveFile(sourcePath, destPath);
+//        File sourceFile = new File(sourcePath);
+//        File destFile = new File(destPath);
+//        copyFiles(sourceFile, destFile);
     }
 }

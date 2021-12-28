@@ -69,7 +69,7 @@ public class BlockController extends BaseController {
         return service.findBlockById(blockId);
     }
 
-    @ApiOperation(value = "模块详情", notes = "")
+    @ApiOperation(value = "跟据code查询模块详情", notes = "")
     @GetMapping("/code/{code}")
     public BaseResponse findOneByCode(@PathVariable String code) {
         return service.findOneByCode(code);

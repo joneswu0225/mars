@@ -26,13 +26,8 @@
         </collection>
     </resultMap>
     <select id="findGrantedBlock" resultMap="BlockMap">
-<<<<<<< HEAD
-        select p.id pId, r.enterprise_id, r.block_id as blockId, b.name as blockName,b.status as blockStatus,b.icon as blockIcon,b.image_url as blockImageUrl,b.panoPath as blockPanoPath,
+        select p.id pId, r.enterprise_id, r.block_id as blockId, b.name as blockName,b.status as blockStatus,b.icon as blockIcon,b.image_url as blockImageUrl,b.panoPath as blockPanoPath,,b.code as blockCode
         m.id as moduleId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, p.operation
-=======
-        select p.id pId, r.enterprise_id, r.block_id as blockId, b.name as blockName,b.status as blockStatus,b.code as blockCode
-        m.id as moduleId, m.name as moduleName, c.id as classId, c.name as className, p.operation
->>>>>>> develop
         from user_role ur, role r, role_permission p, block_class c, block_module m, block b
         where ur.role_id=r.id and ur.role_id=p.role_id and p.class_id=c.id and c.module_id=m.id and r.block_id=b.id
         and ur.user_id=#{userId}
@@ -42,14 +37,10 @@
         <if test="operation != null">
             and p.operation = #{operation}
         </if>
-<<<<<<< HEAD
-        order by r.enterprise_id, r.block_id, m.seq,c.seq
-=======
         <if test="code != null and code != ''">
             and b.code = #{code}
         </if>
-        order by r.enterprise_id, r.block_id, m.id
->>>>>>> develop
+        order by r.enterprise_id, r.block_id, m.seq,c.seq
     </select>
 
     <insert id="insert" parameterType="Role" useGeneratedKeys="true" keyProperty="id">

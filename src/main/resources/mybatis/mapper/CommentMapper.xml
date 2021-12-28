@@ -2,14 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.CommentMapper" >
     <insert id="insert" parameterType="CommentParam" useGeneratedKeys="true" keyProperty="id">
-        insert into comment(`user_id`, `content`,`content_type`, `type`, `related_id`, `create_time`, `update_time`)
-        values(#{userId}, #{content},#{contentType}, #{type}, #{relatedId}, now(), now())
+        insert into comment(`user_id`, `content`,`content_type`, `type`, `related_id`, `ext_type`, `ext_related_id`, `create_time`, `update_time`)
+        values(#{userId}, #{content},#{contentType}, #{type}, #{relatedId}, #{extType}, #{extRelatedId}, now(), now())
     </insert>
     <insert id="update" parameterType="CommentParam">
         update comment
         set update_time = now()
+        <if test="content != null and content !=''">
+            , content = #{content}
+        </if>
+        <if test="contentType != null">
+            , content_type = #{contentType}
+        </if>
         <if test="relatedId != null">
             , related_id = #{relatedId}
+        </if>
+        <if test="type != null">
+            , `type` = #{type}
+        </if>
+        <if test="extType != null">
+            , ext_type = #{extType}
+        </if>
+        <if test="extRelatedId != null">
+            , ext_related_id = #{extRelatedId}
         </if>
         where id=#{id}
     </insert>
@@ -23,6 +38,12 @@
         <if test="relatedId != null">
             and c.related_id = #{relatedId}
         </if>
+        <if test="extType != null">
+            and c.ext_type = #{extType}
+        </if>
+        <if test="extRelatedId != null">
+            and c.ext_related_id = #{extRelatedId}
+        </if>
         order by c.id desc
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
@@ -35,6 +56,12 @@
         <if test="relatedId != null">
             and c.related_id = #{relatedId}
         </if>
+        <if test="extType != null">
+            and c.ext_type = #{extType}
+        </if>
+        <if test="extRelatedId != null">
+            and c.ext_related_id = #{extRelatedId}
+        </if>
     </select>
     <select id="findAll" resultType="Comment">
         select c.*, p.sgname as userName, p.avatar as userAvatar from comment c left join user_profile p on c.user_id = p.user_id
@@ -45,11 +72,17 @@
         <if test="relatedId != null">
             and c.related_id = #{relatedId}
         </if>
+        <if test="extType != null">
+            and c.ext_type = #{extType}
+        </if>
+        <if test="extRelatedId != null">
+            and c.ext_related_id = #{extRelatedId}
+        </if>
         order by c.id desc
     </select>
     <select id="findOne" resultType="Comment">
         select c.*, p.sgname as userName, p.avatar as userAvatar from comment c left join user_profile p on c.user_id = p.user_id
-        where c..id=#{id}
+        where c.id=#{id}
     </select>
     <update id="delete">
         update comment set delete_flg=1  where id=#{id}

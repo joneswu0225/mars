@@ -23,6 +23,8 @@ public class BlockService extends BaseService{
     @Autowired
     private UserMapper userMapper;
     @Autowired
+    private BlockContentMapper blockContentMapper;
+    @Autowired
     private BlockHotspotMapper blockHotspotMapper;
     @Autowired
     private RolePermissionMapper rolePermissionMapper;
@@ -38,15 +40,13 @@ public class BlockService extends BaseService{
         return BaseResponse.builder().data(list).build();
     }
 
-<<<<<<< HEAD
-    public BaseResponse findAuthBlocks(BlockQuery query){
-=======
     public BaseResponse findOneByCode(String code){
-        return BaseResponse.builder().data(mapper.findOneByCode(code)).build();
+        Block block = mapper.findOneByCode(code);
+        block.setBlockContentList(blockContentMapper.findByBlockId(block.getId()));
+        return BaseResponse.builder().data(block).build();
     }
 
-    public BaseResponse findBlocks(BlockQuery query){
->>>>>>> develop
+    public BaseResponse findAuthBlocks(BlockQuery query){
         User user = LoginUtil.getInstance().getUser();
 //        if(user == null){
 //            user = userMapper.findOne(18);
@@ -72,6 +72,7 @@ public class BlockService extends BaseService{
 
     public BaseResponse findBlockById(Integer blockId){
         Block block = mapper.findOne(blockId);
+        block.setBlockContentList(blockContentMapper.findByBlockId(block.getId()));
         List<BlockHotspot> blockHotspotList = blockHotspotMapper.findAll(BlockHotspotQuery.builder().blockId(blockId).build());
         block.setBlockHotspotList(blockHotspotList);
         return BaseResponse.builder().data(block).build();

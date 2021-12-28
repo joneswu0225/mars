@@ -26,11 +26,7 @@
         </collection>
     </resultMap>
     <select id="findBlockModule" resultMap="BlockMap" parameterType="Query">
-<<<<<<< HEAD
-        select m.id as moduleId, m.block_id as blockId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail, b.icon as blockIcon, b.image_url as blockImageUrl, b.pano_path as blockPanoPath
-=======
-        select m.id as moduleId, m.block_id as blockId, m.name as moduleName, c.id as classId, c.name as className, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail, b.code as blockCode
->>>>>>> develop
+        select m.id as moduleId, m.block_id as blockId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail, b.icon as blockIcon, b.code as blockCode, b.image_url as blockImageUrl, b.pano_path as blockPanoPath
         from block b left join block_module m on b.id=m.block_id left join block_class c on m.id=c.module_id
         where m.delete_flg=0 and c.delete_flg=0 and b.delete_flg=0
         <if test="enterpriseId != null">
@@ -54,24 +50,17 @@
         <if test="moduleName != null and moduleName != ''">
             and m.name=#{moduleName}
         </if>
-<<<<<<< HEAD
+        <if test="code != null and code != ''">
+            and b.code=#{code}
+        </if>
         <if test="userId">
             and ur.user_id=#{userId}
         </if>
         order by b.enterprise_id, b.id, m.seq, c.seq
     </select>
     <insert id="insert" parameterType="Block" useGeneratedKeys="true" keyProperty="id">
-        insert into block(`name`, `enterprise_id`, `create_time`, `update_time`, `operator_id`, `detail`,`icon`,`image_url`,`pano_path`)
-        values(#{name}, #{enterpriseId}, now(), now(), #{operatorId}, #{detail},#{icon},#{imageUrl},#{panoPath})
-=======
-        <if test="code != null and code != ''">
-            and b.code=#{code}
-        </if>
-    </select>
-    <insert id="insert" parameterType="Block" useGeneratedKeys="true" keyProperty="id">
-        insert into block(`name`, `enterprise_id`, `create_time`, `update_time`, `operator_id`, `detail`,`code`)
-        values(#{name}, #{enterpriseId}, now(), now(), #{operatorId}, #{detail}, #{code})
->>>>>>> develop
+        insert into block(`name`, `enterprise_id`, `create_time`, `update_time`, `operator_id`, `detail`,`icon`,`image_url`,`pano_path`,`code`)
+        values(#{name}, #{enterpriseId}, now(), now(), #{operatorId}, #{detail},#{icon},#{imageUrl},#{panoPath}, #{code})
     </insert>
     <insert id="update" parameterType="Block" >
         update block
@@ -79,16 +68,14 @@
         <if test="name != null and name != ''">
             ,name = #{name}
         </if>
-<<<<<<< HEAD
         <if test="imageUrl != null and imageUrl != ''">
             ,image_url = #{imageUrl}
         </if>
         <if test="icon != null and icon != ''">
             ,icon = #{icon}
-=======
+        </if>
         <if test="code != null and code != ''">
             ,code = #{code}
->>>>>>> develop
         </if>
         <if test="detail != null and detail != ''">
             ,detail = #{detail}
