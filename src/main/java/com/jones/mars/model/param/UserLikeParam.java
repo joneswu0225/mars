@@ -1,7 +1,6 @@
 package com.jones.mars.model.param;
 
 import com.jones.mars.model.constant.LikeType;
-import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
@@ -25,6 +24,5 @@ public class UserLikeParam{
     private LikeType likeType;
     @ApiModelProperty(value="点赞状态，喜欢1，不喜欢0",name="likeType")
     private Integer likeStatus;
-
 }
 

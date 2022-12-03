@@ -3,7 +3,6 @@ package com.jones.mars.controller;
 import com.jones.mars.model.param.HotspotContentParam;
 import com.jones.mars.model.param.HotspotContentParams;
 import com.jones.mars.model.param.HotspotContentSeqParam;
-import com.jones.mars.model.param.HotspotParam;
 import com.jones.mars.model.query.HotspotContentQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.HotspotContentService;

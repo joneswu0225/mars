@@ -227,12 +227,4 @@ public class KrpanoUtil {
 
 
 
-    public static void main(String[] args) throws IOException {
-        String sourcePath = "/media/jones/0f4d395a-ee07-404e-a020-71a0180b204a/projects/mars/pano_image_tmp/static/block/3/panos/s1635945028000.tiles";
-        String destPath = "/home/jones/sinovat/zhongchuang/pano/static/block/3/panos/s1635945028000.tiles";
-        moveFile(sourcePath, destPath);
-//        File sourceFile = new File(sourcePath);
-//        File destFile = new File(destPath);
-//        copyFiles(sourceFile, destFile);
-    }
 }

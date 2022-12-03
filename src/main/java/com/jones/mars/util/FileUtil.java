@@ -1,6 +1,10 @@
 package com.jones.mars.util;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Base64;
 
 /**
  * 文件操作工具类
@@ -59,6 +63,14 @@ public class FileUtil {
 			os.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void saveFromBase64String(String filePath, String base64){
+		try{
+			Files.write(Paths.get(filePath), Base64.getDecoder().decode(base64), StandardOpenOption.CREATE);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

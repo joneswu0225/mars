@@ -24,6 +24,8 @@ public class HomePageController{
     @Autowired
     private HomePageService service;
     @Autowired
+    private EnterpriseService enterpriseService;
+    @Autowired
     private ProjectService projectService;
     @Autowired
     private ProjectModuleService projectModuleService;
@@ -66,6 +68,12 @@ public class HomePageController{
     @GetMapping("defaultInfo")
     public BaseResponse appDefaultInfo() {
         return service.appDefaultInfo();
+    }
+
+    @ApiOperation(value = "企业详情", notes = "企业详情")
+    @GetMapping("enterprise/{enterpriseId}")
+    public BaseResponse findOneEnterprise(@PathVariable Integer enterpriseId) {
+        return enterpriseService.findById(enterpriseId);
     }
 
     @ApiOperation(value = "系统默认船只", notes = "")

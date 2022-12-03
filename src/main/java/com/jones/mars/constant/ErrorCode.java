@@ -58,6 +58,7 @@ public enum ErrorCode {
 	KRPANO_SLICE_PARAM_ERROR("7004", "切图参数不能全空"),
 	KRPANO_SLICE_TMPFILE_MOVE_ERROR("7005", "切图内部问题，联系管理员处理"),
 	INTERNAL_ERROR("9000", "系统内部错误"),
+	NEED_LOGIN("9001", "请登录后操作"),
 	;
 
 	public final String key;

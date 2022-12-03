@@ -53,15 +53,17 @@ public class DepartmentService extends BaseService {
     public BaseResponse update(DepartmentParam param){
         List<Integer> users = departmentUserMapper.findAll(DepartmentQuery.builder().departmentId(param.getDepartmentId()).build()).parallelStream().map(p->p.getUserId()).collect(Collectors.toList());
         List<Integer> userIds = new ArrayList<>(users);
-        // 传入的去掉已有的=仍需添加的
-        param.getUserIds().removeAll(users);
-        // 已有的去掉传入的=不需要的，要删除
-        users.removeAll(userIds);
-        if(users.size()>0) {
-            departmentUserMapper.deleteByDepartmentParam(DepartmentParam.builder().departmentId(param.getDepartmentId()).userIds(users));
-        }
-        if(param.getUserIds().size()>0){
-            departmentUserMapper.insert(param);
+        if(param.getUserIds() != null) {
+            // 传入的去掉已有的=仍需添加的
+            param.getUserIds().removeAll(users);
+            // 已有的去掉传入的=不需要的，要删除
+            users.removeAll(userIds);
+            if(users.size()>0) {
+                departmentUserMapper.deleteByDepartmentParam(DepartmentParam.builder().departmentId(param.getDepartmentId()).userIds(users));
+            }
+            if(param.getUserIds().size()>0){
+                departmentUserMapper.insert(param);
+            }
         }
         mapper.update(param);
         return BaseResponse.builder().build();
@@ -71,7 +73,7 @@ public class DepartmentService extends BaseService {
     @Transactional
     public BaseResponse addDepartmentUser(DepartmentUserParam param){
         //TODO 仅限海事局项目
-        departmentUserMapper.delete(DepartmentUserParam.builder().userIds(param.getUserIds()));
+//        departmentUserMapper.delete(DepartmentUserParam.builder().userIds(param.getUserIds()));
         departmentUserMapper.insert(param);
         return BaseResponse.builder().build();
     }

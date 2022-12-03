@@ -4,9 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import sun.misc.BASE64Encoder;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.math.BigInteger;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by jones on 18-10-30.
@@ -55,6 +58,29 @@ public class ObjectUtil {
             }
         }
 
-        return new BASE64Encoder().encode(data);
+        return java.util.Base64.getEncoder().encodeToString(data);
+    }
+
+    public static String getMd5String(File file) throws FileNotFoundException {
+        String result = null;
+        FileInputStream fis = new FileInputStream(file);
+        try{
+            MappedByteBuffer byteBuffer = fis.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(byteBuffer);
+            BigInteger bi = new BigInteger(1, md5.digest());
+            result = bi.toString(16);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(null != fis){
+                try{
+                    fis.close();
+                } catch (IOException ioe){
+                    ioe.printStackTrace();
+                }
+            }
+        }
+        return result;
     }
 }

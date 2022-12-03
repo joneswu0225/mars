@@ -18,6 +18,7 @@ package com.jones.mars.controller;
 
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.exception.MarsException;
+import com.jones.mars.exception.NeedLoginException;
 import com.jones.mars.exception.RequestException;
 import com.jones.mars.object.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +68,20 @@ public class ControllerAdvise {
 				new BaseResponse(ErrorCode.VALIDATION_FAILED, ex.getConstraintViolations().stream()
 						.map(cons -> cons.getMessage()).collect(Collectors.joining(","))),
 				HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(NeedLoginException.class)
+	public ResponseEntity<BaseResponse> handleNeedLoginException(MarsException ex) {
+		HttpStatus status;
+		if (ex instanceof RequestException) {
+			log.warn(ex.getMessage(), ex);
+			status = HttpStatus.BAD_REQUEST;
+		} else {
+			log.error(ex.getMessage(), ex);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+
+		return new ResponseEntity<>(new BaseResponse(ex.getCode(), ex.getMessage()), status);
 	}
 
 	@ExceptionHandler(MarsException.class)

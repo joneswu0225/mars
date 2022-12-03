@@ -2,6 +2,7 @@ package com.jones.mars.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jones.mars.constant.ErrorCode;
+import com.jones.mars.model.AppConst;
 import com.jones.mars.model.User;
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.UserLoginParam;
@@ -11,6 +12,7 @@ import com.jones.mars.service.UserService;
 import com.jones.mars.util.LoginUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -40,6 +42,10 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
     private UserService service;
     @Autowired
     private ProjectService projectService;
+
+    @Value("${app.mode:DEBUG}")
+    private String appMode;
+
     private static CountDownLatch tets = new CountDownLatch(1);
     @Bean
     public SecurityInterceptor getSecurityInterceptor() {
@@ -134,10 +140,10 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
             }
             if (request.getCookies() == null || LoginUtil.getInstance().getUser() == null) {
                 log.info("request address: " + request.getRemoteAddr());
-                if("127.0.0.1".equals(getIp(request)) || (request.getHeader("referer") != null && request.getHeader("referer").contains("swagger-ui.html"))){
+                if(appMode.equals(AppConst.APP_MODE_DEBUG) && (request.getHeader("referer") != null && request.getHeader("referer").contains("swagger-ui.html"))){
                     log.info("当前请求为内部接口请求，且无登录状态，设置默认用户为：admin");
                     UserLoginParam user = UserLoginParam.builder().mobile("admin").password("admin").build();
-                    request.setAttribute("authorization", ((Map<String, String>)service.doLogin(user, appSource).getData()).get("authorization"));
+                    request.setAttribute("authorization", ((Map<String, String>)service.doLogin(user, appSource == null ? CommonConstant.APP_SOURCE_ADMIN : appSource).getData()).get("authorization"));
                 } else {
                     log.info("当前用户未登陆");
                     response.sendError(HttpStatus.UNAUTHORIZED.value(), "请登录后进行操作");

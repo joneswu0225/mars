@@ -66,12 +66,10 @@ public class FileUploadService extends BaseService{
     public BaseResponse uploadFile(MultipartFile file, String fileName, FileType fileType, Integer relatedId){
         try {
             fileName = StringUtils.isEmpty(fileName) ? file.getOriginalFilename() : fileName;
-            String[] fileParam = fileName.split("\\.");
-            fileName = fileParam[0];
-            String[] fileOriParam = file.getOriginalFilename().split("\\.");
-            // getFileTypeByStream 太慢了
-//            String                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        fileSurfix = getFileTypeByStream(file.getBytes());
-            String fileSurfix = fileOriParam.length > 1 ? fileOriParam[1] : (fileParam.length > 1 ? fileParam[1] : null);
+            int fileSurfixIndex = fileName.lastIndexOf(".");
+            int originFileSurfixIndex = file.getOriginalFilename().lastIndexOf(".");
+            fileName = fileSurfixIndex > 0 ? fileName.substring(0, fileSurfixIndex) : fileName;
+            String fileSurfix = originFileSurfixIndex > 0 ? file.getOriginalFilename().substring(originFileSurfixIndex + 1) : (fileSurfixIndex > 1 ? fileName.substring(fileSurfixIndex + 1) : null);
             fileName = StringUtils.isEmpty(fileSurfix) ? fileName : (fileName + "." + fileSurfix);
             String relPath = fileType.getFilePath(relatedId, fileName);
             Path path = Paths.get(fileUploadPath, relPath);

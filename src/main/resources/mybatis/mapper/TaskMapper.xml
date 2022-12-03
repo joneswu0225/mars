@@ -19,6 +19,11 @@
             <result column="project_name" property="name"/>
             <result column="project_image_url" property="imageUrl"/>
             <result column="project_detail" property="detail"/>
+            <result column="blockId" property="blockId"/>
+            <result column="blockName" property="blockName"/>
+            <result column="oriEnterpriseId" property="oriEnterpriseId"/>
+            <result column="oriEnterpriseName" property="oriEnterpriseName"/>
+            <result column="public_flg" property="publicFlg"/>
             <collection property="userList" javaType="ProjectUser" column="project_id">
                 <result column="pu_sgname" property="sgname"/>
                 <result column="pu_manager_flg" property="managerFlg"/>
@@ -80,7 +85,10 @@
     <select id="findList" resultMap="TaskMap" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
         select t.*, p.name as project_name,p.image_url as project_image_url, p.detail as project_detail, uc.sgname as creator_sgname, uu.sgname as updater_sgname
+        ,p.ori_block_id as blockId, b.name as blockName, p.ori_enterprise_id as oriEnterpriseId, e.name as oriEnterpriseName, p.public_flg
         from task t left join project p on t.project_id=p.id
+        left join block b on p.ori_block_id=b.id
+        left join enterprise e on p.ori_enterprise_id=e.id
         left join user_profile uc on t.create_by = uc.user_id
         left join user_profile uu on t.update_by = uu.user_id
         where t.current_flg=1 and t.delete_flg=0

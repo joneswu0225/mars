@@ -121,6 +121,16 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.volcengine</groupId>
+			<artifactId>volc-sdk-java</artifactId>
+			<version>1.0.36</version>
+		</dependency>
     </dependencies>
 
 	<build>
@@ -163,6 +173,5 @@
 			<!--</plugin>-->
 		</plugins>
 	</build>
-
 
 </project>

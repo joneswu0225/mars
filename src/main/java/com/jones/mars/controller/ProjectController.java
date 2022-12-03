@@ -1,11 +1,16 @@
 package com.jones.mars.controller;
 
-import com.jones.mars.model.*;
+import com.jones.mars.model.ProjectHotspot;
+import com.jones.mars.model.ProjectScene;
+import com.jones.mars.model.User;
 import com.jones.mars.model.param.ProjectHotspotParam;
 import com.jones.mars.model.param.ProjectParam;
 import com.jones.mars.model.param.ProjectSceneParam;
 import com.jones.mars.model.param.ProjectUserParam;
-import com.jones.mars.model.query.*;
+import com.jones.mars.model.query.HotspotQuery;
+import com.jones.mars.model.query.ProjectQuery;
+import com.jones.mars.model.query.ProjectUserQuery;
+import com.jones.mars.model.query.RolePermissionQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.BlockService;
 import com.jones.mars.service.ProjectService;
@@ -19,9 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/project")
@@ -89,13 +92,6 @@ public class ProjectController extends BaseController {
         param.setReason("");
         return projectService.update(param);
     }
-
-//    @ApiOperation(value = "获取项目场景列表", notes = "获取项目场景列表")
-//    @GetMapping("{projectId}/scene")
-//    public BaseResponse findScene(
-//            @PathVariable Integer projectId) {
-//        return sceneService.findByProjectId(projectId);
-//    }
 
     @ApiOperation(value = "保存项目场景", notes = "保存项目场景,切换顺序也直接保存即可")
     @PostMapping("{projectId}/scene")

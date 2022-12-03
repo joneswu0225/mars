@@ -38,16 +38,6 @@ public class EnterpriseService extends BaseService {
     @Autowired
     private MessageService service;
 
-//    @Value("${app.file.path.pano}")
-//    private String panoBasePath;
-//
-//    @PostConstruct
-//    private void init(){
-//        File file = new File(panoBasePath);
-//        if(!file.exists()){
-//            file.mkdirs();
-//        }
-//    }
 
     @Override
     public BaseMapper getMapper() {
@@ -58,13 +48,6 @@ public class EnterpriseService extends BaseService {
     public BaseResponse add(EnterpriseParam param){
         mapper.insert(param);
         Integer enterpriseId = param.getId();
-//        File enterpriseFile = Paths.get(panoBasePath, enterpriseId.toString()).toFile();
-//        if(!enterpriseFile.exists()){
-//            enterpriseFile.mkdirs();
-//        }
-//        Enterprise enterprise = Enterprise.builder().basePath(File.separator + enterpriseId.toString()).build();
-//        enterprise.setId(enterpriseId);
-//        mapper.update(enterprise);
         return BaseResponse.builder().data(enterpriseUserMapper.findEnterpriseUser(enterpriseId)).build();
     }
 
