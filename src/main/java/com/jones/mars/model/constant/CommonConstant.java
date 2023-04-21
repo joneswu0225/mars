@@ -17,10 +17,15 @@ public class CommonConstant {
     public static final String APP_SOURCE_H5 = "H5";
     public static final String APP_SOURCE_PC = "PC";
     public static final String APP_SOURCE_WEIXIN = "WEIXIN";
-    public static String APP_COOKIE_DOMAIN;
 
-    @Value("${app.cookie.domain:chickai-tech.cn}")
-    public void setAppCookieDomain(String appCookieDomain) {
-        APP_COOKIE_DOMAIN = appCookieDomain;
+    public static final String APP_MODE_DEBUG = "DEBUG";
+    public static final String APP_MODE_NOLOGIN = "NOLOGIN";
+    public static final String APP_MODE_PRODUCT = "PRODUCT";
+
+    public static String APP_DOMAIN;
+
+    @Value("${app.domain:vr2shipping.com}")
+    public void setAppDomain(String appDomain) {
+        APP_DOMAIN = appDomain;
     }
 }

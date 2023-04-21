@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
@@ -45,8 +46,9 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
 
     @Value("${app.mode:DEBUG}")
     private String appMode;
+    @Value("${app.mode.nologin.source.prefix}")
+    private String nologinSource;
 
-    private static CountDownLatch tets = new CountDownLatch(1);
     @Bean
     public SecurityInterceptor getSecurityInterceptor() {
         return new SecurityInterceptor();
@@ -128,6 +130,18 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
             if (request.getQueryString() != null) {
                 url += "?" + request.getQueryString();
             }
+            if(appMode.equals(CommonConstant.APP_MODE_NOLOGIN) && !StringUtils.isEmpty(nologinSource)){
+                String referer = request.getHeader("referer");
+                if(referer.indexOf(CommonConstant.APP_DOMAIN)>0){
+                    referer = referer.split(CommonConstant.APP_DOMAIN)[1];
+                    referer = referer.substring(referer.indexOf("/"));
+                }
+                for(String item : nologinSource.split(",")){
+                    if(referer.startsWith(item)){
+                        return true;
+                    }
+                }
+            }
             log.info("authorization in request header is :" + request.getHeader("authorization"));
             if(request.getHeader("authorization") != null && LoginUtil.getInstance().getUser() == null){
                 String authorization = request.getHeader("authorization");
@@ -140,7 +154,7 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
             }
             if (request.getCookies() == null || LoginUtil.getInstance().getUser() == null) {
                 log.info("request address: " + request.getRemoteAddr());
-                if(appMode.equals(AppConst.APP_MODE_DEBUG) && (request.getHeader("referer") != null && request.getHeader("referer").contains("swagger-ui.html"))){
+                if(appMode.equals(CommonConstant.APP_MODE_DEBUG) && (request.getHeader("referer") != null && request.getHeader("referer").contains("swagger-ui.html"))){
                     log.info("当前请求为内部接口请求，且无登录状态，设置默认用户为：admin");
                     UserLoginParam user = UserLoginParam.builder().mobile("admin").password("admin").build();
                     request.setAttribute("authorization", ((Map<String, String>)service.doLogin(user, appSource == null ? CommonConstant.APP_SOURCE_ADMIN : appSource).getData()).get("authorization"));

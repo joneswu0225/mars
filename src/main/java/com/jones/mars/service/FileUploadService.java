@@ -1,11 +1,12 @@
 package com.jones.mars.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jones.mars.constant.ErrorCode;
-import com.jones.mars.model.FileUpload;
+import com.jones.mars.model.*;
 import com.jones.mars.model.constant.FileType;
+import com.jones.mars.model.query.*;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
-import com.jones.mars.repository.FileUploadMapper;
+import com.jones.mars.repository.*;
 import com.jones.mars.util.LoginUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -33,6 +38,33 @@ public class FileUploadService extends BaseService{
     @Value("${app.domain}")
     private String appDomain;
     public static String fileUploadPath;
+
+
+    @Autowired
+    private BlockMapper blockMapper;
+    @Autowired
+    private BlockModuleMapper blockModuleMapper;
+    @Autowired
+    private BlockClassMapper blockClassMapper;
+    @Autowired
+    private BlockSceneTypeMapper blockSceneTypeMapper;
+    @Autowired
+    private ProjectMapper projectMapper;
+    @Autowired
+    private EnterpriseMapper enterpriseMapper;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private HotspotMapper hotspotMapper;
+    @Autowired
+    private SceneMapper sceneMapper;
+    @Autowired
+    private AppConstMapper appConstMapper;
+    @Autowired
+    private BlockContentMapper blockContentMapper;
+    @Autowired
+    private BlockHotspotMapper blockHotspotMapper;
+
     @Value("${app.file.path.upload:./files/upload}")
     public void setFileUploadPath(String uploadPath){
         FileUploadService.fileUploadPath = uploadPath;
@@ -88,6 +120,50 @@ public class FileUploadService extends BaseService{
             return BaseResponse.builder().code(ErrorCode.UPLOAD_FAILED).data(e.getMessage()).build();
         }
     }
+
+    public String exportData(String fileName) throws IOException {
+        List<Block> blockList = blockMapper.findAll(BlockQuery.builder().build());
+        List<BlockModule> blockModuleList = blockModuleMapper.findAll(ProjectModuleQuery.builder().build());
+        List<BlockClass> blockClassList = blockClassMapper.findAll(ProjectClassQuery.builder().build());
+        List<BlockSceneType> blockSceneTypeList = blockSceneTypeMapper.findAll(BlockSceneTypeQuery.builder().build());
+        List<Project> projectList = projectMapper.findAll(ProjectQuery.builder().build());
+        List<Enterprise> enterpriseList = enterpriseMapper.findAll(EnterpriseQuery.builder().build());
+        List<User> userList = userMapper.findAll(UserQuery.builder().build());
+        List<Hotspot> hotspotList = hotspotMapper.findAllByQuery(HotspotQuery.builder().build());
+        List<Scene> sceneList = sceneMapper.findAll(SceneQuery.builder().build());
+        List<AppConst> appConstList = appConstMapper.findAll(AppConstQuery.builder().build());
+        Map<Integer, Block> blockMap = blockList.parallelStream().collect(Collectors.toMap(Block::getId, Block -> Block));
+        blockContentMapper.findAll(BlockContentQuery.builder().build()).forEach(blockContent -> {
+            if (blockMap.containsKey(blockContent.getBlockId())){
+                blockMap.get(blockContent.getBlockId()).getBlockContentList().add(blockContent);
+            }
+        });
+        blockHotspotMapper.findAll(BlockContentQuery.builder().build()).forEach(blockHotspot -> {
+            if (blockMap.containsKey(blockHotspot.getBlockId())){
+                blockMap.get(blockHotspot.getBlockId()).getBlockHotspotList().add(blockHotspot);
+            }
+        });
+        Map<String, Object> data = new HashMap<>();
+        data.put("enterprise", enterpriseList);
+        data.put("blockModule", blockModuleList);
+        data.put("blockClass", blockClassList);
+        data.put("blockSceneType", blockSceneTypeList);
+        data.put("block", blockList);
+        data.put("project", projectList);
+        data.put("scene", sceneList);
+        data.put("hotspot", hotspotList);
+        data.put("user", userList);
+        data.put("appConst", appConstList);
+        String result = JSONObject.toJSONString(data);
+        Path path = Paths.get(fileUploadPath, "..", StringUtils.isEmpty(fileName) ? "data_all.json" : fileName);
+        try(FileOutputStream outputStream = new FileOutputStream(path.toFile())){
+            outputStream.write(result.getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return path.toAbsolutePath().toString();
+    }
+
 
     public String getFileUploadPath(){
         return fileUploadPath;

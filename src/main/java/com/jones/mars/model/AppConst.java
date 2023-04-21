@@ -3,6 +3,7 @@ package com.jones.mars.model;
 import com.jones.mars.object.BaseObject;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -25,8 +26,7 @@ public class AppConst extends BaseObject {
     public static final String NEWS_DEFAULT_IMAGE = "NEWS_DEFAULT_IMAGE";
     public static final String APP_DEFAULT_BLOCK = "APP_DEFAULT_BLOCK";
     public static final String APP_DEFAULT_PREFIX = "APP_DEFAULT_";
-    public static final String APP_MODE_DEBUG = "DEBUG";
-    public static final String APP_MODE_PRODUCT = "PRODUCT";
+
     private String name;
     private String value;
     private String detail;

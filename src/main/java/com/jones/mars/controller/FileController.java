@@ -56,4 +56,9 @@ public class FileController extends BaseController {
         return response;
     }
 
+    @GetMapping("/exportData")
+    public BaseResponse exportData(@RequestParam("fileName") String fileName) throws Exception{
+        return BaseResponse.builder().data(service.exportData(fileName)).build();
+    }
+
 }

@@ -144,7 +144,7 @@
     <select id="findAll" resultType="User">
         select * from user
         where delete_flg=0
-        order by name
+        order by id
     </select>
     <resultMap id="UserRoleMap" type="User" >
         <id property="id" column="id" />
