@@ -1,6 +1,7 @@
 package com.jones.mars.util;
 
 import com.jones.mars.constant.ErrorCode;
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.constant.FileType;
 import com.jones.mars.service.FileUploadService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,14 +30,14 @@ public class KrpanoUtil {
     private static Long PROCESS_KRPANO_WAIT_TIME = 100000l;
 
     public static String getOutPutPath(Integer blockId){
-        return FileUploadService.fileUploadPath + File.separator + FileType.FILE_PATH_PREFIX + File.separator + "block" + File.separator + blockId + File.separator + "panos";
+        return CommonConstant.UPLOAD_PATH + File.separator + FileType.FILE_PATH_PREFIX + File.separator + "block" + File.separator + blockId + File.separator + "panos";
     }
 
     public static String getOutPutTempPath(Integer blockId){
-        if(StringUtils.isEmpty(FileUploadService.fileUploadTempPath)){
+        if(StringUtils.isEmpty(CommonConstant.getTmpPanoimagePath())){
             return null;
         }
-        return FileUploadService.fileUploadTempPath + File.separator + FileType.FILE_PATH_PREFIX + File.separator + "block" + File.separator + blockId + File.separator + "panos";
+        return CommonConstant.getTmpPanoimagePath() + File.separator + FileType.FILE_PATH_PREFIX + File.separator + "block" + File.separator + blockId + File.separator + "panos";
     }
 
     public enum PanoType {
@@ -47,19 +48,19 @@ public class KrpanoUtil {
         }
     }
 
-    @Value("${krpano.license}")
+    @Value("${krpano.license:}")
     public void setKrpanoLicense(String krpanoLicense) {
         KrpanoUtil.KRPANO_LICENSE = krpanoLicense;
     }
-    @Value("${krpano.home}")
+    @Value("${krpano.home:}")
     public void setKrpanoHome(String krpanoHome) {
         KrpanoUtil.KRPANO_HOME = krpanoHome;
     }
-    @Value("${krpano.command}")
+    @Value("${krpano.command:krpanotools makepano}")
     public void setKrpanoCommand(String krpanoCommand) {
         KrpanoUtil.KRPANO_COMMAND = krpanoCommand;
     }
-    @Value("${krpano.config}")
+    @Value("${krpano.config:templates/vtour-customize.config}")
     public void setKrpanoConfig(String krpanoConfig) {
         KrpanoUtil.KRPANO_CONFIG = krpanoConfig;
     }

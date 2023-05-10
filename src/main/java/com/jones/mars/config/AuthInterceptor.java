@@ -101,7 +101,6 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
         addInterceptor.excludePathPatterns("/translation/**");
         addInterceptor.excludePathPatterns("/enterpriseShown**");
         addInterceptor.excludePathPatterns("/swagger-ui.html");
-
     }
 
     private class TotalInterceptor extends HandlerInterceptorAdapter {
@@ -116,28 +115,29 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
             return true;
         }
     }
+    public static boolean isStaticRequest(String url){
+        String uri = url.split("\\?")[0];
+        return uri.endsWith(".css") || uri.endsWith(".js") || uri.endsWith(".html") || uri.endsWith(".htm");
+    }
+
     private class SecurityInterceptor extends HandlerInterceptorAdapter {
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
                 throws Exception {
+            String url = request.getRequestURI();
+            if(isStaticRequest(url))    return true;
             String appSource = request.getHeader(CommonConstant.APP_SOURCE_FIELD);
             Enumeration<String> headerNames = request.getHeaderNames();
             while (headerNames.hasMoreElements()){
                 String name = headerNames.nextElement();
                 System.out.println(name + " : " + request.getHeader(name));
             }
-            String url = request.getRequestURI();
             if (request.getQueryString() != null) {
                 url += "?" + request.getQueryString();
             }
             if(appMode.equals(CommonConstant.APP_MODE_NOLOGIN) && !StringUtils.isEmpty(nologinSource)){
-                String referer = request.getHeader("referer");
-                if(referer.indexOf(CommonConstant.APP_DOMAIN)>0){
-                    referer = referer.split(CommonConstant.APP_DOMAIN)[1];
-                    referer = referer.substring(referer.indexOf("/"));
-                }
                 for(String item : nologinSource.split(",")){
-                    if(referer.startsWith(item)){
+                    if(url.startsWith(item)){
                         return true;
                     }
                 }

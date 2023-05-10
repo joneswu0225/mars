@@ -41,11 +41,11 @@ public class ImageSwap extends BaseServiceImpl {
     public static String AccessKeyId = "AKLTNWIyYTZmMGFkNzg3NGYxNDg5OGM4ZTJjNzM3NDczYjc";
     public static String AccessKeySecret = "T0dFNU16VXhaVEkzWkdJNU5EWTVabUptT1dVek1tTXdNMk0zTURZMU0ySQ==";
 
-    @Value("${huoshan.app.accesskey}")
+    @Value("${huoshan.app.accesskey:}")
     public void setAccessKeyId(String accessKeyId) {
         ImageSwap.AccessKeyId = accessKeyId;
     }
-    @Value("${huoshan.app.secret}")
+    @Value("${huoshan.app.secret:}")
     public void setAccessKeySecret(String accessKeySecret) {
         ImageSwap.AccessKeySecret = accessKeySecret;
     }

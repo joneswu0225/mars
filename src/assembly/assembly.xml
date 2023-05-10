@@ -2,7 +2,7 @@
         xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
-    <!-- <id>release</id> -->
+<!--     <id>release</id>-->
     <id>jones-mars</id>
     <formats>
         <format>tar.gz</format>
@@ -28,15 +28,15 @@
     </fileSets>
     <files>
         <file>
-            <source>target/panorama-${version}.jar</source>
+            <source>target/mars-${version}.jar</source>
             <outputDirectory>/</outputDirectory>
-            <destName>panorama.jar</destName>
+            <destName>mars.jar</destName>
         </file>
-        <!--<file>-->
-            <!--<source>src/main/resources/application.properties</source>-->
-            <!--<outputDirectory>/</outputDirectory>-->
-            <!--<destName>application.properties</destName>-->
-        <!--</file>-->
+        <file>
+            <source>src/main/resources/application.properties</source>
+            <outputDirectory>/</outputDirectory>
+            <destName>application.properties</destName>
+        </file>
         <file>
             <source>bin/start.sh</source>
             <outputDirectory>/</outputDirectory>

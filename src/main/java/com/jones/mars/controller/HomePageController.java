@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomePageController{
 
     @Autowired
-    private HomePageService service;
-    @Autowired
     private EnterpriseService enterpriseService;
     @Autowired
     private ProjectService projectService;
@@ -40,52 +38,10 @@ public class HomePageController{
     @Autowired
     private UserLikeService userLikeService;
 
-    @ApiOperation(value = "获取船福专题、全景船舶、全景设备下所有子模块名称", notes = "")
-    @GetMapping("moduleInfo")
-    public BaseResponse moduleInfo() {
-        return service.plateformEnterprise();
-    }
-
-    @ApiOperation(value = "获取船福推荐", notes = "")
-    @GetMapping("recommend")
-    public BaseResponse recommend() {
-        return service.recommendProjects();
-    }
-
-    @ApiOperation(value = "首页入驻品牌", notes = "")
-    @GetMapping("brand")
-    public BaseResponse enterpriserShown() {
-        return service.enterpriseShown();
-    }
-
-    @ApiOperation(value = "首页服务优势", notes = "")
-    @GetMapping("service")
-    public BaseResponse serviceSuperiority() {
-        return service.serviceSuperiority();
-    }
-
-    @ApiOperation(value = "系统默认信息", notes = "")
-    @GetMapping("defaultInfo")
-    public BaseResponse appDefaultInfo() {
-        return service.appDefaultInfo();
-    }
-
     @ApiOperation(value = "企业详情", notes = "企业详情")
     @GetMapping("enterprise/{enterpriseId}")
     public BaseResponse findOneEnterprise(@PathVariable Integer enterpriseId) {
         return enterpriseService.findById(enterpriseId);
-    }
-
-    @ApiOperation(value = "系统默认船只", notes = "")
-    @GetMapping("defaultBlocks")
-    public BaseResponse defaultBlocks() {
-        return service.appDefaultBlocks();
-    }
-
-    @ApiOperation(value = "首页信息", notes = "")
-    @GetMapping("pageInfo")
-    public BaseResponse pageInfo() {
-        return service.homePageInfo();
     }
 
     @ApiOperation(value = "项目详情", notes = "项目详情")
@@ -114,12 +70,6 @@ public class HomePageController{
         return newsService.findByPage(query);
     }
 
-    @ApiOperation(value = "app主页信息", notes = "app主页信息")
-    @GetMapping("app/pageInfo")
-    public BaseResponse appPageInfo() {
-        return service.appPageInfo();
-    }
-
     @ApiOperation(value = "船福专题、全景船舶、全景设备", notes = "")
     @GetMapping("project")
     public BaseResponse project(@ApiParam ProjectQuery query) {
@@ -132,7 +82,6 @@ public class HomePageController{
     public BaseResponse moduleList(@ApiParam ProjectModuleQuery query) {
         return projectModuleService.findAllProjectModule(query);
     }
-
 
     @ApiOperation(value = "模块列表", notes = "模块列表")
     @GetMapping("block")
@@ -176,11 +125,5 @@ public class HomePageController{
         return userLikeService.findLikeResult(query);
     }
 
-    @ApiOperation(value = "刷新首页缓存", notes = "")
-    @GetMapping("refreshAll")
-    public BaseResponse refreshBaseInfo(){
-        service.refreshInitData();
-        return new BaseResponse();
-    }
 
 }

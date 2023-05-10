@@ -1,5 +1,7 @@
 package com.jones.mars.controller;
 
+import com.jones.mars.exception.RequestException;
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.constant.FileType;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.FileUploadService;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -46,9 +49,16 @@ public class FileController extends BaseController {
 
     @GetMapping("/download")
     public ResponseEntity fileDownLoad(@RequestParam("path") String path) throws Exception{
-//        String fileName = path.split("_")[1];
+//        String fileName = path.split("_")[1];http://localhost:9900/user/1
 //        fileName=new String(fileName.getBytes("gbk"),"iso8859-1");//防止中文乱码
-        Path realPath = Paths.get(service.getFileUploadPath(), path).toAbsolutePath();
+        String parentPath = CommonConstant.UPLOAD_PATH;
+        Path realPath = Paths.get(parentPath, path).normalize();
+        if(!realPath.startsWith(parentPath)){
+            throw new RequestException("非法路径");
+        }
+        if(!realPath.toFile().exists()){
+            throw new RequestException("文件不存在");
+        }
         HttpHeaders headers=new HttpHeaders();//设置响应头
         headers.add("Content-Disposition", "attachment;filename="+realPath.getFileName().toString());
         HttpStatus statusCode = HttpStatus.OK;//设置响应吗

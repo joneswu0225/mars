@@ -72,19 +72,19 @@ public class AliMnsSender {
 		}
 	}
 
-	@Value("${aliyun.mns.accesskey.id}")
+	@Value("${aliyun.mns.accesskey.id:}")
 	private void setAccessKeyId(String accessKeyId){
 		AliMnsSender.accessKeyId = accessKeyId;
 	}
-	@Value("${aliyun.mns.accesskey.secret}")
+	@Value("${aliyun.mns.accesskey.secret:}")
 	private void setAccessKeySecret(String accessKeySecret){
 		AliMnsSender.accessKeySecret = accessKeySecret;
 	}
-	@Value("${aliyun.mns.signname}")
+	@Value("${aliyun.mns.signname:}")
 	private void setSignName(String signname){
 		AliMnsSender.signname = signname;
 	}
-	@Value("${aliyun.mns.template.code}")
+	@Value("${aliyun.mns.template.code:}")
 	private void setTemplateCode(String templateCode){
 		AliMnsSender.templateCode = templateCode;
 	}

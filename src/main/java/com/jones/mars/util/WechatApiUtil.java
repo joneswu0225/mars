@@ -77,11 +77,6 @@ public class WechatApiUtil {
             InputStream inStream = url.openConnection().getInputStream();
             byte[] bytes = IOUtils.toByteArray(inStream);
             result = Base64.getEncoder().encodeToString(bytes);
-//            String sourcePath = String.format("%s/%s/%s_%s",fileUploadPath,"tmp", mediaId, System.currentTimeMillis());
-//            Files.copy(inStream, Paths.get(sourcePath), StandardCopyOption.REPLACE_EXISTING);
-//            String targetPath = sourcePath + ".wav";
-//            changeToWav(sourcePath, targetPath);
-//            result = ObjectUtil.getBase64FromInputStream(inStream);
         }catch (Exception e){
             log.error("fail to download wechat files", e);
         }
@@ -110,19 +105,14 @@ public class WechatApiUtil {
         }
     }
 
-    @Value("${wechat.official.app.id}")
+    @Value("${wechat.official.app.id:}")
     private void setAppId(String appId){
         WechatApiUtil.appId = appId;
     }
-    @Value("${wechat.official.app.secret}")
+    @Value("${wechat.official.app.secret:}")
     private void setAppSecret(String appSecret){
         WechatApiUtil.appSecret = appSecret;
     }
-    @Value("${app.file.path.upload}")
-    private void setFileUploadPath(String fileUploadPath){
-        WechatApiUtil.fileUploadPath = fileUploadPath;
-    }
-
 
     public static void main(String[] args) throws UnsupportedEncodingException {
         String aa = "https://msa.vr2shipping.com/my/p_ditor/0/248/2";

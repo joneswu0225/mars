@@ -1,6 +1,7 @@
 package com.jones.mars.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.TranslationParam;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.util.XunfeiUtil;
@@ -13,19 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequestMapping({"/youdao"})
 @Api(value = "语音相关", tags = {"语音相关"})
 public class YoudaoController extends BaseController {
-    private static String AUDIO_TMP_PATH = "/tmp/audio/";
-
-    @Value("${app.file.path.tmp.audio.rel}")
-    private void setAudioTmpPath(String tmpPath){
-        AUDIO_TMP_PATH = tmpPath;
-    }
-
     /**
      * 有道语音评测
      * TranslationParam.content 语音的base64
@@ -85,7 +80,7 @@ public class YoudaoController extends BaseController {
                                    @RequestParam(name="langType", required = false) @ApiParam(value="中英文,zh-CHS/en",name="langType") String langType,
                                    @RequestParam(name="voice", required = false) @ApiParam(value="",name="voice") String voice) throws Exception {
         String result = YoudaoUtil.getTTSInfo(text, langType, voice);
-        result = AUDIO_TMP_PATH + result;
+        result = CommonConstant.UPLOAD_PATH_TMP_AUDIO + File.separator + result;
         return BaseResponse.builder().data(result).build();
     }
 

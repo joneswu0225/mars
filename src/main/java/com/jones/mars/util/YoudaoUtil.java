@@ -1,4 +1,5 @@
 package com.jones.mars.util;
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.TranslationParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
@@ -36,26 +37,20 @@ import java.util.Map;
 public class YoudaoUtil {
     
     private static String BASE_URL;// = "https://openapi.youdao.com";
-    private static String TMP_PATH;// = "files/tmp/audio";
-
     private static String APP_KEY;// = "17e32ff2275a6525";
     private static String APP_SECRET;// = "atzwO8jUsYPoX8lOgfuV8H6fm0mnN8WM";
 
-    @Value("${youdao.tts.url}")
+    @Value("${youdao.tts.url:}")
     public void setYoudaoUrl(String youdaoUrl) {
         YoudaoUtil.BASE_URL = youdaoUrl;
     }
-    @Value("${youdao.tts.key}")
+    @Value("${youdao.tts.key:}")
     public void setAppKey(String appKey) {
         YoudaoUtil.APP_KEY = appKey;
     }
-    @Value("${youdao.tts.secret}")
+    @Value("${youdao.tts.secret:}")
     public void setAppSecret(String appSecret) {
         YoudaoUtil.APP_SECRET = appSecret;
-    }
-    @Value("${app.file.path.tmp.audio}")
-    public void setTmpPath(String tmpPath) {
-        YoudaoUtil.TMP_PATH = tmpPath;
     }
 
 
@@ -156,7 +151,7 @@ public class YoudaoUtil {
                 EntityUtils.consume(httpEntity);
                 String fileName = "youdaotts_" + System.currentTimeMillis() + ".mp3";
                 if(stream != null){//合成成功
-                    String file = TMP_PATH + "/" + fileName;
+                    String file = CommonConstant.getTmpAudioPath() + "/" + fileName;
                     byte2File(stream,file);
                 }
                 result = fileName;

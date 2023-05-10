@@ -1,6 +1,7 @@
 package com.jones.mars.util;
 
 import com.aliyuncs.utils.StringUtils;
+import com.jones.mars.model.constant.CommonConstant;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,8 +27,6 @@ public class XunfeiUtil {
     public static String IAT_API_KEY = "a12523df97cef9b716159e1f4da8c2e9";
     // 语音合成接口密钥
     public static String TTS_API_KEY = "a5ca35109f8bb5517ffd1d89b53f3fd0";
-    // 语音合成接口密钥
-    public static String TMP_PATH = "files/tmp/audio";
 
 
     /**
@@ -169,7 +168,7 @@ public class XunfeiUtil {
             } else {
                 fileName = fileName + ".mp3";
             }
-            FileUtil.save(TMP_PATH, fileName, (byte[]) resultMap.get("body"));
+            FileUtil.save(CommonConstant.getTmpAudioPath(), fileName, (byte[]) resultMap.get("body"));
             System.out.println("合成 WebAPI 调用成功，音频文件：" + fileName);
         } else { // 合成失败
             System.out.println("合成 WebAPI 调用失败，错误信息：" + resultMap.get("body").toString());//返回code为错误码时，请查询https://www.xfyun.cn/document/error-code解决方案
@@ -178,28 +177,24 @@ public class XunfeiUtil {
     }
 
 
-    @Value("${xunfei.appid}")
+    @Value("${xunfei.appid:}")
     public void setAPPID(String appid) {
         APPID = appid;
     }
-    @Value("${xunfei.baseurl}")
+    @Value("${xunfei.baseurl:}")
     public void setBaseUrl(String baseUrl) {
         BASE_URL = baseUrl;
     }
-    @Value("${xunfei.ise.apikey}")
+    @Value("${xunfei.ise.apikey:}")
     public void setIseApiKey(String iseApiKey) {
         ISE_API_KEY = iseApiKey;
     }
-    @Value("${xunfei.iat.apikey}")
+    @Value("${xunfei.iat.apikey:}")
     public void setIatApiKey(String iatApiKey) {
         IAT_API_KEY = iatApiKey;
     }
-    @Value("${xunfei.tts.apikey}")
+    @Value("${xunfei.tts.apikey:}")
     public void setTtsApiKey(String ttsApiKey) {
         TTS_API_KEY = ttsApiKey;
-    }
-    @Value("${app.file.path.tmp.audio}")
-    public void setTmpPath(String tmpPath) {
-        TMP_PATH = tmpPath;
     }
 }

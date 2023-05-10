@@ -19,12 +19,12 @@ public class AgoraUtil {
 
     private static final int EXPIRATION_TIME_IN_SECONDS = 3600;
 
-    @Value("${agora.rtc.app.id}")
+    @Value("${agora.rtc.app.id:}")
     public void setAppId(String appId) {
         AgoraUtil.APP_ID = appId;
     }
 
-    @Value("${agora.rtc.app.certificate}")
+    @Value("${agora.rtc.app.certificate:}")
     public void setAppCertificate(String appCertificate) {
         AgoraUtil.APP_CERTIFICATE = appCertificate;
     }

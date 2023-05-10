@@ -2,6 +2,7 @@ package com.jones.mars.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ser.Serializers;
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.TranslationParam;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.util.HttpUtil;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -26,13 +28,6 @@ import java.util.Map;
 @RequestMapping({"/xunfei"})
 @Api(value = "语音相关", tags = {"语音相关"})
 public class XunfeiController extends BaseController {
-    private static String AUDIO_TMP_PATH = "/tmp/audio/";
-
-    @Value("${app.file.path.tmp.audio.rel}")
-    private void setAudioTmpPath(String tmpPath){
-        AUDIO_TMP_PATH = tmpPath;
-    }
-
     /**
      * 讯飞语音评测
      * TranslationParam.content 语音的base64
@@ -97,7 +92,7 @@ public class XunfeiController extends BaseController {
     @ResponseBody
     public BaseResponse getTTSInfo(@RequestBody @ApiParam(required=true) TranslationParam param) throws Exception {
         String result = XunfeiUtil.getTTSInfo(param.getText(), param.getVoiceName());
-        result = AUDIO_TMP_PATH + result;
+        result = CommonConstant.UPLOAD_PATH_TMP_AUDIO + File.separator + result;
         return BaseResponse.builder().data(result).build();
     }
 

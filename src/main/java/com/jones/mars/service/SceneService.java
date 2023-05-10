@@ -5,6 +5,7 @@ import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.Hotspot;
 import com.jones.mars.model.ProjectScene;
 import com.jones.mars.model.Scene;
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.constant.FileType;
 import com.jones.mars.model.param.ProjectSceneParam;
 import com.jones.mars.model.query.HotspotQuery;
@@ -90,7 +91,7 @@ public class SceneService extends BaseService {
     private BaseResponse sliceImage(Scene scene, KrpanoUtil.PanoType panoType){
         scene.setSliceStatus(Scene.SLICESTATUS_TODO);
         sceneMapper.update(scene);
-        ErrorCode code = KrpanoUtil.slice(FileUploadService.fileUploadPath + File.separator + scene.getPanoImageUrl(), scene.getBlockId(), panoType);
+        ErrorCode code = KrpanoUtil.slice(CommonConstant.UPLOAD_PATH + File.separator + scene.getPanoImageUrl(), scene.getBlockId(), panoType);
         if(code.isSucceeded()){
             scene.setSliceStatus(Scene.SLICESTATUS_FINISH);
             sceneMapper.update(scene);

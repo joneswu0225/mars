@@ -39,7 +39,7 @@ public class BlockController extends BaseController {
     @ApiOperation(value = "新增模块", notes = "")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) BlockParam param) {
-        param.setOperatorId(getLoginUser().getId());
+//        param.setOperatorId(getLoginUser().getId());
         return service.add(param);
     }
 
@@ -72,7 +72,7 @@ public class BlockController extends BaseController {
     public BaseResponse update(
             @PathVariable Integer blockId,
             @RequestBody @ApiParam(required=true) BlockParam param) {
-        param.setOperatorId(getLoginUser().getId());
+//        param.setOperatorId(getLoginUser().getId());
         param.setId(blockId);
         return service.update(param);
     }

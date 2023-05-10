@@ -3,6 +3,7 @@ package com.jones.mars.service;
 import com.alibaba.fastjson.JSONObject;
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.*;
+import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.constant.FileType;
 import com.jones.mars.model.query.*;
 import com.jones.mars.object.BaseResponse;
@@ -34,12 +35,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class FileUploadService extends BaseService{
-
-    @Value("${app.domain}")
-    private String appDomain;
-    public static String fileUploadPath;
-
-
     @Autowired
     private BlockMapper blockMapper;
     @Autowired
@@ -65,29 +60,6 @@ public class FileUploadService extends BaseService{
     @Autowired
     private BlockHotspotMapper blockHotspotMapper;
 
-    @Value("${app.file.path.upload:./files/upload}")
-    public void setFileUploadPath(String uploadPath){
-        FileUploadService.fileUploadPath = uploadPath;
-    }
-
-    public static String fileUploadTempPath;
-    @Value("${app.file.path.upload.temp}")
-    public void setFileUploadTempPath(String uploadTempPath){
-        FileUploadService.fileUploadTempPath = uploadTempPath;
-    }
-
-    @PostConstruct
-    private void init(){
-        File path = Paths.get(fileUploadPath).toFile();
-        if(!path.exists()){
-            path.mkdirs();
-        }
-        File tempPath = Paths.get(fileUploadTempPath).toFile();
-        if(!tempPath.exists()){
-            tempPath.mkdirs();
-        }
-    }
-
     @Autowired
     private FileUploadMapper mapper;
     @Override
@@ -104,10 +76,10 @@ public class FileUploadService extends BaseService{
             String fileSurfix = originFileSurfixIndex > 0 ? file.getOriginalFilename().substring(originFileSurfixIndex + 1) : (fileSurfixIndex > 1 ? fileName.substring(fileSurfixIndex + 1) : null);
             fileName = StringUtils.isEmpty(fileSurfix) ? fileName : (fileName + "." + fileSurfix);
             String relPath = fileType.getFilePath(relatedId, fileName);
-            Path path = Paths.get(fileUploadPath, relPath);
+            Path path = Paths.get(CommonConstant.UPLOAD_PATH, relPath);
             path.toFile().mkdirs();
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-            FileUpload fileUpload = FileUpload.builder().type(fileType).path(relPath).name(fileName).domain(appDomain).relatedId(relatedId).build();
+            FileUpload fileUpload = FileUpload.builder().type(fileType).path(relPath).name(fileName).domain(CommonConstant.APP_DOMAIN).relatedId(relatedId).build();
             if(LoginUtil.getInstance().getUser() != null){
                 fileUpload.setUserId(LoginUtil.getInstance().getUser().getId());
             }
@@ -155,18 +127,13 @@ public class FileUploadService extends BaseService{
         data.put("user", userList);
         data.put("appConst", appConstList);
         String result = JSONObject.toJSONString(data);
-        Path path = Paths.get(fileUploadPath, "..", StringUtils.isEmpty(fileName) ? "data_all.json" : fileName);
+        Path path = Paths.get(CommonConstant.UPLOAD_PATH, "..", StringUtils.isEmpty(fileName) ? "data_all.json" : fileName);
         try(FileOutputStream outputStream = new FileOutputStream(path.toFile())){
             outputStream.write(result.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
         return path.toAbsolutePath().toString();
-    }
-
-
-    public String getFileUploadPath(){
-        return fileUploadPath;
     }
 
     public String getFileTypeByStream(byte[] b) {
