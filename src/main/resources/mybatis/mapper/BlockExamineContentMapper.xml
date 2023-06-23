@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.BlockExamineContentMapper" >
+    <insert id="insert" parameterType="BlockExamineContentParam" useGeneratedKeys="true" keyProperty="id">
+        insert into block_examine_content(`examine_id`, `content`, `title`, `extra`, `seq`, `type`) values
+        (#{examineId}, #{content}, #{title}, #{extra}, #{seq}, #{type})
+    </insert>
+    <update id="update" parameterType="BlockExamineContentParam">
+        update block_examine_content
+        set content = #{content}, title = #{title}, `type` = #{type}, extra = #{extra}
+        where id = #{id}
+    </update>
+    <select id="findMaxSeqByExamineId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select max(seq) from block_examine_content where examine_id=#{examineId}
+    </select>
+    <update id="updateBlockExamineContentSeq">
+        update block_examine_content set seq=case
+        <foreach collection="examineContentIds" item="examineContentId" index="index">
+            when id=#{examineContentId} then #{index}
+        </foreach>
+        end
+        where id in
+        <foreach collection="examineContentIds" item="examineContentId" index="index" separator="," open="(" close=")">
+            #{examineContentId}
+        </foreach>
+    </update>
+    <select id="findList" resultType="BlockExamineContent" parameterType="Query">
+        select * from block_examine_content
+        where 1=1
+        <if test="examineId != null">
+            and examine_id=#{examineId}
+        </if>
+        <if test="type != null and type != ''">
+            and `type`=#{type}
+        </if>
+        order by `type`, seq
+    </select>
+
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from block_examine_content
+        where examine_id=#{examineId}
+    </select>
+
+    <select id="findByExamineId" resultType="BlockExamineContent" parameterType="java.lang.Integer">
+        select * from block_examine_content
+        where examine_id=#{examineId}
+        order by seq
+    </select>
+
+    <select id="findAll" resultType="BlockExamineContent">
+        select * from block_examine_content
+        where 1=1
+        <if test="examineId != null">
+            and examine_id=#{examineId}
+        </if>
+        <if test="type != null and type != ''">
+            and `type`=#{type}
+        </if>
+        order by seq
+    </select>
+
+    <select id="findOne" resultType="BlockExamineContent">
+        select * from block_examine_content where id=#{id}
+    </select>
+
+    <delete id="delete">
+        delete from block_examine_content where id=#{id}
+    </delete>
+    <delete id="deleteByExamineId">
+        delete from block_examine_content where examine_id=#{id}
+    </delete>
+</mapper>

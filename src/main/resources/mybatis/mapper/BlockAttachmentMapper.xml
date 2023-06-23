@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.BlockAttachmentMapper" >
+    <insert id="insert" parameterType="BlockAttachment" useGeneratedKeys="true" keyProperty="id">
+        insert into block_attachment(`name`, `block_id`, `create_time`, `update_time`, `creator_id`, `detail`,`parent_id`,`operator_id`,`image_url`,`type`)
+        values(#{name}, #{blockId}, now(), now(), #{operatorId}, #{detail},#{parentId},#{operatorId},#{imageUrl}, #{type})
+    </insert>
+    <insert id="update" parameterType="BlockAttachment" >
+        update block_attachment
+        set id =#{id}
+        <if test="name != null and name != ''">
+            ,name = #{name}
+        </if>
+        <if test="imageUrl != null and imageUrl != ''">
+            ,image_url = #{imageUrl}
+        </if>
+        <if test="type != null and type != ''">
+            ,type = #{type}
+        </if>
+        <if test="detail != null and detail != ''">
+            ,detail = #{detail}
+        </if>
+        <if test="blockId != null">
+            , block_id = #{blockId}
+        </if>
+        <if test="parentId != null">
+            , parent_id = #{parentId}
+        </if>
+        <if test="operatorId != null">
+            , operator_id = #{operatorId}
+        </if>
+        ,update_time = now()
+        where id=#{id}
+    </insert>
+    <select id="findList" resultType="BlockAttachment" parameterType="Query">
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select * from block_attachment
+        where delete_flg=0
+        <if test="name != null and name !=''">
+            and name like concat('%',#{name},'%')
+        </if>
+        <if test="blockId != null">
+            and block_id=#{blockId}
+        </if>
+        <if test="parentId != null">
+            and parent_id=#{parentId}
+        </if>
+        <if test="type != null and type !=''">
+            and type=#{type}
+        </if>
+        order by id desc
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from block_attachment
+        where delete_flg=0
+        <if test="name != null and name !=''">
+            and name like concat('%',#{name},'%')
+        </if>
+        <if test="blockId != null">
+            and block_id=#{blockId}
+        </if>
+        <if test="parentId != null">
+            and parent_id=#{parentId}
+        </if>
+        <if test="type != null and type !=''">
+            and type=#{type}
+        </if>
+    </select>
+    <select id="findAllName" resultType="BlockAttachment" parameterType="Query">
+        select id, name from block_attachment
+        where delete_flg=0
+        <if test="name != null and name !=''">
+            and name like concat('%',#{name},'%')
+        </if>
+        <if test="blockId != null">
+            and block_id=#{blockId}
+        </if>
+        <if test="parentId != null">
+            and parent_id=#{parentId}
+        </if>
+        <if test="type != null and type !=''">
+            and type=#{type}
+        </if>
+        order by id
+    </select>
+    <select id="findAll" resultType="BlockAttachment" parameterType="Query">
+        select * from block_attachment
+        where delete_flg=0
+        <if test="name != null and name !=''">
+            and name like concat('%',#{name},'%')
+        </if>
+        <if test="blockId != null">
+            and block_id=#{blockId}
+        </if>
+        <if test="parentId != null">
+            and parent_id=#{parentId}
+        </if>
+        <if test="type != null and type !=''">
+            and type=#{type}
+        </if>
+        order by id desc
+    </select>
+    <select id="findOne" resultType="BlockAttachment">
+        select * from block_attachment where id=#{id}
+    </select>
+    <update id="delete">
+        update block_attachment set delete_flg=1 where id=#{id}
+    </update>
+</mapper>
