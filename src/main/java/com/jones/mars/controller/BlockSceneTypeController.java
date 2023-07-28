@@ -3,6 +3,7 @@ package com.jones.mars.controller;
 import com.jones.mars.model.BlockSceneType;
 import com.jones.mars.model.param.BlockSceneTypeParam;
 import com.jones.mars.model.query.BlockSceneTypeQuery;
+import com.jones.mars.model.query.HaiteBlockSceneTypeQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.BlockSceneTypeService;
 import io.swagger.annotations.Api;
@@ -11,6 +12,11 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/sceneType")
@@ -32,6 +38,17 @@ public class BlockSceneTypeController extends BaseController {
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) BlockSceneTypeParam param) {
         return service.add(param);
+    }
+
+    @ApiOperation(value = "海特场景类型", notes = "海特场景类型")
+    @PostMapping("/haite/all")
+    public BaseResponse allName(@RequestBody @ApiParam(required=true) HaiteBlockSceneTypeQuery query) {
+        List<BlockSceneType> sceneTypeList = (List<BlockSceneType>) service.allName(query.getBlock_id()).getData();
+        List<Integer> sceneTypeIdList = sceneTypeList.stream().map(s->s.getId()).collect(Collectors.toList());
+        Map<String, Object> result = new HashMap<>();
+        result.put("block_id", query.getBlock_id());
+        result.put("scene_type_ids", sceneTypeIdList);
+        return BaseResponse.builder().data(result).build();
     }
 
     @ApiOperation(value = "更新场景类型", notes = "更新场景类型")
