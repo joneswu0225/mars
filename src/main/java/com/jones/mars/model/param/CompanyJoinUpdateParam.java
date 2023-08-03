@@ -3,10 +3,14 @@ package com.jones.mars.model.param;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @ApiModel(value="企业入驻参数")
+@NoArgsConstructor
+@AllArgsConstructor
 public class CompanyJoinUpdateParam {
     @ApiParam(hidden = true)
     private Integer id;

@@ -1,7 +1,9 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.model.BlockSceneType;
+import com.jones.mars.model.param.BlockExamineContentSeqParam;
 import com.jones.mars.model.param.BlockSceneTypeParam;
+import com.jones.mars.model.param.BlockSceneTypeSeqParam;
 import com.jones.mars.model.query.BlockSceneTypeQuery;
 import com.jones.mars.model.query.HaiteBlockSceneTypeQuery;
 import com.jones.mars.object.BaseResponse;
@@ -37,7 +39,7 @@ public class BlockSceneTypeController extends BaseController {
     @ApiOperation(value = "新增场景类型", notes = "新增场景类型")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) BlockSceneTypeParam param) {
-        return service.add(param);
+        return service.insertSceneType(param);
     }
 
     @ApiOperation(value = "海特场景类型", notes = "海特场景类型")
@@ -61,6 +63,11 @@ public class BlockSceneTypeController extends BaseController {
         return service.update(sceneType);
     }
 
+    @ApiOperation(value = "调整场景类型顺序", notes = "")
+    @PostMapping("/changeSeq")
+    public BaseResponse changeSeq(@RequestBody @ApiParam(required=true) BlockSceneTypeSeqParam param) {
+        return service.updateBlockSceneTypeSeq(param);
+    }
     @ApiOperation(value = "删除场景类型", notes = "后台调用")
     @DeleteMapping("{blockSceneTypeId}")
     public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer blockSceneTypeId) {

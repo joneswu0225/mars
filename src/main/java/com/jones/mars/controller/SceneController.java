@@ -3,7 +3,9 @@ package com.jones.mars.controller;
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.Scene;
 import com.jones.mars.model.constant.FileType;
+import com.jones.mars.model.param.BlockSceneTypeSeqParam;
 import com.jones.mars.model.param.SceneParam;
+import com.jones.mars.model.param.SceneSeqParam;
 import com.jones.mars.model.param.SlicePanoParam;
 import com.jones.mars.model.query.SceneQuery;
 import com.jones.mars.object.BaseResponse;
@@ -65,7 +67,7 @@ public class SceneController extends BaseController {
     @ApiOperation(value = "新增场景", notes = "新增场景,后台接口")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) SceneParam param) {
-        return sceneService.add(param);
+        return sceneService.insertScene(param);
     }
 
     @ApiOperation(value = "场景详情", notes = "场景详情,后台接口")
@@ -81,6 +83,12 @@ public class SceneController extends BaseController {
             @RequestBody @ApiParam(required=true) SceneParam param) {
         param.setId(sceneId);
         return sceneService.update(param);
+    }
+
+    @ApiOperation(value = "调整场景顺序", notes = "")
+    @PostMapping("/changeSeq")
+    public BaseResponse changeSeq(@RequestBody @ApiParam(required=true) SceneSeqParam param) {
+        return sceneService.updateSceneSeq(param);
     }
 
     @ApiOperation(value = "删除场景", notes = "后台调用,后台接口")

@@ -4,14 +4,18 @@ import com.jones.mars.model.constant.LikeType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
 @ApiModel(value="点赞参数")
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserLikeParam{
     @NotBlank(message = "点赞目标的ID不能为空")
     @ApiModelProperty(value="点赞目标的ID",name="likeId")

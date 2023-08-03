@@ -3,10 +3,14 @@ package com.jones.mars.model.param;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @ApiModel(value="用户状态参数")
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserProfileParam {
     @ApiModelProperty(value="姓名",name="sgname")
     private String sgname;

@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +24,7 @@ import java.nio.file.Paths;
 @RestController
 @RequestMapping({"/huoshan"})
 @Api(value = "火山接口", tags = {"火山接口"})
+@Profile({"image"})
 public class HuoshanController extends BaseController {
 
     private static final String SWAPFACE_REL_PATH = "/swapface";

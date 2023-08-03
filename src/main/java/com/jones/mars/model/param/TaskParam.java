@@ -4,8 +4,10 @@ import com.jones.mars.model.constant.TaskType;
 import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TaskParam extends BaseObject {
   @ApiModelProperty(value="任务名称",name="name")
   private String name;

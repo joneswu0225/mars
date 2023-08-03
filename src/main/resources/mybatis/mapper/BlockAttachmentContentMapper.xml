@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.BlockAttachmentContentMapper" >
+    <insert id="insert" parameterType="BlockAttachmentContentParam" useGeneratedKeys="true" keyProperty="id">
+        insert into block_attachment_content(`attachment_id`, `content`, `title`, `extra`, `seq`, `type`) values
+        (#{attachmentId}, #{content}, #{title}, #{extra}, #{seq}, #{type})
+    </insert>
+    <update id="update" parameterType="BlockAttachmentContentParam">
+        update block_attachment_content
+        set content = #{content}, title = #{title}, `type` = #{type}, extra = #{extra}
+        where id = #{id}
+    </update>
+    <select id="findMaxSeqByAttachmentId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select max(seq) from block_attachment_content where attachment_id=#{attachmentId}
+    </select>
+    <update id="updateBlockAttachmentContentSeq">
+        update block_attachment_content set seq=case
+        <foreach collection="attachmentContentIds" item="attachmentContentId" index="index">
+            when id=#{attachmentContentId} then #{index}
+        </foreach>
+        end
+        where id in
+        <foreach collection="attachmentContentIds" item="attachmentContentId" index="index" separator="," open="(" close=")">
+            #{attachmentContentId}
+        </foreach>
+    </update>
+    <select id="findList" resultType="BlockAttachmentContent" parameterType="Query">
+        select * from block_attachment_content
+        where 1=1
+        <if test="attachmentId != null">
+            and attachment_id=#{attachmentId}
+        </if>
+        <if test="type != null and type != ''">
+            and `type`=#{type}
+        </if>
+        order by `type`, seq
+    </select>
+
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from block_attachment_content
+        where attachment_id=#{attachmentId}
+    </select>
+
+    <select id="findByAttachmentId" resultType="BlockAttachmentContent" parameterType="java.lang.Integer">
+        select * from block_attachment_content
+        where attachment_id=#{attachmentId}
+        order by seq
+    </select>
+
+    <select id="findAll" resultType="BlockAttachmentContent">
+        select * from block_attachment_content
+        where 1=1
+        <if test="attachmentId != null">
+            and attachment_id=#{attachmentId}
+        </if>
+        <if test="type != null and type != ''">
+            and `type`=#{type}
+        </if>
+        order by seq
+    </select>
+
+    <select id="findOne" resultType="BlockAttachmentContent">
+        select * from block_attachment_content where id=#{id}
+    </select>
+
+    <delete id="delete">
+        delete from block_attachment_content where id=#{id}
+    </delete>
+    <delete id="deleteByAttachmentId">
+        delete from block_attachment_content where attachment_id=#{id}
+    </delete>
+</mapper>

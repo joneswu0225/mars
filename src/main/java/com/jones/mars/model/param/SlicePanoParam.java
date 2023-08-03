@@ -4,12 +4,16 @@ import com.jones.mars.object.BaseObject;
 import com.jones.mars.util.KrpanoUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @ApiModel(value="场景切图参数")
+@NoArgsConstructor
+@AllArgsConstructor
 public class SlicePanoParam extends BaseObject {
     @ApiModelProperty(value="场景ID",name="sceneId")
     private Integer sceneId;

@@ -4,14 +4,18 @@ import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
 @ApiModel(value="模块平面图参数")
+@NoArgsConstructor
+@AllArgsConstructor
 public class BlockImageParam extends BaseObject {
     @NotNull(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")

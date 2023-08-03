@@ -4,8 +4,10 @@ import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
@@ -13,6 +15,8 @@ import java.util.Date;
 @Data
 @Builder
 @ApiModel(value="企业参数")
+@NoArgsConstructor
+@AllArgsConstructor
 public class EnterpriseParam extends BaseObject {
     @NotBlank(message="企业名称不能为空")
     @ApiModelProperty(value="企业名称",name="name")

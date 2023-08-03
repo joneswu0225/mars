@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import java.util.Map;
 @RequestMapping("/jsrecord")
 @Slf4j
 @Api(value = "jsrecord插件", tags = {"jsrecord插件"})
+@Profile({"wechat"})
 public class JsRecordController extends BaseController {
 
     @Autowired

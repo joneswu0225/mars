@@ -5,6 +5,7 @@ import com.jones.mars.model.constant.CommonConstant;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
@@ -18,6 +19,7 @@ import java.util.Map;
  * Created by jones on 19-5-29.
  */
 @Component
+@Profile({"media"})
 public class XunfeiUtil {
     public static String APPID = "5ce4ebb1";
     public static String BASE_URL = "http://api.xfyun.cn/v1/service/v1";

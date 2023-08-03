@@ -5,8 +5,10 @@ import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -18,6 +20,8 @@ import java.util.List;
 @Data
 @Builder
 @ApiModel(value="项目参数")
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProjectParam extends BaseObject {
     @NotBlank(message = "项目名称不能为空")
     @ApiModelProperty(value="项目名称",name="name")

@@ -2,12 +2,16 @@ package com.jones.mars.model.param;
 
 import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class HotspotParam extends BaseObject {
     @ApiModelProperty(value="热点code",name="code")
     private String code;

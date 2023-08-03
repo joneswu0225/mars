@@ -6,10 +6,12 @@ import com.jones.mars.util.WechatWeProgramUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping({"/wechat"})
+@Profile({"wechat"})
 @Api(value = "微信接口", tags = {"微信接口"})
 public class WechatController extends BaseController {
     @Autowired

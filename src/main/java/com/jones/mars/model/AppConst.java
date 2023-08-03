@@ -1,14 +1,18 @@
 package com.jones.mars.model;
 
 import com.jones.mars.object.BaseObject;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AppConst extends BaseObject {
     public static final String HOME_RECOMMEND_PROJECT = "HOME_RECOMMEND_PROJECT";
     public static final String HOME_ENTERPRISE_SHOWN = "HOME_ENTERPRISE_SHOWN";

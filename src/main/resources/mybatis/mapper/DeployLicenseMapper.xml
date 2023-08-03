@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.DeployLicenseMapper" >
+    <insert id="insert" parameterType="DeployLicense" useGeneratedKeys="true" keyProperty="id">
+        insert into deploy_license(`name`, `detail`, `start_time`, `expire_time`, `create_time`, `key_public`, `key_private`, `disk_series`, `directory`, `content_ori`, `content_enc`)
+        values(#{name}, #{detail}, #{startTime}, #{expireTime}, #{createTime}, #{keyPublic}, #{keyPrivate}, #{diskSeries}, #{directory}, #{contentOri}, #{contentEnc})
+    </insert>
+    <insert id="update" parameterType="AppConst">
+        update deploy_license set id=#{id}
+        <if test="name != null and name != ''">
+            and name=#{name}
+        </if>
+        <if test="detail != null and detail != ''">
+            and `detail`=#{detail}
+        </if>
+        <if test="startTime != null">
+            and start_time=#{startTime}
+        </if>
+        <if test="expireTime != null">
+            and `expire_time`=#{expireTime}
+        </if>
+        <if test="createTime != null">
+            and `create_time`=#{createTime}
+        </if>
+        <if test="keyPublic != null and keyPublic != ''">
+            and key_public=#{keyPublic}
+        </if>
+        <if test="keyPrivate != null and keyPrivate != ''">
+            and `key_private`=#{keyPrivate}
+        </if>
+        <if test="directory != null and directory != ''">
+            and `directory`=#{directory}
+        </if>
+        <if test="contentOri != null and contentOri != ''">
+            and `content_ori`=#{contentOri}
+        </if>
+        <if test="contentEnc != null and contentEnc != ''">
+            and `content_enc`=#{contentEnc}
+        </if>
+        where id=#{id}
+    </insert>
+    <select id="findList" resultType="DeployLicense" parameterType="Query">
+        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        select * from deploy_license where 1=1
+        order by id
+        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from deploy_license where 1=1
+    </select>
+    <select id="findAll" resultType="DeployLicense" parameterType="Query">
+        select * from deploy_license where 1=1
+        order by id
+    </select>
+    <select id="findOne" resultType="DeployLicense">
+        select * from deploy_license where id=#{id}
+    </select>
+    <delete id="delete">
+        delete from deploy_license where id=#{id}
+    </delete>
+</mapper>

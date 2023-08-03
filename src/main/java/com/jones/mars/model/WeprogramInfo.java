@@ -1,10 +1,14 @@
 package com.jones.mars.model;
 
 import com.jones.mars.object.BaseObject;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class WeprogramInfo extends BaseObject {
     public static final String WECHAT_API_URL_BASE = "https://api.weixin.qq.com";

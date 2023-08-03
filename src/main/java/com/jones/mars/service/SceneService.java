@@ -7,7 +7,7 @@ import com.jones.mars.model.ProjectScene;
 import com.jones.mars.model.Scene;
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.constant.FileType;
-import com.jones.mars.model.param.ProjectSceneParam;
+import com.jones.mars.model.param.*;
 import com.jones.mars.model.query.HotspotQuery;
 import com.jones.mars.model.query.SceneQuery;
 import com.jones.mars.object.BaseResponse;
@@ -46,6 +46,15 @@ public class SceneService extends BaseService {
 
     public BaseResponse allName(SceneQuery query){
         return BaseResponse.builder().data(sceneMapper.findAllName(query)).build();
+    }
+
+    public BaseResponse insertScene(SceneParam param){
+        Integer maxSeq = sceneMapper.findMaxSeqByBlockId(param.getBlockId());
+        param.setSeq(maxSeq == null ? 0 : maxSeq + 1);
+        sceneMapper.insert(param);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("id", param.getId());
+        return BaseResponse.builder().data(map).build();
     }
 
     public BaseResponse findPanoInfo(HotspotQuery query){
@@ -97,6 +106,12 @@ public class SceneService extends BaseService {
             sceneMapper.update(scene);
         }
         return BaseResponse.builder().code(code).build();
+    }
+
+
+    public BaseResponse updateSceneSeq(SceneSeqParam param){
+        sceneMapper.updateSceneSeq(param);
+        return BaseResponse.builder().build();
     }
 
 

@@ -3,10 +3,14 @@ package com.jones.mars.model.param;
 import com.jones.mars.util.agora.RtcTokenBuilder;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @ApiModel(value="声网rtc鉴权参数")
+@NoArgsConstructor
+@AllArgsConstructor
 public class AgoraRtcParam {
     @ApiModelProperty(value="用戶ID",name="userId")
     private Integer userId;

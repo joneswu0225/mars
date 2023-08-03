@@ -1,6 +1,7 @@
 package com.jones.mars.util;
 
 import com.jones.mars.model.User;
+import com.jones.mars.model.constant.CommonConstant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,16 +21,16 @@ public class LoginUtil {
     public static final String APP_AUTH = "authorization";
     public static final String USER_MOBILE = "mobile";
     public static final String USER_ID = "userId";
-    public static String APP_DOMAIN;
+    public static String APP_DOMAIN = CommonConstant.APP_DOMAIN;
     public static final int COOKIE_MAX_INACTIVE_INTERVAL = 86400;
     public static LoginUtil INSTANCE = null;
     private ConcurrentHashMap<String, User> loginUser = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, String> userIdAuth = new ConcurrentHashMap<>();
 
-    @Value("${app.domain:vr2shipping.com}")
-    private void setAppDomain(String appDomain){
-        LoginUtil.APP_DOMAIN = appDomain;
-    }
+//    @Value("${app.domain:vr2shipping.com}")
+//    private void setAppDomain(String appDomain){
+//        LoginUtil.APP_DOMAIN = appDomain;
+//    }
 
     public static LoginUtil getInstance() {
         if (INSTANCE == null) {

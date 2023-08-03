@@ -3,7 +3,7 @@ CLASSPATH=.:resources:resources/static:resources/templates:resources/mybatis:$CL
 DEBUG='-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044'
 export CLASSPATH=$CLASSPATH
 echo $CLASSPATH
-java -jar sh_msa_tmp.jar --spring.config.location=./application.properties
+java -jar sh_msa_tmp.jar --spring.profiles.active=swagger --spring.config.location=./application.properties
 #nohup java -jar panorama.jar --spring.config.location=./resources/application.properties
 #nohup java -jar panorama.jar --spring.config.location=./resources/application.properties 1>out.txt 2>&1
 #nohup java -jar panorama.jar 1>out.txt 2>&1

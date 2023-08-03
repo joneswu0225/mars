@@ -102,7 +102,7 @@
     </insert>
     <select id="findList" resultType="User" parameterType="Query">
         <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select u.*, p.nickname,p.sgname,p.job,p.email,p.province,p.city,p.address, p.birthday, p.avatar, p.namecard from user u left join user_profile p on u.id=p.user_id
+        select u.id, u.mobile,u.status,u.last_login_time,u.user_type, u.ip,u.openid, u.unionid, p.nickname,p.sgname,p.job,p.email,p.province,p.city,p.address, p.birthday, p.avatar, p.namecard from user u left join user_profile p on u.id=p.user_id
         where u.delete_flg=0
         <if test="verifyCode != null and verifyCode !=''">
             and u.verify_code = #{verifyCode}

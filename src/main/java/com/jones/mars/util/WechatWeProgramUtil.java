@@ -6,11 +6,13 @@ import com.jones.mars.model.query.WeprogramInfoQuery;
 import com.jones.mars.repository.WeprogramInfoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
  */
 @Component
 @Slf4j
+@Profile({"wechat"})
 public class WechatWeProgramUtil {
     @Autowired
     private WeprogramInfoMapper weprogramInfoMapper;
@@ -26,9 +29,11 @@ public class WechatWeProgramUtil {
 
     @Scheduled(cron = "0 0/2 * * * ?")
     private void refreshWeprogramInfo(){
-        Map<Integer, WeprogramInfo> weprogramInfoMap = weprogramInfoMapper.findAll(WeprogramInfoQuery.builder().build())
-                .stream().collect(Collectors.toMap(WeprogramInfo::getId, p->p));
-        WechatWeProgramUtil.weprogramInfoMap = weprogramInfoMap;
+        List<WeprogramInfo> weprogramInfos = weprogramInfoMapper.findAll(WeprogramInfoQuery.builder().build());
+        if (weprogramInfos.size() > 0) {
+            WechatWeProgramUtil.weprogramInfoMap = weprogramInfos.stream().collect(Collectors.toMap(WeprogramInfo::getId, p->p));
+        }
+
     }
     /**
      * 　code 转化为sessionKey

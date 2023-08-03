@@ -7,6 +7,7 @@ import com.jones.mars.util.agora.RtcTokenBuilder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping({"/agora"})
 @Api(value = "声网接口", tags = {"声网接口"})
+@Profile({"media"})
 public class AgoraController extends BaseController {
 
     /**

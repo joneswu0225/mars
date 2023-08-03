@@ -7,6 +7,7 @@ import com.jones.mars.object.BaseResponse;
 import com.jones.mars.util.RandomString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Headers;
@@ -31,6 +32,7 @@ import java.util.Map;
 @Controller
 @Slf4j
 @RequestMapping("/ws")
+@Profile({"socket"})
 public class WebSocketController extends BaseController {
     private static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Autowired

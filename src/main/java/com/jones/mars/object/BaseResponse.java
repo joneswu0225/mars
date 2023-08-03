@@ -3,7 +3,9 @@ package com.jones.mars.object;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.jones.mars.constant.ErrorCode;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
@@ -14,6 +16,7 @@ import lombok.ToString;
 @JsonSerialize
 @ToString
 @Data
+@AllArgsConstructor
 public class BaseResponse {
 
 	private String code = ErrorCode.OK.key;

@@ -3,7 +3,9 @@ package com.jones.mars.model.param;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Data
 @ApiModel(value="权限参数")
+@NoArgsConstructor
+@AllArgsConstructor
 public class RoleUserParam {
     @ApiParam(hidden = true)
     private Integer id;

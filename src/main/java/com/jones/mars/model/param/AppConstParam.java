@@ -3,14 +3,18 @@ package com.jones.mars.model.param;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @Builder
 @ApiModel(value="系统参数")
+@NoArgsConstructor
+@AllArgsConstructor
 public class AppConstParam {
     @ApiParam(hidden = true)
     private Integer id;

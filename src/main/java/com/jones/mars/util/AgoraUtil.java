@@ -3,6 +3,7 @@ package com.jones.mars.util;
 import com.jones.mars.util.agora.RtcTokenBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.Map;
  */
 @Slf4j
 @Component
+@Profile({"media"})
 public class AgoraUtil {
     private static String APP_ID; // = "970CA35de60c44645bbae8a215061b33";
     private static String APP_CERTIFICATE; // = "5CFd2fd1755d40ecb72977518be15d3b";

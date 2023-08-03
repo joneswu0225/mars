@@ -3,13 +3,17 @@ package com.jones.mars.model.param;
 import com.jones.mars.support.ValidMobile;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Data
 @ApiModel(value="企业入驻参数")
+@NoArgsConstructor
+@AllArgsConstructor
 public class CompanyJoinParam {
     @NotBlank(message = "公司名称不能为空")
     @ApiModelProperty(value="公司名称",name="companyName")

@@ -4,7 +4,9 @@ import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
@@ -13,6 +15,8 @@ import java.util.Date;
 
 @Data
 @ApiModel(value="新闻动态")
+@NoArgsConstructor
+@AllArgsConstructor
 public class NewsParam extends BaseObject {
     @ApiModelProperty(value="内容url",name="contentUrl")
     private String contentUrl;

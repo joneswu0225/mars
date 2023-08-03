@@ -4,8 +4,10 @@ import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -13,6 +15,8 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder
 @ApiModel(value="场景参数")
+@NoArgsConstructor
+@AllArgsConstructor
 public class SceneParam extends BaseObject {
     @ApiModelProperty(value="场景名称",name="name")
     private String name;
@@ -40,6 +44,8 @@ public class SceneParam extends BaseObject {
     private Integer sceneTypeId;
     @ApiParam(hidden = true)
     private Integer sliceStatus;
+    @ApiParam(hidden = true)
+    private Integer seq;
 
 }
 

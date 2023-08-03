@@ -8,12 +8,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping({"/translation"})
 @Api(value = "语音相关", tags = {"语音相关"})
+@Profile({"media"})
 public class TranslationController extends BaseController {
     @Autowired
     private YoudaoUtil translator;

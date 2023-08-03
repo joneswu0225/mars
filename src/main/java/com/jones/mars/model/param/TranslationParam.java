@@ -3,11 +3,15 @@ package com.jones.mars.model.param;
 import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @ApiModel(value="翻译参数")
+@NoArgsConstructor
+@AllArgsConstructor
 public class TranslationParam {
     @ApiModelProperty(value="文本内容",name="text")
     private String text;

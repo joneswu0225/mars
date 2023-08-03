@@ -2,13 +2,17 @@ package com.jones.mars.model.param;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
 @ApiModel(value="微信登录参数", description = "")
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserWXLoginParam {
     @NotNull(message = "小程序ID不能为空")
     @ApiModelProperty(value="小程序ID",name="weprogramId")

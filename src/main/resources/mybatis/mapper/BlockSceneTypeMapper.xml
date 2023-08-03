@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.BlockSceneTypeMapper" >
     <insert id="insert" parameterType="BlockSceneType" useGeneratedKeys="true" keyProperty="id">
-        insert into block_scene_type(`name`,`detail`, `block_id`)
-        values(#{name}, #{detail}, #{blockId})
+        insert into block_scene_type(`name`,`detail`, `block_id`,`seq`)
+        values(#{name}, #{detail}, #{blockId}, #{seq})
     </insert>
     <insert id="update" parameterType="BlockSceneType">
         update block_scene_type set name = #{name}, detail=#{detail} where id=#{id}
@@ -13,6 +13,9 @@
         select * from block_scene_type where 1=1
         <if test="blockId != null">
              and block_id=#{blockId}
+        </if>
+        <if test="blockId != null">
+        order by seq
         </if>
         <include refid="com.jones.mars.repository.BaseMapper.endPage" />
     </select>
@@ -29,8 +32,22 @@
         <if test="blockId != null">
             and block_id = #{blockId}
         </if>
-        order by name
+        order by seq, name
     </select>
+    <select id="findMaxSeqByBlockId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select max(seq) from block_scene_type where block_id=#{blockId}
+    </select>
+    <update id="updateBlockSceneTypeSeq">
+        update block_scene_type set seq=case
+        <foreach collection="sceneTypeIds" item="sceneTypeId" index="index">
+            when id=#{sceneTypeId} then #{index}
+        </foreach>
+        end
+        where id in
+        <foreach collection="sceneTypeIds" item="sceneTypeId" index="index" separator="," open="(" close=")">
+            #{sceneTypeId}
+        </foreach>
+    </update>
     <resultMap id="SceneTypeProjectSceneMap" type="BlockSceneType" >
         <id property="id" column="id" />
         <result property="name" column="name" />

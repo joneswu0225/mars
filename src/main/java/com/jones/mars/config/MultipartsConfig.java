@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
@@ -26,9 +27,9 @@ public class MultipartsConfig {
 			@Value("${multipart.maxRequestSize}") String maxRequestSize) {
 		MultipartConfigFactory factory = new MultipartConfigFactory();
 		// 单个文件最大
-		factory.setMaxFileSize(maxFileSize);
+		factory.setMaxFileSize(DataSize.parse(maxFileSize));
 		// 设置总上传数据总大小
-		factory.setMaxRequestSize(maxRequestSize);
+		factory.setMaxRequestSize(DataSize.parse(maxRequestSize));
 		return factory.createMultipartConfig();
 	}
 
