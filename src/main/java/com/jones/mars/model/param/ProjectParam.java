@@ -35,18 +35,18 @@ public class ProjectParam extends BaseObject {
     private String reason;
     @NotNull(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Integer blockId;
+    private Long blockId;
     @NotNull(message = "一级分类ID不能为空")
     @ApiModelProperty(value="一级分类ID",name="moduleId")
-    private Integer moduleId;
+    private Long moduleId;
     @NotNull(message = "二级分类ID不能为空")
     @ApiModelProperty(value="二级分类ID",name="classId")
-    private Integer classId;
+    private Long classId;
     @NotNull(message = "所属企业ID不能为空")
     @ApiModelProperty(value="所属企业ID",name="oriEnterpriseId")
-    private Integer oriEnterpriseId;
+    private Long oriEnterpriseId;
     @ApiModelProperty(value="项目共建人ID列表",name="userIds")
-    private List<Integer> userIds = new ArrayList<>();
+    private List<Long> userIds = new ArrayList<>();
     @ApiParam(hidden = true)
     private Integer status = Project.CREATING;
     @ApiParam(hidden = true)
@@ -58,7 +58,7 @@ public class ProjectParam extends BaseObject {
     @ApiModelProperty(value="是否强制更新",name="force")
     private Integer force;
     @ApiParam(hidden = true)
-    private Integer creatorId;
+    private Long creatorId;
 
 }
 

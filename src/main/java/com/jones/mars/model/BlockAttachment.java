@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,13 +15,14 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName("block_attachment")
 public class BlockAttachment extends BaseObject {
     private String name;
     private String detail;
     private String imageUrl;
-    private Integer blockId;
-    private Integer parentId;
-    private Integer creatorId;
+    private Long blockId;
+    private Long parentId;
+    private Long creatorId;
     private String type;
     private Integer seq;
     private Date updateTime;

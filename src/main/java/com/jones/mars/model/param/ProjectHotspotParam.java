@@ -17,10 +17,10 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjectHotspotParam {
     @ApiParam(hidden = true)
-    private Integer id;
+    private Long id;
     @ApiParam(hidden = true)
-    private Integer projectId;
+    private Long projectId;
     @ApiModelProperty(value="热点ID列表(热点顺序按照热点ID顺序排列)",name="hotspotIds")
-    private List<Integer> hotspotIds;
+    private List<Long> hotspotIds;
 }
 

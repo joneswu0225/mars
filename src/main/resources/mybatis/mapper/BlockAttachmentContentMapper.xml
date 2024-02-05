@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.BlockAttachmentContentMapper" >
-    <insert id="insert" parameterType="BlockAttachmentContentParam" useGeneratedKeys="true" keyProperty="id">
-        insert into block_attachment_content(`attachment_id`, `content`, `title`, `extra`, `seq`, `type`) values
-        (#{attachmentId}, #{content}, #{title}, #{extra}, #{seq}, #{type})
+    <insert id="insertRecord" parameterType="BlockAttachmentContentParam" useGeneratedKeys="true" keyProperty="id">
+        insert into block_attachment_content(`id`, `attachment_id`, `content`, `title`, `extra`, `seq`, `type`) values
+        (#{id}, #{attachmentId}, #{content}, #{title}, #{extra}, #{seq}, #{type})
     </insert>
     <update id="update" parameterType="BlockAttachmentContentParam">
         update block_attachment_content
         set content = #{content}, title = #{title}, `type` = #{type}, extra = #{extra}
         where id = #{id}
     </update>
-    <select id="findMaxSeqByAttachmentId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="findMaxSeqByAttachmentId" parameterType="java.lang.Long" resultType="java.lang.Integer">
         select max(seq) from block_attachment_content where attachment_id=#{attachmentId}
     </select>
     <update id="updateBlockAttachmentContentSeq">
@@ -41,7 +41,7 @@
         where attachment_id=#{attachmentId}
     </select>
 
-    <select id="findByAttachmentId" resultType="BlockAttachmentContent" parameterType="java.lang.Integer">
+    <select id="findByAttachmentId" resultType="BlockAttachmentContent" parameterType="java.lang.Long">
         select * from block_attachment_content
         where attachment_id=#{attachmentId}
         order by seq

@@ -1,5 +1,8 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,18 +16,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@TableName(value="user")
 public class User extends BaseObject {
     public static final int COMMON = 0;
     public static final int ENTMANAGER = 1;
     public static final int ADMIN = 2;
 
-    private Integer id;
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    private Long id;
     private String mobile;
     private String nickname;
     private String departmentName;
     private String sgname;
     private String password;
+    private String passwordOld;
     private String openid;
+    private Long userId;
     private String unionid;
     private Integer userType;
     private String verifyCode;
@@ -43,7 +50,7 @@ public class User extends BaseObject {
     private String namecard;
     private String description;
     private String auth;
-    private List<Enterprise> enterprises;
+    private List<EnterpriseUser> enterprises;
     private List<Block> blocks;
     private List<Role> roleList;
 }

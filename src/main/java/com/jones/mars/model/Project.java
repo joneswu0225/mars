@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@TableName("project")
 public class Project extends BaseObject {
     public static final int CREATING = 0;
     public static final int EDITIND = 1;
@@ -29,24 +31,24 @@ public class Project extends BaseObject {
     private String name;
     private String detail;
     private String imageUrl;
-    private Integer blockId;
+    private Long blockId;
     private String blockName;
     private String blockPanoPath;
-    private Integer moduleId;
+    private Long moduleId;
     private Integer enterprisePlateformFlg;
-    private Integer oriEnterpriseId;
+    private Long oriEnterpriseId;
     private String oriEnterpriseAvatar;
     private String oriEnterpriseName;
     private String oriEnterpriseBasePath;
     private String moduleName;
-    private Integer classId;
+    private Long classId;
     private Integer customFlg;
     private Integer publicFlg = UNPUBLIC;
     private String className;
     private Integer status = EDITIND;
     private String reason;
     private Date publishDate;
-    private Integer creatorId;
+    private Long creatorId;
     private String creatorSgname;
     private String creatorAvator;
     private Date updateTime;

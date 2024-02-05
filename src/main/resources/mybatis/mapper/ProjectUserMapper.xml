@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.ProjectUserMapper" >
-    <insert id="insert" parameterType="ProjectUserParam" useGeneratedKeys="true" keyProperty="id">
-        insert into project_user(`project_id`, `user_id`, `manager_flg`) values
+    <insert id="insertRecord" parameterType="ProjectUserParam" useGeneratedKeys="true" keyProperty="id">
+        insert into project_user(`id`, `project_id`, `user_id`, `manager_flg`) values
         <foreach collection="userIds" item="userId" index="index" separator=",">
-            (#{projectId}, #{userId}, <if test="managerFlg == null">0</if><if test="managerFlg!=null">#{managerFlg}</if>)
+            (#{id}, #{projectId}, #{userId}, <if test="managerFlg == null">0</if><if test="managerFlg!=null">#{managerFlg}</if>)
         </foreach>
         ON DUPLICATE KEY UPDATE
         <foreach collection="userIds" item="userId" index="index" separator=",">
@@ -13,7 +13,7 @@
     </insert>
     <!-- TODO 所属部门　department_user 在一对多情况下会有隐患，list与count的数量不匹配 -->
     <select id="findList" resultType="ProjectUser">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select pu.*,u.mobile, up.sgname, up.email,up.avatar, up.description, d.name as departmentName from project_user pu
         left join user_profile up on pu.user_id=up.user_id left join user u on pu.user_id=u.id
         left join department_user du on du.user_id=pu.user_id
@@ -33,7 +33,7 @@
             and manager_flg=#{managerFlg}
         </if>
         order by manager_flg desc, pu.user_id
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from project_user pu
@@ -99,7 +99,7 @@
         </if>
     </delete>
     <delete id="deleteByEnterpriseUser">
-        delete from project_user where project_id in (select id from project where ori_enterprise_id=#{enterprise_id}) and user_id=#{userId}
+        delete from project_user where project_id in (select id from project where ori_enterprise_id=#{enterpriseId}) and user_id=#{userId}
     </delete>
 
     <select id="findProjectUserByRolePermission" resultType="ProjectUser" parameterType="RolePermissionParam">

@@ -3,7 +3,7 @@ package com.jones.mars.service;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseObject;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.util.Page;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.Map;
  * Created by jones on 18-9-2.
  */
 public abstract class BaseService<T> {
-    public abstract BaseMapper getMapper();
+    public abstract CommonMapper getMapper();
 
     public Page<T> findPage(Query query) {
         int count = getMapper().findCount(query);
@@ -34,7 +34,7 @@ public abstract class BaseService<T> {
      */
     public BaseResponse add(BaseObject param){
         getMapper().insert(param);
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Long> map = new HashMap<>();
         map.put("id", param.getId());
         return BaseResponse.builder().data(map).build();
     }
@@ -54,7 +54,7 @@ public abstract class BaseService<T> {
      * @param id
      * @return
      */
-    public BaseResponse findById(Integer id){
+    public BaseResponse findById(Long id){
         Object item = getMapper().findOne(id);
         return BaseResponse.builder().data(item).build();
     }
@@ -84,7 +84,7 @@ public abstract class BaseService<T> {
      * @param id
      * @return
      */
-    public BaseResponse delete(Integer id){
+    public BaseResponse delete(Long id){
         getMapper().delete(id);
         return BaseResponse.builder().build();
     }

@@ -3,7 +3,7 @@ package com.jones.mars.service;
 import com.jones.mars.model.param.BlockClassParam;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.repository.BlockClassMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class ProjectClassService extends BaseService{
     @Autowired
     private BlockClassMapper mapper;
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.mapper;
     }
 

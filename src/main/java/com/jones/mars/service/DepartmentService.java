@@ -2,12 +2,13 @@ package com.jones.mars.service;
 
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.Department;
+import com.jones.mars.model.DepartmentUsers;
 import com.jones.mars.model.param.DepartmentParam;
 import com.jones.mars.model.param.DepartmentUserParam;
 import com.jones.mars.model.query.DepartmentQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.repository.DepartmentMapper;
 import com.jones.mars.repository.DepartmentUserMapper;
 import org.apache.commons.collections.CollectionUtils;
@@ -28,7 +29,7 @@ public class DepartmentService extends BaseService {
     private DepartmentUserMapper departmentUserMapper;
 
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.mapper;
     }
 
@@ -51,8 +52,8 @@ public class DepartmentService extends BaseService {
 
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse update(DepartmentParam param){
-        List<Integer> users = departmentUserMapper.findAll(DepartmentQuery.builder().departmentId(param.getDepartmentId()).build()).parallelStream().map(p->p.getUserId()).collect(Collectors.toList());
-        List<Integer> userIds = new ArrayList<>(users);
+        List<Long> users = departmentUserMapper.findAll(DepartmentQuery.builder().departmentId(param.getDepartmentId()).build()).parallelStream().map(p->p.getUserId()).collect(Collectors.toList());
+        List<Long> userIds = new ArrayList<>(users);
         if(param.getUserIds() != null) {
             // 传入的去掉已有的=仍需添加的
             param.getUserIds().removeAll(users);
@@ -74,7 +75,7 @@ public class DepartmentService extends BaseService {
     public BaseResponse addDepartmentUser(DepartmentUserParam param){
         //TODO 仅限海事局项目
 //        departmentUserMapper.delete(DepartmentUserParam.builder().userIds(param.getUserIds()));
-        departmentUserMapper.insert(param);
+        departmentUserMapper.insert(new DepartmentUsers(param));
         return BaseResponse.builder().build();
     }
 
@@ -84,14 +85,14 @@ public class DepartmentService extends BaseService {
     }
 
 
-    public BaseResponse findOne(Integer departmentId){
+    public BaseResponse findOne(Long departmentId){
         Department department = mapper.findOne(departmentId);
         department.setUserList(departmentUserMapper.findAll(DepartmentQuery.builder().departmentId(departmentId).build()));
         return BaseResponse.builder().data(department).build();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public BaseResponse delete(Integer departmentId){
+    public BaseResponse delete(Long departmentId){
         Integer userCount = mapper.findCount(DepartmentQuery.builder().departmentId(departmentId).build());
         if(userCount > 0){
             return BaseResponse.builder().code(ErrorCode.DEPARTMENT_DELETE_EXIST_USER).build();

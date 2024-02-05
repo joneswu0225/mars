@@ -29,12 +29,12 @@ public class BlockContentController extends BaseController {
 
     @ApiOperation(value = "查看单个模块内容", notes = "")
     @GetMapping("/{blockContentId}")
-    public BaseResponse findById(@PathVariable Integer blockContentId) {
+    public BaseResponse findById(@PathVariable Long blockContentId) {
         return service.findById(blockContentId);
     }
 
     @ApiOperation(value = "新增模块内容", notes = "")
-    @PostMapping("/")
+    @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) BlockContentParam param) {
         return service.insertContent(param);
     }
@@ -42,7 +42,7 @@ public class BlockContentController extends BaseController {
     @ApiOperation(value = "更新内容", notes = "")
     @PostMapping("/{blockContentId}")
     public BaseResponse singleUpdate(
-            @PathVariable Integer blockContentId,
+            @PathVariable Long blockContentId,
             @RequestBody @ApiParam(required=true) BlockContentParam param) {
         param.setId(blockContentId);
         return service.update(param);
@@ -56,7 +56,7 @@ public class BlockContentController extends BaseController {
 
     @ApiOperation(value = "删除模块内容", notes = "")
     @DeleteMapping("{blockContentId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer blockContentId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long blockContentId) {
         return service.delete(blockContentId);
     }
 

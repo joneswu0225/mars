@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AppConstMapper extends BaseMapper<AppConst> {
+public interface AppConstMapper extends CommonMapper<AppConst> {
     List<AppConst> findGroup();
     void updateAppConstSeq(AppConstParam param);
 }

@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class EnterpriseQuery extends Query {
 
     private String name;
-    private Integer userId;
-    private Integer managerId;
+    private Long userId;
+    private Long managerId;
     private Integer plateformFlg;
 
 

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.BlockSceneTypeMapper" >
-    <insert id="insert" parameterType="BlockSceneType" useGeneratedKeys="true" keyProperty="id">
-        insert into block_scene_type(`name`,`detail`, `block_id`,`seq`)
-        values(#{name}, #{detail}, #{blockId}, #{seq})
+    <insert id="insertRecord" parameterType="BlockSceneType" useGeneratedKeys="true" keyProperty="id">
+        insert into block_scene_type(`id`,`name`,`detail`, `block_id`,`seq`,`rel_scene_type_id`)
+        values(#{id}, #{name}, #{detail}, #{blockId}, #{seq}, #{relSceneTypeId})
     </insert>
     <insert id="update" parameterType="BlockSceneType">
         update block_scene_type set name = #{name}, detail=#{detail} where id=#{id}
     </insert>
     <select id="findList" resultType="BlockSceneType" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select * from block_scene_type where 1=1
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
+        select * from block_scene_type where delete_flg=0
         <if test="blockId != null">
              and block_id=#{blockId}
         </if>
         <if test="blockId != null">
         order by seq
         </if>
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from block_scene_type
@@ -34,7 +34,7 @@
         </if>
         order by seq, name
     </select>
-    <select id="findMaxSeqByBlockId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="findMaxSeqByBlockId" parameterType="java.lang.Long" resultType="java.lang.Long">
         select max(seq) from block_scene_type where block_id=#{blockId}
     </select>
     <update id="updateBlockSceneTypeSeq">
@@ -52,6 +52,7 @@
         <id property="id" column="id" />
         <result property="name" column="name" />
         <result property="block_id" column="blockId" />
+        <result property="rel_scene_type_id" column="relSceneTypeId" />
         <collection property="sceneList" ofType="Scene" column="scene_type_id">
             <id column="sceneId" property="id"/>
             <result column="sceneName" property="name"/>
@@ -59,7 +60,7 @@
         </collection>
     </resultMap>
     <select id="findSceneTypeProjectScene" resultMap="SceneTypeProjectSceneMap" parameterType="Query">
-        select t.name, t.id,t.block_id, s.name as sceneName, s.id as sceneId, s.code from block_scene_type t, scene s
+        select t.name, t.id,t.block_id,t.ori_block_scene_type_id, s.name as sceneName, s.id as sceneId, s.code from block_scene_type t, scene s
         where t.id=s.scene_type_id and t.delete_flg=0 and s.delete_flg=0
         <if test="blockId != null">
             and t.block_id = #{blockId}

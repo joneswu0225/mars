@@ -27,7 +27,7 @@ public class UserLikeService extends BaseService{
     private UserLikeMapper mapper;
 
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.mapper;
     }
 

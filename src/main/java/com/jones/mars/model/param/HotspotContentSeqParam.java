@@ -15,9 +15,9 @@ import java.util.List;
 public class HotspotContentSeqParam {
     @NotNull
     @ApiModelProperty(value="热点ID",name="hotspotId")
-    private Integer hotspotId;
+    private Long hotspotId;
     @NotEmpty
     @ApiModelProperty(value="热点内容ID列表",name="hotspotContentIds")
-    private List<Integer> hotspotContentIds;
+    private List<Long> hotspotContentIds;
 }
 

@@ -1,6 +1,6 @@
 package com.jones.mars.service;
 
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.repository.CommentMapper;
 import com.jones.mars.repository.DepartmentUserMapper;
 import lombok.extern.java.Log;
@@ -15,7 +15,7 @@ public class DepartmentUserService extends BaseService {
 
 
     @Override
-    public BaseMapper getMapper() {
+    public CommonMapper getMapper() {
         return this.mapper;
     }
 }

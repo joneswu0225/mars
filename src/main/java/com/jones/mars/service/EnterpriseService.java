@@ -1,22 +1,19 @@
 package com.jones.mars.service;
 
 import com.jones.mars.constant.ErrorCode;
-import com.jones.mars.model.Enterprise;
+import com.jones.mars.model.EnterpriseUser;
 import com.jones.mars.model.param.DepartmentUserParam;
+import com.jones.mars.model.DepartmentUsers;
 import com.jones.mars.model.param.EnterpriseParam;
 import com.jones.mars.model.param.EnterpriseUserParam;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import java.io.File;
-import java.nio.file.Paths;
 import java.util.Arrays;
 
 @Log
@@ -40,14 +37,17 @@ public class EnterpriseService extends BaseService {
 
 
     @Override
-    public BaseMapper getMapper() {
+    public CommonMapper getMapper() {
         return this.mapper;
     }
 
     @Transactional
     public BaseResponse add(EnterpriseParam param){
         mapper.insert(param);
-        Integer enterpriseId = param.getId();
+        if(param.getManagerId() != null){
+            enterpriseUserMapper.insert(EnterpriseUser.builder().enterpriseId(param.getId()).userId(param.getManagerId()).managerFlg(EnterpriseUser.ENTERPRISE_MANAGER).build());
+        }
+        Long enterpriseId = param.getId();
         return BaseResponse.builder().data(enterpriseUserMapper.findEnterpriseUser(enterpriseId)).build();
     }
 
@@ -56,7 +56,7 @@ public class EnterpriseService extends BaseService {
      * @param enterpriseId
      * @return
      */
-    public BaseResponse findEnterpriseUser(Integer enterpriseId){
+    public BaseResponse findEnterpriseUser(Long enterpriseId){
         return BaseResponse.builder().data(enterpriseUserMapper.findEnterpriseUser(enterpriseId)).build();
     }
 
@@ -69,9 +69,6 @@ public class EnterpriseService extends BaseService {
         try {
             enterpriseUserMapper.insert(param);
             service.sendInvitedToEnterprise(mapper.findOne(param.getEnterpriseId()).getName(), param.getUserId());
-            if (param.getDepartmentId() != null) {
-                departmentUserMapper.insert(DepartmentUserParam.builder().departmentId(param.getDepartmentId()).userIds(Arrays.asList(param.getUserId())));
-            }
             return BaseResponse.builder().build();
         } catch (DuplicateKeyException e){
             return BaseResponse.builder().code(ErrorCode.ENT_USER_EXISTS).build();
@@ -86,9 +83,9 @@ public class EnterpriseService extends BaseService {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public BaseResponse removeUser(EnterpriseUserParam param){
-        departmentUserMapper.delete(param);
-        userRoleMapper.delete(param);
+    public BaseResponse removeUser(EnterpriseUser param){
+        departmentUserMapper.deleteByEnterpriseUser(param);
+        userRoleMapper.deleteByEnterpriseUser(param);
         enterpriseUserMapper.delete(param);
         projectUserMapper.deleteByEnterpriseUser(param);
         return BaseResponse.builder().build();

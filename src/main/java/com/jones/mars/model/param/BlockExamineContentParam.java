@@ -26,9 +26,9 @@ public class BlockExamineContentParam extends BaseObject {
     private String title;
     @NotNull
     @ApiModelProperty(value="模块ID",name="examineId")
-    private Integer examineId;
+    private Long examineId;
     @ApiParam(hidden = true)
-    private Integer id;
+    private Long id;
     @ApiParam(hidden = true)
     private Integer seq;
 }

@@ -60,7 +60,7 @@ public class WechatController extends BaseController {
      */
     @ApiOperation(value = "小程序Code2SessionKey", notes = "小程序Code2SessionKey")
     @GetMapping(value="/weprogram/{weprogramId}/wxCode2SessionKey")
-    public BaseResponse wxCode2SessionKey(@PathVariable Integer weprogramId, @RequestParam(name="code", required = true) String code){
+    public BaseResponse wxCode2SessionKey(@PathVariable Long weprogramId, @RequestParam(name="code", required = true) String code){
         return BaseResponse.builder().data(WechatWeProgramUtil.getSessionKey(weprogramId, code)).build();
     }
     /**

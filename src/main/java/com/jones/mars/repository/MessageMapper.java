@@ -4,5 +4,5 @@ import com.jones.mars.model.Message;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MessageMapper extends BaseMapper<Message> {
+public interface MessageMapper extends CommonMapper<Message> {
 }

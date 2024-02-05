@@ -1,26 +1,17 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.config.LoginUser;
-import com.jones.mars.constant.ErrorCode;
-import com.jones.mars.exception.MarsException;
 import com.jones.mars.model.User;
 import com.jones.mars.model.param.CommentParam;
-import com.jones.mars.model.param.CompanyJoinParam;
-import com.jones.mars.model.param.CompanyJoinUpdateParam;
 import com.jones.mars.model.query.CommentQuery;
-import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.CommentService;
-import com.jones.mars.util.LoginUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping({"/comment"})
@@ -53,7 +44,7 @@ public class CommentController extends BaseController {
     @ApiOperation(value = "更新评论", notes = "更新评论")
     @PutMapping("{commentId}")
     public BaseResponse update(
-            @PathVariable Integer commentId,
+            @PathVariable Long commentId,
             @RequestBody @ApiParam(required=true) CommentParam param) {
 //        param.setOperatorId(LoginUtil.getInstance().getUser().getId());
         param.setId(commentId);
@@ -63,7 +54,7 @@ public class CommentController extends BaseController {
     @ApiOperation(value = "删除评论", notes = "删除评论")
     @DeleteMapping("/{commentId}")
     public BaseResponse updateStatus(
-            @PathVariable Integer commentId) {
+            @PathVariable Long commentId) {
         return service.delete(commentId);
     }
 

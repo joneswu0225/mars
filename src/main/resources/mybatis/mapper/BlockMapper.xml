@@ -4,6 +4,7 @@
     <resultMap id="BlockMap" type="Block" >
         <id column="blockId" property="id" />
         <result column="enterprise_id" property="enterpriseId" />
+        <result column="blockTypeId" property="blockTypeId" />
         <result column="blockName" property="name" />
         <result column="blockCode" property="code" />
         <result column="blockDetail" property="detail" />
@@ -26,26 +27,59 @@
         </collection>
     </resultMap>
     <select id="findBlockModule" resultMap="BlockMap" parameterType="Query">
-        select m.id as moduleId, m.block_id as blockId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail, b.icon as blockIcon, b.code as blockCode, b.image_url as blockImageUrl, b.pano_path as blockPanoPath
+        select m.id as moduleId, m.block_id as blockId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id,b.block_type_id as blockTypeId, b.name as blockName, b.status as blockStatus, b.detail as blockDetail, b.icon as blockIcon, b.code as blockCode, b.image_url as blockImageUrl, b.pano_path as blockPanoPath
         from block b left join block_module m on b.id=m.block_id left join block_class c on m.id=c.module_id
         where m.delete_flg=0 and c.delete_flg=0 and b.delete_flg=0
         <if test="enterpriseId != null">
             and b.enterprise_id=#{enterpriseId}
+        </if>
+        <if test="blockTypeId != null">
+            and b.block_type_id=#{blockTypeId}
         </if>
         <if test="moduleName != null and moduleName != ''">
             and m.name=#{moduleName}
         </if>
         order by b.enterprise_id,b.id,m.seq,c.seq
     </select>
+
+    <select id="findUserBlock" resultType="Block" parameterType="Query">
+        select b.*
+        from user_role ur left join role r on ur.role_id=r.id
+        left join block b on b.id=r.block_id
+        where b.delete_flg=0 and r.delete_flg=0
+        <if test="status != null">
+            and b.status=#{status}
+        </if>
+        <if test="enterpriseId != null">
+            and b.enterprise_id=#{enterpriseId}
+        </if>
+        <if test="blockTypeId != null">
+            and b.block_type_id=#{blockTypeId}
+        </if>
+        <if test="blockTypeId != null">
+            and b.block_type_id=#{blockTypeId}
+        </if>
+        <if test="code != null and code != ''">
+            and b.code=#{code}
+        </if>
+        <if test="userId">
+            and ur.user_id=#{userId}
+        </if>
+        order by b.enterprise_id, b.id
+    </select>
     <select id="findBlockUserPermission" resultMap="BlockMap" parameterType="Query">
-        select rp.operation, m.id as moduleId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id, b.name as blockName, b.status as blockStatus, b.detail as blockDetail, b.icon as blockIcon, b.image_url as blockImageUrl
-        from user_role ur left join role_permission rp on ur.role_id=rp.role_id
+        select rp.operation, m.id as moduleId, m.name as moduleName, m.seq as moduleSeq, c.id as classId, c.name as className, c.seq as classSeq, c.module_id, b.id as blockId, b.enterprise_id as enterprise_id,b.block_type_id as blockTypeId, b.name as blockName, b.status as blockStatus, b.detail as blockDetail, b.icon as blockIcon, b.image_url as blockImageUrl
+        from user_role ur left join role r on ur.role_id=r.id
+        left join block b on b.id=r.block_id
+        left join role_permission rp on ur.role_id=rp.role_id
         left join block_class c on rp.class_id=c.id
         left join block_module m on c.module_id=m.id
-        left join block b on b.id=m.block_id
         where m.delete_flg=0
         <if test="enterpriseId != null">
             and b.enterprise_id=#{enterpriseId}
+        </if>
+        <if test="blockTypeId != null">
+            and b.block_type_id=#{blockTypeId}
         </if>
         <if test="moduleName != null and moduleName != ''">
             and m.name=#{moduleName}
@@ -58,11 +92,11 @@
         </if>
         order by b.enterprise_id, b.id, m.seq, c.seq
     </select>
-    <insert id="insert" parameterType="Block" useGeneratedKeys="true" keyProperty="id">
-        insert into block(`name`, `enterprise_id`, `create_time`, `update_time`, `operator_id`, `detail`,`icon`,`image_url`,`pano_path`,`code`)
-        values(#{name}, #{enterpriseId}, now(), now(), #{operatorId}, #{detail},#{icon},#{imageUrl},#{panoPath}, #{code})
+    <insert id="insertRecord" parameterType="Block" useGeneratedKeys="true" keyProperty="id">
+        insert into block(`id`, `name`, `enterprise_id`, `block_type_id`,`create_time`, `update_time`, `operator_id`, `detail`,`icon`,`image_url`,`pano_path`,`code`)
+        values(#{id}, #{name}, #{enterpriseId},#{blockTypeId}, now(), now(), #{operatorId}, #{detail},#{icon},#{imageUrl},#{panoPath}, #{code})
     </insert>
-    <insert id="update" parameterType="Block" >
+    <update id="update" parameterType="Block" >
         update block
         set id =#{id}
         <if test="name != null and name != ''">
@@ -83,6 +117,9 @@
         <if test="enterpriseId != null">
             , enterprise_id = #{enterpriseId}
         </if>
+        <if test="blockTypeId != null">
+            , block_type_id = #{blockTypeId}
+        </if>
         <if test="status != null">
             , status = #{status}
         </if>
@@ -94,9 +131,9 @@
         </if>
         ,update_time = now()
         where id=#{id}
-    </insert>
+    </update>
     <select id="findList" resultType="Block" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select * from block
         where delete_flg=0
         <if test="name != null and name !=''">
@@ -108,11 +145,21 @@
         <if test="enterpriseId != null">
             and enterprise_id=#{enterpriseId}
         </if>
+        <if test="blockTypeId != null">
+            and block_type_id=#{blockTypeId}
+        </if>
         <if test="code != null and code !=''">
             and code=#{code}
         </if>
+        <if test="blockIds != null">
+            and id in (
+            <foreach collection="blockIds" item="bid" index="index" separator=",">
+                #{bid}
+            </foreach>
+            )
+        </if>
         order by id desc
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from block
@@ -123,8 +170,21 @@
         <if test="status != null">
             and status=#{status}
         </if>
+        <if test="code != null and code !=''">
+            and code=#{code}
+        </if>
         <if test="enterpriseId != null">
             and enterprise_id=#{enterpriseId}
+        </if>
+        <if test="blockTypeId != null">
+            and block_type_id=#{blockTypeId}
+        </if>
+        <if test="blockIds != null">
+            and id in (
+            <foreach collection="blockIds" item="bid" index="index" separator=",">
+                #{bid}
+            </foreach>
+            )
         </if>
     </select>
     <select id="findAllName" resultType="Block" parameterType="Query">
@@ -136,8 +196,18 @@
         <if test="enterpriseId != null">
             and enterprise_id=#{enterpriseId}
         </if>
+        <if test="blockTypeId != null">
+            and block_type_id=#{blockTypeId}
+        </if>
         <if test="code != null and code !=''">
             and code=#{code}
+        </if>
+        <if test="blockIds != null">
+            and id in (
+            <foreach collection="blockIds" item="bid" index="index" separator=",">
+                #{bid}
+            </foreach>
+            )
         </if>
         order by id
     </select>
@@ -152,6 +222,9 @@
         </if>
         <if test="enterpriseId != null">
             and enterprise_id=#{enterpriseId}
+        </if>
+        <if test="blockTypeId != null">
+            and block_type_id=#{blockTypeId}
         </if>
         <if test="code != null and code !=''">
             and code=#{code}

@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SceneMapper extends BaseMapper<Scene> {
+public interface SceneMapper extends CommonMapper<Scene> {
     List<Scene> findAllName(Query query);
     void updateSceneSeq(SceneSeqParam param);
 
-    Integer findMaxSeqByBlockId(Integer blockId);
+    Integer findMaxSeqByBlockId(Long blockId);
 
 }
 

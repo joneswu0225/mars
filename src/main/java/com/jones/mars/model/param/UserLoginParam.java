@@ -23,7 +23,7 @@ public class UserLoginParam {
     @NotBlank(message = "密码不能为空")
     @ApiModelProperty(value="密码",name="password")
     private String password;
-    @NotBlank(message = "验证码不能为空")
+//    @NotBlank(message = "验证码不能为空")
     @ApiModelProperty(value="验证码",name="verifyCode")
     private String verifyCode;
     @ApiParam(hidden = true)

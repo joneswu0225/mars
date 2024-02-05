@@ -1,5 +1,6 @@
 package com.jones.mars.controller;
 
+import com.jones.mars.constant.ApplicationConst;
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.HuoshanSwapfaceParam;
@@ -30,7 +31,7 @@ public class HuoshanController extends BaseController {
     private static final String SWAPFACE_REL_PATH = "/swapface";
 
     static {
-        File path = new File(CommonConstant.UPLOAD_PATH + "/" + SWAPFACE_REL_PATH);
+        File path = new File(ApplicationConst.UPLOAD_PATH + "/" + SWAPFACE_REL_PATH);
         if(!path.exists()){
             path.mkdirs();
         }
@@ -46,7 +47,7 @@ public class HuoshanController extends BaseController {
         try {
 
             String fileName = "swapface" + "_" + sourceFile.getOriginalFilename().split("\\.")[0] + "_" + templateFile.getOriginalFilename().split("\\.")[0] + ".jpg";
-            String filePath = CommonConstant.UPLOAD_PATH + "/" + SWAPFACE_REL_PATH + "/" + fileName;
+            String filePath = ApplicationConst.UPLOAD_PATH + "/" + SWAPFACE_REL_PATH + "/" + fileName;
             ImageSwap.getInstance().swapFaceFile(filePath, sourceFile.getInputStream(), templateFile.getInputStream());
             return BaseResponse.builder().data(SWAPFACE_REL_PATH + "/" + fileName).build();
         } catch (Exception e){
@@ -59,9 +60,9 @@ public class HuoshanController extends BaseController {
     @ResponseBody
     public BaseResponse swapfaceParam(@RequestBody @ApiParam(required=true) HuoshanSwapfaceParam param) throws Exception{
         String fileName = "swapface" + "_" + param.getImageName().split("\\.")[0] + "_" + param.getTemplateName().split("\\.")[0] + ".jpg";
-        String filePath = CommonConstant.UPLOAD_PATH + "/" + SWAPFACE_REL_PATH + "/" + fileName;
+        String filePath = ApplicationConst.UPLOAD_PATH + "/" + SWAPFACE_REL_PATH + "/" + fileName;
         if(!StringUtils.isEmpty(param.getTemplatePath())){
-            param.setTemplateBase64(ObjectUtil.getBase64FromInputStream(Files.newInputStream(Paths.get(CommonConstant.UPLOAD_PATH, param.getTemplatePath()))));
+            param.setTemplateBase64(ObjectUtil.getBase64FromInputStream(Files.newInputStream(Paths.get(ApplicationConst.UPLOAD_PATH, param.getTemplatePath()))));
         }
         ImageSwap.getInstance().swapFaceFile(filePath, param.getImageBase64(), param.getTemplateBase64());
         return BaseResponse.builder().data(SWAPFACE_REL_PATH + "/" + fileName).build();

@@ -1,23 +1,20 @@
 package com.jones.mars.service;
 
+import com.jones.mars.config.LoginUser;
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.exception.InternalException;
 import com.jones.mars.model.Block;
 import com.jones.mars.model.Enterprise;
+import com.jones.mars.model.EnterpriseUser;
 import com.jones.mars.model.User;
 import com.jones.mars.model.constant.CommonConstant;
-import com.jones.mars.model.param.UserLoginParam;
-import com.jones.mars.model.param.UserProfileParam;
-import com.jones.mars.model.param.UserWXLoginParam;
-import com.jones.mars.model.param.UserWXUpdatePasswordParam;
+import com.jones.mars.model.param.*;
 import com.jones.mars.model.query.BlockQuery;
 import com.jones.mars.model.query.EnterpriseQuery;
+import com.jones.mars.model.query.EnterpriseUserQuery;
 import com.jones.mars.model.query.UserQuery;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
-import com.jones.mars.repository.BlockMapper;
-import com.jones.mars.repository.EnterpriseMapper;
-import com.jones.mars.repository.UserMapper;
+import com.jones.mars.repository.*;
 import com.jones.mars.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +36,12 @@ public class UserService extends BaseService<User>{
     @Autowired
     private EnterpriseMapper enterpriseMapper;
     @Autowired
+    private EnterpriseUserMapper enterpriseUserMapper;
+    @Autowired
     private BlockMapper blockMapper;
 
     @Override
-    public BaseMapper getMapper() {
+    public CommonMapper getMapper() {
         return this.mapper;
     }
 
@@ -52,20 +51,19 @@ public class UserService extends BaseService<User>{
     }
 
 
-    public BaseResponse personal(Integer userId){
+    public BaseResponse personal(Long userId){
         // base info
         User user = mapper.findOne(userId);
         // enterprise
-        if(user.getUserType().equals(User.COMMON)){
-            List<Enterprise> enterprises = enterpriseMapper.findUserEnterprise(EnterpriseQuery.builder().userId(userId).build());
+        if(!user.getUserType().equals(User.ADMIN)){
+            List<EnterpriseUser> enterprises = enterpriseUserMapper.findAll(EnterpriseUserQuery.builder().userId(userId).build());
             user.setEnterprises(enterprises);
-        } else if(user.getUserType().equals(User.ENTMANAGER)) {
-            List<Enterprise> enterprises = enterpriseMapper.findList(EnterpriseQuery.builder().managerId(userId).build());
-            user.setEnterprises(enterprises);
+            List<Block> userBlock = blockMapper.findUserBlock(BlockQuery.builder().userId(userId).build());
+            user.setBlocks(userBlock);
         }
         // block
-        List<Block> userBlockPermission = blockMapper.findBlockUserPermission(BlockQuery.builder().userId(userId).build());
-        user.setBlocks(userBlockPermission);
+//        List<Block> userBlockPermission = blockMapper.findBlockUserPermission(BlockQuery.builder().userId(userId).build());
+//        user.setBlocks(userBlockPermission);
         return BaseResponse.builder().data(user).build();
     }
 
@@ -101,9 +99,12 @@ public class UserService extends BaseService<User>{
                 user.setUserType(User.COMMON);
             }
             mapper.insert(user);
+            Long userId = user.getId();
+            user.setId(null);
+            user.setUserId(userId);
             user.setSgname("新用户" + user.getMobile().substring(user.getMobile().length()-4));
             mapper.insertProfile(user);
-            return BaseResponse.builder().data(user.getId()).build();
+            return BaseResponse.builder().data(userId).build();
         } else {
             return BaseResponse.builder().code(ErrorCode.REGIST_MOBILE_EXISTS).build();
         }
@@ -143,12 +144,17 @@ public class UserService extends BaseService<User>{
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public BaseResponse resetPassword(User param){
+    public BaseResponse resetPassword(UserPasswordRestParam param){
         User user = mapper.findOneByMobile(param.getMobile());
         if(user == null){
             return BaseResponse.builder().code(ErrorCode.LOGIN_MOBILE_NOTEXISTS).build();
         }
         if(param.getVerifyCode() != null && param.getVerifyCode().equals(user.getVerifyCode())) {
+            User user_update = User.builder().password(param.getPassword()).build();
+            user_update.setId(user.getId());
+            mapper.update(user_update);
+            return BaseResponse.builder().data(user_update.getId()).build();
+        } if(param.getPasswordOld() != null && param.getPasswordOld().equals(user.getPassword())) {
             User user_update = User.builder().password(param.getPassword()).build();
             user_update.setId(user.getId());
             mapper.update(user_update);
@@ -188,25 +194,19 @@ public class UserService extends BaseService<User>{
             // 返回用户基本信息
             // 从enterprise_user表中查询所有的企业
             // 如果是管理员则不返回
-            if(user_db.getUserType().equals(User.COMMON)){
+            log.info("userparam appsource: " + appSource);
+            if(user_db.getUserType().equals(User.COMMON) && CommonConstant.APP_SOURCE_ADMIN.equals(appSource)) {
                 // 普通用户登录后台要拒绝
-                log.info("userparam appsource: " + appSource);
-                if(CommonConstant.APP_SOURCE_ADMIN.equals(appSource)){
-                    log.info("当前用户%s,　为普通用户无权限登录后台管理");
-                    return BaseResponse.builder().code(ErrorCode.ADMIN_LOGIN_DENIED).build();
-                }
-                List<Enterprise> enterprises = enterpriseMapper.findUserEnterprise(EnterpriseQuery.builder().userId(user_db.getId()).build());
-                result.put("enterprises", enterprises);
-                user_db.setEnterprises(enterprises);
-            } else if(user_db.getUserType().equals(User.ENTMANAGER)) {
-                List<Enterprise> enterprises = enterpriseMapper.findAll(EnterpriseQuery.builder().managerId(user_db.getId()).build());
-                result.put("enterprises", enterprises);
-                user_db.setEnterprises(enterprises);
+                log.info("当前用户%s,　为普通用户无权限登录后台管理");
+                return BaseResponse.builder().code(ErrorCode.ADMIN_LOGIN_DENIED).build();
             }
+            List<EnterpriseUser> enterprises = enterpriseUserMapper.findAll(EnterpriseUserQuery.builder().userId(user_db.getId()).build());
+            user_db.setEnterprises(enterprises);
 //            if(user_db.getUserType().equals(User.COMMON)){
 //                List<Block> roleList = roleMapper.findGrantedBlock(user_db.getId());
 //                result.put("roles", roleList);
 //            }
+            result.put("enterprises", enterprises);
             result.put("expireTime", new Date(now.getTime() + LoginUtil.COOKIE_MAX_INACTIVE_INTERVAL));
             result.put("userType", user_db.getUserType());
             LoginUtil.getInstance().setUser(authorization, user_db);

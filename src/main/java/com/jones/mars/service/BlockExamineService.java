@@ -5,7 +5,7 @@ import com.jones.mars.model.query.BlockAttachmentQuery;
 import com.jones.mars.model.query.BlockExamineQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.repository.BlockExamineContentMapper;
 import com.jones.mars.repository.BlockExamineMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +23,11 @@ public class BlockExamineService extends BaseService{
   
 
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.mapper;
     }
 
-    public BaseResponse allName(Integer blockId){
+    public BaseResponse allName(Long blockId){
         Query query = BlockExamineQuery.builder().blockId(blockId).build();
         List<Object> list = mapper.findAllName(query);
         return BaseResponse.builder().data(list).build();
@@ -37,13 +37,13 @@ public class BlockExamineService extends BaseService{
         return findByPage(query);
     }
 
-    public BaseResponse findBlockExamineById(Integer examineId){
+    public BaseResponse findBlockExamineById(Long examineId){
         BlockExamine examine = mapper.findOne(examineId);
         examine.setBlockExamineContentList(blockExamineContentMapper.findByExamineId(examine.getId()));
         return BaseResponse.builder().data(examine).build();
     }
 
-    public BaseResponse deleteExamine(Integer examineId){
+    public BaseResponse deleteExamine(Long examineId){
         super.delete(examineId);
         blockExamineContentMapper.deleteByExamineId(examineId);
         return BaseResponse.builder().build();

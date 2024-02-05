@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DepartmentMapper extends BaseMapper<Department> {
+public interface DepartmentMapper extends CommonMapper<Department> {
     List<Object> findAllName(Query query);
 }

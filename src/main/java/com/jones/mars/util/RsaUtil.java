@@ -15,6 +15,9 @@ import java.util.Map;
 public class RsaUtil {
 
     public static void main(String[] args) {
+//        String a = "107518948843387122581837547862334956766398643634224765846833053297479518038290466911985468642264457995795178764054747478660499243415642807814561644443887560582541614836246093676657208189183638428849992961411844888496881093249797565126339593783344338858081523128943367553788193576959456818670301051015039385909";
+//        byte[] d = a.getBytes();
+//        System.out.println(123);
         //解密数据
         try {
             //生成公钥和私钥
@@ -24,7 +27,7 @@ public class RsaUtil {
             String privateKey = keyMap.get(1);
             System.out.println("私钥:" + privateKey);
 
-            String orgData = "脏数据优化";
+            String orgData = "fe80::c48c:3345:3fc7:33e3%14;./tutor;2024-01-01;2025-01-01";
             System.out.println("原数据：" + orgData);
             String encryptStr =encrypt(orgData,publicKey);
             System.out.println("加密结果：" + encryptStr);

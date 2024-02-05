@@ -33,6 +33,8 @@ public class ProjectService extends BaseService {
     @Autowired
     private EnterpriseMapper enterpriseMapper;
     @Autowired
+    private EnterpriseUserMapper enterpriseUserMapper;
+    @Autowired
     private ProjectUserMapper projectUserMapper;
     @Autowired
     private RolePermissionMapper rolePermissionMapper;
@@ -43,7 +45,7 @@ public class ProjectService extends BaseService {
     @Autowired
     private HotspotMapper hotspotMapper;
     @Value("${app.public.block.id:3}")
-    private Integer publicBlockId;
+    private Long publicBlockId;
 
     private static final Integer FORCE_EXECUTE = 1;
 
@@ -54,7 +56,7 @@ public class ProjectService extends BaseService {
     private ProjectUserService projectUserService;
 
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.mapper;
     }
 
@@ -75,20 +77,20 @@ public class ProjectService extends BaseService {
         param.setCreatorId(currentUser.getId());
         param.setStatus(Project.CREATING);
         mapper.insert(param);
-        Integer projectId = param.getId();
+        Long projectId = param.getId();
         log.info("关联模块与项目关系");
         BlockProject blockProject = BlockProject.builder().blockId(param.getBlockId()).projectId(projectId).build();
         blockProjectMapper.insert(blockProject);
 //        if (currentUser.getUserType().equals(User.COMMON)) {
         log.info("新增当前用户为项目负责人");
-        projectUserMapper.insert(ProjectUserParam.builder().projectId(projectId).userIds(Arrays.asList(currentUser.getId())).managerFlg(ProjectUser.PROJECT_MANAGER).build());
+        projectUserMapper.insert(new ProjectUsers(ProjectUserParam.builder().projectId(projectId).userIds(Arrays.asList(currentUser.getId())).managerFlg(ProjectUser.PROJECT_MANAGER).build()));
 //        }
-        List<Integer> userIds = param.getUserIds();
+        List<Long> userIds = param.getUserIds();
         if (!CollectionUtils.isEmpty(userIds)) {
             userIds.remove(currentUser.getId());
             log.info("添加项目共建人");
             if (!CollectionUtils.isEmpty(userIds)) {
-                projectUserMapper.insert(ProjectUserParam.builder().projectId(projectId).userIds(userIds).build());
+                projectUserMapper.insert(new ProjectUsers(ProjectUserParam.builder().projectId(projectId).userIds(userIds).build()));
             }
         }
         Map<String, Object> result = new HashMap<>();
@@ -97,7 +99,7 @@ public class ProjectService extends BaseService {
     }
 
 
-    public ErrorCode projectModifyAuthError(Integer projectId){
+    public ErrorCode projectModifyAuthError(Long projectId){
         Project project = mapper.findOne(projectId);
         User loginUser = LoginUtil.getInstance().getUser();
         if(loginUser.getUserType().equals(User.COMMON)){
@@ -113,7 +115,7 @@ public class ProjectService extends BaseService {
                 return ErrorCode.AUTH_PROJECT_EDIT_NOTPARTNER;
             }
         } else if(loginUser.getUserType().equals(User.ENTMANAGER)) {
-            List<Integer> enterpriseIds = loginUser.getEnterprises().stream().map(p->p.getId()).collect(Collectors.toList());
+            List<Long> enterpriseIds = loginUser.getEnterprises().stream().map(p->p.getId()).collect(Collectors.toList());
             if(!enterpriseIds.contains(project.getOriEnterpriseId())) {
                 log.info("用户[ %s ] 因非该企业管理员无法修改项目信息", loginUser.getMobile());
                 return ErrorCode.AUTH_PROJECT_EDIT_UNAUTH;
@@ -136,10 +138,10 @@ public class ProjectService extends BaseService {
         log.info("更新项目{} {}", param.getId(), param.getName());
         param.setStatus(Project.EDITIND);
         mapper.update(param);
-        Integer projectId = param.getId();
+        Long projectId = param.getId();
         log.info("添加项目共建人");
         if (!CollectionUtils.isEmpty(param.getUserIds())) {
-            List<Integer> oriUserIds = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
+            List<Long> oriUserIds = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
             param.getUserIds().removeAll(oriUserIds);
             if(param.getUserIds().size() > 0){
                 projectUserMapper.insert(ProjectUserParam.builder().projectId(projectId).userIds(param.getUserIds()).build());
@@ -161,7 +163,7 @@ public class ProjectService extends BaseService {
      * @return
      */
     @Transactional
-    public BaseResponse delete(Integer projectId){
+    public BaseResponse delete(Long projectId){
 //        ErrorCode projectModifyAuthError = projectModifyAuthError(projectId);
 //        if(projectModifyAuthError != null){
 //            return BaseResponse.builder().code(projectModifyAuthError).build();
@@ -199,7 +201,7 @@ public class ProjectService extends BaseService {
     }
 
     //TODO split authority
-    public BaseResponse findOne(Integer projectId){
+    public BaseResponse findOne(Long projectId){
         Project project = mapper.findOne(projectId);
         User loginUser = LoginUtil.getInstance().getUser();
         if(project.getPublicFlg().equals(Project.UNPUBLIC) && project.getEnterprisePlateformFlg().equals(CommonConstant.NOPLATEFROM)){
@@ -212,7 +214,7 @@ public class ProjectService extends BaseService {
                         return BaseResponse.builder().code(ErrorCode.AUTH_PROJECT_UNAUTH).build();
                     }
                 } else if(loginUser.getUserType().equals(User.ENTMANAGER)) {
-                    List<Integer> enterpriseIds = loginUser.getEnterprises().stream().map(p->p.getId()).collect(Collectors.toList());
+                    List<Long> enterpriseIds = loginUser.getEnterprises().stream().map(p->p.getId()).collect(Collectors.toList());
                     if(!enterpriseIds.contains(project.getOriEnterpriseId())) {
                         return BaseResponse.builder().code(ErrorCode.AUTH_PROJECT_UNAUTH).build();
                     }
@@ -236,7 +238,7 @@ public class ProjectService extends BaseService {
     }
 
     @Transactional
-    public BaseResponse updateProjectManager(Integer projectId, Integer userId){
+    public BaseResponse updateProjectManager(Long projectId, Long userId){
         projectUserMapper.update(ProjectUser.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build());
         projectUserMapper.update(ProjectUser.builder().projectId(projectId).userId(userId).managerFlg(ProjectUser.PROJECT_MANAGER).build());
         service.sendAddToProjectManager(mapper.findOne(projectId).getName(), userId);
@@ -251,15 +253,15 @@ public class ProjectService extends BaseService {
         return BaseResponse.builder().build();
     }
 
-    public BaseResponse submitVerifyProject(Integer projectId){
+    public BaseResponse submitVerifyProject(Long projectId){
         BaseResponse response = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);
         if(project.getStatus().equals(Project.EDITIND)){
             Project updateProject = Project.builder().status(Project.VERIFYING).build();
             updateProject.setId(projectId);
             mapper.update(updateProject);
-            Integer managerId = enterpriseMapper.findOne(project.getOriEnterpriseId()).getManagerId();
-            service.sendSubmitVerifyProject(LoginUtil.getLoginSgname(), project.getName(), managerId);
+            List<Long> mangerIds =enterpriseUserMapper.findAll(EnterpriseUserQuery.builder().enterpriseId(project.getOriEnterpriseId()).isManager(EnterpriseUser.ENTERPRISE_MANAGER).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
+            service.sendSubmitVerifyProject(LoginUtil.getLoginSgname(), project.getName(), mangerIds);
         } else {
             response.setErrorCode(ErrorCode.PROJECT_VERIFY_VERIFIED);
         }
@@ -267,11 +269,11 @@ public class ProjectService extends BaseService {
     }
 
     @Transactional
-    public BaseResponse verifyProject(Integer projectId, Boolean isPass, String reason){
+    public BaseResponse verifyProject(Long projectId, Boolean isPass, String reason){
         BaseResponse response  = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);
         if(project.getStatus().equals(Project.VERIFYING)) {
-            List<Integer> oriUserIds = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
+            List<Long> oriUserIds = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
             if (isPass) {
                 response = onshelfProject(projectId, false);
                 // 获取项目当前处理中的任务
@@ -292,11 +294,11 @@ public class ProjectService extends BaseService {
         return response;
     }
 
-    public BaseResponse onshelfProject(Integer projectId, Boolean publicFlag){
+    public BaseResponse onshelfProject(Long projectId, Boolean publicFlag){
         return onshelfProject(projectId, publicFlag, FORCE_EXECUTE);
     }
 
-    public BaseResponse onshelfProject(Integer projectId, Boolean publicFlag, Integer force){
+    public BaseResponse onshelfProject(Long projectId, Boolean publicFlag, Integer force){
         force = force == null ? 0 : force;
         BaseResponse response  = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);
@@ -315,7 +317,7 @@ public class ProjectService extends BaseService {
     }
 
     @Transactional
-    public BaseResponse offshelfProject(Integer projectId){
+    public BaseResponse offshelfProject(Long projectId){
         BaseResponse response  = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);
         if(project.getStatus().equals(Project.ONSHELF)){
@@ -330,7 +332,7 @@ public class ProjectService extends BaseService {
     }
 
     @Transactional
-    public BaseResponse unpublicProject(Integer projectId){
+    public BaseResponse unpublicProject(Long projectId){
         Project project = Project.builder().publicFlg(Project.UNPUBLIC).build();
         project.setId(projectId);
         mapper.update(project);
@@ -339,7 +341,7 @@ public class ProjectService extends BaseService {
     }
 
     @Transactional
-    public BaseResponse backToEditProject(Integer projectId){
+    public BaseResponse backToEditProject(Long projectId){
         Project project = Project.builder().status(Project.EDITIND).build();
         project.setId(projectId);
         mapper.update(project);
@@ -347,7 +349,7 @@ public class ProjectService extends BaseService {
     }
 
     @Transactional
-    public BaseResponse publicProject(Integer projectId){
+    public BaseResponse publicProject(Long projectId){
         Project project = Project.builder().publicFlg(Project.PUBLIC).build();
         project.setId(projectId);
         mapper.update(project);
@@ -355,7 +357,7 @@ public class ProjectService extends BaseService {
         return BaseResponse.builder().build();
     }
 
-    public BaseResponse remodifyProject(Integer projectId, Integer force) {
+    public BaseResponse remodifyProject(Long projectId, Integer force) {
         force = force == null ? 0 : force;
         BaseResponse response  = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.WeprogramInfoMapper" >
-    <insert id="insert" parameterType="WeprogramInfo" useGeneratedKeys="true" keyProperty="id">
-        insert into weprogram_info(`name`,`detail`, `app_id`, `app_secret`, `info`)
-        values(#{name}, #{detail}, #{appId}, #{appSecret}, #{info})
+    <insert id="insertRecord" parameterType="WeprogramInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into weprogram_info(`id`,`name`,`detail`, `app_id`, `app_secret`, `info`)
+        values(#{id}, #{name}, #{detail}, #{appId}, #{appSecret}, #{info})
     </insert>
-    <insert id="update" parameterType="WeprogramInfo">
+    <update id="update" parameterType="WeprogramInfo">
         update weprogram_info set name = #{name}, detail=#{detail}, app_id=#{appId}, app_secret=#{appSecret}, info=#{info} where id=#{id}
-    </insert>
+    </update>
     <select id="findList" resultType="WeprogramInfo" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select * from weprogram_info where 1=1
         <if test="name != null and name !=''">
             and name = #{name}
@@ -18,7 +18,7 @@
             and name like concat('%', #{nameLike}, '%')
         </if>
         order by name
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from weprogram_info where 1=1

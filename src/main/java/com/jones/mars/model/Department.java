@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,10 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@TableName("department")
 public class Department extends BaseObject {
     private String name;
-    private Integer enterpriseId;
-    private Integer parentId;
+    private Long enterpriseId;
+    private Long parentId;
     private String parentName;
     private Integer managerId;
     private Integer userCount;
@@ -26,7 +28,7 @@ public class Department extends BaseObject {
     private String managerMobile;
     private String managerDescription;
     private List<DepartmentUser> userList = new ArrayList<>();
-    private Integer operatorId;
+    private Long operatorId;
     private Date updateTime;
     private Date createTime;
 }

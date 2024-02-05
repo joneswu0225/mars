@@ -23,7 +23,9 @@ public class BlockSceneTypeParam extends BaseObject {
     private String detail;
     @NotNull(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID称",name="blockId")
-    private Integer blockId;
+    private Long blockId;
+    @ApiModelProperty(value="关联场景类型ID",name="relSceneTypeId")
+    private Long relSceneTypeId;
     @ApiParam(hidden = true)
     private Integer seq;
 }

@@ -1,6 +1,7 @@
 package com.jones.mars.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jones.mars.constant.ApplicationConst;
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.TranslationParam;
 import com.jones.mars.object.BaseResponse;
@@ -82,7 +83,7 @@ public class YoudaoController extends BaseController {
                                    @RequestParam(name="langType", required = false) @ApiParam(value="中英文,zh-CHS/en",name="langType") String langType,
                                    @RequestParam(name="voice", required = false) @ApiParam(value="",name="voice") String voice) throws Exception {
         String result = YoudaoUtil.getTTSInfo(text, langType, voice);
-        result = CommonConstant.UPLOAD_PATH_TMP_AUDIO + File.separator + result;
+        result = ApplicationConst.UPLOAD_PATH_TMP_AUDIO + File.separator + result;
         return BaseResponse.builder().data(result).build();
     }
 

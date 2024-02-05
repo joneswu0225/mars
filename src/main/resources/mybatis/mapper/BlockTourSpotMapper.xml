@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.BlockTourSpotMapper" >
+    <insert id="insertRecord" parameterType="BlockTourSpotParam" useGeneratedKeys="true" keyProperty="id">
+        insert into block_tour_spot(`id`, `block_id`, `ath`,`atv`,`fov`,`acode`,`scode`,`title`, `detail`, `seq`, `type`) values
+        (#{id}, #{blockId}, #{ath}, #{atv}, #{fov}, #{acode}, #{scode}, #{title}, #{detail}, #{seq}, #{type})
+    </insert>
+    <update id="update" parameterType="BlockTourSpotParam">
+        update block_tour_spot
+        set title = #{title},ath = #{ath}, atv = #{atv}, fov = #{fov}, acode = #{acode}, scode = #{scode},  `type` = #{type}, detail = #{detail}
+        where id = #{id}
+    </update>
+    <select id="findMaxSeqByBlockId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select max(seq) from block_tour_spot where block_id=#{blockId}
+    </select>
+    <update id="updateBlockTourSpotSeq">
+        update block_tour_spot set seq=case
+        <foreach collection="tourSpotIds" item="tourSpotId" index="index">
+            when id=#{tourSpotId} then #{index}
+        </foreach>
+        end
+        where id in
+        <foreach collection="tourSpotIds" item="tourSpotId" index="index" separator="," open="(" close=")">
+            #{tourSpotId}
+        </foreach>
+    </update>
+    <select id="findList" resultType="BlockTourSpot" parameterType="Query">
+        select * from block_tour_spot
+        where 1=1
+        <if test="blockId != null">
+            and block_id=#{blockId}
+        </if>
+        <if test="type != null and type != ''">
+            and `type`=#{type}
+        </if>
+        order by `type`, seq
+    </select>
+
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from block_tour_spot
+        where block_id=#{blockId}
+    </select>
+
+    <select id="findByBlockId" resultType="BlockTourSpot" parameterType="java.lang.Long">
+        select * from block_tour_spot
+        where block_id=#{blockId}
+        order by seq
+    </select>
+
+    <select id="findAll" resultType="BlockTourSpot">
+        select * from block_tour_spot
+        where 1=1
+        <if test="blockId != null">
+            and block_id=#{blockId}
+        </if>
+        <if test="type != null and type != ''">
+            and `type`=#{type}
+        </if>
+        order by seq
+    </select>
+
+    <select id="findOne" resultType="BlockTourSpot">
+        select * from block_tour_spot where id=#{id}
+    </select>
+
+    <delete id="delete">
+        delete from block_tour_spot where id=#{id}
+    </delete>
+    <delete id="deleteByBlockId">
+        delete from block_tour_spot where block_id=#{id}
+    </delete>
+</mapper>

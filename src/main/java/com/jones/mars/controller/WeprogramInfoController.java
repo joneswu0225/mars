@@ -44,7 +44,7 @@ public class WeprogramInfoController extends BaseController {
     @ApiOperation(value = "更新小程序配置", notes = "")
     @PutMapping("{weprogramInfoId}")
     public BaseResponse update(
-            @PathVariable Integer weprogramInfoId,
+            @PathVariable Long weprogramInfoId,
             @RequestBody @ApiParam(required=true) WeprogramInfo param) {
         param.setId(weprogramInfoId);
         return service.update(param);
@@ -52,7 +52,7 @@ public class WeprogramInfoController extends BaseController {
 
     @ApiOperation(value = "删除小程序配置", notes = "")
     @DeleteMapping("{weprogramInfoId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer weprogramInfoId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long weprogramInfoId) {
         return service.delete(weprogramInfoId);
     }
 }

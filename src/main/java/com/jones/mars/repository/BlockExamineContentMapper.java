@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BlockExamineContentMapper extends BaseMapper<BlockExamineContent> {
-    List<BlockExamineContent> findByExamineId(Integer examineId);
-    void deleteByExamineId(Integer examineId);
+public interface BlockExamineContentMapper extends CommonMapper<BlockExamineContent> {
+    List<BlockExamineContent> findByExamineId(Long examineId);
+    void deleteByExamineId(Long examineId);
     void updateExamineContentSeq(BlockExamineContentSeqParam param);
-    Integer findMaxSeqByExamineId(Integer examineId);
+    Integer findMaxSeqByExamineId(Long examineId);
 
 }

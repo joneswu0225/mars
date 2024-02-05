@@ -15,11 +15,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RolePermissionQuery extends Query{
     @ApiModelProperty(value="二级分类ID",name="classId")
-    private Integer classId;
+    private Long classId;
     @ApiModelProperty(value="操作类型，0：VIEW，1：CREATE   ",name="operation")
     private Integer operation;
     @ApiParam(hidden = true)
-    private Integer userId;
+    private Long userId;
     @ApiParam(hidden = true)
-    private Integer projectId;
+    private Long projectId;
 }

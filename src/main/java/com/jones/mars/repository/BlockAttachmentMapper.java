@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BlockAttachmentMapper extends BaseMapper<BlockAttachment> {
+public interface BlockAttachmentMapper extends CommonMapper<BlockAttachment> {
     List<Object> findAllName(Query query);
 }

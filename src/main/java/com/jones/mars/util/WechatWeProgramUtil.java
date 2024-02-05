@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class WechatWeProgramUtil {
     @Autowired
     private WeprogramInfoMapper weprogramInfoMapper;
-    private static Map<Integer, WeprogramInfo> weprogramInfoMap;
+    private static Map<Long, WeprogramInfo> weprogramInfoMap;
 
     @Scheduled(cron = "0 0/2 * * * ?")
     private void refreshWeprogramInfo(){
@@ -40,7 +40,7 @@ public class WechatWeProgramUtil {
      *
      * @param code
      */
-    public static JSONObject getSessionKey(Integer weprogramId, String code) {
+    public static JSONObject getSessionKey(Long weprogramId, String code) {
         try {
             JSONObject resp = HttpClientUtil.getJson(weprogramInfoMap.get(weprogramId).getSessionUrl() + code);
             log.info("wechat code to session key resp: " + resp.toJSONString());
@@ -59,7 +59,7 @@ public class WechatWeProgramUtil {
      * @param iv
      * @return
      */
-    public static Map<String, String> getUserInfo(Integer weprogramId, String code, String encrypedData, String iv) {
+    public static Map<String, String> getUserInfo(Long weprogramId, String code, String encrypedData, String iv) {
         log.info("start to parse wx user info: \\n code:{}\\n encryptedData:{}\\n iv:{}", code, encrypedData, iv);
         Map<String, String> resultMap = null;
         JSONObject sessionInfo = getSessionKey(weprogramId, code);

@@ -34,14 +34,14 @@ public class BlockImageController extends BaseController {
 
     @ApiOperation(value = "获取模块下所有模块平面图名称", notes = "")
     @GetMapping("name")
-    public BaseResponse allName(@RequestParam(name="blockId") @ApiParam(required=true) Integer blockId) {
+    public BaseResponse allName(@RequestParam(name="blockId") @ApiParam(required=true) Long blockId) {
         return service.allName(blockId);
     }
 
     @ApiOperation(value = "更新模块平面图", notes = "")
     @PutMapping("{blockImageId}")
     public BaseResponse update(
-            @PathVariable Integer blockImageId,
+            @PathVariable Long blockImageId,
             @RequestBody @ApiParam(required=true) BlockImageParam param) {
         param.setId(blockImageId);
         return service.update(param);
@@ -49,7 +49,7 @@ public class BlockImageController extends BaseController {
 
     @ApiOperation(value = "删除模块平面图", notes = "")
     @DeleteMapping("{blockImageId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer blockImageId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long blockImageId) {
         return service.delete(blockImageId);
     }
 

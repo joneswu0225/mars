@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BlockImageMapper extends BaseMapper<BlockImage> {
+public interface BlockImageMapper extends CommonMapper<BlockImage> {
     List<Object> findAllName(Query query);
 }

@@ -14,6 +14,7 @@ public enum ErrorCode {
 	//注册错误
 	REGIST_MOBILE_EXISTS("1001", "手机号已被注册"),
 
+
 	//登录错误
 	LOGIN_MOBILE_NOTEXISTS("1002", "手机号不存在"),
 	LOGIN_FAIL("1003", "验证码或密码错误"),
@@ -21,7 +22,9 @@ public enum ErrorCode {
 	WECHAT_NO_PASSWD("1005", "微信小程序注册没有密码"),
 	VERIFY_CODE_FAILED("1006", "验证码错误"),
 	ADMIN_LOGIN_DENIED("1007", "非管理员无法登录管理系统"),
-
+	//用户创建错误
+	USER_ADD_DENIED("1008", "无权限创建用户"),
+	ADMIN_ONLY("1009", "非管理员无法操作"),
 	//请求错误
 	VALIDATION_FAILED("1011", "参数校验失败"),
 	BAD_REQUEST("1012", "请求参数错误 [%s]"),
@@ -48,8 +51,10 @@ public enum ErrorCode {
 	//角色错误
 	ROLE_DELETE_EXIST_USER("5101", "该角色仍存在被授予的用户，无法删除"),
 	ROLE_PERMISSION_DELETE_NOAUTH("5101", "请联系管理员进行权限删除"),
-	//部门错误
-	DEPARTMENT_DELETE_EXIST_USER("6001", "该部门存在其他用户，无法删除"),
+	//企业部门错误
+	ENTERPRISE_USER_MODIFY_DENIED("6001", "非企业管理员无法添加修改删除企业员工"),
+
+	DEPARTMENT_DELETE_EXIST_USER("6002", "该部门存在其他用户，无法删除"),
 
 	// KRPANO
 	KRPANO_SOURCE_IMAGE_NOT_EXIST("7001", "切图文件不存在"),

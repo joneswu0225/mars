@@ -7,10 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BlockAttachmentContentMapper extends BaseMapper<BlockAttachmentContent> {
-    List<BlockAttachmentContent> findByAttachmentId(Integer examineId);
-    void deleteByAttachmentId(Integer examineId);
+public interface BlockAttachmentContentMapper extends CommonMapper<BlockAttachmentContent> {
+
+    List<BlockAttachmentContent> findByAttachmentId(Long examineId);
+    void deleteByAttachmentId(Long examineId);
     void updateAttachmentContentSeq(BlockAttachmentContentSeqParam param);
-    Integer findMaxSeqByAttachmentId(Integer examineId);
+    Integer findMaxSeqByAttachmentId(Long examineId);
 
 }

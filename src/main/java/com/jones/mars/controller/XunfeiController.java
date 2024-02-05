@@ -1,6 +1,7 @@
 package com.jones.mars.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jones.mars.constant.ApplicationConst;
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.TranslationParam;
 import com.jones.mars.object.BaseResponse;
@@ -86,7 +87,7 @@ public class XunfeiController extends BaseController {
     @ResponseBody
     public BaseResponse getTTSInfo(@RequestBody @ApiParam(required=true) TranslationParam param) throws Exception {
         String result = XunfeiUtil.getTTSInfo(param.getText(), param.getVoiceName());
-        result = CommonConstant.UPLOAD_PATH_TMP_AUDIO + File.separator + result;
+        result = ApplicationConst.UPLOAD_PATH_TMP_AUDIO + File.separator + result;
         return BaseResponse.builder().data(result).build();
     }
 

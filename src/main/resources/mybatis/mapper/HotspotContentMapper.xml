@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.HotspotContentMapper" >
-    <insert id="insert" parameterType="HotspotContentParams" useGeneratedKeys="true" keyProperty="id">
-        insert into hotspot_content(`hotspot_id`, `content`, `title`, `extra`, `seq`, `type`) values
+    <insert id="insertRecord" parameterType="HotspotContentParams">
+        insert into hotspot_content(`id`,`hotspot_id`, `content`, `title`, `extra`, `seq`, `type`) values
         <foreach collection="hotspotContentList" item="param" index="index" separator=",">
-            (#{param.hotspotId}, #{param.content}, #{param.title}, #{param.extra}, #{index}, #{param.type})
+            (#{param.id}, #{param.hotspotId}, #{param.content}, #{param.title}, #{param.extra}, #{index}, #{param.type})
         </foreach>
     </insert>
-    <insert id="insertOne" parameterType="HotspotContentParam" useGeneratedKeys="true" keyProperty="id">
-        insert into hotspot_content(`hotspot_id`, `content`, `title`, `extra`, `seq`, `type`) values
-        (#{hotspotId}, #{content}, #{title}, #{extra}, #{seq}, #{type})
+    <insert id="insertOne" parameterType="HotspotContentParam">
+        insert into hotspot_content(`id`,`hotspot_id`, `content`, `title`, `extra`, `seq`, `type`) values
+        (#{id}, #{hotspotId}, #{content}, #{title}, #{extra}, #{seq}, #{type})
     </insert>
     <update id="updateOne" parameterType="HotspotContentParam">
         update hotspot_content
@@ -23,7 +23,7 @@
         where id = #{param.id}
         </foreach>
     </update>
-    <select id="findMaxSeqByhotspotId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="findMaxSeqByhotspotId" parameterType="java.lang.Long" resultType="java.lang.Integer">
         select max(seq) from hotspot_content where hotspot_id=#{hotspotId}
     </select>
     <update id="updateHotspotContentSeq">
@@ -54,7 +54,7 @@
         where hotspot_id=#{hotspotId}
     </select>
 
-    <select id="findByHotspotId" resultType="HotspotContent" parameterType="java.lang.Integer">
+    <select id="findByHotspotId" resultType="HotspotContent" parameterType="java.lang.Long">
         select * from hotspot_content
         where hotspot_id=#{hotspotId}
         order by seq

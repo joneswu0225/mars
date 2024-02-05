@@ -2,10 +2,11 @@ package com.jones.mars.service;
 
 import com.jones.mars.model.Hotspot;
 import com.jones.mars.model.ProjectHotspot;
+import com.jones.mars.model.ProjectHotspots;
 import com.jones.mars.model.param.HotspotParam;
 import com.jones.mars.model.query.HotspotQuery;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.repository.HotspotContentMapper;
 import com.jones.mars.repository.HotspotMapper;
 import com.jones.mars.repository.ProjectHotspotMapper;
@@ -28,7 +29,7 @@ public class HotspotService  extends BaseService{
     private HotspotContentMapper hotspotContentMapper;
 
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.mapper;
     }
 
@@ -37,7 +38,7 @@ public class HotspotService  extends BaseService{
         mapper.insert(param);
         if(param.getType().equals(Hotspot.TYPE_GUIDE) || param.getType().equals(Hotspot.TYPE_ATTACHMENT)) {
             Integer maxSeq = projectHotspotMapper.findMaxSeqByHotspot(Hotspot.builder().projectId(param.getProjectId()).type(param.getType()).build());
-            projectHotspotMapper.insert(ProjectHotspot.builder().hotspotId(param.getId()).seq(maxSeq == null ? 0 : (maxSeq + 1)).projectId(param.getProjectId()));
+            projectHotspotMapper.insert(ProjectHotspot.builder().hotspotId(param.getId()).seq(maxSeq == null ? 0 : (maxSeq + 1)).projectId(param.getProjectId()).build());
         }
         Map<String, String> result = new HashMap<>();
         result.put("id", param.getId().toString());
@@ -46,7 +47,7 @@ public class HotspotService  extends BaseService{
     }
 
     @Transactional
-    public BaseResponse delete(Integer hotspotId){
+    public BaseResponse delete(Long hotspotId){
         if(mapper.findOne(hotspotId).getType().equals(Hotspot.TYPE_GUIDE)){
             projectHotspotMapper.delete(hotspotId);
         }

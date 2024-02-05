@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,11 +15,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@TableName("hotspot")
 public class Hotspot extends BaseObject {
     public static final String TYPE_DEFAULT = "DEFAULT";
     public static final String TYPE_GUIDE = "GUIDE";
     public static final String TYPE_ATTACHMENT = "ATTACHMENT";
-    private Integer id;
+    private Long id;
     private String code;
     private String icon;
     private String sceneCode;
@@ -28,9 +30,9 @@ public class Hotspot extends BaseObject {
     private Float locationX;
     private Float locationY;
     private Float locationFov;
-    private Integer sceneId;
+    private Long sceneId;
     private Integer seq;
-    private Integer projectId;
+    private Long projectId;
     private Date createTime;
     private Date updateTime;
     private List<HotspotContent> contents = new ArrayList<>();

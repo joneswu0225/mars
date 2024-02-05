@@ -56,14 +56,14 @@ public class DepartmentController extends BaseController {
 
     @ApiOperation(value = "部门详情", notes = "部门详情")
     @GetMapping("{departmentId}")
-    public BaseResponse findOne(@PathVariable Integer departmentId) {
+    public BaseResponse findOne(@PathVariable Long departmentId) {
         return service.findById(departmentId);
     }
 
     @ApiOperation(value = "更新部门", notes = "更新部门")
     @PutMapping("{departmentId}")
     public BaseResponse update(
-            @PathVariable Integer departmentId,
+            @PathVariable Long departmentId,
             @RequestBody @ApiParam(required=true) DepartmentParam param) {
 //        param.setOperatorId(LoginUtil.getInstance().getUser().getId());
         param.setDepartmentId(departmentId);
@@ -72,14 +72,14 @@ public class DepartmentController extends BaseController {
 
     @ApiOperation(value = "删除部门", notes = "后台调用")
     @DeleteMapping("{departmentId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer departmentId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long departmentId) {
         return service.delete(departmentId);
     }
 
     @ApiOperation(value = "部门人员列表", notes = "")
     @GetMapping("{departmentId}/user")
     public BaseResponse departmentUser(
-            @PathVariable Integer departmentId,
+            @PathVariable Long departmentId,
             @ApiParam(required=true) DepartmentUserQuery query) {
         query.setDepartmentId(departmentId);
         return departmentUserService.findByPage(query);
@@ -88,7 +88,7 @@ public class DepartmentController extends BaseController {
     @ApiOperation(value = "部门所有人员列表", notes = "")
     @GetMapping("{departmentId}/user/all")
     public BaseResponse departmentUserAll(
-            @PathVariable Integer departmentId) {
+            @PathVariable Long departmentId) {
         DepartmentUserQuery query = DepartmentUserQuery.builder().departmentId(departmentId).build();
         return departmentUserService.findAll(query);
     }
@@ -96,7 +96,7 @@ public class DepartmentController extends BaseController {
     @ApiOperation(value = "部门加人", notes = "")
     @PostMapping("{departmentId}/user")
     public BaseResponse addUser(
-            @PathVariable Integer departmentId,
+            @PathVariable Long departmentId,
             @RequestBody @ApiParam(required=true) DepartmentUserParam param) {
         param.setDepartmentId(departmentId);
         return service.addDepartmentUser(param);
@@ -104,8 +104,8 @@ public class DepartmentController extends BaseController {
 
     @ApiOperation(value = "部门删人", notes = "")
     @DeleteMapping("{departmentId}/user/{userId}")
-    public BaseResponse removeUser(@PathVariable @ApiParam(required=true) Integer departmentId,
-                                   @PathVariable @ApiParam(required=true) Integer userId) {
+    public BaseResponse removeUser(@PathVariable @ApiParam(required=true) Long departmentId,
+                                   @PathVariable @ApiParam(required=true) Long userId) {
         return service.removeDepartmentUser(DepartmentUserParam.builder().departmentId(departmentId).userId(userId).build());
     }
 

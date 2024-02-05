@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.SceneMapper" >
-    <insert id="insert" parameterType="Scene" useGeneratedKeys="true" keyProperty="id">
-        insert into scene(`name`, `detail`, `code`,`block_id`,`public_flg`, `image_id`, `location_x`, `location_y`,`pano_image_url`,`scene_type_id`,`seq`)
-        values(#{name}, #{detail}, #{code}, #{blockId}, #{publicFlg}, #{imageId}, #{locationX}, #{locationY},#{panoImageUrl},#{sceneTypeId},#{seq})
+    <insert id="insertRecord" parameterType="Scene" useGeneratedKeys="true" keyProperty="id">
+        insert into scene(`id`,`name`, `detail`, `code`,`block_id`,`public_flg`, `image_id`, `location_x`, `location_y`,`pano_image_url`,`scene_type_id`,`seq`)
+        values(#{id}, #{name}, #{detail}, #{code}, #{blockId}, #{publicFlg}, #{imageId}, #{locationX}, #{locationY},#{panoImageUrl},#{sceneTypeId},#{seq})
     </insert>
     <update id="update" parameterType="Scene">
         update scene set id=#{id}
@@ -12,6 +12,9 @@
         </if>
         <if test="detail != null and detail !=''">
             ,detail = #{detail}
+        </if>
+        <if test="srcBlockId != null">
+            ,src_block_id = #{srcBlockId}
         </if>
         <if test="panoImageUrl != null and panoImageUrl !=''">
             ,pano_image_url = #{panoImageUrl}
@@ -40,13 +43,14 @@
         where id=#{id}
     </update>
     <select id="findList" resultType="Scene" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select s.*,si.path as imageUrl, bst.name as sceneTypeName
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
+        select s.*,si.path as imageUrl, bst.name as sceneTypeName, bst.rel_scene_type_id as relSceneTypeId, rst.name as relSceneTypeName
         <if test="projectId != null">
         , ps.seq
         </if>
         from scene s left join block_image si on s.image_id=si.id
         left join block_scene_type bst on bst.id=s.scene_type_id
+        left join block_scene_type rst on bst.rel_scene_type_id=rst.id
         <if test="projectId != null">
         left join project_scene ps on s.id=ps.scene_id
         </if>
@@ -56,6 +60,9 @@
         </if>
         <if test="blockId != null">
             and s.block_id = #{blockId}
+        </if>
+        <if test="srcBlockId != null">
+            and s.src_block_id = #{srcBlockId}
         </if>
         <if test="publicFlg != null">
             and s.public_flg = #{publicFlg}
@@ -77,7 +84,7 @@
                 order by s.seq, s.name
             </otherwise>
         </choose>
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from scene s
@@ -97,6 +104,9 @@
         <if test="blockId != null">
             and s.block_id = #{blockId}
         </if>
+        <if test="srcBlockId != null">
+            and s.src_block_id = #{srcBlockId}
+        </if>
         <if test="sliceStatus != null">
             and s.slice_status = #{sliceStatus}
         </if>
@@ -104,7 +114,7 @@
             and s.name = #{name}
         </if>
     </select>
-    <select id="findMaxSeqByBlockId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="findMaxSeqByBlockId" parameterType="java.lang.Long" resultType="java.lang.Integer">
         select max(seq) from scene where block_id=#{blockId}
     </select>
     <update id="updateSceneSeq">
@@ -119,13 +129,19 @@
         </foreach>
     </update>
     <select id="findAllName" resultType="Scene" parameterType="Query">
-        select distinct(s.id), s.name, s.scene_type_id as sceneTypeId, bst.name as sceneTypeName, s.code from scene s
+        select distinct(s.id), s.name, s.scene_type_id as sceneTypeId,
+                       bst.name as sceneTypeName, bst.rel_scene_type_id as relSceneTypeId, rst.name as relSceneTypeName, s.code
+        from scene s
         left join project_scene ps on ps.scene_id = s.id
         left join project p on ps.project_id=p.id
         left join block_scene_type bst on bst.id=s.scene_type_id
+        left join block_scene_type rst on bst.rel_scene_type_id=rst.id
         where s.delete_flg=0
         <if test="blockId != null">
             and s.block_id = #{blockId}
+        </if>
+        <if test="srcBlockId != null">
+            and s.src_block_id = #{srcBlockId}
         </if>
         <if test="projectId != null">
             and ps.project_id = #{projectId}
@@ -156,12 +172,14 @@
 
     </select>
     <select id="findAll" resultType="Scene" parameterType="Query">
-        select s.*,si.path as imageUrl, bst.name as sceneTypeName
+        select s.*,si.path as imageUrl, bst.name as sceneTypeName,
+        bst.name as sceneTypeName, bst.rel_scene_type_id as relSceneTypeId, rst.name as relSceneTypeName
         <if test="projectId != null">
             , ps.seq
         </if>
         from scene s left join block_image si on s.image_id=si.id
         left join block_scene_type bst on bst.id=s.scene_type_id
+        left join block_scene_type rst on bst.rel_scene_type_id=rst.id
         <if test="projectId != null">
             left join project_scene ps on s.id=ps.scene_id
         </if>
@@ -180,6 +198,9 @@
         </if>
         <if test="blockId != null">
             and s.block_id = #{blockId}
+        </if>
+        <if test="srcBlockId != null">
+            and s.src_block_id = #{srcBlockId}
         </if>
         <if test="name != null and name !=''">
             and s.name = #{name}

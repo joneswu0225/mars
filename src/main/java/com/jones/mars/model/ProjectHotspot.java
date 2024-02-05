@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,10 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@TableName("project_hotspot")
 public class ProjectHotspot extends BaseObject {
     private Integer seq;
-    private Integer hotspotId;
-    private List<Integer> hotspotIds;
-    private Integer projectId;
+    private Long hotspotId;
+    private List<Long> hotspotIds;
+    private Long projectId;
 }
 

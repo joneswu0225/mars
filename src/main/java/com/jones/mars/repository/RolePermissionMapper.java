@@ -12,8 +12,8 @@ import java.util.List;
 public interface RolePermissionMapper {
     void insert(Object param);
     void delete(Object param);
-    void deleteByRoleId(Integer roleId);
-    RolePermission findOne(Integer permissionId);
+    void deleteByRoleId(Long roleId);
+    RolePermission findOne(Long permissionId);
     List<RolePermission> findAll(RolePermissionQuery query);
     List<EnterpriseUser> findGrantedUserByClassId(RolePermissionQuery query);
     List<ProjectUser> findGrantedUserInfoList(RolePermissionQuery query);

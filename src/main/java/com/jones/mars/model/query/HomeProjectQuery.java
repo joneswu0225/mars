@@ -14,17 +14,17 @@ import lombok.NoArgsConstructor;
 @ApiModel(value="首页项目查询参数")
 public class HomeProjectQuery extends Query {
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Integer blockId;
+    private Long blockId;
     @ApiModelProperty(value="企业ID",name="enterpriseId")
-    private Integer enterpriseId;
+    private Long enterpriseId;
     @ApiModelProperty(value="来源企业ID",name="oriEnterpriseId")
-    private Integer oriEnterpriseId;
+    private Long oriEnterpriseId;
     @ApiParam(hidden = true)
     private Integer plateform_flg = CommonConstant.PLATEFROM;
     @ApiParam(hidden = true)
     private String name;
     @ApiParam(hidden = true)
-    private Integer moduleId;
+    private Long moduleId;
     @ApiParam(hidden = true)
-    private Integer classId;
+    private Long classId;
 }

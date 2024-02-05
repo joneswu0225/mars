@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.EnterpriseMapper" >
-    <insert id="insert" parameterType="EnterpriseParam" useGeneratedKeys="true" keyProperty="id">
-        insert into enterprise(`name`, `detail`, `manager_id`, `image_path`, `create_time`, `update_time`)
-        values(#{name}, #{detail}, #{managerId}, #{imagePath}, now(), now())
+    <insert id="insertRecord" parameterType="EnterpriseParam" useGeneratedKeys="true" keyProperty="id">
+        insert into enterprise(`id`, `name`, `detail`, `image_path`, `create_time`, `update_time`)
+        values(#{id}, #{name}, #{detail}, #{imagePath}, now(), now())
     </insert>
-    <insert id="update" parameterType="EnterpriseParam">
+    <update id="update" parameterType="EnterpriseParam">
         update enterprise
         set update_time = now()
         <if test="name != null and name != ''">
@@ -14,9 +14,6 @@
         <if test="detail != null and detail != ''">
             , detail = #{detail}
         </if>
-        <if test="managerId != null">
-            , manager_id = #{managerId}
-        </if>
         <if test="imagePath != null">
             , image_path = #{imagePath}
         </if>
@@ -24,13 +21,10 @@
             , base_path = #{basePath}
         </if>
         where id=#{id}
-    </insert>
+    </update>
     <select id="findList" resultType="Enterprise" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select d.*, p.sgname as managerName from enterprise d left join user_profile p on d.manager_id = p.user_id
-        <if test="managerId != null">
-            left join enterprise_user eu on d.id=eu.enterprise_id
-        </if>
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
+        select d.* from enterprise d
         where 1=1
         <if test="name != null and name !=''">
             and d.name like concat('%',#{name},'%')
@@ -39,10 +33,10 @@
             and d.plateform_flg = #{plateformFlg}
         </if>
         <if test="managerId != null">
-            and eu.manager_flg=1 and eu.user_id=#{managerId}
+            and id in (select distinct enterprise_id from enterprise_user where manager_flg=1 and user_id=#{managerId})
         </if>
         order by d.id desc
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from enterprise d
@@ -72,7 +66,7 @@
         order by id desc
     </select>
     <select id="findUserEnterprise" resultType="Enterprise" parameterType="Query">
-        select e.*
+        select e.*, u.manager_flg
         from enterprise e, enterprise_user u
         where e.id=u.enterprise_id and e.plateform_flg=0
         <if test="userId != null">
@@ -87,10 +81,7 @@
         order by id desc
     </select>
     <select id="findAll" resultType="Enterprise">
-        select d.*, p.sgname as managerName from enterprise d left join user_profile p on d.manager_id = p.user_id
-        <if test="managerId != null">
-            left join enterprise_user eu on d.id=eu.enterprise_id
-        </if>
+        select d.* from enterprise d
         where 1=1
         <if test="name != null and name !=''">
             and d.name like concat('%',#{name},'%')
@@ -99,12 +90,12 @@
             and d.plateform_flg = #{plateformFlg}
         </if>
         <if test="managerId != null">
-            and eu.manager_flg=1 and eu.user_id=#{managerId}
+            and id in (select distinct enterprise_id from enterprise_user where manager_flg=1 and user_id=#{managerId})
         </if>
         order by d.id desc
     </select>
     <select id="findOne" resultType="Enterprise">
-        select e.*, p.sgname as managerName from enterprise e left join user_profile p on e.manager_id = p.user_id
+        select e.* from enterprise e
         where e.id=#{id}
     </select>
     <update id="delete">

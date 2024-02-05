@@ -36,6 +36,13 @@ public class BlockSceneTypeController extends BaseController {
     }
 
 
+    @ApiOperation(value = "所有场景类型列表", notes = "所有场景类型列表")
+    @GetMapping("all")
+    public BaseResponse all(@ApiParam BlockSceneTypeQuery query) {
+        return service.findAll(query);
+    }
+
+
     @ApiOperation(value = "新增场景类型", notes = "新增场景类型")
     @PostMapping("")
     public BaseResponse add(@RequestBody @ApiParam(required=true) BlockSceneTypeParam param) {
@@ -46,7 +53,7 @@ public class BlockSceneTypeController extends BaseController {
     @PostMapping("/haite/all")
     public BaseResponse allName(@RequestBody @ApiParam(required=true) HaiteBlockSceneTypeQuery query) {
         List<BlockSceneType> sceneTypeList = (List<BlockSceneType>) service.allName(query.getBlock_id()).getData();
-        List<Integer> sceneTypeIdList = sceneTypeList.stream().map(s->s.getId()).collect(Collectors.toList());
+        List<Long> sceneTypeIdList = sceneTypeList.stream().map(s->s.getId()).collect(Collectors.toList());
         Map<String, Object> result = new HashMap<>();
         result.put("block_id", query.getBlock_id());
         result.put("scene_type_ids", sceneTypeIdList);
@@ -56,7 +63,7 @@ public class BlockSceneTypeController extends BaseController {
     @ApiOperation(value = "更新场景类型", notes = "更新场景类型")
     @PutMapping("{blockSceneTypeId}")
     public BaseResponse update(
-            @PathVariable Integer blockSceneTypeId,
+            @PathVariable Long blockSceneTypeId,
             @RequestBody @ApiParam(required=true) BlockSceneTypeParam param) {
         BlockSceneType sceneType = BlockSceneType.builder().blockId(param.getBlockId()).name(param.getName()).detail(param.getDetail()).build();
         sceneType.setId(blockSceneTypeId);
@@ -70,7 +77,7 @@ public class BlockSceneTypeController extends BaseController {
     }
     @ApiOperation(value = "删除场景类型", notes = "后台调用")
     @DeleteMapping("{blockSceneTypeId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer blockSceneTypeId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long blockSceneTypeId) {
         return service.delete(blockSceneTypeId);
     }
 

@@ -18,9 +18,9 @@ import java.util.Date;
 @Builder
 public class TaskQuery extends Query {
     @ApiModelProperty(value="任务接收人Id",name="userId")
-    private Integer userId;
+    private Long userId;
     @ApiModelProperty(value="项目Id",name="projectId")
-    private Integer projectId;
+    private Long projectId;
     @ApiModelProperty(value="任务状态",name="status")
     private Integer status;
     @ApiModelProperty(value="任务状态列表",name="statusIn")

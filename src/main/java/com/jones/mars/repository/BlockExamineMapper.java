@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BlockExamineMapper extends BaseMapper<BlockExamine> {
+public interface BlockExamineMapper extends CommonMapper<BlockExamine> {
     List<Object> findAllName(Query query);
 
 }

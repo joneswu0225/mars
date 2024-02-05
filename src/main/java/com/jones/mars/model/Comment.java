@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.model.constant.CommentType;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
@@ -15,19 +16,20 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@TableName("comment")
 public class Comment extends BaseObject {
     public static final int CONTENT_TYPE_TEXT = 0;
     public static final int CONTENT_TYPE_IMAGE = 1;
 
     private String content;
     private Integer contentType = CONTENT_TYPE_TEXT;
-    private Integer userId;
+    private Long userId;
     private String userName;
     private String userAvatar;
     private Date createTime;
     private CommentType extType;
     private CommentType type;
-    private Integer relatedId;
-    private Integer extrelatedId;
+    private Long relatedId;
+    private Long extrelatedId;
 }
 

@@ -1,10 +1,7 @@
 package com.jones.mars.service;
 
 import com.jones.mars.constant.ErrorCode;
-import com.jones.mars.model.ProjectUser;
-import com.jones.mars.model.RolePermission;
-import com.jones.mars.model.User;
-import com.jones.mars.model.UserRole;
+import com.jones.mars.model.*;
 import com.jones.mars.model.param.ProjectUserParam;
 import com.jones.mars.model.param.RoleUserParam;
 import com.jones.mars.model.param.RolePermissionParam;
@@ -33,7 +30,7 @@ public class RoleService extends BaseService{
     @Autowired
     private ProjectUserMapper projectUserMapper;
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.roleMapper;
     }
 
@@ -48,18 +45,18 @@ public class RoleService extends BaseService{
             });
         }
         if(!CollectionUtils.isEmpty(param.getUserIds())){
-            userRoleMapper.insert(UserRoleParam.builder().roleId(param.getId()).userIds(param.getUserIds()));
+            userRoleMapper.insert(new UserRoles(UserRoleParam.builder().roleId(param.getId()).userIds(param.getUserIds()).build()));
         }
         return BaseResponse.builder().build();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public BaseResponse delete(Integer roleId){
+    public BaseResponse delete(Long roleId){
         List<UserRole> users = userRoleMapper.findAll(UserRoleQuery.builder().roleId(roleId).build());
         if(users.size() > 0){
             return BaseResponse.builder().code(ErrorCode.ROLE_DELETE_EXIST_USER).build();
         } else {
-            userRoleMapper.delete(UserRoleParam.builder().roleId(roleId).build());
+            userRoleMapper.delete(UserRole.builder().roleId(roleId).build());
             rolePermissionMapper.deleteByRoleId(roleId);
             roleMapper.delete(roleId);
             return BaseResponse.builder().build();
@@ -72,12 +69,12 @@ public class RoleService extends BaseService{
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public BaseResponse removePermission(Integer permissionId){
+    public BaseResponse removePermission(Long permissionId){
         if(LoginUtil.getInstance().getUser().getUserType().equals(User.ADMIN)) {
             // 刪除只依赖该角色所成为的项目共建人
             List<ProjectUser> projectUsers = projectUserMapper.findProjectUserByRolePermission(RolePermissionParam.builder().permissionId(permissionId).build());
             if(projectUsers.size() > 0) {
-                List<Integer> projectUserIds = projectUsers.stream().map(p -> p.getId()).collect(Collectors.toList());
+                List<Long> projectUserIds = projectUsers.stream().map(p -> p.getId()).collect(Collectors.toList());
                 projectUserMapper.delete(ProjectUserParam.builder().ids(projectUserIds).build());
             }
             rolePermissionMapper.delete(permissionId);
@@ -88,16 +85,16 @@ public class RoleService extends BaseService{
     }
 
     public BaseResponse addUser(UserRoleParam param){
-        userRoleMapper.insert(param);
+        userRoleMapper.insert(new UserRoles(param));
         return BaseResponse.builder().build();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public BaseResponse removeUser(UserRoleParam param){
+    public BaseResponse removeUser(UserRole param){
         // 刪除只依赖该角色所成为的项目共建人
         List<ProjectUser> projectUsers = projectUserMapper.findProjectUserByRolePermission(RolePermissionParam.builder().roleId(param.getRoleId()).userId(param.getUserId()).build());
         if(projectUsers.size() > 0) {
-            List<Integer> projectUserIds = projectUsers.stream().map(p -> p.getId()).collect(Collectors.toList());
+            List<Long> projectUserIds = projectUsers.stream().map(p -> p.getId()).collect(Collectors.toList());
             projectUserMapper.delete(ProjectUserParam.builder().ids(projectUserIds).build());
         }
         userRoleMapper.delete(param);

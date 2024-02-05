@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.BlockExamineContentMapper" >
-    <insert id="insert" parameterType="BlockExamineContentParam" useGeneratedKeys="true" keyProperty="id">
-        insert into block_examine_content(`examine_id`, `content`, `title`, `extra`, `seq`, `type`) values
-        (#{examineId}, #{content}, #{title}, #{extra}, #{seq}, #{type})
+    <insert id="insertRecord" parameterType="BlockExamineContentParam" useGeneratedKeys="true" keyProperty="id">
+        insert into block_examine_content(`id`, `examine_id`, `content`, `title`, `extra`, `seq`, `type`) values
+        (#{id}, #{examineId}, #{content}, #{title}, #{extra}, #{seq}, #{type})
     </insert>
     <update id="update" parameterType="BlockExamineContentParam">
         update block_examine_content
         set content = #{content}, title = #{title}, `type` = #{type}, extra = #{extra}
         where id = #{id}
     </update>
-    <select id="findMaxSeqByExamineId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="findMaxSeqByExamineId" parameterType="java.lang.Long" resultType="java.lang.Integer">
         select max(seq) from block_examine_content where examine_id=#{examineId}
     </select>
     <update id="updateBlockExamineContentSeq">
@@ -41,7 +41,7 @@
         where examine_id=#{examineId}
     </select>
 
-    <select id="findByExamineId" resultType="BlockExamineContent" parameterType="java.lang.Integer">
+    <select id="findByExamineId" resultType="BlockExamineContent" parameterType="java.lang.Long">
         select * from block_examine_content
         where examine_id=#{examineId}
         order by seq

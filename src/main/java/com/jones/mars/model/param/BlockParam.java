@@ -22,7 +22,9 @@ public class BlockParam extends BaseObject {
     private String name;
     @NotBlank(message = "公司ID")
     @ApiModelProperty(value="公司ID",name="enterpriseId")
-    private Integer enterpriseId;
+    private Long enterpriseId;
+    @ApiModelProperty(value="模块类型ID",name="blockTypeId")
+    private Long blockTypeId;
 //    @ApiModelProperty(value="是否为平台内部模块，1：是，0：否",name="plateformFlg")
 //    private Integer plateformFlg;
     @ApiModelProperty(value="模块简介",name="detail")
@@ -38,6 +40,6 @@ public class BlockParam extends BaseObject {
     @ApiModelProperty(value="模块状态，0：配备，1：运行",name="detail")
     private Integer status;
     @ApiParam(hidden = true)
-    private Integer operatorId;
+    private Long operatorId;
 }
 

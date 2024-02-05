@@ -3,7 +3,7 @@ package com.jones.mars.service;
 import com.jones.mars.model.param.BlockModuleParam;
 import com.jones.mars.model.query.ProjectModuleQuery;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.repository.BlockModuleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class ProjectModuleService extends BaseService{
     @Autowired
     private BlockModuleMapper blockModuleMapper;
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.blockModuleMapper;
     }
 

@@ -3,7 +3,7 @@ package com.jones.mars.service;
 import com.jones.mars.model.param.BlockContentParam;
 import com.jones.mars.model.param.BlockContentSeqParam;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.repository.BlockContentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class BlockContentService extends BaseService{
     private BlockContentMapper mapper;
 
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.mapper;
     }
 
@@ -27,7 +27,7 @@ public class BlockContentService extends BaseService{
         Integer maxSeq = mapper.findMaxSeqByBlockId(param.getBlockId());
         param.setSeq(maxSeq == null ? 0 : maxSeq + 1);
         mapper.insert(param);
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Long> map = new HashMap<>();
         map.put("id", param.getId());
         return BaseResponse.builder().data(map).build();
     }

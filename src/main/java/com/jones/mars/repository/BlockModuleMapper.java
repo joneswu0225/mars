@@ -5,6 +5,6 @@ import com.jones.mars.model.param.BlockModuleParam;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BlockModuleMapper extends BaseMapper<BlockModule> {
+public interface BlockModuleMapper extends CommonMapper<BlockModule> {
     void updateBlockModuleSeq(BlockModuleParam param);
 }

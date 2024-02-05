@@ -8,7 +8,7 @@ import com.jones.mars.model.query.AppConstQuery;
 import com.jones.mars.model.query.ProjectQuery;
 import com.jones.mars.object.BaseResponse;
 import com.jones.mars.repository.AppConstMapper;
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.repository.ProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class AppConstService extends BaseService{
     private ProjectMapper projectMapper;
 
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.mapper;
     }
 
@@ -38,12 +38,12 @@ public class AppConstService extends BaseService{
 
     public BaseResponse findRecommendProject(){
         List<AppConst> consts = mapper.findList(AppConstQuery.builder().name(AppConst.HOME_RECOMMEND_PROJECT).build());
-        List<Integer> ids = consts.stream().map(p-> Integer.parseInt(p.getValue())).collect(Collectors.toList());//.stream().map(p-> Integer.parseInt(p.getValue())).collect(Collectors.toList());
+        List<Long> ids = consts.stream().map(p-> Long.parseLong(p.getValue())).collect(Collectors.toList());//.stream().map(p-> Integer.parseInt(p.getValue())).collect(Collectors.toList());
         List<Project> projects = projectMapper.findAll(ProjectQuery.builder().ids(ids).build());
-        Map<Integer, Project> projectIdMap = projects.stream().collect(Collectors.toMap(Project::getId, p->p));
+        Map<Long, Project> projectIdMap = projects.stream().collect(Collectors.toMap(Project::getId, p->p));
         List<Project> results = new ArrayList<>();
         consts.forEach(p->{
-            p.setRel(projectIdMap.get(Integer.parseInt(p.getValue())));
+            p.setRel(projectIdMap.get(Long.parseLong(p.getValue())));
         });
         return BaseResponse.builder().data(consts).build();
     }

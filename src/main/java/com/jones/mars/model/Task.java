@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.model.constant.TaskType;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@TableName("task")
 public class Task extends BaseObject {
     public static final int CREATING = 0;
     public static final int WORKING = 1;
@@ -24,19 +26,21 @@ public class Task extends BaseObject {
     public static final int CURRENT_TASK = 1;
     public static final int OLD_TASK = 0;
 
-    private Integer id;
+    private Long id;
     private String name;
     private String detail;
     private String type = TaskType.PROJECT_MODIFY.name();
-    private Integer blockId;
-    private Integer userId;
+    private Long blockId;
+    private Long userId;
+    private Long projectId;
     private Integer status = CREATING;
     private Date startDate;
     private Date expireDate;
     private Integer currentFlg;
     private Integer deleteFlg;
     private Integer version;
-    private Integer createBy;
+    private Long createBy;
+    private Long updateBy;
     private Date createTime;
     private Date updateTime;
     private String creatorSgname;

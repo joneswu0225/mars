@@ -3,7 +3,7 @@ package com.jones.mars.service;
 import com.jones.mars.model.ProjectUser;
 import com.jones.mars.model.query.ProjectUserQuery;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.repository.ProjectUserMapper;
 import com.jones.mars.util.Page;
 import lombok.extern.java.Log;
@@ -20,7 +20,7 @@ public class ProjectUserService extends BaseService {
     private ProjectUserMapper mapper;
 
     @Override
-    public BaseMapper getMapper() {
+    public CommonMapper getMapper() {
         return this.mapper;
     }
 

@@ -4,7 +4,7 @@ import com.jones.mars.model.BlockAttachment;
 import com.jones.mars.model.query.BlockAttachmentQuery;
 import com.jones.mars.model.query.Query;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.repository.BlockAttachmentContentMapper;
 import com.jones.mars.repository.BlockAttachmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +22,11 @@ public class BlockAttachmentService extends BaseService{
 
 
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.mapper;
     }
 
-    public BaseResponse allName(Integer blockId){
+    public BaseResponse allName(Long blockId){
         Query query = BlockAttachmentQuery.builder().blockId(blockId).build();
         List<Object> list = mapper.findAllName(query);
         return BaseResponse.builder().data(list).build();
@@ -36,13 +36,13 @@ public class BlockAttachmentService extends BaseService{
         return findByPage(query);
     }
 
-    public BaseResponse findBlockAttachmentById(Integer attachmentId){
+    public BaseResponse findBlockAttachmentById(Long attachmentId){
         BlockAttachment attachment = mapper.findOne(attachmentId);
         attachment.setBlockAttachmentContentList(blockAttachmentContentMapper.findByAttachmentId(attachment.getId()));
         return BaseResponse.builder().data(attachment).build();
     }
 
-    public BaseResponse deleteAttachment(Integer attachmentId){
+    public BaseResponse deleteAttachment(Long attachmentId){
         super.delete(attachmentId);
         blockAttachmentContentMapper.deleteByAttachmentId(attachmentId);
         return BaseResponse.builder().build();

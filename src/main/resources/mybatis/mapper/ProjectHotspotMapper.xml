@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.ProjectHotspotMapper" >
-    <insert id="insert" parameterType="ProjectHotspot">
-        insert into project_hotspot(`project_id`, `hotspot_id`, `seq`) values (#{projectId}, #{hotspotId}, #{seq})
+    <insert id="insertRecord" parameterType="ProjectHotspot">
+        insert into project_hotspot(`id`, `project_id`, `hotspot_id`, `seq`) values (#{projectId}, #{hotspotId}, #{seq})
     </insert>
-    <insert id="insertMany" parameterType="ProjectHotspotParam">
-            insert into project_hotspot(`project_id`, `hotspot_id`, `seq`) values
-        <foreach collection="hotspotIds" item="hotspotId" index="index" separator=",">
-        (#{projectId}, #{hotspotId}, #{index})
+    <insert id="insertMany" parameterType="ProjectHotspots">
+        insert into project_hotspot(`id`, `project_id`, `hotspot_id`, `seq`) values
+        <foreach collection="projectHotspots" item="param" index="index" separator=",">
+        (#{param.id}, #{param.projectId}, #{param.hotspotId}, #{index})
         </foreach>
             ON DUPLICATE KEY UPDATE
         <foreach collection="hotspotIds" item="hotspotId" index="index" separator=",">

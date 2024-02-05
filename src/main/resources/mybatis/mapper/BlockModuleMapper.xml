@@ -13,15 +13,15 @@
             <result column="classSeq" property="seq"/>
         </collection>
     </resultMap>
-    <insert id="insert" parameterType="BlockModule" useGeneratedKeys="true" keyProperty="id">
-        insert into block_module(`name`, `block_id`)
-        values(#{name}, #{blockId})
+    <insert id="insertRecord" parameterType="BlockModule" useGeneratedKeys="true" keyProperty="id">
+        insert into block_module(`id`, `name`, `block_id`)
+        values(#{id}, #{name}, #{blockId})
     </insert>
     <insert id="update" parameterType="BlockModule">
         update block_module set name = #{name} where id=#{id}
     </insert>
     <select id="findList" resultMap="BlockModuleMap" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select m.*, c.id as classId, c.name as className, c.module_id, c.seq as classSeq
         from block_module m left join block_class c on m.id=c.module_id
         where m.delete_flg=0
@@ -29,7 +29,7 @@
             and m.block_id = #{blockId}
         </if>
         order by m.seq,c.seq,m.name,c.name
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from block_module

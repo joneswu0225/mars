@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.NewsMapper" >
-    <insert id="insert" parameterType="News" useGeneratedKeys="true" keyProperty="id">
-        insert into news(`title`, `summary`, `author`, `content_url`, `content_html`, `institution`,`image_url`, `publish_time`, `create_time`, `update_time`)
-        values(#{title}, #{summary}, #{author}, #{contentUrl}, #{contentHtml}, #{institution}, #{imageUrl}, #{publishTime}, now(), now())
+    <insert id="insertRecord" parameterType="News" useGeneratedKeys="true" keyProperty="id">
+        insert into news(`id`, `title`, `summary`, `author`, `content_url`, `content_html`, `institution`,`image_url`, `publish_time`, `create_time`, `update_time`)
+        values(#{id}, #{title}, #{summary}, #{author}, #{contentUrl}, #{contentHtml}, #{institution}, #{imageUrl}, #{publishTime}, now(), now())
     </insert>
     <update id="update" parameterType="News">
         update news set update_time=now()
@@ -40,7 +40,7 @@
         where id=#{id}
     </update>
     <select id="findList" resultType="News" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select id, title, summary, author,institution, content_url, content_html, image_url, publish_time, top_flg, status from news
         where 1=1
         <if test="status != null">
@@ -50,7 +50,7 @@
             and status in(<foreach collection="statusIn" item="item" index="index" separator=",">#{item}</foreach>)
         </if>
         order by top_flg desc, publish_time desc
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from news where 1=1

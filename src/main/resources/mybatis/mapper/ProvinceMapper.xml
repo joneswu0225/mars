@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.ProvinceMapper" >
-    <insert id="insert" parameterType="Province" useGeneratedKeys="true" keyProperty="id">
-        insert into const_province(`name`)
-        values(#{name})
+    <insert id="insertRecord" parameterType="Province" useGeneratedKeys="true" keyProperty="id">
+        insert into const_province(`id`, `name`)
+        values(#{id}, #{name})
     </insert>
-    <insert id="update" parameterType="Province">
+    <update id="update" parameterType="Province">
         update const_province set name = #{name} where id=#{id}
-    </insert>
+    </update>
     <select id="findList" resultType="Province" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select * from const_province
         order by name
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from const_province

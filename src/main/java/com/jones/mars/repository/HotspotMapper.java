@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface HotspotMapper extends BaseMapper<Hotspot> {
+public interface HotspotMapper extends CommonMapper<Hotspot> {
     List<Object> findAllName(Query query);
     List<Hotspot> findAllByQuery(HotspotQuery query);
 }

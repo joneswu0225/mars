@@ -26,9 +26,9 @@ public class BlockAttachmentContentParam extends BaseObject {
     private String title;
     @NotNull
     @ApiModelProperty(value="设备ID",name="attachmentId")
-    private Integer attachmentId;
+    private Long attachmentId;
     @ApiParam(hidden = true)
-    private Integer id;
+    private Long id;
     @ApiParam(hidden = true)
     private Integer seq;
 }

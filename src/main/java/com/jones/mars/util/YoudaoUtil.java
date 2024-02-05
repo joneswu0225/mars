@@ -1,4 +1,5 @@
 package com.jones.mars.util;
+import com.jones.mars.constant.ApplicationConst;
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.TranslationParam;
 import lombok.extern.slf4j.Slf4j;
@@ -153,7 +154,7 @@ public class YoudaoUtil {
                 EntityUtils.consume(httpEntity);
                 String fileName = "youdaotts_" + System.currentTimeMillis() + ".mp3";
                 if(stream != null){//合成成功
-                    String file = CommonConstant.getTmpAudioPath() + "/" + fileName;
+                    String file = ApplicationConst.getTmpAudioPath() + "/" + fileName;
                     byte2File(stream,file);
                 }
                 result = fileName;

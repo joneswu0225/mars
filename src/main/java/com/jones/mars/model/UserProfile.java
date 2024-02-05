@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("user_profile")
 public class UserProfile extends BaseObject {
     private String description;
     private String birthday;
@@ -24,6 +26,6 @@ public class UserProfile extends BaseObject {
     private String job;
     private String mobile;
     private String sgname;
-    private Integer userId;
+    private Long userId;
 }
 

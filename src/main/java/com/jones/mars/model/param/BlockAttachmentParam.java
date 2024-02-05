@@ -20,9 +20,9 @@ public class BlockAttachmentParam extends BaseObject {
     private String name;
     @NotBlank(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Integer blockId;
+    private Long blockId;
     @ApiModelProperty(value="父ID",name="parentId")
-    private Integer parentId;
+    private Long parentId;
     @ApiModelProperty(value="简介",name="detail")
     private String detail;
     @ApiModelProperty(value="类型",name="类型")
@@ -30,8 +30,8 @@ public class BlockAttachmentParam extends BaseObject {
     @ApiModelProperty(value="图片URL",name="imageUrl")
     private String imageUrl;
     @ApiParam(hidden = true)
-    private Integer creatorId;
+    private Long creatorId;
     @ApiParam(hidden = true)
-    private Integer operatorId;
+    private Long operatorId;
 }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.UserMapper" >
-    <insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        insert into user(`mobile`, `user_type`
+    <insert id="insertRecord" parameterType="User">
+        insert into user(`id`, `mobile`, `user_type`
         , `create_time`, `update_time`
         <if test="password != null and password !=''">
         , `password`
@@ -11,7 +11,7 @@
         , `openid`
         </if>
         )
-        values(#{mobile}, #{userType}, now(), now()
+        values(#{id}, #{mobile}, #{userType}, now(), now()
         <if test="password != null and password !=''">
         , #{password}
         </if>
@@ -19,13 +19,12 @@
         , #{openid}
         </if>
         )
-        ;
     </insert>
     <insert id="insertProfile" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        insert into user_profile(`user_id`, `nickname`, `sgname`, `job`, `province`, `city`, `address`, `description`, `birthday`, `avatar`, `namecard`)
-        values(#{id}, #{nickname}, #{sgname}, #{job}, #{province}, #{city}, #{address}, #{description}, #{birthday}, #{avatar}, #{namecard});
+        insert into user_profile(`id`, `user_id`, `nickname`, `sgname`, `job`, `province`, `city`, `address`, `description`, `birthday`, `avatar`, `namecard`)
+        values(#{id}, #{userId}, #{nickname}, #{sgname}, #{job}, #{province}, #{city}, #{address}, #{description}, #{birthday}, #{avatar}, #{namecard});
     </insert>
-    <insert id="updateProfile" parameterType="User">
+    <update id="updateProfile" parameterType="User">
         update user_profile set user_id=#{userId}
         <if test="sgname != null and sgname !=''">
             ,sgname = #{sgname}
@@ -58,8 +57,8 @@
             ,namecard = #{namecard}
         </if>
         where user_id=#{userId}
-    </insert>
-    <insert id="update" parameterType="User">
+    </update>
+    <update id="update" parameterType="User">
         update user set id=#{id}, verify_code=null
         <if test="userType != null and userType !=''">
             ,user_type = #{userType}
@@ -86,8 +85,8 @@
             ,password = #{password}
         </if>
         where id=#{id}
-    </insert>
-    <insert id="updateByMobile" parameterType="java.util.Map">
+    </update>
+    <update id="updateByMobile" parameterType="java.util.Map">
         update user set mobile=#{mobile}, verify_code=null
         <if test="unionid != null and unionid !=''">
             ,unionid = #{unionid}
@@ -99,9 +98,9 @@
             ,password = #{password}
         </if>
         where mobile=#{mobile}
-    </insert>
+    </update>
     <select id="findList" resultType="User" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select u.id, u.mobile,u.status,u.last_login_time,u.user_type, u.ip,u.openid, u.unionid, p.nickname,p.sgname,p.job,p.email,p.province,p.city,p.address, p.birthday, p.avatar, p.namecard from user u left join user_profile p on u.id=p.user_id
         where u.delete_flg=0
         <if test="verifyCode != null and verifyCode !=''">
@@ -120,7 +119,7 @@
             and p.nickname like concat('%',#{nickname},'%')
         </if>
         order by u.id desc
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(1) from `user` u left join user_profile p on u.id=p.user_id
@@ -168,6 +167,9 @@
         <collection property="roleList" ofType="Role" column="role_id">
             <id column="role_id" property="id"/>
             <result column="enterprise_id" property="enterpriseId"/>
+            <result column="block_id" property="blockId"/>
+            <result column="blockName" property="blockName"/>
+            <result column="blockImageUrl" property="blockImageUrl"/>
             <result column="roleName" property="name"/>
             <result column="roleImage" property="image"/>
             <result column="enterpriseName" property="enterpriseName"/>
@@ -179,8 +181,12 @@
     </select>
     <select id="findOne" resultMap="UserRoleMap">
         select u.id, u.user_type as userType, u.mobile,up.sgname,up.nickname, up.job, up.email, up.province, up.city, up.address, up.description, up.birthday, up.avatar, up.namecard, last_login_time, u.create_time, u.update_time, user_type,
-        d.name as departmentName, role_id, r.name as roleName, r.image as roleImage, r.enterprise_id, e.name as enterpriseName, e.avatar as enterpriseAvatar
-        from user u LEFT JOIN user_profile up on u.id=up.user_id left join user_role ur on u.id=ur.user_id LEFT JOIN role r on ur.role_id=r.id left join enterprise e on r.enterprise_id=e.id
+        d.name as departmentName, role_id, r.name as roleName, r.image as roleImage,
+        r.block_id, b.name as blockName, b.image_url as blockImageUrl,
+        r.enterprise_id, e.name as enterpriseName, e.avatar as enterpriseAvatar
+        from user u LEFT JOIN user_profile up on u.id=up.user_id left join user_role ur on u.id=ur.user_id LEFT JOIN role r on ur.role_id=r.id
+        left join block b on r.block_id=b.id
+        left join enterprise e on r.enterprise_id=e.id
         left join department_user du on u.id=du.user_id left join department d on du.department_id=d.id
         where u.id=#{id}
     </select>

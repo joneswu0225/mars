@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RoleMapper extends BaseMapper {
+public interface RoleMapper extends CommonMapper {
     List<Block> findGrantedBlock(Query query);
     List<Role> findRolePermissionList(Query query);
 }

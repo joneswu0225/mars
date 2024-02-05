@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,12 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@TableName("block_class")
 public class BlockClass extends BaseObject {
     private String name;
-    private Integer moduleId;
+    private Long moduleId;
     private Integer operation;
-    private Integer id;
+    private Long id;
     private Integer seq;
-    private Integer permissionId;
+    private Long permissionId;
 }
 

@@ -1,6 +1,7 @@
 package com.jones.mars.controller;
 
 import com.jones.mars.model.Role;
+import com.jones.mars.model.UserRole;
 import com.jones.mars.model.param.RoleParam;
 import com.jones.mars.model.param.RoleUserParam;
 import com.jones.mars.model.param.RolePermissionParam;
@@ -48,7 +49,7 @@ public class RoleController extends BaseController {
     @ApiOperation(value = "更新角色", notes = "更新角色")
     @PutMapping("{roleId}")
     public BaseResponse update(
-            @PathVariable Integer roleId,
+            @PathVariable Long roleId,
             @RequestBody @ApiParam(required=true) RoleParam param) {
         param.setId(roleId);
         return service.update(param);
@@ -56,14 +57,14 @@ public class RoleController extends BaseController {
 
     @ApiOperation(value = "删除角色", notes = "后台调用")
     @DeleteMapping("{roleId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer roleId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long roleId) {
         return service.delete(roleId);
     }
 
     @ApiOperation(value = "角色新增权限", notes = "")
     @PostMapping("{roleId}/permission")
     public BaseResponse addPermission(
-            @PathVariable Integer roleId,
+            @PathVariable Long roleId,
             @RequestBody @ApiParam(required=true) RolePermissionParam param) {
         param.setRoleId(roleId);
         return service.addPermission(param);
@@ -71,15 +72,15 @@ public class RoleController extends BaseController {
 
     @ApiOperation(value = "角色移除权限", notes = "")
     @DeleteMapping("{roleId}/permission/{permissionId}")
-    public BaseResponse removePermission(@PathVariable @ApiParam(required=true) Integer roleId,
-                               @PathVariable @ApiParam(required=true) Integer permissionId) {
+    public BaseResponse removePermission(@PathVariable @ApiParam(required=true) Long roleId,
+                               @PathVariable @ApiParam(required=true) Long permissionId) {
         return service.removePermission(permissionId);
     }
 
     @ApiOperation(value = "角色加人", notes = "")
     @PostMapping("{roleId}/user")
     public BaseResponse addUser(
-            @PathVariable Integer roleId,
+            @PathVariable Long roleId,
             @RequestBody @ApiParam(required=true) UserRoleParam param) {
         param.setRoleId(roleId);
         return service.addUser(param);
@@ -87,9 +88,9 @@ public class RoleController extends BaseController {
 
     @ApiOperation(value = "角色删人", notes = "")
     @DeleteMapping("{roleId}/user/{userId}")
-    public BaseResponse removeUser(@PathVariable @ApiParam(required=true) Integer roleId,
-                               @PathVariable @ApiParam(required=true) Integer userId) {
-        return service.removeUser(UserRoleParam.builder().roleId(roleId).userId(userId).build());
+    public BaseResponse removeUser(@PathVariable @ApiParam(required=true) Long roleId,
+                               @PathVariable @ApiParam(required=true) Long userId) {
+        return service.removeUser(UserRole.builder().roleId(roleId).userId(userId).build());
     }
 
 

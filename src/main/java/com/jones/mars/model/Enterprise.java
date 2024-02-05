@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.EnterpriseParam;
 import com.jones.mars.object.BaseObject;
@@ -16,17 +17,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@TableName("enterprise")
 public class Enterprise extends BaseObject {
     private String name;
     private String detail;
     private String avatar;
     private String imagePath;
-    private Integer managerId;
-    private String managerName;
     private String basePath;
     private Date updateTime;
     private Date createTime;
     private Integer plateformFlg = CommonConstant.NOPLATEFROM;
+    private Integer managerFlg = EnterpriseUser.ENTERPRISE_NORMAL;
     private List<Block> blockList = new ArrayList<>();
     private List<Role> roleList = new ArrayList<>();
 

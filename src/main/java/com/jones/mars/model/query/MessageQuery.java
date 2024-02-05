@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MessageQuery extends Query {
     @ApiModelProperty(value="消息接收人Id",name="receiver")
-    private Integer receiver;
+    private Long receiver;
     @ApiModelProperty(value="已读状态",name="status")
     private Integer status;
 }

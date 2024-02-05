@@ -1,5 +1,7 @@
 package com.jones.mars.object;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BaseObject {
     @ApiParam(hidden = true)
-    protected Integer id;
+    @TableId(value="id", type= IdType.ASSIGN_ID)
+    protected Long id;
 
 }

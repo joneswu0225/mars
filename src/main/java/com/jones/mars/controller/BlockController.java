@@ -1,6 +1,5 @@
 package com.jones.mars.controller;
 
-import com.jones.mars.model.param.BlockHotspotParam;
 import com.jones.mars.model.param.BlockParam;
 import com.jones.mars.model.query.BlockQuery;
 import com.jones.mars.object.BaseResponse;
@@ -45,19 +44,19 @@ public class BlockController extends BaseController {
 
     @ApiOperation(value = "获取公司下所有模块名称", notes = "")
     @GetMapping("name")
-    public BaseResponse allName(@RequestParam(name="enterpriseId") @ApiParam(required=true) Integer enterpriseId) {
+    public BaseResponse allName(@RequestParam(name="enterpriseId") @ApiParam(required=true) Long enterpriseId) {
         return service.allName(enterpriseId);
     }
 
     @ApiOperation(value = "企业共建人列表", notes = "")
     @GetMapping("{blockId}/class/{classId}/user") 
-    public BaseResponse findBlockUser(@PathVariable Integer blockId,@PathVariable Integer classId) {
+    public BaseResponse findBlockUser(@PathVariable Long blockId,@PathVariable Long classId) {
         return service.findClassPartner(classId);
     }
 
     @ApiOperation(value = "模块详情", notes = "")
     @GetMapping("{blockId}")
-    public BaseResponse findOne(@PathVariable Integer blockId) {
+    public BaseResponse findOne(@PathVariable Long blockId) {
         return service.findBlockById(blockId);
     }
 
@@ -70,7 +69,7 @@ public class BlockController extends BaseController {
     @ApiOperation(value = "更新模块", notes = "")
     @PutMapping("{blockId}")
     public BaseResponse update(
-            @PathVariable Integer blockId,
+            @PathVariable Long blockId,
             @RequestBody @ApiParam(required=true) BlockParam param) {
 //        param.setOperatorId(getLoginUser().getId());
         param.setId(blockId);
@@ -79,50 +78,14 @@ public class BlockController extends BaseController {
 
     @ApiOperation(value = "删除模块", notes = "")
     @DeleteMapping("{blockId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer blockId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long blockId) {
         return service.delete(blockId);
     }
 
     @ApiOperation(value = "模块下所有场景类型列表", notes = "模块下所有场景类型列表")
     @GetMapping("{blockId}/sceneType")
-    public BaseResponse sceneType(@PathVariable @ApiParam(required=true) Integer blockId) {
+    public BaseResponse sceneType(@PathVariable @ApiParam(required=true) Long blockId) {
         return blockSceneTypeService.findSceneTypeProjectScene(blockId);
-    }
-
-    @ApiOperation(value = "新增漫游热点", notes = "")
-    @PostMapping("/{blockId}/blockHotspot")
-    public BaseResponse addBlockHotspot(@PathVariable @ApiParam(required=true) Integer blockId,
-                                        @RequestBody @ApiParam(required=true) BlockHotspotParam param) {
-        param.setBlockId(blockId);
-        service.insertBlockHotspot(param);
-        return BaseResponse.builder().build();
-    }
-
-    @ApiOperation(value = "删除漫游热点", notes = "")
-    @DeleteMapping("/blockHotspot/{blockHotspotId}")
-    public BaseResponse deleteBlockHotspot(@PathVariable @ApiParam(required=true) Integer blockHotspotId) {
-        service.deleteBlockHotspot(blockHotspotId);
-        return BaseResponse.builder().build();
-    }
-
-    @ApiOperation(value = "更新漫游热点", notes = "")
-    @PutMapping("/blockHotspot/{blockHotspotId}")
-    public BaseResponse updateblockHotspot(
-            @PathVariable Integer blockHotspotId,
-            @RequestBody @ApiParam(required=true) BlockHotspotParam param) {
-        param.setId(blockHotspotId);
-        service.updateblockHotspot(param);
-        return BaseResponse.builder().build();
-    }
-
-    @ApiOperation(value = "更新漫游热点排序", notes = "")
-    @PutMapping("/{blockId}/blockHotspot/changeSeq")
-    public BaseResponse updateblockHotspotSeq(
-            @PathVariable @ApiParam(required=true) Integer blockId,
-            @RequestBody @ApiParam(required=true) BlockHotspotParam param) {
-        param.setBlockId(blockId);
-        service.updateblockHotspotSeq(param);
-        return BaseResponse.builder().build();
     }
 
 }

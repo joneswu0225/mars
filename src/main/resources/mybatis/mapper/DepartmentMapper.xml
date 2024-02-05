@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.DepartmentMapper" >
-    <insert id="insert" parameterType="DepartmentParam" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertRecord" parameterType="DepartmentParam" useGeneratedKeys="true" keyProperty="id">
         insert into department(`name`, `parent_id`, `manager_id`, `operator_id`, `enterprise_id`, `create_time`, `update_time`)
         values(#{name}, #{parentId}, #{managerId}, #{operatorId}, #{enterpriseId}, now(), now())
     </insert>
@@ -45,7 +45,7 @@
         </collection>
     </resultMap>
     <select id="findList" resultType="Department" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select d.id, d.enterprise_id as enterpriseId, d.name, d.parent_id as parentId, p.name as parentName, d.manager_id as managerId,
         u1.mobile as managerMobile, up1.sgname as managerName, up1.email as managerEmail, up1.description as managerDescription, count(DISTINCT du.user_id) as userCount
         from department d left join department p on d.parent_id = p.id
@@ -60,7 +60,7 @@
         </if>
         group by d.id
         order by d.id desc
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from department d

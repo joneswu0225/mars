@@ -1,5 +1,6 @@
 package com.jones.mars.util;
 
+import com.jones.mars.constant.ApplicationConst;
 import com.jones.mars.model.User;
 import com.jones.mars.model.constant.CommonConstant;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,11 +22,11 @@ public class LoginUtil {
     public static final String APP_AUTH = "authorization";
     public static final String USER_MOBILE = "mobile";
     public static final String USER_ID = "userId";
-    public static String APP_DOMAIN = CommonConstant.APP_DOMAIN;
+    public static String APP_DOMAIN = ApplicationConst.APP_DOMAIN;
     public static final int COOKIE_MAX_INACTIVE_INTERVAL = 86400;
     public static LoginUtil INSTANCE = null;
     private ConcurrentHashMap<String, User> loginUser = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<Integer, String> userIdAuth = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Long, String> userIdAuth = new ConcurrentHashMap<>();
 
 //    @Value("${app.domain:vr2shipping.com}")
 //    private void setAppDomain(String appDomain){
@@ -132,7 +133,7 @@ public class LoginUtil {
     }
 
     @Transactional
-    private void setLoginUser(String authorization, User user){
+    void setLoginUser(String authorization, User user){
         // 只能单点登录，互踢机制
         if(userIdAuth.containsKey(user.getId())){
             loginUser.remove(userIdAuth.get(user.getId()));

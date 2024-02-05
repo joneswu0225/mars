@@ -7,16 +7,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ApiModel(value="场景漫游热点查询参数")
-public class BlockHotspotQuery extends Query {
-    @NotBlank(message = "模块ID不能为空")
-    @ApiModelProperty(value="模块ID",name="blockId")
-    private Integer blockId;
+@ApiModel(value="license查询参数")
+public class DeployLicenseQuery extends Query {
+    @ApiModelProperty(value="磁盘序列号",name="diskSeries")
+    private String diskSeries;
 }
-

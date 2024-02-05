@@ -4,5 +4,5 @@ import com.jones.mars.model.constant.Province;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProvinceMapper extends BaseMapper<Province> {
+public interface ProvinceMapper extends CommonMapper<Province> {
 }

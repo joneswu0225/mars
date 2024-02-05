@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.model.constant.FileType;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
@@ -11,12 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@TableName("file_upload")
 public class FileUpload extends BaseObject {
     private String path;
     private String name;
     private String domain;
-    private Integer userId;
-    private Integer relatedId;
+    private Long userId;
+    private Long relatedId;
     private FileType type;
 }
 

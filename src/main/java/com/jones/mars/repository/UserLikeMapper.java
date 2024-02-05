@@ -9,8 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserLikeMapper extends BaseMapper<UserLike> {
-    void insert(UserLikeParam userLike);
+public interface UserLikeMapper extends CommonMapper<UserLike> {
     List<JSONObject> findLikeResult(UserLikeQuery query);
     void delete(UserLikeParam userLike);
 }

@@ -18,10 +18,10 @@ import javax.validation.constraints.NotBlank;
 public class UserLikeQuery extends Query {
     @NotBlank(message = "点赞目标的ID不能为空")
     @ApiModelProperty(value="点赞目标的ID",name="likeId")
-    private Integer likeId;
+    private Long likeId;
     @ApiParam(hidden = true)
     @ApiModelProperty(value="用戶ID",name="userId")
-    private Integer userId;
+    private Long userId;
     @NotBlank(message = "点赞目标的类型不能为空")
     @ApiModelProperty(value="点赞目标的类型",name="likeType")
     private LikeType likeType;

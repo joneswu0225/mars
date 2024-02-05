@@ -34,13 +34,13 @@ public class TaskParam extends BaseObject {
   @ApiModelProperty(value="任务类型",name="type")
   private String type = TaskType.PROJECT_MODIFY.name();
   @ApiModelProperty(value="模块ID",name="blockId")
-  private Integer blockId;
+  private Long blockId;
   @NotNull(message = "项目ID不能为空")
   @ApiModelProperty(value="项目ID",name="projectId")
-  private Integer projectId;
+  private Long projectId;
   @ApiParam(hidden = true)
   @ApiModelProperty(value="项目协作人",name="projectId")
-  private List<Integer> userIds;
+  private List<Long> userIds;
   @ApiParam(hidden = true)
   @ApiModelProperty(value="项目版本",name="version")
   private Integer version;
@@ -49,12 +49,12 @@ public class TaskParam extends BaseObject {
   @ApiParam(hidden = true)
   private Integer status;
   @ApiParam(hidden = true)
-  private Integer userId;
+  private Long userId;
   @ApiParam(hidden = true)
-  private Integer createBy;
+  private Long createBy;
   @ApiParam(hidden = true)
-  private Integer updateBy;
+  private Long updateBy;
   @ApiParam(hidden = true)
-  private Integer id;
+  private Long id;
 }
 

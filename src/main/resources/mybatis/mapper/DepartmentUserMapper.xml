@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.DepartmentUserMapper" >
-    <insert id="insert" parameterType="DepartmentUserParam" useGeneratedKeys="true" keyProperty="id">
-        <foreach collection="userIds" item="userId" index="index" separator=";">
-            insert into department_user(`department_id`, `user_id`, `create_time`,`update_time`) values
-            (#{departmentId}, #{userId}, now(), now())
+    <insert id="insertRecord" parameterType="DepartmentUsers">
+        <foreach collection="departmentUserList" item="param" index="index" separator=";">
+            insert into department_user(`id`, `department_id`, `user_id`, `create_time`,`update_time`) values
+            (#{id}, #{departmentId}, #{userId}, now(), now())
             ON DUPLICATE KEY UPDATE
             update_time=now()
         </foreach>
     </insert>
-    <select id="findList" parameterType="java.lang.Integer" resultType="DepartmentUser">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+    <select id="findList" parameterType="java.lang.Long" resultType="DepartmentUser">
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select du.*, p.sgname as userSgname
         from department_user du left join user_profile p on du.user_id=p.user_id
         where department_id=#{departmentId}
         order by id desc
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from department_user du
         where department_id=#{departmentId}
     </select>
-    <select id="findAll" parameterType="java.lang.Integer" resultType="DepartmentUser">
+    <select id="findAll" parameterType="java.lang.Long" resultType="DepartmentUser">
         select du.*, p.sgname as userSgname
         from department_user du left join user_profile p on du.user_id=p.user_id
         where 1=1
@@ -36,10 +36,10 @@
             #{userId}
         </foreach>
     </delete>
+    <delete id="deleteByEnterpriseUser">
+        delete from department_user where user_id=#{userId} and department_id in (select id from department where enterprise_id=#{enterpriseId})
+    </delete>
     <delete id="delete">
-        <if test="enterpriseId != null">
-            delete from department_user where user_id=#{userId} and department_id in (select id from department where enterprise_id=#{enterpriseId})
-        </if>
         <if test="departmentId != null">
             delete from department_user where department_id=#{departmentId}
             <if test="userId != null">

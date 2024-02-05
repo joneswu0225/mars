@@ -1,13 +1,13 @@
 package com.jones.mars.service;
 
-import com.jones.mars.config.LoginUser;
 import com.jones.mars.model.*;
 import com.jones.mars.model.constant.TaskType;
 import com.jones.mars.model.param.TaskParam;
+import com.jones.mars.model.Tasks;
 import com.jones.mars.model.query.ProjectUserQuery;
 import com.jones.mars.model.query.TaskQuery;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.repository.ProjectMapper;
 import com.jones.mars.repository.ProjectUserMapper;
 import com.jones.mars.repository.TaskMapper;
@@ -19,7 +19,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,7 +36,7 @@ public class TaskService extends BaseService{
     private MessageService messageService;
 
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.mapper;
     }
 
@@ -46,7 +45,7 @@ public class TaskService extends BaseService{
 //        List<ProjectUser> projectUserList = projectUserMapper.findList(ProjectUserQuery.builder().projectId(param.getProjectId()).build());
 //        List<Integer> userIds = projectUserList.stream().map(p -> p.getUserId()).collect(Collectors.toList())
         User loginUser = LoginUtil.getInstance().getUser();
-        List<Integer> userIds = (param.getUserIds() != null && param.getUserIds().size() > 0) ? param.getUserIds() : param.getUserId() != null ? Arrays.asList(param.getUserId()) : new ArrayList<>();
+        List<Long> userIds = (param.getUserIds() != null && param.getUserIds().size() > 0) ? param.getUserIds() : param.getUserId() != null ? Arrays.asList(param.getUserId()) : new ArrayList<>();
         if(userIds.size() > 0) {
             Task task = mapper.findMaxVersionTask(TaskQuery.builder().type(param.getType()).projectId(param.getProjectId()).build());
             if(task == null || task.getCurrentFlg()==Task.OLD_TASK){
@@ -59,7 +58,7 @@ public class TaskService extends BaseService{
             param.setUserIds(userIds);
             param.setCreateBy(loginUser.getId());
             param.setUpdateBy(loginUser.getId());
-            mapper.insert(param);
+            mapper.insert(new Tasks(param));
             String exipreDate = DateUtil.dateToDateTimeStr(param.getExpireDate());
             if(TaskType.PROJECT_MODIFY.name().equals(param.getType())) {
                 messageService.sendTaskProjectModify(param.getName(), exipreDate, userIds);
@@ -74,9 +73,9 @@ public class TaskService extends BaseService{
     public BaseResponse findTaskList(TaskQuery query){
         Page<Task> taskPage = findPage(query);
         if(taskPage.getContent().size() > 0){
-            List<Integer> projectIds = taskPage.getContent().parallelStream().map(p->p.getProject().getId()).collect(Collectors.toList());
+            List<Long> projectIds = taskPage.getContent().parallelStream().map(p->p.getProject().getId()).collect(Collectors.toList());
             List<ProjectUser> projectUsers = projectUserMapper.findList(ProjectUserQuery.builder().projectIds(projectIds).build());
-            Map<Integer, List<ProjectUser>> projectUserMap = new HashMap<>();
+            Map<Long, List<ProjectUser>> projectUserMap = new HashMap<>();
             projectIds.forEach(p->projectUserMap.put(p, new ArrayList<>()));
             projectUsers.forEach(p->projectUserMap.get(p.getProjectId()).add(p));
             taskPage.getContent().forEach(task -> task.getProject().setUserList(projectUserMap.get(task.getProject().getId())));
@@ -88,9 +87,9 @@ public class TaskService extends BaseService{
         query.setCurrentFlg(Task.CURRENT_TASK);
         List<Task> taskList = mapper.findAll(query);
         if(taskList.size() > 0){
-            List<Integer> projectIds = taskList.parallelStream().map(p->p.getProject().getId()).collect(Collectors.toList());
+            List<Long> projectIds = taskList.parallelStream().map(p->p.getProject().getId()).collect(Collectors.toList());
             List<ProjectUser> projectUsers = projectUserMapper.findList(ProjectUserQuery.builder().projectIds(projectIds).build());
-            Map<Integer, List<ProjectUser>> projectUserMap = new HashMap<>();
+            Map<Long, List<ProjectUser>> projectUserMap = new HashMap<>();
             projectIds.forEach(p->projectUserMap.put(p, new ArrayList<>()));
             projectUsers.forEach(p->projectUserMap.get(p.getProjectId()).add(p));
             taskList.forEach(task -> task.getProject().setUserList(projectUserMap.get(task.getProject().getId())));
@@ -103,7 +102,7 @@ public class TaskService extends BaseService{
         mapper.deleteCurrentTask(param);
         return BaseResponse.builder().build();
     }
-    public BaseResponse findPrivateTask(Integer taskId){
+    public BaseResponse findPrivateTask(Long taskId){
         Map<String, Object> query = new HashMap<>();
         query.put("id", taskId);
         query.put("userId", LoginUtil.getInstance().getUser().getId());
@@ -135,8 +134,8 @@ public class TaskService extends BaseService{
     public void refreshExpiredTaskStatusAndNotify(){
         List<Task> tasks = mapper.findAll(TaskQuery.builder().expireDateLt(new Date()).status(Task.WORKING).build());
         mapper.updateExpiredTaskStatus();
-        Map<String, Set<Integer>> adminTask = new HashMap<>();
-        Map<String, Set<Integer>> workerTask = new HashMap<>();
+        Map<String, Set<Long>> adminTask = new HashMap<>();
+        Map<String, Set<Long>> workerTask = new HashMap<>();
         for(Task task: tasks){
             adminTask.putIfAbsent(task.getName(), new HashSet<>());
             workerTask.putIfAbsent(task.getName(), new HashSet<>());

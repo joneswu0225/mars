@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 /**
  * Created by jones on 18-10-4.
  */
-@Component
 public class CommonConstant {
     public static final int PLATEFROM = 1;
     public static final int NOPLATEFROM = 0;
@@ -25,49 +24,7 @@ public class CommonConstant {
     public static final String APP_MODE_NOLOGIN = "NOLOGIN";
     public static final String APP_MODE_PRODUCT = "PRODUCT";
 
-    public static String UPLOAD_PATH;
-    public static String UPLOAD_PATH_TMP_PANOIMAGE;
-    public static String UPLOAD_PATH_TMP_AUDIO;
-    public static String APP_DOMAIN;
 
-    @Value("${app.domain:vr2shipping.com}")
-    public void setAppDomain(String appDomain) {
-        APP_DOMAIN = appDomain;
-    }
-
-    @Value("${app.file.path.upload:./pano}")
-    public void setUploadPath(String uploadPath) {
-        UPLOAD_PATH = uploadPath;
-    }
-    @Value("${app.file.path.upload.temp.panoimage:}")
-    public void setUploadPathTmpPanoimage(String uploadPathTmpPanoimage){
-        UPLOAD_PATH_TMP_PANOIMAGE = uploadPathTmpPanoimage;
-    }
-    @Value("${app.file.path.upload.temp.audio:}")
-    public void setUploadPathTmpAudio(String uploadPathTmpAudio){
-        UPLOAD_PATH_TMP_AUDIO = uploadPathTmpAudio;
-    }
-
-    public static String getTmpPanoimagePath(){
-        return Paths.get(UPLOAD_PATH, UPLOAD_PATH_TMP_PANOIMAGE).normalize().toString();
-    }
-    public static String getTmpAudioPath(){
-        return Paths.get(UPLOAD_PATH, UPLOAD_PATH_TMP_AUDIO).normalize().toString();
-    }
-
-    private void initDir(String path){
-        File tempPath = Paths.get(path).toFile();
-        if(!tempPath.exists()){
-            tempPath.mkdirs();
-        }
-    }
-
-    @PostConstruct
-    public void init(){
-        initDir(UPLOAD_PATH);
-        initDir(getTmpPanoimagePath());
-        initDir(getTmpAudioPath());
-    }
 
 
 }

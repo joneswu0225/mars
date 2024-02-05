@@ -5,7 +5,7 @@ import com.jones.mars.model.News;
 import com.jones.mars.model.constant.LikeType;
 import com.jones.mars.model.query.UserLikeQuery;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.repository.NewsMapper;
 import com.jones.mars.repository.UserLikeMapper;
 import com.jones.mars.util.LoginUtil;
@@ -25,11 +25,11 @@ public class NewsService extends BaseService{
     @Autowired
     private UserLikeMapper userLikeMapper;
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.mapper;
     }
 
-    public BaseResponse findNewsDetail(Integer newsId){
+    public BaseResponse findNewsDetail(Long newsId){
         News news = mapper.findOne(newsId);
         List<JSONObject> likeResult = userLikeMapper.findLikeResult(UserLikeQuery.builder().likeType(LikeType.NEWS).likeId(newsId).build());
         Map<String, Integer> likeInfo =  new HashMap<>();
@@ -46,12 +46,12 @@ public class NewsService extends BaseService{
         return BaseResponse.builder().data(news).build();
     }
 
-    public BaseResponse updateTopFlg(Integer newsId, Integer topFlg) {
+    public BaseResponse updateTopFlg(Long newsId, Integer topFlg) {
         mapper.update(News.builder().id(newsId).topFlg(topFlg).build());
         return BaseResponse.builder().build();
     }
 
-    public BaseResponse updateStatus(Integer newsId, Integer status) {
+    public BaseResponse updateStatus(Long newsId, Integer status) {
         News news = News.builder().id(newsId).status(status).build();
         if(status.equals(News.STATUS_PUBLISHED)){
             news.setPublishTime(new Date());

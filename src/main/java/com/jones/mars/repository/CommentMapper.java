@@ -4,5 +4,5 @@ import com.jones.mars.model.Comment;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CommentMapper extends BaseMapper<Comment> {
+public interface CommentMapper extends CommonMapper<Comment> {
 }

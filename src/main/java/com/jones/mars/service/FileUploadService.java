@@ -1,6 +1,7 @@
 package com.jones.mars.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jones.mars.constant.ApplicationConst;
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.*;
 import com.jones.mars.model.constant.CommonConstant;
@@ -57,17 +58,15 @@ public class FileUploadService extends BaseService{
     private AppConstMapper appConstMapper;
     @Autowired
     private BlockContentMapper blockContentMapper;
-    @Autowired
-    private BlockHotspotMapper blockHotspotMapper;
 
     @Autowired
     private FileUploadMapper mapper;
     @Override
-    public BaseMapper getMapper(){
+    public CommonMapper getMapper(){
         return this.mapper;
     }
 
-    public BaseResponse uploadFile(MultipartFile file, String fileName, FileType fileType, Integer relatedId){
+    public BaseResponse uploadFile(MultipartFile file, String fileName, FileType fileType, Long relatedId){
         try {
             fileName = StringUtils.isEmpty(fileName) ? file.getOriginalFilename() : fileName;
             int fileSurfixIndex = fileName.lastIndexOf(".");
@@ -76,10 +75,10 @@ public class FileUploadService extends BaseService{
             String fileSurfix = originFileSurfixIndex > 0 ? file.getOriginalFilename().substring(originFileSurfixIndex + 1) : (fileSurfixIndex > 1 ? fileName.substring(fileSurfixIndex + 1) : null);
             fileName = StringUtils.isEmpty(fileSurfix) ? fileName : (fileName + "." + fileSurfix);
             String relPath = fileType.getFilePath(relatedId, fileName);
-            Path path = Paths.get(CommonConstant.UPLOAD_PATH, relPath);
+            Path path = Paths.get(ApplicationConst.UPLOAD_PATH, relPath);
             path.toFile().mkdirs();
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-            FileUpload fileUpload = FileUpload.builder().type(fileType).path(relPath).name(fileName).domain(CommonConstant.APP_DOMAIN).relatedId(relatedId).build();
+            FileUpload fileUpload = FileUpload.builder().type(fileType).path(relPath).name(fileName).domain(ApplicationConst.APP_DOMAIN).relatedId(relatedId).build();
             if(LoginUtil.getInstance().getUser() != null){
                 fileUpload.setUserId(LoginUtil.getInstance().getUser().getId());
             }
@@ -104,15 +103,10 @@ public class FileUploadService extends BaseService{
         List<Hotspot> hotspotList = hotspotMapper.findAllByQuery(HotspotQuery.builder().build());
         List<Scene> sceneList = sceneMapper.findAll(SceneQuery.builder().build());
         List<AppConst> appConstList = appConstMapper.findAll(AppConstQuery.builder().build());
-        Map<Integer, Block> blockMap = blockList.parallelStream().collect(Collectors.toMap(Block::getId, Block -> Block));
+        Map<Long, Block> blockMap = blockList.parallelStream().collect(Collectors.toMap(Block::getId, Block -> Block));
         blockContentMapper.findAll(BlockContentQuery.builder().build()).forEach(blockContent -> {
             if (blockMap.containsKey(blockContent.getBlockId())){
                 blockMap.get(blockContent.getBlockId()).getBlockContentList().add(blockContent);
-            }
-        });
-        blockHotspotMapper.findAll(BlockContentQuery.builder().build()).forEach(blockHotspot -> {
-            if (blockMap.containsKey(blockHotspot.getBlockId())){
-                blockMap.get(blockHotspot.getBlockId()).getBlockHotspotList().add(blockHotspot);
             }
         });
         Map<String, Object> data = new HashMap<>();
@@ -127,7 +121,7 @@ public class FileUploadService extends BaseService{
         data.put("user", userList);
         data.put("appConst", appConstList);
         String result = JSONObject.toJSONString(data);
-        Path path = Paths.get(CommonConstant.UPLOAD_PATH, "..", StringUtils.isEmpty(fileName) ? "data_all.json" : fileName);
+        Path path = Paths.get(ApplicationConst.UPLOAD_PATH, "..", StringUtils.isEmpty(fileName) ? "data_all.json" : fileName);
         try(FileOutputStream outputStream = new FileOutputStream(path.toFile())){
             outputStream.write(result.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e){

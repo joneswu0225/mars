@@ -1,7 +1,7 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,21 +15,22 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName(value="block")
 public class Block extends BaseObject {
     private String detail;
     private String icon;
     private String imageUrl;
     private String code;
-    private Integer operatorId;
+    private Long operatorId;
     private Date updateTime;
     private Date createTime;
     private String status;
-    private Integer enterpriseId;
+    private Long enterpriseId;
+    private Long blockTypeId;
     private String name;
     private String panoPath;
     private Integer seq;
     private List<BlockModule> moduleList = new ArrayList<>();
-    private List<BlockHotspot> blockHotspotList = new ArrayList<>();
     private List<BlockContent> blockContentList = new ArrayList<>();
 
 }

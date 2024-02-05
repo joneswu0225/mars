@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.AppConstMapper" >
-    <insert id="insert" parameterType="AppConst" useGeneratedKeys="true" keyProperty="id">
-        insert into app_const(`name`, `value`,`detail`)
-        values(#{name}, #{value}, #{detail})
+    <insert id="insertRecord" parameterType="AppConst" useGeneratedKeys="true" keyProperty="id">
+        insert into app_const(`id`, `name`, `value`,`detail`)
+        values(#{id}, #{name}, #{value}, #{detail})
     </insert>
-    <insert id="update" parameterType="AppConst">
+    <update id="update" parameterType="AppConst">
         update app_const set name = #{name}, value=#{value}, detail=#{detail} where id=#{id}
-    </insert>
+    </update>
     <update id="updateAppConstSeq" parameterType="AppConstParam">
         update app_const set seq=case
         <foreach collection="appConstIds" item="appConstId" index="index">
@@ -20,7 +20,7 @@
         </foreach>
     </update>
     <select id="findList" resultType="AppConst" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select * from app_const where 1=1
         <if test="name != null and name !=''">
             and name = #{name}
@@ -29,7 +29,7 @@
             and name like concat('%', #{nameLike}, '%')
         </if>
         order by name,seq
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <resultMap id="AppConstMap" type="AppConst" >
         <result column="name" property="name" />

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.RolePermissionMapper" >
-    <insert id="insert" parameterType="RolePermissionParam" useGeneratedKeys="true" keyProperty="id">
-        <foreach collection="classIds" item="classId" index="index" separator=";">
-            insert into role_permission(`role_id`, `class_id`, `operation`, `create_time`, `update_time`)
+    <insert id="insertRecord" parameterType="RolePermissions" useGeneratedKeys="true" keyProperty="id">
+            insert into role_permission(`id`, `role_id`, `role_id`, `class_id`, `operation`, `create_time`, `update_time`)
             values
-            (#{roleId}, #{classId}, #{operation}, now(), now())
-            ON DUPLICATE KEY UPDATE
-            role_id = #{roleId}, class_id=#{classId}, operation=#{operation}, create_time=now(), update_time=now()
-        </foreach>
+            <foreach collection="rolePermissionList" item="param" index="index" separator=";">
+            (#{param.id}, #{param.roleId}, #{param.classId}, #{param.operation}, now(), now())
+            </foreach>
+            ON DUPLICATE KEY UPDATE update_time=now()
     </insert>
     <select id="findOne" resultType="RolePermission">
         select * from role_permission where id = #{id}
@@ -35,7 +34,7 @@
     </select>
 
     <select id="findGrantedUserInfoList" resultType="ProjectUser" parameterType="RolePermissionQuery">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select distinct(ur.user_id) as userId, u.mobile, up.sgname, up.avatar, up.email,up.description, d.name as departmentName
         from user_role ur
         left join role_permission rp on ur.role_id=rp.role_id left join user_profile up on ur.user_id=up.user_id
@@ -53,7 +52,7 @@
             and rp.class_id=#{classId}
         </if>
         order by up.sgname desc
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
 
     <select id="findGrantedUserInfoAll" resultType="ProjectUser" parameterType="RolePermissionQuery">

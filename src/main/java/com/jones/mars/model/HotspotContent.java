@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("hotspot_content")
 public class HotspotContent extends BaseObject {
     public static final String MODULE_DEFAULT = "DEFAULT";
     private String type;
@@ -18,6 +20,6 @@ public class HotspotContent extends BaseObject {
     private String extra;
     private String content;
     private String title;
-    private Integer hotspotId;
+    private Long hotspotId;
 }
 

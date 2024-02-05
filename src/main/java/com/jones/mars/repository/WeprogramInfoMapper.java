@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface WeprogramInfoMapper extends BaseMapper<WeprogramInfo> {
+public interface WeprogramInfoMapper extends CommonMapper<WeprogramInfo> {
 }

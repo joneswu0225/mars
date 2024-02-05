@@ -26,9 +26,9 @@ public class BlockContentParam extends BaseObject {
     private String title;
     @NotNull
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Integer blockId;
+    private Long blockId;
     @ApiParam(hidden = true)
-    private Integer id;
+    private Long id;
     @ApiParam(hidden = true)
     private Integer seq;
 }

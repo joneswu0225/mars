@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EnterpriseUserMapper extends BaseMapper<EnterpriseUser> {
-    List<EnterpriseUser> findEnterpriseUser(Integer enterpriseId);
+public interface EnterpriseUserMapper extends CommonMapper<EnterpriseUser> {
+    List<EnterpriseUser> findEnterpriseUser(Long enterpriseId);
 }

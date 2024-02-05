@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 public class HaiteBlockSceneTypeQuery {
     @NotBlank(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Integer block_id;
+    private Long block_id;
 
     @NotBlank(message = "token不能为空")
     @ApiModelProperty(value="token",name="token")

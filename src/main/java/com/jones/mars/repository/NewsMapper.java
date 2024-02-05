@@ -4,5 +4,5 @@ import com.jones.mars.model.News;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface NewsMapper extends BaseMapper<News> {
+public interface NewsMapper extends CommonMapper<News> {
 }

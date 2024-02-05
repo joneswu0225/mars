@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EnterpriseMapper extends BaseMapper<Enterprise> {
+public interface EnterpriseMapper extends CommonMapper<Enterprise> {
     List<Enterprise> findAllName(Query query);
     List<Enterprise> findUserEnterprise(Query query);
 }

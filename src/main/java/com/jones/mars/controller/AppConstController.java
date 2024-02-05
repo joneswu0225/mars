@@ -61,7 +61,7 @@ public class AppConstController extends BaseController {
     @ApiOperation(value = "更新系統常量", notes = "")
     @PutMapping("{appConstId}")
     public BaseResponse update(
-            @PathVariable Integer appConstId,
+            @PathVariable Long appConstId,
             @RequestBody @ApiParam(required=true) AppConst param) {
         param.setId(appConstId);
         return service.update(param);
@@ -69,7 +69,7 @@ public class AppConstController extends BaseController {
 
     @ApiOperation(value = "删除系統常量", notes = "")
     @DeleteMapping("{appConstId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer appConstId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long appConstId) {
         return service.delete(appConstId);
     }
 }

@@ -41,13 +41,13 @@ public class BlockAttachmentController extends BaseController {
 
     @ApiOperation(value = "获取模块下所有设备名称", notes = "")
     @GetMapping("name")
-    public BaseResponse allName(@RequestParam(name="blockId") @ApiParam(required=true) Integer blockId) {
+    public BaseResponse allName(@RequestParam(name="blockId") @ApiParam(required=true) Long blockId) {
         return service.allName(blockId);
     }
 
     @ApiOperation(value = "设备详情", notes = "")
     @GetMapping("{blockAttachmentId}")
-    public BaseResponse findOne(@PathVariable Integer blockAttachmentId) {
+    public BaseResponse findOne(@PathVariable Long blockAttachmentId) {
         return service.findBlockAttachmentById(blockAttachmentId);
     }
 
@@ -55,7 +55,7 @@ public class BlockAttachmentController extends BaseController {
     @ApiOperation(value = "更新设备", notes = "")
     @PutMapping("{blockAttachmentId}")
     public BaseResponse update(
-            @PathVariable Integer blockAttachmentId,
+            @PathVariable Long blockAttachmentId,
             @RequestBody @ApiParam(required=true) BlockAttachmentParam param) {
         param.setOperatorId(getLoginUser().getId());
         param.setId(blockAttachmentId);
@@ -64,7 +64,7 @@ public class BlockAttachmentController extends BaseController {
 
     @ApiOperation(value = "删除设备", notes = "")
     @DeleteMapping("{blockAttachmentId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer blockAttachmentId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long blockAttachmentId) {
         return service.deleteAttachment(blockAttachmentId);
     }
 

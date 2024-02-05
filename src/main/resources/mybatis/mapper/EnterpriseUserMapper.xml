@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.EnterpriseUserMapper" >
-    <insert id="insert" parameterType="EnterpriseUserParam" useGeneratedKeys="true" keyProperty="id">
-        insert into enterprise_user(`enterprise_id`, `user_id`, `create_time`,`update_time`)
-        values(#{enterpriseId}, #{userId}, now(), now());
+    <insert id="insertRecord" parameterType="EnterpriseUserParam" useGeneratedKeys="true" keyProperty="id">
+        insert into enterprise_user(`id`, `enterprise_id`, `user_id`, `manager_flg`, `create_time`,`update_time`)
+        values(#{id}, #{enterpriseId}, #{userId}, #{managerFlg}, now(), now());
     </insert>
-    <select id="findEnterpriseUser" parameterType="java.lang.Integer" resultType="EnterpriseUser">
+    <update id="update" parameterType="EnterpriseUserParam">
+        update enterprise_user
+        set update_time = now()
+        <if test="managerFlg != null">
+            , manager_flg = #{managerFlg}
+        </if>
+        where enterprise_id=#{enterpriseId} and user_id=#{userId}
+    </update>
+    <select id="findEnterpriseUser" parameterType="java.lang.Long" resultType="EnterpriseUser">
         select eu.*, p.sgname as userSgname, u.mobile, p.avatar,p.email, p.description
         from enterprise_user eu left join user_profile p on eu.user_id=p.user_id
         left join user u on eu.user_id=u.id
@@ -17,6 +25,12 @@
         <result property="userId" column="userId" />
         <result property="userSgname" column="userSgname" />
         <result property="enterpriseId" column="enterpriseId" />
+        <result property="managerFlg" column="managerFlg" />
+        <result property="detail" column="detail" />
+        <result property="avatar" column="avatar" />
+        <result property="name" column="name" />
+        <result property="image_path" column="imagePath" />
+        <result property="base_path" column="basePath" />
         <result property="updateTime" column="updateTime" />
         <result property="createTime" column="createTime" />
         <collection property="departmentList" ofType="Department" column="departmentId">
@@ -28,12 +42,17 @@
     </resultMap>
 
     <select id="findList" resultMap="EnterpriseUserMap" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
-        select eu.id, eu.enterprise_id as enterpriseId, eu.user_id as userId,eu.create_time as createTime, eu.update_time as updateTime, p.sgname as userSgname, d.id as departmentId, d.name as departmentName, d.parent_id as parentId, d.manager_id as managerId
-        from enterprise_user eu left join user_profile p on eu.user_id=p.user_id left join department_user du on du.user_id=eu.user_id left join department d on du.department_id=d.id
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
+        select eu.id, eu.enterprise_id as enterpriseId, eu.manager_flg as managerFlg, eu.user_id as userId,eu.create_time as createTime, eu.update_time as updateTime, p.sgname as userSgname, d.id as departmentId, d.name as departmentName, d.parent_id as parentId, d.manager_id as managerId
+        from enterprise_user eu left join user_profile p on eu.user_id=p.user_id
+            left join department_user du on du.user_id=eu.user_id
+            left join department d on du.department_id=d.id
         where 1=1
         <if test="enterpriseId != null">
             and eu.enterprise_id=#{enterpriseId}
+        </if>
+        <if test="userId != null">
+            and eu.user_id=#{userId}
         </if>
         <if test="sgname != null and sgname != ''">
             and p.sgname like concat('%',#{sgname},'%')
@@ -42,16 +61,22 @@
             and d.id=#{departmentId}
         </if>
         order by d.id desc
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findAll" resultMap="EnterpriseUserMap" parameterType="Query">
-        select eu.id, eu.enterprise_id as enterpriseId, eu.user_id as userId,eu.create_time as createTime, eu.update_time as updateTime, p.sgname as userSgname, d.id as departmentId, d.name as departmentName, d.parent_id as parentId, d.manager_id as managerId
+        select eu.id, eu.enterprise_id as enterpriseId, eu.manager_flg as managerFlg, eu.user_id as userId,eu.create_time as createTime, eu.update_time as updateTime,
+               e.name, e.detail, e.avatar, e.image_path, e.base_path,
+               p.sgname as userSgname, d.id as departmentId, d.name as departmentName, d.parent_id as parentId, d.manager_id as managerId
         from enterprise_user eu left join user_profile p on eu.user_id=p.user_id
+            left join enterprise e on eu.enterprise_id=e.id
         LEFT JOIN department_user du on du.user_id=eu.user_id
         left join department d on d.enterprise_id=eu.enterprise_id and d.id=du.department_id
         where 1=1
         <if test="enterpriseId != null">
             and eu.enterprise_id=#{enterpriseId}
+        </if>
+        <if test="userId != null">
+            and eu.user_id=#{userId}
         </if>
         <if test="sgname != null and sgname != ''">
             and p.sgname like concat('%',#{sgname},'%')

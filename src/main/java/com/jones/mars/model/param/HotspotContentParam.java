@@ -1,5 +1,6 @@
 package com.jones.mars.model.param;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("hotspot_content")
 public class HotspotContentParam {
     @NotNull
     @ApiModelProperty(value="类型",name="type")
@@ -25,9 +27,9 @@ public class HotspotContentParam {
     private String title;
     @NotNull
     @ApiModelProperty(value="热点ID",name="hotspotId")
-    private Integer hotspotId;
+    private Long hotspotId;
     @ApiParam(hidden = true)
-    private Integer id;
+    private Long id;
     @ApiParam(hidden = true)
     private Integer seq;
 }

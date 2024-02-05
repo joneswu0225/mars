@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AgoraRtcParam {
     @ApiModelProperty(value="用戶ID",name="userId")
-    private Integer userId;
+    private Long userId;
     @ApiModelProperty(value="频道名称",name="channelName")
     private String channelName;
     @ApiModelProperty(value="频道发送接收角色，Role_Publisher：发送；Role_Subscriber：接收",name="role")

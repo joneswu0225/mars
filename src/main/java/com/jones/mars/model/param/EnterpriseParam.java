@@ -25,9 +25,8 @@ public class EnterpriseParam extends BaseObject {
     private String imagePath;
     @ApiModelProperty(value="企业简介",name="detail", allowEmptyValue=true)
     private String detail;
-    @NotBlank(message="企业管理员ID不能为空")
     @ApiModelProperty(value="企业管理员ID",name="managerId")
-    private Integer managerId;
+    private Long managerId;
     @ApiParam(hidden = true)
     private String basePath;
 }

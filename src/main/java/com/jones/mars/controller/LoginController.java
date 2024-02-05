@@ -1,6 +1,5 @@
 package com.jones.mars.controller;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.jones.mars.model.User;
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.*;
@@ -8,15 +7,16 @@ import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.UserService;
 import com.jones.mars.support.ValidMobile;
 import com.jones.mars.util.LoginUtil;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +31,7 @@ public class LoginController extends BaseController {
 
     @ApiOperation(value = "用户注册", notes = "用户注册")
     @PostMapping("regist")
-    public BaseResponse regist(@RequestBody @ApiParam(required=true) UserRegistParam param) {
+    public BaseResponse regist(@Validated @RequestBody @ApiParam(required=true) UserRegistParam param) {
         return userService.add(User.builder().mobile(param.getMobile()).password(param.getPassword()).userType(User.COMMON).build());
     }
 
@@ -61,26 +61,26 @@ public class LoginController extends BaseController {
 
     @ApiOperation(value = "重置密码", notes = "重置密码")
     @PostMapping("password/reset")
-    public BaseResponse passwordReset(@RequestBody @ApiParam(required=true) UserPasswordRestParam param) {
-        return userService.resetPassword(User.builder().mobile(param.getMobile()).password(param.getPassword()).verifyCode(param.getVerifyCode()).build());
+    public BaseResponse passwordReset(@Validated @RequestBody @ApiParam(required=true) UserPasswordRestParam param) {
+        return userService.resetPassword(param);
     }
 
     @ApiOperation(value = "登录", notes = "登录")
     @PostMapping("login")
-    public BaseResponse login(@RequestBody @ApiParam(required=true) UserLoginParam param, HttpServletRequest request) {
+    public BaseResponse login(@Validated @RequestBody @ApiParam(required=true) UserLoginParam param, HttpServletRequest request) {
         String appSource = request.getHeader(CommonConstant.APP_SOURCE_FIELD);
         return userService.doLogin(param, appSource);
     }
 
     @ApiOperation(value = "小程序登录", notes = "登录")
     @PostMapping("wxlogin")
-    public BaseResponse wxLogin(@RequestBody @ApiParam(required=true) UserWXLoginParam param) {
+    public BaseResponse wxLogin(@Validated @RequestBody @ApiParam(required=true) UserWXLoginParam param) {
         return userService.doWxLogin(param);
     }
 
     @ApiOperation(value = "小程序更新密码", notes = "小程序更新密码")
     @PostMapping("wxUpdatePassword")
-    public BaseResponse wxUpdatePassword(@RequestBody @ApiParam(required=true) UserWXUpdatePasswordParam param) {
+    public BaseResponse wxUpdatePassword(@Validated @RequestBody @ApiParam(required=true) UserWXUpdatePasswordParam param) {
         return userService.wxUpdatePassword(param);
     }
 

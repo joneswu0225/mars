@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.MessageMapper" >
-    <insert id="insert" parameterType="Message" useGeneratedKeys="true" keyProperty="id">
-        insert into message(`title`, `content`, `receiver`, `poster`,`message_type`, `create_time`)
+    <insert id="insertRecord" parameterType="Message" useGeneratedKeys="true" keyProperty="id">
+        insert into message(`id`, `title`, `content`, `receiver`, `poster`,`message_type`, `create_time`)
         values
-        <foreach collection="receiverList" item="userId" index="index" separator=",">
-            (#{title}, #{content}, #{userId}, #{poster}, #{messageType}, now())
+        <foreach collection="messageList" item="param" index="index" separator=",">
+            (#{param.id}, #{param.title}, #{param.content}, #{param.receiver}, #{param.poster}, #{param.messageType}, now())
         </foreach>
     </insert>
-    <insert id="update" parameterType="Message">
+    <update id="update" parameterType="Message">
         update message set status = #{status}
         where id=#{id}
-    </insert>
+    </update>
     <select id="findList" resultType="Message" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select * from message where delete_flg=0
         <if test="receiver != null">
             and receiver = #{receiver}
@@ -22,7 +22,7 @@
             and status = #{status}
         </if>
         order by create_time desc
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from message where delete_flg=0

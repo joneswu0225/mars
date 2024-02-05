@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BlockSceneTypeMapper extends BaseMapper<BlockSceneType> {
+public interface BlockSceneTypeMapper extends CommonMapper<BlockSceneType> {
     List<BlockSceneType> findAllName(Query query);
     List<BlockSceneType> findSceneTypeProjectScene(Query query);
 
     void updateBlockSceneTypeSeq(BlockSceneTypeSeqParam param);
 
-    Integer findMaxSeqByBlockId(Integer blockId);
+    Integer findMaxSeqByBlockId(Long blockId);
 }

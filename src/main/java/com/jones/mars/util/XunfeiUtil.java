@@ -1,6 +1,7 @@
 package com.jones.mars.util;
 
 import com.aliyuncs.utils.StringUtils;
+import com.jones.mars.constant.ApplicationConst;
 import com.jones.mars.model.constant.CommonConstant;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -170,7 +171,7 @@ public class XunfeiUtil {
             } else {
                 fileName = fileName + ".mp3";
             }
-            FileUtil.save(CommonConstant.getTmpAudioPath(), fileName, (byte[]) resultMap.get("body"));
+            FileUtil.save(ApplicationConst.getTmpAudioPath(), fileName, (byte[]) resultMap.get("body"));
             System.out.println("合成 WebAPI 调用成功，音频文件：" + fileName);
         } else { // 合成失败
             System.out.println("合成 WebAPI 调用失败，错误信息：" + resultMap.get("body").toString());//返回code为错误码时，请查询https://www.xfyun.cn/document/error-code解决方案

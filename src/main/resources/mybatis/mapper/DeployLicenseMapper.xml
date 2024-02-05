@@ -1,55 +1,60 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.DeployLicenseMapper" >
-    <insert id="insert" parameterType="DeployLicense" useGeneratedKeys="true" keyProperty="id">
-        insert into deploy_license(`name`, `detail`, `start_time`, `expire_time`, `create_time`, `key_public`, `key_private`, `disk_series`, `directory`, `content_ori`, `content_enc`)
-        values(#{name}, #{detail}, #{startTime}, #{expireTime}, #{createTime}, #{keyPublic}, #{keyPrivate}, #{diskSeries}, #{directory}, #{contentOri}, #{contentEnc})
+    <insert id="insertRecord" parameterType="DeployLicense" useGeneratedKeys="true" keyProperty="id">
+        insert into deploy_license(`id`, `name`, `detail`, `start_date`, `expire_date`, `create_time`, `key`, `disk_series`, `path`, `content_ori`, `content_enc`)
+        values(#{id}, #{name}, #{detail}, #{startDate}, #{expireDate}, now(), #{key}, #{diskSeries}, #{path}, #{contentOri}, #{contentEnc})
+        ON DUPLICATE KEY UPDATE
+        `name` = #{name}, `detail` = #{detail}, `start_date`=#{startDate}, `expire_date` = #{expireDate}, `path` = #{path}
     </insert>
-    <insert id="update" parameterType="AppConst">
-        update deploy_license set id=#{id}
+    <update id="update" parameterType="DeployLicense">
+        update deploy_license set `id`=#{id}
         <if test="name != null and name != ''">
-            and name=#{name}
+            ,`name`=#{name}
         </if>
         <if test="detail != null and detail != ''">
-            and `detail`=#{detail}
+            , `detail`=#{detail}
         </if>
-        <if test="startTime != null">
-            and start_time=#{startTime}
+        <if test="startDate != null">
+            , start_date=#{startDate}
         </if>
-        <if test="expireTime != null">
-            and `expire_time`=#{expireTime}
+        <if test="expireDate != null">
+            , `expire_date`=#{expireDate}
         </if>
         <if test="createTime != null">
-            and `create_time`=#{createTime}
+            , `create_time`=#{createTime}
         </if>
-        <if test="keyPublic != null and keyPublic != ''">
-            and key_public=#{keyPublic}
+        <if test="key != null and key != ''">
+            , `key`=#{key}
         </if>
-        <if test="keyPrivate != null and keyPrivate != ''">
-            and `key_private`=#{keyPrivate}
-        </if>
-        <if test="directory != null and directory != ''">
-            and `directory`=#{directory}
+        <if test="path != null and path != ''">
+            , `path`=#{path}
         </if>
         <if test="contentOri != null and contentOri != ''">
-            and `content_ori`=#{contentOri}
+            , `content_ori`=#{contentOri}
         </if>
         <if test="contentEnc != null and contentEnc != ''">
-            and `content_enc`=#{contentEnc}
+            , `content_enc`=#{contentEnc}
         </if>
-        where id=#{id}
-    </insert>
+        where `id`=#{id}
+    </update>
     <select id="findList" resultType="DeployLicense" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select * from deploy_license where 1=1
+        <if test="diskSeries != null and diskSeries != ''">
+            and `disk_series`=#{diskSeries}
+        </if>
         order by id
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from deploy_license where 1=1
     </select>
     <select id="findAll" resultType="DeployLicense" parameterType="Query">
         select * from deploy_license where 1=1
+        <if test="diskSeries != null and diskSeries != ''">
+            and `disk_series`=#{diskSeries}
+        </if>
         order by id
     </select>
     <select id="findOne" resultType="DeployLicense">

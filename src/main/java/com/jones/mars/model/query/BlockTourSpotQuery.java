@@ -2,20 +2,19 @@ package com.jones.mars.model.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ApiModel(value="企业入驻查询参数")
-public class EnterpriseShownQuery extends Query {
-    @ApiParam(hidden = true)
-    private List<Integer> ids;
+@ApiModel(value="漫游热点参数")
+public class BlockTourSpotQuery extends Query {
+    @ApiModelProperty(value="模块ID",name="blockId")
+    private Long blockId;
+    @ApiModelProperty(value="类型",name="type")
+    private String type;
 }

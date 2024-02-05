@@ -32,7 +32,7 @@ public class HotspotContentController extends BaseController {
 
     @ApiOperation(value = "查看单个热点内容", notes = "")
     @GetMapping("/{hotspotContentId}")
-    public BaseResponse findById(@PathVariable Integer hotspotContentId) {
+    public BaseResponse findById(@PathVariable Long hotspotContentId) {
         return service.findById(hotspotContentId);
     }
 
@@ -51,7 +51,7 @@ public class HotspotContentController extends BaseController {
     @ApiOperation(value = "更新内容", notes = "")
     @PostMapping("/{hotspotContentId}")
     public BaseResponse singleUpdate(
-            @PathVariable Integer hotspotContentId,
+            @PathVariable Long hotspotContentId,
             @RequestBody @ApiParam(required=true) HotspotContentParam param) {
         param.setId(hotspotContentId);
         return service.updateContents(Arrays.asList(param));
@@ -65,7 +65,7 @@ public class HotspotContentController extends BaseController {
 
     @ApiOperation(value = "删除热点内容", notes = "")
     @DeleteMapping("{hotspotContentId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Integer hotspotContentId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long hotspotContentId) {
         return service.delete(hotspotContentId);
     }
 

@@ -1,6 +1,7 @@
 package com.jones.mars.service;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
+import com.jones.mars.constant.ApplicationConst;
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.Hotspot;
 import com.jones.mars.model.ProjectScene;
@@ -11,7 +12,7 @@ import com.jones.mars.model.param.*;
 import com.jones.mars.model.query.HotspotQuery;
 import com.jones.mars.model.query.SceneQuery;
 import com.jones.mars.object.BaseResponse;
-import com.jones.mars.repository.BaseMapper;
+import com.jones.mars.repository.CommonMapper;
 import com.jones.mars.repository.HotspotMapper;
 import com.jones.mars.repository.ProjectSceneMapper;
 import com.jones.mars.repository.SceneMapper;
@@ -36,7 +37,7 @@ public class SceneService extends BaseService {
     private HotspotMapper hotspotMapper;
 
     @Override
-    public BaseMapper getMapper() {
+    public CommonMapper getMapper() {
         return this.sceneMapper;
     }
 
@@ -52,14 +53,14 @@ public class SceneService extends BaseService {
         Integer maxSeq = sceneMapper.findMaxSeqByBlockId(param.getBlockId());
         param.setSeq(maxSeq == null ? 0 : maxSeq + 1);
         sceneMapper.insert(param);
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Long> map = new HashMap<>();
         map.put("id", param.getId());
         return BaseResponse.builder().data(map).build();
     }
 
     public BaseResponse findPanoInfo(HotspotQuery query){
         List<Scene> sceneList = sceneMapper.findAll(SceneQuery.builder().projectId(query.getProjectId()).build());
-        Map<Integer, Scene> sceneMap = sceneList.stream().sorted(Comparator.comparing(Scene::getSeq)).collect(Collectors.toMap(Scene::getId, p->p));
+        Map<Long, Scene> sceneMap = sceneList.stream().collect(Collectors.toMap(Scene::getId, p->p));
         if(sceneMap.size() > 0){
 //            List<Hotspot> hotspotList = hotspotMapper.findAll(HotspotQuery.builder().sceneIds(sceneMap.keySet()).build());
             List<Hotspot> hotspotList = hotspotMapper.findAllByQuery(query);
@@ -69,12 +70,12 @@ public class SceneService extends BaseService {
                 }
             });
         }
-        List<Scene> result = sceneMap.values().stream().sorted(Comparator.comparing(Scene::getSeq)).collect(Collectors.toList());
+        List<Scene> result = sceneMap.values().stream().sorted((s1, s2) -> ((s1.getSeq() != null) && (s2.getSeq() != null)) ? s1.getSeq() -s2.getSeq() : s1.getSeq() != null ? -1 : s2.getSeq() != null ? 1 : (int)((s1.getId() - s2.getId()) % Integer.MAX_VALUE)).collect(Collectors.toList());
         return BaseResponse.builder().data(result).build();
     }
 
 
-    public BaseResponse sliceImageBySceneId(Integer sceneId, KrpanoUtil.PanoType panoType){
+    public BaseResponse sliceImageBySceneId(Long sceneId, KrpanoUtil.PanoType panoType){
         Scene scene = sceneMapper.findOne(sceneId);
         return sliceImage(scene, panoType);
     }
@@ -84,7 +85,7 @@ public class SceneService extends BaseService {
         return sliceImage(sceneList.get(0), panoType);
     }
 
-    public BaseResponse sliceImageByBlock(Integer blockId, KrpanoUtil.PanoType panoType){
+    public BaseResponse sliceImageByBlock(Long blockId, KrpanoUtil.PanoType panoType){
         List<Scene> sceneList = sceneMapper.findAll(SceneQuery.builder().blockId(blockId).build());
         sceneList = sceneList.parallelStream().filter(p -> !StringUtils.isEmpty(p.getPanoImageUrl())).collect(Collectors.toList());
         Map<String, String> result = new HashMap<>();
@@ -100,7 +101,7 @@ public class SceneService extends BaseService {
     private BaseResponse sliceImage(Scene scene, KrpanoUtil.PanoType panoType){
         scene.setSliceStatus(Scene.SLICESTATUS_TODO);
         sceneMapper.update(scene);
-        ErrorCode code = KrpanoUtil.slice(CommonConstant.UPLOAD_PATH + File.separator + scene.getPanoImageUrl(), scene.getBlockId(), panoType);
+        ErrorCode code = KrpanoUtil.slice(ApplicationConst.UPLOAD_PATH + File.separator + scene.getPanoImageUrl(), scene.getBlockId(), panoType);
         if(code.isSucceeded()){
             scene.setSliceStatus(Scene.SLICESTATUS_FINISH);
             sceneMapper.update(scene);

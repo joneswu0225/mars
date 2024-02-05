@@ -17,12 +17,12 @@ public class BlockAttachmentQuery extends Query {
     @ApiModelProperty(value="名称",name="name")
     private String name;
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Integer blockId;
+    private Long blockId;
     @ApiModelProperty(value="父ID",name="parentId")
-    private Integer parentId;
+    private Long parentId;
     @ApiModelProperty(value="类型",name="类型")
     private String type;
     @ApiParam(hidden = true)
-    private Integer creatorId;
+    private Long creatorId;
 }
 

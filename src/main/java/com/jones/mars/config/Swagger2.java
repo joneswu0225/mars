@@ -21,9 +21,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Profile({"swagger"})
 public class Swagger2 implements WebMvcConfigurer {
 
-	@Value("${swagger.enable}")
-	private boolean enableSwagger;
-
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/swagger-ui.html**")

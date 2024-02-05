@@ -1,8 +1,8 @@
 package com.jones.mars.config;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jones.mars.constant.ApplicationConst;
 import com.jones.mars.constant.ErrorCode;
-import com.jones.mars.model.AppConst;
 import com.jones.mars.model.User;
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.param.UserLoginParam;
@@ -10,6 +10,7 @@ import com.jones.mars.object.BaseResponse;
 import com.jones.mars.service.ProjectService;
 import com.jones.mars.service.UserService;
 import com.jones.mars.util.LoginUtil;
+import javafx.application.Application;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,9 +24,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import sun.rmi.runtime.Log;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
@@ -33,7 +32,6 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 @Slf4j
 @Configuration
@@ -44,8 +42,8 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
     @Autowired
     private ProjectService projectService;
 
-    @Value("${app.mode:DEBUG}")
-    private String appMode;
+//    @Value("${app.mode:DEBUG}")
+//    private String appMode;
     @Value("${app.mode.nologin.source.prefix}")
     private String nologinSource;
 
@@ -94,12 +92,11 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
         addInterceptor.excludePathPatterns("/wsclient/**");
         addInterceptor.excludePathPatterns("/file/**");
         addInterceptor.excludePathPatterns("/jsrecord/**");
-        addInterceptor.excludePathPatterns("/companyJoin/**");
         addInterceptor.excludePathPatterns("/home/**");
+        addInterceptor.excludePathPatterns("/tools/**");
         addInterceptor.excludePathPatterns("/xunfei/**");
         addInterceptor.excludePathPatterns("/wechat/**");
         addInterceptor.excludePathPatterns("/translation/**");
-        addInterceptor.excludePathPatterns("/enterpriseShown**");
         addInterceptor.excludePathPatterns("/swagger-ui.html");
     }
 
@@ -135,8 +132,8 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
             if (request.getQueryString() != null) {
                 url += "?" + request.getQueryString();
             }
-            if(appMode.equals(CommonConstant.APP_MODE_NOLOGIN) && !StringUtils.isEmpty(nologinSource)){
-                for(String item : nologinSource.split(",")){
+            if(ApplicationConst.APP_MODE.equals(CommonConstant.APP_MODE_NOLOGIN) && ApplicationConst.APP_MODE_NOLOGIN_SOURCE.length > 0 && request.getMethod().equals("GET")){
+                for(String item : ApplicationConst.APP_MODE_NOLOGIN_SOURCE){
                     if(url.startsWith(item)){
                         return true;
                     }
@@ -154,7 +151,7 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
             }
             if (request.getCookies() == null || LoginUtil.getInstance().getUser() == null) {
                 log.info("request address: " + request.getRemoteAddr());
-                if(appMode.equals(CommonConstant.APP_MODE_DEBUG) && (request.getHeader("referer") != null && request.getHeader("referer").contains("swagger-ui.html"))){
+                if(ApplicationConst.APP_MODE.equals(CommonConstant.APP_MODE_DEBUG) && (request.getHeader("referer") != null && request.getHeader("referer").contains("swagger-ui.html"))){
                     log.info("当前请求为内部接口请求，且无登录状态，设置默认用户为：admin");
                     UserLoginParam user = UserLoginParam.builder().mobile("admin").password("admin").build();
                     request.setAttribute("authorization", ((Map<String, String>)service.doLogin(user, appSource == null ? CommonConstant.APP_SOURCE_ADMIN : appSource).getData()).get("authorization"));
@@ -187,7 +184,7 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
                 String[] pathParams = requestUri.split("/");
                 if(pathParams.length > 2 && pathParams[2].matches("\\d+")){
                     String projectId = pathParams[2];
-                    ErrorCode errorCode = projectService.projectModifyAuthError(Integer.parseInt(projectId));
+                    ErrorCode errorCode = projectService.projectModifyAuthError(Long.parseLong(projectId));
                     if(errorCode != null){
                         response.setContentType("application/json; charset=utf-8");
                         PrintWriter writer = response.getWriter();

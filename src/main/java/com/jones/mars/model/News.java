@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@TableName("message")
 public class News extends BaseObject {
     public static final int STATUS_EDITING = 0;
     public static final int STATUS_PUBLISHED = 1;
@@ -21,7 +23,7 @@ public class News extends BaseObject {
     public static final int TOP_CANCEL = 0;
 
 
-    private Integer id;
+    private Long id;
     private String contentUrl;
     private String contentHtml;
     private String author;

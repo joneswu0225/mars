@@ -1,5 +1,6 @@
 package com.jones.mars.util;
 
+import com.jones.mars.constant.ApplicationConst;
 import com.jones.mars.constant.ErrorCode;
 import com.jones.mars.model.constant.CommonConstant;
 import com.jones.mars.model.constant.FileType;
@@ -29,15 +30,15 @@ public class KrpanoUtil {
     private static String KRPANO_CONFIG;// = "files/tmp/audio";
     private static Long PROCESS_KRPANO_WAIT_TIME = 100000l;
 
-    public static String getOutPutPath(Integer blockId){
-        return CommonConstant.UPLOAD_PATH + File.separator + FileType.FILE_PATH_PREFIX + File.separator + "block" + File.separator + blockId + File.separator + "panos";
+    public static String getOutPutPath(Long blockId){
+        return ApplicationConst.UPLOAD_PATH + File.separator + FileType.FILE_PATH_PREFIX + File.separator + "block" + File.separator + blockId + File.separator + "panos";
     }
 
-    public static String getOutPutTempPath(Integer blockId){
-        if(StringUtils.isEmpty(CommonConstant.getTmpPanoimagePath())){
+    public static String getOutPutTempPath(Long blockId){
+        if(StringUtils.isEmpty(ApplicationConst.getTmpPanoimagePath())){
             return null;
         }
-        return CommonConstant.getTmpPanoimagePath() + File.separator + FileType.FILE_PATH_PREFIX + File.separator + "block" + File.separator + blockId + File.separator + "panos";
+        return ApplicationConst.getTmpPanoimagePath() + File.separator + FileType.FILE_PATH_PREFIX + File.separator + "block" + File.separator + blockId + File.separator + "panos";
     }
 
     public enum PanoType {
@@ -117,7 +118,7 @@ public class KrpanoUtil {
     }
 
 
-    public static ErrorCode slice(String fileName, Integer blockId,  PanoType panoType){
+    public static ErrorCode slice(String fileName, Long blockId,  PanoType panoType){
         String tmpPath = getOutPutTempPath(blockId);
         if (tmpPath == null) {
             return slice(fileName, getOutPutPath(blockId), panoType);

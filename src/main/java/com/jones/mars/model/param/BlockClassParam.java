@@ -15,8 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 public class BlockClassParam extends BaseObject {
     @ApiModelProperty(value="一级分类ID",name="moduleId")
-    private Integer moduleId;
+    private Long moduleId;
     @ApiModelProperty(value="二级分类ID列表(热点顺序按照热点ID顺序排列)",name="classIds")
-    private List<Integer> classIds;
+    private List<Long> classIds;
 }
 

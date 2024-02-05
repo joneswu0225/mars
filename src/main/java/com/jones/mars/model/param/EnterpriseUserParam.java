@@ -1,5 +1,6 @@
 package com.jones.mars.model.param;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
@@ -15,16 +16,13 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("enterprise_user")
 public class EnterpriseUserParam extends BaseObject {
     @ApiParam(hidden = true)
-    private Integer enterpriseId;
-    @ApiParam(hidden = true)
-    private Integer roleId;
-    @ApiParam(hidden = true)
-    private List<Integer> userIds;
+    private Long enterpriseId;
     @ApiModelProperty(value="用户ID",name="userId")
-    private Integer userId;
-    @ApiModelProperty(value="部门ID",name="departmentId")
-    private Integer departmentId;
+    private Long userId;
+    @ApiModelProperty(value="企业管理员",name="managerFlg")
+    private Integer managerFlg;
 }
 

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.BlockTypeMapper" >
+    <insert id="insertRecord" parameterType="BlockType" useGeneratedKeys="true" keyProperty="id">
+        insert into block_type(`id`,`name`,`detail`, `enterprise_id`,`seq`)
+        values(#{id}, #{name}, #{detail}, #{enterpriseId}, #{seq})
+    </insert>
+    <insert id="update" parameterType="BlockType">
+        update block_type set name = #{name}, detail=#{detail} where id=#{id}
+    </insert>
+    <select id="findList" resultType="BlockType" parameterType="Query">
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
+        select * from block_type where delete_flg=0
+        <if test="enterpriseId != null">
+             and enterprise_id=#{enterpriseId}
+        </if>
+        <if test="enterpriseId != null">
+        order by seq
+        </if>
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from block_type
+        where delete_flg=0
+        <if test="enterpriseId != null">
+            and enterprise_id = #{enterpriseId}
+        </if>
+    </select>
+    <select id="findAllName" resultType="BlockType" parameterType="Query">
+        select id, name from block_type
+        where delete_flg=0
+        <if test="enterpriseId != null">
+            and enterprise_id = #{enterpriseId}
+        </if>
+        order by seq, name
+    </select>
+    <select id="findMaxSeqByEnterpriseId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select max(seq) from block_type where enterprise_id=#{enterpriseId}
+    </select>
+    <update id="updateBlockTypeSeq">
+        update block_type set seq=case
+        <foreach collection="blockTypeIds" item="blockTypeId" index="index">
+            when id=#{blockTypeId} then #{index}
+        </foreach>
+        end
+        where id in
+        <foreach collection="blockTypeIds" item="blockTypeId" index="index" separator="," open="(" close=")">
+            #{blockTypeId}
+        </foreach>
+    </update>
+    <select id="findAll" resultType="BlockType" parameterType="Query">
+        select * from block_type
+        where delete_flg=0
+        <if test="enterpriseId != null">
+            and enterprise_id = #{enterpriseId}
+        </if>
+        order by id desc
+    </select>
+    <select id="findOne" resultType="BlockModule">
+        select * from block_type where id=#{id}
+    </select>
+    <update id="delete">
+        update block_type set delete_flg=1 where id=#{id}
+    </update>
+</mapper>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.UserLikeMapper" >
-    <insert id="insert" parameterType="UserLike" useGeneratedKeys="true" keyProperty="id">
-        insert into user_like(`user_id`, `like_id`,`like_type`,`like_status`,`create_time`,`update_time`)
-        values(#{userId}, #{likeId}, #{likeType}, #{likeStatus}, now(), now())
+    <insert id="insertRecord" parameterType="UserLike" useGeneratedKeys="true" keyProperty="id">
+        insert into user_like(`id`, `user_id`, `like_id`,`like_type`,`like_status`,`create_time`,`update_time`)
+        values(#{id}, #{userId}, #{likeId}, #{likeType}, #{likeStatus}, now(), now())
         ON DUPLICATE KEY UPDATE
             like_status=#{likeStatus}, update_time=now()
     </insert>

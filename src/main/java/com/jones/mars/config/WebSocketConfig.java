@@ -1,5 +1,6 @@
 package com.jones.mars.config;
 
+import com.jones.mars.constant.ApplicationConst;
 import com.jones.mars.model.constant.CommonConstant;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +21,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     }
 
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(new String[]{"/panopipe"}).setAllowedOrigins(CommonConstant.APP_DOMAIN).withSockJS();
+        registry.addEndpoint(new String[]{"/panopipe"}).setAllowedOrigins(ApplicationConst.APP_DOMAIN).withSockJS();
     }
 
     @Bean

@@ -25,16 +25,16 @@ public class DepartmentParam extends BaseObject {
     private String name;
     @NotNull(message = "企业ID不能为空")
     @ApiModelProperty(value="企业ID",name="enterpriseId")
-    private Integer enterpriseId;
+    private Long enterpriseId;
     @ApiModelProperty(value="上级部门ID",name="parentId")
-    private Integer parentId;
+    private Long parentId;
     @ApiModelProperty(value="部门负责人ID",name="managerId")
-    private Integer managerId;
+    private Long managerId;
     @ApiParam(hidden = true)
-    private Integer departmentId;
+    private Long departmentId;
     @ApiParam(hidden = true)
-    private Integer operatorId;
+    private Long operatorId;
     @ApiModelProperty(value="部门人员ID列表",name="userIds", allowEmptyValue=true)
-    private List<Integer> userIds;
+    private List<Long> userIds;
 }
 

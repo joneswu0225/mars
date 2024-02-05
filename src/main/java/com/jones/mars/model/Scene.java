@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,19 +14,21 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@TableName("scene")
 public class Scene extends BaseObject {
     public static final int UNPUBLIC = 0;
     public static final int PUBLIC = 1;
     public static final int SLICESTATUS_TODO = 0;
     public static final int SLICESTATUS_FINISH = 1;
 
-    private Integer sceneTypeId;
+    private Long sceneTypeId;
     private String sceneTypeName;
     private String code;
     private String name;
     private String detail;
-    private Integer blockId;
-    private Integer imageId;
+    private Long blockId;
+    private Long srcBlockId;
+    private Long imageId;
     private String imageUrl;
     private String panoImageUrl;
     private Float locationX;
@@ -33,6 +36,8 @@ public class Scene extends BaseObject {
     private Integer seq;
     private Integer sliceStatus;
     private Integer publicFlg = UNPUBLIC;
+    private Long relSceneTypeId;
+    private String relSceneTypeName;
     private List<Hotspot> hotspots = new ArrayList<>();
 
 //    public static Scene.SceneBuilder sceneBuilder(SceneParam param){

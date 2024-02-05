@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.BlockContentMapper" >
-    <insert id="insert" parameterType="BlockContentParam" useGeneratedKeys="true" keyProperty="id">
-        insert into block_content(`block_id`, `content`, `title`, `extra`, `seq`, `type`) values
-        (#{blockId}, #{content}, #{title}, #{extra}, #{seq}, #{type})
+    <insert id="insertRecord" parameterType="BlockContentParam" useGeneratedKeys="true" keyProperty="id">
+        insert into block_content(`id`, `block_id`, `content`, `title`, `extra`, `seq`, `type`) values
+        (#{id}, #{blockId}, #{content}, #{title}, #{extra}, #{seq}, #{type})
     </insert>
     <update id="update" parameterType="BlockContentParam">
         update block_content
         set content = #{content}, title = #{title}, `type` = #{type}, extra = #{extra}
         where id = #{id}
     </update>
-    <select id="findMaxSeqByBlockId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="findMaxSeqByBlockId" parameterType="java.lang.Long" resultType="java.lang.Integer">
         select max(seq) from block_content where block_id=#{blockId}
     </select>
     <update id="updateBlockContentSeq">
@@ -41,7 +41,7 @@
         where block_id=#{blockId}
     </select>
 
-    <select id="findByBlockId" resultType="BlockContent" parameterType="java.lang.Integer">
+    <select id="findByBlockId" resultType="BlockContent" parameterType="java.lang.Long">
         select * from block_content
         where block_id=#{blockId}
         order by seq

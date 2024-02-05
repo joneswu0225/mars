@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.model.constant.LikeType;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
@@ -13,13 +14,14 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@TableName("user_like")
 public class UserLike extends BaseObject {
     public static final String LIKE = "LIKE";
     public static final String UNLIKE = "UNLIKE";
 
-    private Integer id;
-    private Integer userId;
-    private Integer likeId;
+    private Long id;
+    private Long userId;
+    private Long likeId;
     private LikeType likeType;
     private String likeStatus;
     private Date createTime;

@@ -15,9 +15,9 @@ import java.util.List;
 public class ProjectSceneSeqParam {
     @NotNull
     @ApiModelProperty(value="项目ID",name="projectId")
-    private Integer projectId;
+    private Long projectId;
     @NotEmpty
     @ApiModelProperty(value="场景ID列表",name="sceneIds")
-    private List<Integer> sceneIds;
+    private List<Long> sceneIds;
 }
 

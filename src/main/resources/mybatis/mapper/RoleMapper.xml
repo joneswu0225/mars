@@ -43,17 +43,17 @@
         order by r.enterprise_id, r.block_id, m.seq,c.seq
     </select>
 
-    <insert id="insert" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
-        insert into role(`name`, `block_id`, `image`, `enterprise_id`, `create_time`, `update_time`)
-        values(#{name}, #{blockId},#{image}, #{enterpriseId}, now(), now())
+    <insert id="insertRecord" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
+        insert into role(`id`, `name`, `block_id`, `image`, `enterprise_id`, `create_time`, `update_time`)
+        values(#{id}, #{name}, #{blockId},#{image}, #{enterpriseId}, now(), now())
     </insert>
-    <insert id="update" parameterType="Role">
+    <update id="update" parameterType="Role">
         update role set name = #{name},
         <if test="name != null and name !=''">
             name = #{name},
         </if>
         update_time=now() where id=#{id}
-    </insert>
+    </update>
     <resultMap id="RolePermissionMap" type="Role" >
         <id column="id" property="id" />
         <result column="name" property="name" />
@@ -107,7 +107,7 @@
         </collection>
     </resultMap>
     <select id="findList" resultMap="RoleUserMap" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select r.id, r.name,r.image, r.block_id as blockId, b.name as blockName,b.enterprise_id as enterpriseId,r.update_time, r.create_time,  p.id as permissionId, p.role_id, p.class_id, c.name as className, c.module_id, m.name as moduleName, p.operation,
         up.sgname, up.user_id as user_id,up.description, up.email,u.mobile, d.name as departmentName
         from role r left join user_role ur on r.id=ur.role_id left join user_profile up on ur.user_id=up.user_id left join user u on up.user_id=u.id left join department_user du on du.user_id=ur.user_id left join department d on du.department_id=d.id
@@ -121,7 +121,7 @@
             and r.enterprise_id = #{enterpriseId}
         </if>
         order by id desc
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
 
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">

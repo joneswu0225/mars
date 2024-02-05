@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DeployLicenseMapper extends BaseMapper<DeployLicense> {
+public interface DeployLicenseMapper extends CommonMapper<DeployLicense> {
 }

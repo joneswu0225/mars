@@ -27,11 +27,11 @@
         </collection>
     </resultMap>
 
-    <insert id="insert" parameterType="Hotspot" useGeneratedKeys="true" keyProperty="id">
-        insert into hotspot(`code`, `icon`, `title`, `location_x`, `location_y`, `location_fov`, `scene_id`,`project_id`,`type`, `create_time`, `update_time`)
-        values(#{code}, #{icon}, #{title}, #{locationX}, #{locationY}, #{locationFov}, #{sceneId}, #{projectId}, #{type},now(), now())
+    <insert id="insertRecord" parameterType="Hotspot" useGeneratedKeys="true" keyProperty="id">
+        insert into hotspot(`id`, `code`, `icon`, `title`, `location_x`, `location_y`, `location_fov`, `scene_id`,`project_id`,`type`, `create_time`, `update_time`)
+        values(#{id}, #{code}, #{icon}, #{title}, #{locationX}, #{locationY}, #{locationFov}, #{sceneId}, #{projectId}, #{type},now(), now())
     </insert>
-    <insert id="update" parameterType="Hotspot">
+    <update id="update" parameterType="Hotspot">
         update hotspot
         set id = #{id}
         <if test="type != null and type !=''">
@@ -59,10 +59,10 @@
             , location_fov = #{locationFov}
         </if>
         where id = #{id}
-    </insert>
+    </update>
 
     <select id="findList" resultType="Hotspot" parameterType="Query">
-        <include refid="com.jones.mars.repository.BaseMapper.startPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select * from hotspot
         where 1=1
         <if test="sceneId != null">
@@ -81,7 +81,7 @@
             </foreach>
         </if>
         order by id desc
-        <include refid="com.jones.mars.repository.BaseMapper.endPage" />
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
 
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">

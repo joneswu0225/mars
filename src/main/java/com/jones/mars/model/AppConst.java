@@ -1,5 +1,6 @@
 package com.jones.mars.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.jones.mars.object.BaseObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName("app_const")
 public class AppConst extends BaseObject {
     public static final String HOME_RECOMMEND_PROJECT = "HOME_RECOMMEND_PROJECT";
     public static final String HOME_ENTERPRISE_SHOWN = "HOME_ENTERPRISE_SHOWN";
