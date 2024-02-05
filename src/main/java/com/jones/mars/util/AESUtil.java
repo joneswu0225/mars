@@ -73,12 +73,13 @@ public class AESUtil {
         String diskSeries2 = "4CDA-39A3";
         String diskId = "81711104";
         Integer disk = Integer.valueOf(diskId.substring(diskId.length() - 8));
-        String key = String.format("%08d", disk) + diskSeries.replace("-","");
-        String key2 = String.format("%08d", disk) + diskSeries2.replace("-","");
-
-        System.out.println("加密前：" + originalText);
+//        String key = String.format("%08d", disk) + diskSeries.replace("-","");
+//        String key2 = String.format("%08d", disk) + diskSeries2.replace("-","");
+        String key = "244193284CDA39AE";
+//        System.out.println("加密前：" + originalText);
         String encrypted = AESUtil.AESencrypt(key, originalText);
         System.out.println("加密后：" + encrypted);
+        encrypted = "ou0+kaZeuMYCQnxB1XcZQazA/pDGjHUacYCL8+LieD6b4HCuRDI096mceEsxktJd";
         System.out.println("解密后：" + AESUtil.AESdecrypt(key, encrypted));
 //        System.out.println("解密后：" + AESUtil.AESdecrypt(key2, encrypted));
     }

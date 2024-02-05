@@ -3,11 +3,11 @@ package com.jones.mars.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 public class MybatisConfiguration {
 
-    @Bean
-    public MybatisInjector sqlInjector() {
-        return new MybatisInjector();
-    }
+//    @Bean
+//    public MybatisInjector sqlInjector() {
+//        return new MybatisInjector();
+//    }
 }
