@@ -17,5 +17,5 @@ public interface BlockSceneTypeMapper extends CommonMapper<BlockSceneType> {
 
     void updateBlockSceneTypeSeq(BlockSceneTypeSeqParam param);
 
-    Integer findMaxSeqByBlockId(Long blockId);
+    Integer findMaxSeqByBlockId(String blockId);
 }

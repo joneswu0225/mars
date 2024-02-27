@@ -21,7 +21,7 @@ public class RolePermissions {
     private List<RolePermission> rolePermissionList = new ArrayList<>();
 
     public RolePermissions(RolePermissionParam param){
-        for(Long classId : param.getClassIds()){
+        for(String classId : param.getClassIds()){
             rolePermissionList.add(RolePermission.builder().roleId(param.getRoleId()).classId(classId).build());
         }
     }

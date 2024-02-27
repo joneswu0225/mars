@@ -29,7 +29,7 @@ public class BlockTourSpotController extends BaseController {
 
     @ApiOperation(value = "查看单个漫游热点", notes = "")
     @GetMapping("/{tourSpotId}")
-    public BaseResponse findById(@PathVariable Long tourSpotId) {
+    public BaseResponse findById(@PathVariable String tourSpotId) {
         return service.findById(tourSpotId);
     }
 
@@ -42,7 +42,7 @@ public class BlockTourSpotController extends BaseController {
     @ApiOperation(value = "更新内容", notes = "")
     @PostMapping("/{tourSpotId}")
     public BaseResponse singleUpdate(
-            @PathVariable Long tourSpotId,
+            @PathVariable String tourSpotId,
             @RequestBody @ApiParam(required=true) BlockTourSpotParam param) {
         param.setId(tourSpotId);
         return service.update(param);
@@ -56,7 +56,7 @@ public class BlockTourSpotController extends BaseController {
 
     @ApiOperation(value = "删除漫游热点", notes = "")
     @DeleteMapping("{tourSpotId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long tourSpotId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String tourSpotId) {
         return service.delete(tourSpotId);
     }
 

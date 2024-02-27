@@ -17,7 +17,7 @@ import java.util.List;
 @TableName("block_module")
 public class BlockModule extends BaseObject {
     private String name;
-    private Long blockId;
+    private String blockId;
     private Integer seq;
     private String blockName;
     private List<BlockClass> classList = new ArrayList<>();

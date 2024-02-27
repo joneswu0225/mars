@@ -15,7 +15,7 @@ import java.util.Date;
 @Builder
 @TableName("block_image")
 public class BlockImage extends BaseObject {
-    private Long blockId;
+    private String blockId;
     private String detail;
     private String name;
     private String path;

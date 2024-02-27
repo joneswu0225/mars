@@ -15,5 +15,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserRoleQuery extends Query{
     @ApiParam(hidden = true)
-    private Long roleId;
+    private String roleId;
 }

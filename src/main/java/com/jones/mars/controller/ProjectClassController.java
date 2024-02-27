@@ -37,7 +37,7 @@ public class ProjectClassController extends BaseController {
     @ApiOperation(value = "更新二级分类", notes = "更新二级分类")
     @PutMapping("{projectClassId}")
     public BaseResponse update(
-            @PathVariable Long projectClassId,
+            @PathVariable String projectClassId,
             @RequestBody @ApiParam(required=true) ProjectClassParam param) {
         BlockClass blockClass = BlockClass.builder().moduleId(param.getModuleId()).name(param.getName()).build();
         blockClass.setId(projectClassId);
@@ -54,7 +54,7 @@ public class ProjectClassController extends BaseController {
     // TODO 增加后台注解
     @ApiOperation(value = "删除二级分类", notes = "后台调用")
     @DeleteMapping("{projectClassId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long projectClassId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String projectClassId) {
         return service.delete(projectClassId);
     }
 

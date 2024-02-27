@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @ApiModel(value="模块内容查询参数")
 public class BlockContentQuery extends Query {
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @ApiModelProperty(value="模块内容类型",name="type")
     private String type;
 }

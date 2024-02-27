@@ -29,7 +29,7 @@ public class NewsService extends BaseService{
         return this.mapper;
     }
 
-    public BaseResponse findNewsDetail(Long newsId){
+    public BaseResponse findNewsDetail(String newsId){
         News news = mapper.findOne(newsId);
         List<JSONObject> likeResult = userLikeMapper.findLikeResult(UserLikeQuery.builder().likeType(LikeType.NEWS).likeId(newsId).build());
         Map<String, Integer> likeInfo =  new HashMap<>();
@@ -46,12 +46,12 @@ public class NewsService extends BaseService{
         return BaseResponse.builder().data(news).build();
     }
 
-    public BaseResponse updateTopFlg(Long newsId, Integer topFlg) {
+    public BaseResponse updateTopFlg(String newsId, Integer topFlg) {
         mapper.update(News.builder().id(newsId).topFlg(topFlg).build());
         return BaseResponse.builder().build();
     }
 
-    public BaseResponse updateStatus(Long newsId, Integer status) {
+    public BaseResponse updateStatus(String newsId, Integer status) {
         News news = News.builder().id(newsId).status(status).build();
         if(status.equals(News.STATUS_PUBLISHED)){
             news.setPublishTime(new Date());

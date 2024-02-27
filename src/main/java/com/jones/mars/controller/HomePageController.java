@@ -40,26 +40,26 @@ public class HomePageController{
 
     @ApiOperation(value = "企业详情", notes = "企业详情")
     @GetMapping("enterprise/{enterpriseId}")
-    public BaseResponse findOneEnterprise(@PathVariable Long enterpriseId) {
+    public BaseResponse findOneEnterprise(@PathVariable String enterpriseId) {
         return enterpriseService.findById(enterpriseId);
     }
 
     @ApiOperation(value = "项目详情", notes = "项目详情")
     @GetMapping("project/{projectId}")
-    public BaseResponse findOne(@PathVariable Long projectId) {
+    public BaseResponse findOne(@PathVariable String projectId) {
         return projectService.findOne(projectId);
     }
 
     @ApiOperation(value = "项目全景信息", notes = "项目全景信息")
     @GetMapping("project/{projectId}/panoInfo")
-    public BaseResponse findPanoInfo(@PathVariable Long projectId, @ApiParam HotspotQuery query) {
+    public BaseResponse findPanoInfo(@PathVariable String projectId, @ApiParam HotspotQuery query) {
         query.setProjectId(projectId);
         return sceneService.findPanoInfo(query);
     }
 
     @ApiOperation(value = "新闻详情", notes = "新闻详情")
     @GetMapping("news/{newsId}")
-    public BaseResponse findNewsById(@PathVariable Long newsId) {
+    public BaseResponse findNewsById(@PathVariable String newsId) {
         return newsService.findById(newsId);
     }
 
@@ -97,7 +97,7 @@ public class HomePageController{
 
     @ApiOperation(value = "查询模块详情", notes = "")
     @GetMapping("/block/{blockId}")
-    public BaseResponse findOneByBlockId(@PathVariable Long blockId) {
+    public BaseResponse findOneByBlockId(@PathVariable String blockId) {
         return blockService.findBlockById(blockId);
     }
 

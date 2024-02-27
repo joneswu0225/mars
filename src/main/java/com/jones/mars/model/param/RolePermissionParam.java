@@ -18,16 +18,16 @@ import java.util.List;
 @AllArgsConstructor
 public class RolePermissionParam {
   @ApiModelProperty(value="角色ID",name="roleId")
-  private Long roleId;
+  private String roleId;
   @ApiParam(hidden = true)
-  private Long classId;
+  private String classId;
   @ApiParam(hidden = true)
-  private Long userId;
+  private String userId;
   @ApiParam(hidden = true)
-  private Long permissionId;
+  private String permissionId;
   @NotNull(message = "二级分类ID不能为空")
   @ApiModelProperty(value="二级分类ID",name="classIds")
-  private List<Long> classIds;
+  private List<String> classIds;
   @NotNull(message = "操作权限不能为空")
   @ApiModelProperty(value="操作权限，0：查看，1：创建",name="operation")
   private Integer operation;

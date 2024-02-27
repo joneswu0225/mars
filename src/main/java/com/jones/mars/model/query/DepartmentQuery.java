@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @ApiModel(value="部门查询参数")
 public class DepartmentQuery extends Query {
     @ApiModelProperty(value="企业ID",name="enterpriseId")
-    private Long enterpriseId;
+    private String enterpriseId;
     @ApiModelProperty(value="部门名称",name="name")
     private String name;
     @ApiModelProperty(value="部门ID",name="departmentId")
-    private Long departmentId;
+    private String departmentId;
 }

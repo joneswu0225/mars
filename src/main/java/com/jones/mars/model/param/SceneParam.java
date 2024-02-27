@@ -30,20 +30,20 @@ public class SceneParam extends BaseObject {
     private Integer publicFlg;
     @NotNull(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @ApiModelProperty(value="源模块ID",name="srcBlockId")
-    private Long srcBlockId;
+    private String srcBlockId;
 //    @NotNull(message = "场景类型ID不能为空")
 //    @ApiModelProperty(value="场景类型ID",name="sceneTypeId")
 //    private Integer sceneTypeId;
     @ApiModelProperty(value="场景全览图ID",name="imageId")
-    private Long imageId;
+    private String imageId;
     @ApiModelProperty(value="全览图-x",name="locationX")
     private Float locationX;
     @ApiModelProperty(value="全览图-y",name="locationY")
     private Float locationY;
     @ApiParam(hidden = true)
-    private Long sceneTypeId;
+    private String sceneTypeId;
     @ApiParam(hidden = true)
     private Integer sliceStatus;
     @ApiParam(hidden = true)

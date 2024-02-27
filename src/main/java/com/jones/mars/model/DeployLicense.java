@@ -15,7 +15,7 @@ import java.util.Date;
 @Builder
 @TableName("deploy_license")
 public class DeployLicense {
-    private Long id;
+    private String id;
     private String name;
     private String detail;
     private String path;

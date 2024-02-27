@@ -20,6 +20,6 @@ public class ProjectModuleParam extends BaseObject {
     private String name;
     @NotNull(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID称",name="blockId")
-    private Long blockId;
+    private String blockId;
 }
 

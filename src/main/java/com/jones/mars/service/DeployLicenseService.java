@@ -1,7 +1,6 @@
 package com.jones.mars.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonObject;
 import com.jones.mars.model.*;
 import com.jones.mars.model.param.DeployLicenseParam;
 import com.jones.mars.model.query.*;
@@ -10,7 +9,6 @@ import com.jones.mars.util.AESUtil;
 import com.jones.mars.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,7 +47,7 @@ public class DeployLicenseService extends BaseService{
         mapper.insert(deployLicense);
         List<DeployLicense> licenseList = mapper.findAll(DeployLicenseQuery.builder().diskSeries(param.getDiskSeries()).path(param.getPath()).build());
         deployLicense = licenseList.get(0);
-        String diskId = deployLicense.getId().toString();
+        String diskId = deployLicense.getId();
         Integer disk = Integer.valueOf(diskId.substring(diskId.length() - 8));
         String key = String.format("%08d", disk) + deployLicense.getDiskSeries().replace("-","");
         StringJoiner sj = new StringJoiner(";");
@@ -85,9 +83,9 @@ public class DeployLicenseService extends BaseService{
     private BlockExamineContentMapper blockExamineContentMapper;
     @Autowired
     private BlockTourSpotMapper blockTourSpotMapper;
-    public String getLocalDbInfo(Long blockId){
+    public String getLocalDbInfo(String blockId){
         Block block = blockMapper.findOne(blockId);
-        Long enterpriseId = block.getEnterpriseId();
+        String enterpriseId = block.getEnterpriseId();
         Enterprise enterprise = enterpriseMapper.findOne(enterpriseId);
         List<BlockType> blockTypeList = blockTypeMapper.findAll(BlockTypeQuery.builder().enterpriseId(enterpriseId).build());
         List<BlockSceneType> blockSceneTypeList = blockSceneTypeMapper.findAll(BlockSceneTypeQuery.builder().blockId(blockId).build());
@@ -114,15 +112,12 @@ public class DeployLicenseService extends BaseService{
         return result;
     }
 
-    public String getEncryptedDbInfo(String key, String content) throws Exception {
+    public String getEncryptedDbInfo(String key, String blockId) throws Exception {
+        String content = getLocalDbInfo(blockId);
         if(key != null){
-            return AESUtil.AESencrypt(key, content);
+            content = AESUtil.AESencrypt(key, content);
         }
         return content;
-    }
-
-    public String getEncryptedDbInfo(String key, Long blockId) throws Exception {
-        return getEncryptedDbInfo(key, getLocalDbInfo(blockId));
     }
 
 }

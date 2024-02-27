@@ -26,7 +26,7 @@ public class EnterpriseParam extends BaseObject {
     @ApiModelProperty(value="企业简介",name="detail", allowEmptyValue=true)
     private String detail;
     @ApiModelProperty(value="企业管理员ID",name="managerId")
-    private Long managerId;
+    private String managerId;
     @ApiParam(hidden = true)
     private String basePath;
 }

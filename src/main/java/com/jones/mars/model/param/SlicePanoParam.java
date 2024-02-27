@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SlicePanoParam extends BaseObject {
     @ApiModelProperty(value="场景ID",name="sceneId")
-    private Long sceneId;
+    private String sceneId;
     @ApiModelProperty(value="场景code",name="sceneCode")
     private String sceneCode;
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @ApiModelProperty(value="切图类型",name="panoType")
     private KrpanoUtil.PanoType panoType;
 }

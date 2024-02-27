@@ -21,8 +21,8 @@ public class DepartmentUsers {
     private List<DepartmentUser> departmentUserList = new ArrayList<>();
 
     public DepartmentUsers(DepartmentUserParam param){
-        for(Long userid : param.getUserIds()){
-            departmentUserList.add(DepartmentUser.builder().departmentId(param.getDepartmentId()).userId(userid).build());
+        for(String userId : param.getUserIds()){
+            departmentUserList.add(DepartmentUser.builder().departmentId(param.getDepartmentId()).userId(userId).build());
         }
     }
 }

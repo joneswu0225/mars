@@ -34,7 +34,7 @@ public abstract class BaseService<T> {
      */
     public BaseResponse add(BaseObject param){
         getMapper().insert(param);
-        Map<String, Long> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("id", param.getId());
         return BaseResponse.builder().data(map).build();
     }
@@ -54,7 +54,7 @@ public abstract class BaseService<T> {
      * @param id
      * @return
      */
-    public BaseResponse findById(Long id){
+    public BaseResponse findById(String id){
         Object item = getMapper().findOne(id);
         return BaseResponse.builder().data(item).build();
     }
@@ -84,7 +84,7 @@ public abstract class BaseService<T> {
      * @param id
      * @return
      */
-    public BaseResponse delete(Long id){
+    public BaseResponse delete(String id){
         getMapper().delete(id);
         return BaseResponse.builder().build();
     }

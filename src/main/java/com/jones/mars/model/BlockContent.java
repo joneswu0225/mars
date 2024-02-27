@@ -16,6 +16,6 @@ public class BlockContent extends BaseObject {
     private String extra;
     private String content;
     private String title;
-    private Long blockId;
+    private String blockId;
 }
 

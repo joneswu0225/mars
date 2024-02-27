@@ -51,7 +51,7 @@ public class UserService extends BaseService<User>{
     }
 
 
-    public BaseResponse personal(Long userId){
+    public BaseResponse personal(String userId){
         // base info
         User user = mapper.findOne(userId);
         // enterprise
@@ -99,7 +99,7 @@ public class UserService extends BaseService<User>{
                 user.setUserType(User.COMMON);
             }
             mapper.insert(user);
-            Long userId = user.getId();
+            String userId = user.getId();
             user.setId(null);
             user.setUserId(userId);
             user.setSgname("新用户" + user.getMobile().substring(user.getMobile().length()-4));

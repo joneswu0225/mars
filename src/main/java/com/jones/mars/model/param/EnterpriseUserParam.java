@@ -19,9 +19,9 @@ import java.util.List;
 @TableName("enterprise_user")
 public class EnterpriseUserParam extends BaseObject {
     @ApiParam(hidden = true)
-    private Long enterpriseId;
+    private String enterpriseId;
     @ApiModelProperty(value="用户ID",name="userId")
-    private Long userId;
+    private String userId;
     @ApiModelProperty(value="企业管理员",name="managerFlg")
     private Integer managerFlg;
 }

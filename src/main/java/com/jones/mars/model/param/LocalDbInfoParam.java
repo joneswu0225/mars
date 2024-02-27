@@ -22,7 +22,7 @@ public class LocalDbInfoParam extends BaseObject {
     private String key;
     @NotBlank(message="blockID")
     @ApiModelProperty(value="blockID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @ApiModelProperty(value="导出文件名",name="fileName")
     private String fileName = "local.db";
 }

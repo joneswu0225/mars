@@ -186,8 +186,8 @@ public class Snowflake implements Serializable {
     }
 
     public static void main(String[] args) {
-        Long deployId = 111l;
-        Long tableId = 63l;
+        long deployId = 111l;
+        long tableId = 63l;
         Snowflake snowflake = new Snowflake(deployId, tableId);
         for(int i=0;i<=10;i++){
             long id = snowflake.nextId();

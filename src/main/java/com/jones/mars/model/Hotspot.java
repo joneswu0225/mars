@@ -20,7 +20,6 @@ public class Hotspot extends BaseObject {
     public static final String TYPE_DEFAULT = "DEFAULT";
     public static final String TYPE_GUIDE = "GUIDE";
     public static final String TYPE_ATTACHMENT = "ATTACHMENT";
-    private Long id;
     private String code;
     private String icon;
     private String sceneCode;
@@ -30,9 +29,9 @@ public class Hotspot extends BaseObject {
     private Float locationX;
     private Float locationY;
     private Float locationFov;
-    private Long sceneId;
+    private String sceneId;
     private Integer seq;
-    private Long projectId;
+    private String projectId;
     private Date createTime;
     private Date updateTime;
     private List<HotspotContent> contents = new ArrayList<>();

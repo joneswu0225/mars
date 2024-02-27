@@ -18,8 +18,8 @@ import java.util.List;
 @TableName("department")
 public class Department extends BaseObject {
     private String name;
-    private Long enterpriseId;
-    private Long parentId;
+    private String enterpriseId;
+    private String parentId;
     private String parentName;
     private Integer managerId;
     private Integer userCount;
@@ -28,7 +28,7 @@ public class Department extends BaseObject {
     private String managerMobile;
     private String managerDescription;
     private List<DepartmentUser> userList = new ArrayList<>();
-    private Long operatorId;
+    private String operatorId;
     private Date updateTime;
     private Date createTime;
 }

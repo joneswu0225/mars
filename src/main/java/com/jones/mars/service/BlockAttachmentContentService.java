@@ -27,7 +27,7 @@ public class BlockAttachmentContentService extends BaseService{
         Integer maxSeq = mapper.findMaxSeqByAttachmentId(param.getAttachmentId());
         param.setSeq(maxSeq == null ? 0 : maxSeq + 1);
         mapper.insert(param);
-        Map<String, Long> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("id", param.getId());
         return BaseResponse.builder().data(map).build();
     }

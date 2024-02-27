@@ -49,7 +49,7 @@ public class HotspotController extends BaseController {
     @ApiOperation(value = "更新热点", notes = "")
     @PutMapping("{hotspotId}")
     public BaseResponse update(
-            @PathVariable Long hotspotId,
+            @PathVariable String hotspotId,
             @RequestBody @ApiParam(required=true) HotspotParam param) {
         param.setId(hotspotId);
         return service.update(param);
@@ -57,7 +57,7 @@ public class HotspotController extends BaseController {
 
     @ApiOperation(value = "删除热点", notes = "")
     @DeleteMapping("{hotspotId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long hotspotId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String hotspotId) {
         return service.delete(hotspotId);
     }
 

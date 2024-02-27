@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 public class UserWXLoginParam {
     @NotNull(message = "小程序ID不能为空")
     @ApiModelProperty(value="小程序ID",name="weprogramId")
-    private Long weprogramId;
+    private String weprogramId;
     @NotBlank(message = "加密数据不能为空")
     @ApiModelProperty(value="加密数据",name="encryptedData")
     private String encryptedData;

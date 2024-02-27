@@ -17,19 +17,19 @@ import java.util.List;
 @ApiModel(value="项目查询参数")
 public class ProjectQuery extends Query {
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @ApiModelProperty(value="企业ID",name="enterpriseId")
-    private Long enterpriseId;
+    private String enterpriseId;
     @ApiModelProperty(value="来源企业ID",name="oriEnterpriseId")
-    private Long oriEnterpriseId;
+    private String oriEnterpriseId;
     @ApiModelProperty(value="项目名称",name="name")
     private String name;
     @ApiModelProperty(value="一级分类ID",name="moduleId")
-    private Long moduleId;
+    private String moduleId;
     @ApiModelProperty(value="一级分类名称",name="moduleName")
-    private Long moduleName;
+    private String moduleName;
     @ApiModelProperty(value="二级分类ID",name="classId")
-    private Long classId;
+    private String classId;
     @ApiModelProperty(value="查询状态",name="status")
     private Integer status;
     @ApiModelProperty(value="发布状态",name="publishFlg")
@@ -41,9 +41,9 @@ public class ProjectQuery extends Query {
     @ApiParam(hidden = true)
     private Integer plateformFlg;
     @ApiParam(hidden = true)
-    private Long userId;
+    private String userId;
     @ApiParam(hidden = true)
-    private List<Long> ids;
+    private List<String> ids;
     @ApiModelProperty(value="是否可编辑，1：可编辑，我的项目，0：不可编辑企业项目",name="operation")
     private Integer operation;
 }

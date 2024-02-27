@@ -50,7 +50,7 @@ public class HotspotContentService extends BaseService{
         Integer maxSeq = mapper.findMaxSeqByhotspotId(param.getHotspotId());
         param.setSeq(maxSeq == null ? 0 : maxSeq + 1);
         mapper.insertOne(param);
-        Map<String, Long> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("id", param.getId());
         return BaseResponse.builder().data(map).build();
     }

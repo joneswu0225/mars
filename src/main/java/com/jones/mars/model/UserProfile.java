@@ -26,6 +26,6 @@ public class UserProfile extends BaseObject {
     private String job;
     private String mobile;
     private String sgname;
-    private Long userId;
+    private String userId;
 }
 

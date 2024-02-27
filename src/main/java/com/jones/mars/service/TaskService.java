@@ -45,7 +45,7 @@ public class TaskService extends BaseService{
 //        List<ProjectUser> projectUserList = projectUserMapper.findList(ProjectUserQuery.builder().projectId(param.getProjectId()).build());
 //        List<Integer> userIds = projectUserList.stream().map(p -> p.getUserId()).collect(Collectors.toList())
         User loginUser = LoginUtil.getInstance().getUser();
-        List<Long> userIds = (param.getUserIds() != null && param.getUserIds().size() > 0) ? param.getUserIds() : param.getUserId() != null ? Arrays.asList(param.getUserId()) : new ArrayList<>();
+        List<String> userIds = (param.getUserIds() != null && param.getUserIds().size() > 0) ? param.getUserIds() : param.getUserId() != null ? Arrays.asList(param.getUserId()) : new ArrayList<>();
         if(userIds.size() > 0) {
             Task task = mapper.findMaxVersionTask(TaskQuery.builder().type(param.getType()).projectId(param.getProjectId()).build());
             if(task == null || task.getCurrentFlg()==Task.OLD_TASK){
@@ -73,9 +73,9 @@ public class TaskService extends BaseService{
     public BaseResponse findTaskList(TaskQuery query){
         Page<Task> taskPage = findPage(query);
         if(taskPage.getContent().size() > 0){
-            List<Long> projectIds = taskPage.getContent().parallelStream().map(p->p.getProject().getId()).collect(Collectors.toList());
+            List<String> projectIds = taskPage.getContent().parallelStream().map(p->p.getProject().getId()).collect(Collectors.toList());
             List<ProjectUser> projectUsers = projectUserMapper.findList(ProjectUserQuery.builder().projectIds(projectIds).build());
-            Map<Long, List<ProjectUser>> projectUserMap = new HashMap<>();
+            Map<String, List<ProjectUser>> projectUserMap = new HashMap<>();
             projectIds.forEach(p->projectUserMap.put(p, new ArrayList<>()));
             projectUsers.forEach(p->projectUserMap.get(p.getProjectId()).add(p));
             taskPage.getContent().forEach(task -> task.getProject().setUserList(projectUserMap.get(task.getProject().getId())));
@@ -87,9 +87,9 @@ public class TaskService extends BaseService{
         query.setCurrentFlg(Task.CURRENT_TASK);
         List<Task> taskList = mapper.findAll(query);
         if(taskList.size() > 0){
-            List<Long> projectIds = taskList.parallelStream().map(p->p.getProject().getId()).collect(Collectors.toList());
+            List<String> projectIds = taskList.parallelStream().map(p->p.getProject().getId()).collect(Collectors.toList());
             List<ProjectUser> projectUsers = projectUserMapper.findList(ProjectUserQuery.builder().projectIds(projectIds).build());
-            Map<Long, List<ProjectUser>> projectUserMap = new HashMap<>();
+            Map<String, List<ProjectUser>> projectUserMap = new HashMap<>();
             projectIds.forEach(p->projectUserMap.put(p, new ArrayList<>()));
             projectUsers.forEach(p->projectUserMap.get(p.getProjectId()).add(p));
             taskList.forEach(task -> task.getProject().setUserList(projectUserMap.get(task.getProject().getId())));
@@ -102,7 +102,7 @@ public class TaskService extends BaseService{
         mapper.deleteCurrentTask(param);
         return BaseResponse.builder().build();
     }
-    public BaseResponse findPrivateTask(Long taskId){
+    public BaseResponse findPrivateTask(String taskId){
         Map<String, Object> query = new HashMap<>();
         query.put("id", taskId);
         query.put("userId", LoginUtil.getInstance().getUser().getId());
@@ -134,8 +134,8 @@ public class TaskService extends BaseService{
     public void refreshExpiredTaskStatusAndNotify(){
         List<Task> tasks = mapper.findAll(TaskQuery.builder().expireDateLt(new Date()).status(Task.WORKING).build());
         mapper.updateExpiredTaskStatus();
-        Map<String, Set<Long>> adminTask = new HashMap<>();
-        Map<String, Set<Long>> workerTask = new HashMap<>();
+        Map<String, Set<String>> adminTask = new HashMap<>();
+        Map<String, Set<String>> workerTask = new HashMap<>();
         for(Task task: tasks){
             adminTask.putIfAbsent(task.getName(), new HashSet<>());
             workerTask.putIfAbsent(task.getName(), new HashSet<>());
@@ -176,7 +176,7 @@ public class TaskService extends BaseService{
             put("startDate",DateUtil.parseDate("2020-06-07"));
             put("endDate",DateUtil.parseDate("2020-06-19"));
         }});
-        long max_gap = last.getTime() - first.getTime();
+        String max_gap = last.getTime() - first.getTime();
         Date min = last;
         Date max = first;
         Set<Date> dateSet = new HashSet<>();

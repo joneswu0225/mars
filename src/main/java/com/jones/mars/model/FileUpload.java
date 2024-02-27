@@ -17,8 +17,8 @@ public class FileUpload extends BaseObject {
     private String path;
     private String name;
     private String domain;
-    private Long userId;
-    private Long relatedId;
+    private String userId;
+    private String relatedId;
     private FileType type;
 }
 

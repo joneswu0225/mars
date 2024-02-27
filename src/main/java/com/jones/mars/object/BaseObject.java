@@ -16,6 +16,6 @@ import lombok.NoArgsConstructor;
 public class BaseObject {
     @ApiParam(hidden = true)
     @TableId(value="id", type= IdType.ASSIGN_ID)
-    protected Long id;
+    protected String id;
 
 }

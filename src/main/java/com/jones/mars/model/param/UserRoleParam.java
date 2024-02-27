@@ -20,9 +20,9 @@ import java.util.List;
 @TableName("user_role")
 public class UserRoleParam extends BaseObject {
     @ApiParam(hidden = true)
-    private Long roleId;
+    private String roleId;
     @NotEmpty
     @ApiModelProperty(value="用户ID",name="userIds")
-    private List<Long> userIds = new ArrayList<>();
+    private List<String> userIds = new ArrayList<>();
 }
 

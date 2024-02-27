@@ -16,8 +16,8 @@ import java.util.List;
 @Builder
 @TableName("block_scene_type")
 public class BlockSceneType extends BaseObject {
-  private Long blockId;
-  private Long relSceneTypeId;
+  private String blockId;
+  private String relSceneTypeId;
   private String name;
   private String detail;
   private Integer seq;

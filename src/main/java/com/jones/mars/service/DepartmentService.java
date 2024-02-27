@@ -52,8 +52,8 @@ public class DepartmentService extends BaseService {
 
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse update(DepartmentParam param){
-        List<Long> users = departmentUserMapper.findAll(DepartmentQuery.builder().departmentId(param.getDepartmentId()).build()).parallelStream().map(p->p.getUserId()).collect(Collectors.toList());
-        List<Long> userIds = new ArrayList<>(users);
+        List<String> users = departmentUserMapper.findAll(DepartmentQuery.builder().departmentId(param.getDepartmentId()).build()).parallelStream().map(p->p.getUserId()).collect(Collectors.toList());
+        List<String> userIds = new ArrayList<>(users);
         if(param.getUserIds() != null) {
             // 传入的去掉已有的=仍需添加的
             param.getUserIds().removeAll(users);
@@ -85,14 +85,14 @@ public class DepartmentService extends BaseService {
     }
 
 
-    public BaseResponse findOne(Long departmentId){
+    public BaseResponse findOne(String departmentId){
         Department department = mapper.findOne(departmentId);
         department.setUserList(departmentUserMapper.findAll(DepartmentQuery.builder().departmentId(departmentId).build()));
         return BaseResponse.builder().data(department).build();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public BaseResponse delete(Long departmentId){
+    public BaseResponse delete(String departmentId){
         Integer userCount = mapper.findCount(DepartmentQuery.builder().departmentId(departmentId).build());
         if(userCount > 0){
             return BaseResponse.builder().code(ErrorCode.DEPARTMENT_DELETE_EXIST_USER).build();

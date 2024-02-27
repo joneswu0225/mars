@@ -15,5 +15,5 @@ import lombok.NoArgsConstructor;
 @ApiModel(value="部门人员查询参数")
 public class DepartmentUserQuery extends Query {
     @ApiParam(hidden = true)
-    private Long departmentId;
+    private String departmentId;
 }

@@ -38,14 +38,14 @@ public class TaskController extends BaseController {
 
     @ApiOperation(value = "任务详情", notes = "任务详情")
     @GetMapping("{taskId}")
-    public BaseResponse findOne(@PathVariable Long taskId) {
+    public BaseResponse findOne(@PathVariable String taskId) {
         return service.findById(taskId);
     }
 
     @ApiOperation(value = "更新任务状态", notes = "更新任务状态")
     @PutMapping("{taskId}")
     public BaseResponse update(
-            @PathVariable Long taskId,
+            @PathVariable String taskId,
             @RequestBody @ApiParam(required=true) TaskParam param) {
         param.setUpdateBy(LoginUtil.getInstance().getUser().getId());
         param.setId(taskId);
@@ -75,7 +75,7 @@ public class TaskController extends BaseController {
     // TODO 增加后台注解
     @ApiOperation(value = "删除任务", notes = "后台调用")
     @DeleteMapping("{taskId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long taskId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String taskId) {
         return service.delete(taskId);
     }
 

@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 public class ProjectClassParam extends BaseObject {
     @NotNull(message = "一级分类ID不能为空")
     @ApiModelProperty(value="一级分类ID",name="moduleId")
-    private Long moduleId;
+    private String moduleId;
     @NotBlank(message = "二级分类名称不能为空")
     @ApiModelProperty(value="二级分类名称",name="name")
     private String name;

@@ -17,12 +17,12 @@ import java.util.List;
 @AllArgsConstructor
 public class AppConstParam {
     @ApiParam(hidden = true)
-    private Long id;
+    private String id;
     @ApiModelProperty(value="参数名称",name="name")
     private String name;
     @ApiModelProperty(value="参数值",name="value")
     private String value;
     @ApiModelProperty(value="参数ID列表(顺序按照ID顺序)",name="appConstIds")
-    private List<Long> appConstIds;
+    private List<String> appConstIds;
 }
 

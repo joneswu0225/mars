@@ -11,11 +11,11 @@ import java.util.List;
 @Repository
 public interface HotspotContentMapper extends CommonMapper<HotspotContent> {
     void insertByHotspotContentParams(HotspotContentParams params);
-    List<HotspotContent> findByHotspotId(Long hotspotId);
-    void deleteByHotspotId(Long hotspotId);
+    List<HotspotContent> findByHotspotId(String hotspotId);
+    void deleteByHotspotId(String hotspotId);
     void updateHotspotContentSeq(HotspotContentSeqParam param);
     void insertOne(HotspotContentParam param);
     void updateOne(HotspotContentParam param);
-    Integer findMaxSeqByhotspotId(Long hotspotId);
+    Integer findMaxSeqByhotspotId(String hotspotId);
 
 }

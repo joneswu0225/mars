@@ -9,9 +9,9 @@ import java.util.List;
 @Repository
 public interface BlockAttachmentContentMapper extends CommonMapper<BlockAttachmentContent> {
 
-    List<BlockAttachmentContent> findByAttachmentId(Long examineId);
-    void deleteByAttachmentId(Long examineId);
+    List<BlockAttachmentContent> findByAttachmentId(String examineId);
+    void deleteByAttachmentId(String examineId);
     void updateAttachmentContentSeq(BlockAttachmentContentSeqParam param);
-    Integer findMaxSeqByAttachmentId(Long examineId);
+    Integer findMaxSeqByAttachmentId(String examineId);
 
 }

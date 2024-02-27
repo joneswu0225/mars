@@ -49,7 +49,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "验证用户状态", notes = "管理员对用户状态修改")
     @PutMapping("{userId}")
     public BaseResponse update(
-            @PathVariable Long userId,
+            @PathVariable String userId,
             @RequestBody @ApiParam(required=true) UserParam param) {
         User loginUser = LoginUtil.getInstance().getUser();
         if(loginUser.getUserType() == User.COMMON){
@@ -71,14 +71,14 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "查看用户信息", notes = "")
     @GetMapping("{userId}")
-    public BaseResponse userInfo(@PathVariable Long userId) {
+    public BaseResponse userInfo(@PathVariable String userId) {
         return service.personal(userId);
     }
 
     @ApiOperation(value = "更新用户信息", notes = "")
     @PutMapping("{userId}/profile")
     public BaseResponse update(
-            @PathVariable Long userId,
+            @PathVariable String userId,
             @RequestBody @ApiParam(required=true) UserProfileParam param) {
         param.setUserId(userId);
         return service.updateProfile(param);
@@ -86,7 +86,7 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "删除用户", notes = "")
     @DeleteMapping("{userId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long userId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String userId) {
         return service.delete(userId);
     }
 

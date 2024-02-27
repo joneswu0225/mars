@@ -9,9 +9,9 @@ import java.util.List;
 
 @Repository
 public interface BlockContentMapper extends CommonMapper<BlockContent> {
-    List<BlockContent> findByBlockId(Long blockId);
-    void deleteByBlockId(Long blockId);
+    List<BlockContent> findByBlockId(String blockId);
+    void deleteByBlockId(String blockId);
     void updateBlockContentSeq(BlockContentSeqParam param);
-    Integer findMaxSeqByBlockId(Long blockId);
+    Integer findMaxSeqByBlockId(String blockId);
 
 }

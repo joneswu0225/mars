@@ -21,7 +21,7 @@ public class ProjectUsers {
     private List<ProjectUser> projectUsertList = new ArrayList<>();
 
     public ProjectUsers(ProjectUserParam param){
-        for(Long userId : param.getUserIds()){
+        for(String userId : param.getUserIds()){
             projectUsertList.add(ProjectUser.builder().projectId(param.getProjectId()).userId(userId).build());
         }
     }

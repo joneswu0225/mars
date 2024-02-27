@@ -22,7 +22,7 @@ public class Messages extends BaseObject {
 
     public Messages(Message param){
 
-        for(Long receiver : param.getReceiverList()){
+        for(String receiver : param.getReceiverList()){
             messageList.add(Message.builder().title(param.getTitle())
                     .content(param.getContent())
                     .poster(param.getPoster())

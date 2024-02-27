@@ -21,12 +21,12 @@ public class Block extends BaseObject {
     private String icon;
     private String imageUrl;
     private String code;
-    private Long operatorId;
+    private String operatorId;
     private Date updateTime;
     private Date createTime;
     private String status;
-    private Long enterpriseId;
-    private Long blockTypeId;
+    private String enterpriseId;
+    private String blockTypeId;
     private String name;
     private String panoPath;
     private Integer seq;

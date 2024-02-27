@@ -16,8 +16,8 @@ import java.util.List;
 @TableName("project_hotspot")
 public class ProjectHotspot extends BaseObject {
     private Integer seq;
-    private Long hotspotId;
-    private List<Long> hotspotIds;
-    private Long projectId;
+    private String hotspotId;
+    private List<String> hotspotIds;
+    private String projectId;
 }
 

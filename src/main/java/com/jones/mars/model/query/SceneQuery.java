@@ -14,23 +14,23 @@ import lombok.NoArgsConstructor;
 @ApiModel(value="场景查询参数")
 public class SceneQuery extends Query {
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @ApiModelProperty(value="源模块ID",name="srcBlockId")
-    private Long srcBlockId;
+    private String srcBlockId;
     @ApiModelProperty(value="项目ID",name="projectId")
-    private Long projectId;
+    private String projectId;
     @ApiModelProperty(value="是否为公开的场景,0:非公开,1:公开",name="publicFlg")
     private Integer publicFlg;
     @ApiModelProperty(value="一级分类ID",name="moduleId")
-    private Long moduleId;
+    private String moduleId;
     @ApiModelProperty(value="二级分类ID",name="classId")
-    private Long classId;
+    private String classId;
     @ApiModelProperty(value="场景名称",name="name")
     private String name;
     @ApiModelProperty(value="场景Code",name="sceneCode")
     private String sceneCode;
     @ApiModelProperty(value="场景类型ID",name="sceneTypeId")
-    private Long sceneTypeId;
+    private String sceneTypeId;
     @ApiModelProperty(value="场景切图状态",name="sliceStatus")
     private Integer sliceStatus;
 }

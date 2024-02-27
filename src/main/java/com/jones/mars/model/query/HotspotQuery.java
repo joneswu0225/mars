@@ -17,11 +17,11 @@ import java.util.Set;
 @ApiModel(value="热点查询参数")
 public class HotspotQuery extends Query {
     @ApiModelProperty(value="场景ID",name="sceneId")
-    private Long sceneId;
+    private String sceneId;
     @ApiModelProperty(value="项目ID",name="projectId")
-    private Long projectId;
+    private String projectId;
     @ApiModelProperty(hidden = true)
-    private Set<Long> sceneIds;
+    private Set<String> sceneIds;
     @ApiModelProperty(hidden = true)
     private Boolean hasSceneCode;
     @ApiModelProperty(value="热点类型集合",name="types")

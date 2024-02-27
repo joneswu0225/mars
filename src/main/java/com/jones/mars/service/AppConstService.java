@@ -38,12 +38,12 @@ public class AppConstService extends BaseService{
 
     public BaseResponse findRecommendProject(){
         List<AppConst> consts = mapper.findList(AppConstQuery.builder().name(AppConst.HOME_RECOMMEND_PROJECT).build());
-        List<Long> ids = consts.stream().map(p-> Long.parseLong(p.getValue())).collect(Collectors.toList());//.stream().map(p-> Integer.parseInt(p.getValue())).collect(Collectors.toList());
+        List<String> ids = consts.stream().map(p-> p.getValue()).collect(Collectors.toList());//.stream().map(p-> Integer.parseInt(p.getValue())).collect(Collectors.toList());
         List<Project> projects = projectMapper.findAll(ProjectQuery.builder().ids(ids).build());
-        Map<Long, Project> projectIdMap = projects.stream().collect(Collectors.toMap(Project::getId, p->p));
+        Map<String, Project> projectIdMap = projects.stream().collect(Collectors.toMap(Project::getId, p->p));
         List<Project> results = new ArrayList<>();
         consts.forEach(p->{
-            p.setRel(projectIdMap.get(Long.parseLong(p.getValue())));
+            p.setRel(projectIdMap.get(p.getValue()));
         });
         return BaseResponse.builder().data(consts).build();
     }

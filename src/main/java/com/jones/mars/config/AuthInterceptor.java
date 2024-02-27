@@ -184,7 +184,7 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
                 String[] pathParams = requestUri.split("/");
                 if(pathParams.length > 2 && pathParams[2].matches("\\d+")){
                     String projectId = pathParams[2];
-                    ErrorCode errorCode = projectService.projectModifyAuthError(Long.parseLong(projectId));
+                    ErrorCode errorCode = projectService.projectModifyAuthError(projectId);
                     if(errorCode != null){
                         response.setContentType("application/json; charset=utf-8");
                         PrintWriter writer = response.getWriter();

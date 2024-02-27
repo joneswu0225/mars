@@ -53,7 +53,7 @@ public class BlockSceneTypeController extends BaseController {
     @PostMapping("/haite/all")
     public BaseResponse allName(@RequestBody @ApiParam(required=true) HaiteBlockSceneTypeQuery query) {
         List<BlockSceneType> sceneTypeList = (List<BlockSceneType>) service.allName(query.getBlock_id()).getData();
-        List<Long> sceneTypeIdList = sceneTypeList.stream().map(s->s.getId()).collect(Collectors.toList());
+        List<String> sceneTypeIdList = sceneTypeList.stream().map(s->s.getId()).collect(Collectors.toList());
         Map<String, Object> result = new HashMap<>();
         result.put("block_id", query.getBlock_id());
         result.put("scene_type_ids", sceneTypeIdList);
@@ -63,7 +63,7 @@ public class BlockSceneTypeController extends BaseController {
     @ApiOperation(value = "更新场景类型", notes = "更新场景类型")
     @PutMapping("{blockSceneTypeId}")
     public BaseResponse update(
-            @PathVariable Long blockSceneTypeId,
+            @PathVariable String blockSceneTypeId,
             @RequestBody @ApiParam(required=true) BlockSceneTypeParam param) {
         BlockSceneType sceneType = BlockSceneType.builder().blockId(param.getBlockId()).name(param.getName()).detail(param.getDetail()).build();
         sceneType.setId(blockSceneTypeId);
@@ -77,7 +77,7 @@ public class BlockSceneTypeController extends BaseController {
     }
     @ApiOperation(value = "删除场景类型", notes = "后台调用")
     @DeleteMapping("{blockSceneTypeId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long blockSceneTypeId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String blockSceneTypeId) {
         return service.delete(blockSceneTypeId);
     }
 

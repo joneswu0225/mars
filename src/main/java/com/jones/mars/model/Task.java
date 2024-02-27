@@ -26,21 +26,20 @@ public class Task extends BaseObject {
     public static final int CURRENT_TASK = 1;
     public static final int OLD_TASK = 0;
 
-    private Long id;
     private String name;
     private String detail;
     private String type = TaskType.PROJECT_MODIFY.name();
-    private Long blockId;
-    private Long userId;
-    private Long projectId;
+    private String blockId;
+    private String userId;
+    private String projectId;
     private Integer status = CREATING;
     private Date startDate;
     private Date expireDate;
     private Integer currentFlg;
     private Integer deleteFlg;
     private Integer version;
-    private Long createBy;
-    private Long updateBy;
+    private String createBy;
+    private String updateBy;
     private Date createTime;
     private Date updateTime;
     private String creatorSgname;

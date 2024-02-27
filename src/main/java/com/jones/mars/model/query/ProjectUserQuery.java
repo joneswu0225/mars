@@ -14,11 +14,11 @@ import java.util.List;
 @Builder
 public class ProjectUserQuery extends Query {
   @ApiParam(hidden = true)
-  private Long projectId;
+  private String projectId;
   @ApiParam(hidden = true)
-  private Long userId;
+  private String userId;
   @ApiParam(hidden = true)
-  private List<Long> projectIds;
+  private List<String> projectIds;
   @ApiParam(hidden = true)
   private Integer managerFlg;
 }

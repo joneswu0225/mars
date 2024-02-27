@@ -30,11 +30,11 @@ public class KrpanoUtil {
     private static String KRPANO_CONFIG;// = "files/tmp/audio";
     private static Long PROCESS_KRPANO_WAIT_TIME = 100000l;
 
-    public static String getOutPutPath(Long blockId){
+    public static String getOutPutPath(String blockId){
         return ApplicationConst.UPLOAD_PATH + File.separator + FileType.FILE_PATH_PREFIX + File.separator + "block" + File.separator + blockId + File.separator + "panos";
     }
 
-    public static String getOutPutTempPath(Long blockId){
+    public static String getOutPutTempPath(String blockId){
         if(StringUtils.isEmpty(ApplicationConst.getTmpPanoimagePath())){
             return null;
         }
@@ -118,7 +118,7 @@ public class KrpanoUtil {
     }
 
 
-    public static ErrorCode slice(String fileName, Long blockId,  PanoType panoType){
+    public static ErrorCode sliceByBlockId(String fileName, String blockId,  PanoType panoType){
         String tmpPath = getOutPutTempPath(blockId);
         if (tmpPath == null) {
             return slice(fileName, getOutPutPath(blockId), panoType);
@@ -206,7 +206,7 @@ public class KrpanoUtil {
     }
 
 //    public static void main(String[] args) throws IOException {
-////        Long blockId = 22l;
+////        String blockId = 22l;
 ////        String fileName = "/media/jones/1f99b686-b16b-43ad-8aff-c7ec2cbfffc7/projects/pano/images/thumb_tour3d.jpg";
 ////        String outputPath = "%INPUTPATH%/panos/block_id_" + blockId;
 ////        ErrorCode result = KrpanoUtil.slice(fileName, outputPath, PanoType.FLAT);

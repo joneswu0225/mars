@@ -17,8 +17,8 @@ import java.util.List;
 @Builder
 @TableName("block_tour_spot")
 public class BlockTourSpot extends BaseObject {
-    private Long id;
-    private Long blockId;
+    private String id;
+    private String blockId;
     private String scode;
     private String acode;
     private String type;

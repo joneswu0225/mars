@@ -31,10 +31,10 @@ public class AgoraUtil {
         AgoraUtil.APP_CERTIFICATE = appCertificate;
     }
 
-    public static Map<String, Object> getRtcToken(Long userId, String channelName, RtcTokenBuilder.Role role){
+    public static Map<String, Object> getRtcToken(String userId, String channelName, RtcTokenBuilder.Role role){
         RtcTokenBuilder tokenBuilder = new RtcTokenBuilder();
         int timestamp = (int)(System.currentTimeMillis() / 1000 + EXPIRATION_TIME_IN_SECONDS);
-        int userIdInt = (int)(userId % Integer.MAX_VALUE);
+        int userIdInt = (int)(Integer.parseInt(userId) % Integer.MAX_VALUE);
         String token = tokenBuilder.buildTokenWithUid(APP_ID, APP_CERTIFICATE,
                 channelName, userIdInt, role, timestamp);
         Map<String, Object> result = new HashMap<>();
@@ -49,8 +49,8 @@ public class AgoraUtil {
     public static void main(String[] args) throws Exception {
         String channelName = "7d72365eb983485397e3e3f9d460bdda";
         String userAccount = "2082341273";
-        long uid = 2082341273l;
-        int uidInt = (int)(uid % Integer.MAX_VALUE);
+        String uid = "2082341273";
+        int uidInt = (int)(Long.parseLong(uid) % Integer.MAX_VALUE);
         RtcTokenBuilder token = new RtcTokenBuilder();
         int timestamp = (int)(System.currentTimeMillis() / 1000 + EXPIRATION_TIME_IN_SECONDS);
         String result = token.buildTokenWithUserAccount(APP_ID, APP_CERTIFICATE,

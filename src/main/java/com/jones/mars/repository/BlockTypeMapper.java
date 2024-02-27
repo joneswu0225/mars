@@ -11,5 +11,5 @@ import java.util.List;
 public interface BlockTypeMapper extends CommonMapper<BlockType> {
     List<BlockType> findAllName(Query query);
     void updateBlockTypeSeq(BlockTypeSeqParam param);
-    Integer findMaxSeqByEnterpriseId(Long enterprise);
+    Integer findMaxSeqByEnterpriseId(String enterprise);
 }

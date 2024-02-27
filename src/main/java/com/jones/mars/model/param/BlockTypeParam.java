@@ -23,7 +23,7 @@ public class BlockTypeParam extends BaseObject {
     private String detail;
     @NotNull(message = "企业D不能为空")
     @ApiModelProperty(value="企业ID",name="enterpriseId")
-    private Long enterpriseId;
+    private String enterpriseId;
     @ApiParam(hidden = true)
     private Integer seq;
 }

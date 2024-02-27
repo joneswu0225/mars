@@ -16,9 +16,9 @@ import java.util.List;
 @ApiModel(value="漫游热点参数")
 public class BlockTourSpotQuery extends Query {
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @ApiModelProperty(value="模块IDs",name="blockIds")
-    private List<Long> blockIds;
+    private List<String> blockIds;
     @ApiModelProperty(value="类型",name="type")
     private String type;
 }

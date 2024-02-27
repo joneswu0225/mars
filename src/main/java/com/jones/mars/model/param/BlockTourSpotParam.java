@@ -34,9 +34,9 @@ public class BlockTourSpotParam extends BaseObject {
     private String scode;
     @NotNull
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @ApiParam(hidden = true)
-    private Long id;
+    private String id;
     @ApiParam(hidden = true)
     private Integer seq;
 }

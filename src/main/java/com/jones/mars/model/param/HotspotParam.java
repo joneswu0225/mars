@@ -29,10 +29,10 @@ public class HotspotParam extends BaseObject {
     private Float locationFov;
     @NotNull(message = "场景ID不能为空")
     @ApiModelProperty(value="场景ID",name="sceneId")
-    private Long sceneId;
+    private String sceneId;
     @NotNull(message = "项目ID不能为空")
     @ApiModelProperty(value="项目ID",name="projectId")
-    private Long projectId;
+    private String projectId;
     @ApiModelProperty(value="热点图标",name="icon")
     private String icon;
     @ApiModelProperty(value="热点类型",name="type")

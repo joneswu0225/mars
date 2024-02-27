@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @TableName("block_type")
 public class BlockType extends BaseObject {
-  private Long enterpriseId;
+  private String enterpriseId;
   private String name;
   private String detail;
   private Integer seq;

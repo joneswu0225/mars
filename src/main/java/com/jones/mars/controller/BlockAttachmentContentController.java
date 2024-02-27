@@ -29,7 +29,7 @@ public class BlockAttachmentContentController extends BaseController {
 
     @ApiOperation(value = "查看单个设备内容", notes = "")
     @GetMapping("/{blockAttachmentContentId}")
-    public BaseResponse findById(@PathVariable Long blockAttachmentContentId) {
+    public BaseResponse findById(@PathVariable String blockAttachmentContentId) {
         return service.findById(blockAttachmentContentId);
     }
 
@@ -42,7 +42,7 @@ public class BlockAttachmentContentController extends BaseController {
     @ApiOperation(value = "更新内容", notes = "")
     @PostMapping("/{blockAttachmentContentId}")
     public BaseResponse singleUpdate(
-            @PathVariable Long blockAttachmentContentId,
+            @PathVariable String blockAttachmentContentId,
             @RequestBody @ApiParam(required=true) BlockAttachmentContentParam param) {
         param.setId(blockAttachmentContentId);
         return service.update(param);
@@ -56,7 +56,7 @@ public class BlockAttachmentContentController extends BaseController {
 
     @ApiOperation(value = "删除设备内容", notes = "")
     @DeleteMapping("{blockAttachmentContentId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long blockAttachmentContentId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String blockAttachmentContentId) {
         return service.delete(blockAttachmentContentId);
     }
 

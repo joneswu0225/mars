@@ -21,7 +21,7 @@ public class BlockImageService extends BaseService{
         return this.mapper;
     }
 
-    public BaseResponse allName(Long blockId){
+    public BaseResponse allName(String blockId){
         Query query = new Query(BlockImage.builder().blockId(blockId).build());
         List<Object> list = mapper.findAllName(query);
         return BaseResponse.builder().data(list).build();

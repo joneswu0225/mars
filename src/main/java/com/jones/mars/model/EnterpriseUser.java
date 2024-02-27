@@ -22,7 +22,7 @@ public class EnterpriseUser extends BaseObject {
     public static final int ENTERPRISE_NORMAL = 0;
     private Date updateTime;
     private Date createTime;
-    private Long userId;
+    private String userId;
     private String userSgname;
     private String avatar;
     private String detail;
@@ -32,7 +32,7 @@ public class EnterpriseUser extends BaseObject {
     private String mobile;
     private String description;
     private String email;
-    private Long enterpriseId;
+    private String enterpriseId;
     private Integer managerFlg;
     private List<Department> departmentList = new ArrayList<>();
 }

@@ -47,7 +47,7 @@ public class EnterpriseController extends BaseController {
 
     @ApiOperation(value = "企业详情", notes = "企业详情")
     @GetMapping("{enterpriseId}")
-    public BaseResponse findOne(@PathVariable Long enterpriseId) {
+    public BaseResponse findOne(@PathVariable String enterpriseId) {
         return service.findById(enterpriseId);
     }
 
@@ -55,7 +55,7 @@ public class EnterpriseController extends BaseController {
     @ApiOperation(value = "更新企业", notes = "")
     @PutMapping("{enterpriseId}")
     public BaseResponse update(
-            @PathVariable Long enterpriseId,
+            @PathVariable String enterpriseId,
             @RequestBody @ApiParam(required=true) EnterpriseParam param) {
         param.setId(enterpriseId);
         return service.update(param);
@@ -63,14 +63,14 @@ public class EnterpriseController extends BaseController {
 
     @ApiOperation(value = "删除企业", notes = "")
     @DeleteMapping("{enterpriseId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long enterpriseId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String enterpriseId) {
         return service.delete(enterpriseId);
     }
 
     @ApiOperation(value = "人员部门列表", notes = "按人员划分部门")
     @GetMapping("/{enterpriseId}/userDepartment")
     public BaseResponse userlist(
-            @PathVariable Long enterpriseId,
+            @PathVariable String enterpriseId,
             @ApiParam EnterpriseUserQuery query) {
         query.setEnterpriseId(enterpriseId);
         return enterpriseUserService.findByPage(query);
@@ -78,13 +78,13 @@ public class EnterpriseController extends BaseController {
 
     @ApiOperation(value = "企业所有员工列表", notes = "")
     @GetMapping("{enterpriseId}/user")
-    public BaseResponse findEnterpriseUser(@PathVariable Long enterpriseId) {
+    public BaseResponse findEnterpriseUser(@PathVariable String enterpriseId) {
         return service.findEnterpriseUser(enterpriseId);
     }
 
     @ApiOperation(value = "企业添加员工", notes = "")
     @PostMapping("{enterpriseId}/user")
-    public BaseResponse addUser(@PathVariable Long enterpriseId,
+    public BaseResponse addUser(@PathVariable String enterpriseId,
                                 @RequestBody @ApiParam(required=true) EnterpriseUserParam param) {
         List<EnterpriseUser> enterpriseUserList = getLoginUser().getEnterprises().stream().filter(enterpriseUser -> enterpriseUser.getEnterpriseId().equals(enterpriseId)).collect(Collectors.toList());
         if(getLoginUser().getUserType().equals(User.ADMIN) || (enterpriseUserList.size() > 0 && enterpriseUserList.get(0).getManagerFlg().equals(EnterpriseUser.ENTERPRISE_MANAGER))){
@@ -96,7 +96,7 @@ public class EnterpriseController extends BaseController {
     }
     @ApiOperation(value = "更新企业员工类型", notes = "")
     @PutMapping("{enterpriseId}/user")
-    public BaseResponse updateUser(@PathVariable Long enterpriseId,
+    public BaseResponse updateUser(@PathVariable String enterpriseId,
                                 @RequestBody @ApiParam(required=true) EnterpriseUserParam param) {
         List<EnterpriseUser> enterpriseUserList = getLoginUser().getEnterprises().stream().filter(enterpriseUser -> enterpriseUser.getEnterpriseId().equals(enterpriseId)).collect(Collectors.toList());
         if(getLoginUser().getUserType().equals(User.ADMIN) || (enterpriseUserList.size() > 0 && enterpriseUserList.get(0).getManagerFlg().equals(EnterpriseUser.ENTERPRISE_MANAGER))){
@@ -109,8 +109,8 @@ public class EnterpriseController extends BaseController {
 
     @ApiOperation(value = "企业移除员工", notes = "")
     @DeleteMapping("{enterpriseId}/user/{userId}")
-    public BaseResponse removeUser(@PathVariable Long enterpriseId,
-                                @PathVariable Long userId) {
+    public BaseResponse removeUser(@PathVariable String enterpriseId,
+                                @PathVariable String userId) {
         //TODO manage_flg=1
         List<EnterpriseUser> enterpriseUserList = getLoginUser().getEnterprises().stream().filter(enterpriseUser -> enterpriseUser.getEnterpriseId().equals(enterpriseId)).collect(Collectors.toList());
         if(getLoginUser().getUserType().equals(User.ADMIN) || (enterpriseUserList.size() > 0 && enterpriseUserList.get(0).getManagerFlg().equals(EnterpriseUser.ENTERPRISE_MANAGER))){

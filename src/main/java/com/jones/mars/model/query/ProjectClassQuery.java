@@ -17,9 +17,9 @@ import javax.validation.constraints.NotBlank;
 public class ProjectClassQuery extends Query {
     @NotBlank(message = "二级分类ID不能为空")
     @ApiModelProperty(value="二级分类ID",name="moduleId")
-    private Long moduleId;
+    private String moduleId;
     @NotBlank(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
 }
 

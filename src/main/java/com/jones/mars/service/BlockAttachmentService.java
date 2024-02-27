@@ -26,7 +26,7 @@ public class BlockAttachmentService extends BaseService{
         return this.mapper;
     }
 
-    public BaseResponse allName(Long blockId){
+    public BaseResponse allName(String blockId){
         Query query = BlockAttachmentQuery.builder().blockId(blockId).build();
         List<Object> list = mapper.findAllName(query);
         return BaseResponse.builder().data(list).build();
@@ -36,13 +36,13 @@ public class BlockAttachmentService extends BaseService{
         return findByPage(query);
     }
 
-    public BaseResponse findBlockAttachmentById(Long attachmentId){
+    public BaseResponse findBlockAttachmentById(String attachmentId){
         BlockAttachment attachment = mapper.findOne(attachmentId);
         attachment.setBlockAttachmentContentList(blockAttachmentContentMapper.findByAttachmentId(attachment.getId()));
         return BaseResponse.builder().data(attachment).build();
     }
 
-    public BaseResponse deleteAttachment(Long attachmentId){
+    public BaseResponse deleteAttachment(String attachmentId){
         super.delete(attachmentId);
         blockAttachmentContentMapper.deleteByAttachmentId(attachmentId);
         return BaseResponse.builder().build();

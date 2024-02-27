@@ -15,9 +15,9 @@ import java.util.List;
 public class BlockTourSpotSeqParam {
     @NotNull
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @NotEmpty
     @ApiModelProperty(value="排序后ID列表",name="tourSpotIds")
-    private List<Long> tourSpotIds;
+    private List<String> tourSpotIds;
 }
 

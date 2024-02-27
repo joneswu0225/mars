@@ -31,7 +31,7 @@ public enum FileType {
     }
 
     public static final String FILE_PATH_PREFIX = "static/";
-    public String getFilePath(Long relatedId, String fileName){
+    public String getFilePath(String relatedId, String fileName){
         String name = this.name() + "_" + relatedId + "_" + System.currentTimeMillis() + "_" + fileName;
         String relPath = "";
         switch (this){

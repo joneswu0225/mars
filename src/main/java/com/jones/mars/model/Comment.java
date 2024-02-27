@@ -23,13 +23,13 @@ public class Comment extends BaseObject {
 
     private String content;
     private Integer contentType = CONTENT_TYPE_TEXT;
-    private Long userId;
+    private String userId;
     private String userName;
     private String userAvatar;
     private Date createTime;
     private CommentType extType;
     private CommentType type;
-    private Long relatedId;
-    private Long extrelatedId;
+    private String relatedId;
+    private String extrelatedId;
 }
 

@@ -26,7 +26,7 @@ public class LoginUtil {
     public static final int COOKIE_MAX_INACTIVE_INTERVAL = 86400;
     public static LoginUtil INSTANCE = null;
     private ConcurrentHashMap<String, User> loginUser = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<Long, String> userIdAuth = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, String> userIdAuth = new ConcurrentHashMap<>();
 
 //    @Value("${app.domain:vr2shipping.com}")
 //    private void setAppDomain(String appDomain){

@@ -47,7 +47,7 @@ public class EnterpriseService extends BaseService {
         if(param.getManagerId() != null){
             enterpriseUserMapper.insert(EnterpriseUser.builder().enterpriseId(param.getId()).userId(param.getManagerId()).managerFlg(EnterpriseUser.ENTERPRISE_MANAGER).build());
         }
-        Long enterpriseId = param.getId();
+        String enterpriseId = param.getId();
         return BaseResponse.builder().data(enterpriseUserMapper.findEnterpriseUser(enterpriseId)).build();
     }
 
@@ -56,7 +56,7 @@ public class EnterpriseService extends BaseService {
      * @param enterpriseId
      * @return
      */
-    public BaseResponse findEnterpriseUser(Long enterpriseId){
+    public BaseResponse findEnterpriseUser(String enterpriseId){
         return BaseResponse.builder().data(enterpriseUserMapper.findEnterpriseUser(enterpriseId)).build();
     }
 

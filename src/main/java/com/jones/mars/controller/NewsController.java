@@ -36,14 +36,14 @@ public class NewsController extends BaseController {
 
     @ApiOperation(value = "新闻动态详情", notes = "新闻动态详情")
     @GetMapping("{newsId}")
-    public BaseResponse findOne(@PathVariable Long newsId) {
+    public BaseResponse findOne(@PathVariable String newsId) {
         return service.findById(newsId);
     }
 
     @ApiOperation(value = "更新新闻动态", notes = "更新新闻动态")
     @PutMapping("{newsId}")
     public BaseResponse update(
-            @PathVariable Long newsId,
+            @PathVariable String newsId,
             @RequestBody @ApiParam(required=true) NewsParam param) {
         param.setId(newsId);
         param.setStatus(News.STATUS_EDITING);
@@ -51,31 +51,31 @@ public class NewsController extends BaseController {
     }
     @ApiOperation(value = "发布新闻动态", notes = "发布新闻动态")
     @PutMapping("{newsId}/publish")
-    public BaseResponse publish(@PathVariable Long newsId) {
+    public BaseResponse publish(@PathVariable String newsId) {
         return service.updateStatus(newsId, News.STATUS_PUBLISHED);
     }
     @ApiOperation(value = "下架新闻动态", notes = "下架新闻动态")
     @PutMapping("{newsId}/downshelf")
-    public BaseResponse downshelf(@PathVariable Long newsId) {
+    public BaseResponse downshelf(@PathVariable String newsId) {
         return service.updateStatus(newsId, News.STATUS_DOWNSHELF);
     }
 
     @ApiOperation(value = "置顶新闻动态", notes = "置顶新闻动态")
     @PutMapping("{newsId}/settop")
-    public BaseResponse setTop(@PathVariable Long newsId) {
+    public BaseResponse setTop(@PathVariable String newsId) {
         return service.updateTopFlg(newsId, News.TOP_SET);
     }
 
     @ApiOperation(value = "取消置顶新闻动态", notes = "取消置顶新闻动态")
     @PutMapping("{newsId}/canceltop")
-    public BaseResponse cancelTop(@PathVariable Long newsId) {
+    public BaseResponse cancelTop(@PathVariable String newsId) {
         return service.updateTopFlg(newsId, News.TOP_CANCEL);
     }
 
     // TODO 增加后台注解
     @ApiOperation(value = "删除新闻动态", notes = "后台调用")
     @DeleteMapping("{newsId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long newsId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String newsId) {
         return service.delete(newsId);
     }
 

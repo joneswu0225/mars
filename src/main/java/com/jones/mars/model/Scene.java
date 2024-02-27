@@ -21,14 +21,14 @@ public class Scene extends BaseObject {
     public static final int SLICESTATUS_TODO = 0;
     public static final int SLICESTATUS_FINISH = 1;
 
-    private Long sceneTypeId;
+    private String sceneTypeId;
     private String sceneTypeName;
     private String code;
     private String name;
     private String detail;
-    private Long blockId;
-    private Long srcBlockId;
-    private Long imageId;
+    private String blockId;
+    private String srcBlockId;
+    private String imageId;
     private String imageUrl;
     private String panoImageUrl;
     private Float locationX;
@@ -36,7 +36,7 @@ public class Scene extends BaseObject {
     private Integer seq;
     private Integer sliceStatus;
     private Integer publicFlg = UNPUBLIC;
-    private Long relSceneTypeId;
+    private String relSceneTypeId;
     private String relSceneTypeName;
     private List<Hotspot> hotspots = new ArrayList<>();
 

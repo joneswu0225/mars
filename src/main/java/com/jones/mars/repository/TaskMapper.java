@@ -12,6 +12,6 @@ public interface TaskMapper extends CommonMapper<Task> {
     List<Object> findAllName(Query query);
     Task findMaxVersionTask(Query query);
     Task findPrivateTask(Object query);
-    Long deleteCurrentTask(TaskParam param);
+    String deleteCurrentTask(TaskParam param);
     void updateExpiredTaskStatus();
 }

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @TableName("block_project")
 public class BlockProject extends BaseObject {
-  private Long projectId;
-  private Long blockId;
+  private String projectId;
+  private String blockId;
 }
 

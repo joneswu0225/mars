@@ -12,7 +12,7 @@ public interface SceneMapper extends CommonMapper<Scene> {
     List<Scene> findAllName(Query query);
     void updateSceneSeq(SceneSeqParam param);
 
-    Integer findMaxSeqByBlockId(Long blockId);
+    Integer findMaxSeqByBlockId(String blockId);
 
 }
 

@@ -16,13 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjectUserParam {
   @ApiParam(hidden = true)
-  private Long userId;
+  private String userId;
   @ApiParam(hidden = true)
-  private List<Long> ids;
+  private List<String> ids;
   @ApiParam(hidden = true)
-  private Long projectId;
+  private String projectId;
   @ApiModelProperty(value="用户ID",name="userIds")
-  private List<Long> userIds = new ArrayList<>();
+  private List<String> userIds = new ArrayList<>();
   @ApiParam(hidden = true)
   private Integer managerFlg = 0;
 }

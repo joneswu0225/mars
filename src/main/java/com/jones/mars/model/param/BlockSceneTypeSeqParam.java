@@ -15,10 +15,10 @@ import java.util.List;
 public class BlockSceneTypeSeqParam {
     @NotNull
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @NotEmpty
     @ApiModelProperty(value="场景类型ID列表",name="sceneIds")
-    private List<Long> sceneTypeIds;
+    private List<String> sceneTypeIds;
 
 }
 

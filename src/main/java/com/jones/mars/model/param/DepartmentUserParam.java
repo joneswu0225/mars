@@ -17,13 +17,13 @@ import java.util.List;
 @AllArgsConstructor
 public class DepartmentUserParam extends BaseObject {
     @ApiParam(hidden = true)
-    private Long departmentId;
+    private String departmentId;
     @ApiParam(hidden = true)
-    private Long enterpriseId;
+    private String enterpriseId;
     @ApiParam(hidden = true)
-    private Long userId;
+    private String userId;
     @NotEmpty
     @ApiModelProperty(value="用户ID",name="userIds")
-    private List<Long> userIds;
+    private List<String> userIds;
 }
 

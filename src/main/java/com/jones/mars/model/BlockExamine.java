@@ -20,9 +20,9 @@ public class BlockExamine extends BaseObject {
     private String name;
     private String detail;
     private String imageUrl;
-    private Long blockId;
-    private Long parentId;
-    private Long creatorId;
+    private String blockId;
+    private String parentId;
+    private String creatorId;
     private String type;
     private Integer seq;
     private Date updateTime;

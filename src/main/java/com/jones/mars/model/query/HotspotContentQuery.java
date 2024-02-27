@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @ApiModel(value="热点内容查询参数")
 public class HotspotContentQuery extends Query {
     @ApiModelProperty(value="场景ID",name="hotspotId")
-    private Long hotspotId;
+    private String hotspotId;
     @ApiModelProperty(value="热点内容类型",name="type")
     private String type;
 }

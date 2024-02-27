@@ -22,8 +22,7 @@ public class User extends BaseObject {
     public static final int ENTMANAGER = 1;
     public static final int ADMIN = 2;
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    private String id;
     private String mobile;
     private String nickname;
     private String departmentName;
@@ -31,7 +30,7 @@ public class User extends BaseObject {
     private String password;
     private String passwordOld;
     private String openid;
-    private Long userId;
+    private String userId;
     private String unionid;
     private Integer userType;
     private String verifyCode;

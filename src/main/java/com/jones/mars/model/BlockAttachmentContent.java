@@ -16,6 +16,6 @@ public class BlockAttachmentContent extends BaseObject {
     private String extra;
     private String content;
     private String title;
-    private Long attachmentId;
+    private String attachmentId;
 }
 

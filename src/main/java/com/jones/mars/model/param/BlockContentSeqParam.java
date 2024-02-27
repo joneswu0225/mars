@@ -15,9 +15,9 @@ import java.util.List;
 public class BlockContentSeqParam {
     @NotNull
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @NotEmpty
     @ApiModelProperty(value="模块内容ID列表",name="blockContentIds")
-    private List<Long> blockContentIds;
+    private List<String> blockContentIds;
 }
 

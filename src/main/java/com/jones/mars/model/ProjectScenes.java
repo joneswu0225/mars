@@ -20,7 +20,7 @@ public class ProjectScenes {
     private List<ProjectScene> projectSceneList = new ArrayList<>();
 
     public ProjectScenes(ProjectSceneParam param){
-        for(Long sceneId : param.getSceneIds()){
+        for(String sceneId : param.getSceneIds()){
             projectSceneList.add(ProjectScene.builder().projectId(param.getProjectId()).sceneId(sceneId).build());
         }
     }

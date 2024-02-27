@@ -27,7 +27,7 @@ public class BlockExamineService extends BaseService{
         return this.mapper;
     }
 
-    public BaseResponse allName(Long blockId){
+    public BaseResponse allName(String blockId){
         Query query = BlockExamineQuery.builder().blockId(blockId).build();
         List<Object> list = mapper.findAllName(query);
         return BaseResponse.builder().data(list).build();
@@ -37,13 +37,13 @@ public class BlockExamineService extends BaseService{
         return findByPage(query);
     }
 
-    public BaseResponse findBlockExamineById(Long examineId){
+    public BaseResponse findBlockExamineById(String examineId){
         BlockExamine examine = mapper.findOne(examineId);
         examine.setBlockExamineContentList(blockExamineContentMapper.findByExamineId(examine.getId()));
         return BaseResponse.builder().data(examine).build();
     }
 
-    public BaseResponse deleteExamine(Long examineId){
+    public BaseResponse deleteExamine(String examineId){
         super.delete(examineId);
         blockExamineContentMapper.deleteByExamineId(examineId);
         return BaseResponse.builder().build();

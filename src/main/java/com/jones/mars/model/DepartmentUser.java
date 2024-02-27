@@ -17,12 +17,12 @@ import java.util.Date;
 public class DepartmentUser extends BaseObject {
     private Date updateTime;
     private Date createTime;
-    private Long userId;
+    private String userId;
     private String userSgname;
     private String userEmail;
     private String userMobile;
     private String userDescription;
-    private Long departmentId;
-    private Long enterpriseId;
+    private String departmentId;
+    private String enterpriseId;
 }
 

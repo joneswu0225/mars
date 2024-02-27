@@ -20,6 +20,6 @@ public class HotspotContent extends BaseObject {
     private String extra;
     private String content;
     private String title;
-    private Long hotspotId;
+    private String hotspotId;
 }
 

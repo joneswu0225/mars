@@ -21,7 +21,7 @@ public class Tasks {
     private List<Task> taskList = new ArrayList<>();
 
     public Tasks(TaskParam param){
-        for(Long userId : param.getUserIds()){
+        for(String userId : param.getUserIds()){
             taskList.add(Task.builder()
                     .name(param.getName())
                     .detail(param.getDetail())

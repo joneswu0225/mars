@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @TableName("project_scene")
 public class ProjectScene extends BaseObject {
     private Integer seq;
-    private Long sceneId;
-    private Long projectId;
+    private String sceneId;
+    private String projectId;
 }
 

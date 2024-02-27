@@ -20,12 +20,12 @@ public class BlockExamineQuery extends Query {
     @ApiModelProperty(value="名称",name="name")
     private String name;
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @ApiModelProperty(value="父ID",name="parentId")
-    private Long parentId;
+    private String parentId;
     @ApiModelProperty(value="类型",name="类型")
     private String type;
     @ApiParam(hidden = true)
-    private Long creatorId;
+    private String creatorId;
 }
 

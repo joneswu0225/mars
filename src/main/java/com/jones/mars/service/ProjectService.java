@@ -45,7 +45,7 @@ public class ProjectService extends BaseService {
     @Autowired
     private HotspotMapper hotspotMapper;
     @Value("${app.public.block.id:3}")
-    private Long publicBlockId;
+    private String publicBlockId;
 
     private static final Integer FORCE_EXECUTE = 1;
 
@@ -77,7 +77,7 @@ public class ProjectService extends BaseService {
         param.setCreatorId(currentUser.getId());
         param.setStatus(Project.CREATING);
         mapper.insert(param);
-        Long projectId = param.getId();
+        String projectId = param.getId();
         log.info("关联模块与项目关系");
         BlockProject blockProject = BlockProject.builder().blockId(param.getBlockId()).projectId(projectId).build();
         blockProjectMapper.insert(blockProject);
@@ -85,7 +85,7 @@ public class ProjectService extends BaseService {
         log.info("新增当前用户为项目负责人");
         projectUserMapper.insert(new ProjectUsers(ProjectUserParam.builder().projectId(projectId).userIds(Arrays.asList(currentUser.getId())).managerFlg(ProjectUser.PROJECT_MANAGER).build()));
 //        }
-        List<Long> userIds = param.getUserIds();
+        List<String> userIds = param.getUserIds();
         if (!CollectionUtils.isEmpty(userIds)) {
             userIds.remove(currentUser.getId());
             log.info("添加项目共建人");
@@ -99,7 +99,7 @@ public class ProjectService extends BaseService {
     }
 
 
-    public ErrorCode projectModifyAuthError(Long projectId){
+    public ErrorCode projectModifyAuthError(String projectId){
         Project project = mapper.findOne(projectId);
         User loginUser = LoginUtil.getInstance().getUser();
         if(loginUser.getUserType().equals(User.COMMON)){
@@ -115,7 +115,7 @@ public class ProjectService extends BaseService {
                 return ErrorCode.AUTH_PROJECT_EDIT_NOTPARTNER;
             }
         } else if(loginUser.getUserType().equals(User.ENTMANAGER)) {
-            List<Long> enterpriseIds = loginUser.getEnterprises().stream().map(p->p.getId()).collect(Collectors.toList());
+            List<String> enterpriseIds = loginUser.getEnterprises().stream().map(p->p.getId()).collect(Collectors.toList());
             if(!enterpriseIds.contains(project.getOriEnterpriseId())) {
                 log.info("用户[ %s ] 因非该企业管理员无法修改项目信息", loginUser.getMobile());
                 return ErrorCode.AUTH_PROJECT_EDIT_UNAUTH;
@@ -138,10 +138,10 @@ public class ProjectService extends BaseService {
         log.info("更新项目{} {}", param.getId(), param.getName());
         param.setStatus(Project.EDITIND);
         mapper.update(param);
-        Long projectId = param.getId();
+        String projectId = param.getId();
         log.info("添加项目共建人");
         if (!CollectionUtils.isEmpty(param.getUserIds())) {
-            List<Long> oriUserIds = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
+            List<String> oriUserIds = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
             param.getUserIds().removeAll(oriUserIds);
             if(param.getUserIds().size() > 0){
                 projectUserMapper.insert(ProjectUserParam.builder().projectId(projectId).userIds(param.getUserIds()).build());
@@ -163,7 +163,7 @@ public class ProjectService extends BaseService {
      * @return
      */
     @Transactional
-    public BaseResponse delete(Long projectId){
+    public BaseResponse delete(String projectId){
 //        ErrorCode projectModifyAuthError = projectModifyAuthError(projectId);
 //        if(projectModifyAuthError != null){
 //            return BaseResponse.builder().code(projectModifyAuthError).build();
@@ -201,7 +201,7 @@ public class ProjectService extends BaseService {
     }
 
     //TODO split authority
-    public BaseResponse findOne(Long projectId){
+    public BaseResponse findOne(String projectId){
         Project project = mapper.findOne(projectId);
         User loginUser = LoginUtil.getInstance().getUser();
         if(project.getPublicFlg().equals(Project.UNPUBLIC) && project.getEnterprisePlateformFlg().equals(CommonConstant.NOPLATEFROM)){
@@ -214,7 +214,7 @@ public class ProjectService extends BaseService {
                         return BaseResponse.builder().code(ErrorCode.AUTH_PROJECT_UNAUTH).build();
                     }
                 } else if(loginUser.getUserType().equals(User.ENTMANAGER)) {
-                    List<Long> enterpriseIds = loginUser.getEnterprises().stream().map(p->p.getId()).collect(Collectors.toList());
+                    List<String> enterpriseIds = loginUser.getEnterprises().stream().map(p->p.getId()).collect(Collectors.toList());
                     if(!enterpriseIds.contains(project.getOriEnterpriseId())) {
                         return BaseResponse.builder().code(ErrorCode.AUTH_PROJECT_UNAUTH).build();
                     }
@@ -238,7 +238,7 @@ public class ProjectService extends BaseService {
     }
 
     @Transactional
-    public BaseResponse updateProjectManager(Long projectId, Long userId){
+    public BaseResponse updateProjectManager(String projectId, String userId){
         projectUserMapper.update(ProjectUser.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build());
         projectUserMapper.update(ProjectUser.builder().projectId(projectId).userId(userId).managerFlg(ProjectUser.PROJECT_MANAGER).build());
         service.sendAddToProjectManager(mapper.findOne(projectId).getName(), userId);
@@ -253,14 +253,14 @@ public class ProjectService extends BaseService {
         return BaseResponse.builder().build();
     }
 
-    public BaseResponse submitVerifyProject(Long projectId){
+    public BaseResponse submitVerifyProject(String projectId){
         BaseResponse response = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);
         if(project.getStatus().equals(Project.EDITIND)){
             Project updateProject = Project.builder().status(Project.VERIFYING).build();
             updateProject.setId(projectId);
             mapper.update(updateProject);
-            List<Long> mangerIds =enterpriseUserMapper.findAll(EnterpriseUserQuery.builder().enterpriseId(project.getOriEnterpriseId()).isManager(EnterpriseUser.ENTERPRISE_MANAGER).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
+            List<String> mangerIds =enterpriseUserMapper.findAll(EnterpriseUserQuery.builder().enterpriseId(project.getOriEnterpriseId()).isManager(EnterpriseUser.ENTERPRISE_MANAGER).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
             service.sendSubmitVerifyProject(LoginUtil.getLoginSgname(), project.getName(), mangerIds);
         } else {
             response.setErrorCode(ErrorCode.PROJECT_VERIFY_VERIFIED);
@@ -269,11 +269,11 @@ public class ProjectService extends BaseService {
     }
 
     @Transactional
-    public BaseResponse verifyProject(Long projectId, Boolean isPass, String reason){
+    public BaseResponse verifyProject(String projectId, Boolean isPass, String reason){
         BaseResponse response  = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);
         if(project.getStatus().equals(Project.VERIFYING)) {
-            List<Long> oriUserIds = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
+            List<String> oriUserIds = projectUserMapper.findList(ProjectUserQuery.builder().projectId(projectId).managerFlg(ProjectUser.PROJECT_NORMAL).build()).stream().map(p->p.getUserId()).collect(Collectors.toList());
             if (isPass) {
                 response = onshelfProject(projectId, false);
                 // 获取项目当前处理中的任务
@@ -294,11 +294,11 @@ public class ProjectService extends BaseService {
         return response;
     }
 
-    public BaseResponse onshelfProject(Long projectId, Boolean publicFlag){
+    public BaseResponse onshelfProject(String projectId, Boolean publicFlag){
         return onshelfProject(projectId, publicFlag, FORCE_EXECUTE);
     }
 
-    public BaseResponse onshelfProject(Long projectId, Boolean publicFlag, Integer force){
+    public BaseResponse onshelfProject(String projectId, Boolean publicFlag, Integer force){
         force = force == null ? 0 : force;
         BaseResponse response  = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);
@@ -317,7 +317,7 @@ public class ProjectService extends BaseService {
     }
 
     @Transactional
-    public BaseResponse offshelfProject(Long projectId){
+    public BaseResponse offshelfProject(String projectId){
         BaseResponse response  = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);
         if(project.getStatus().equals(Project.ONSHELF)){
@@ -332,7 +332,7 @@ public class ProjectService extends BaseService {
     }
 
     @Transactional
-    public BaseResponse unpublicProject(Long projectId){
+    public BaseResponse unpublicProject(String projectId){
         Project project = Project.builder().publicFlg(Project.UNPUBLIC).build();
         project.setId(projectId);
         mapper.update(project);
@@ -341,7 +341,7 @@ public class ProjectService extends BaseService {
     }
 
     @Transactional
-    public BaseResponse backToEditProject(Long projectId){
+    public BaseResponse backToEditProject(String projectId){
         Project project = Project.builder().status(Project.EDITIND).build();
         project.setId(projectId);
         mapper.update(project);
@@ -349,7 +349,7 @@ public class ProjectService extends BaseService {
     }
 
     @Transactional
-    public BaseResponse publicProject(Long projectId){
+    public BaseResponse publicProject(String projectId){
         Project project = Project.builder().publicFlg(Project.PUBLIC).build();
         project.setId(projectId);
         mapper.update(project);
@@ -357,7 +357,7 @@ public class ProjectService extends BaseService {
         return BaseResponse.builder().build();
     }
 
-    public BaseResponse remodifyProject(Long projectId, Integer force) {
+    public BaseResponse remodifyProject(String projectId, Integer force) {
         force = force == null ? 0 : force;
         BaseResponse response  = BaseResponse.builder().build();
         Project project = mapper.findOne(projectId);

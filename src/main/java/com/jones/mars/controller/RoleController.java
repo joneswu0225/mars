@@ -49,7 +49,7 @@ public class RoleController extends BaseController {
     @ApiOperation(value = "更新角色", notes = "更新角色")
     @PutMapping("{roleId}")
     public BaseResponse update(
-            @PathVariable Long roleId,
+            @PathVariable String roleId,
             @RequestBody @ApiParam(required=true) RoleParam param) {
         param.setId(roleId);
         return service.update(param);
@@ -57,14 +57,14 @@ public class RoleController extends BaseController {
 
     @ApiOperation(value = "删除角色", notes = "后台调用")
     @DeleteMapping("{roleId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long roleId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String roleId) {
         return service.delete(roleId);
     }
 
     @ApiOperation(value = "角色新增权限", notes = "")
     @PostMapping("{roleId}/permission")
     public BaseResponse addPermission(
-            @PathVariable Long roleId,
+            @PathVariable String roleId,
             @RequestBody @ApiParam(required=true) RolePermissionParam param) {
         param.setRoleId(roleId);
         return service.addPermission(param);
@@ -72,15 +72,15 @@ public class RoleController extends BaseController {
 
     @ApiOperation(value = "角色移除权限", notes = "")
     @DeleteMapping("{roleId}/permission/{permissionId}")
-    public BaseResponse removePermission(@PathVariable @ApiParam(required=true) Long roleId,
-                               @PathVariable @ApiParam(required=true) Long permissionId) {
+    public BaseResponse removePermission(@PathVariable @ApiParam(required=true) String roleId,
+                               @PathVariable @ApiParam(required=true) String permissionId) {
         return service.removePermission(permissionId);
     }
 
     @ApiOperation(value = "角色加人", notes = "")
     @PostMapping("{roleId}/user")
     public BaseResponse addUser(
-            @PathVariable Long roleId,
+            @PathVariable String roleId,
             @RequestBody @ApiParam(required=true) UserRoleParam param) {
         param.setRoleId(roleId);
         return service.addUser(param);
@@ -88,8 +88,8 @@ public class RoleController extends BaseController {
 
     @ApiOperation(value = "角色删人", notes = "")
     @DeleteMapping("{roleId}/user/{userId}")
-    public BaseResponse removeUser(@PathVariable @ApiParam(required=true) Long roleId,
-                               @PathVariable @ApiParam(required=true) Long userId) {
+    public BaseResponse removeUser(@PathVariable @ApiParam(required=true) String roleId,
+                               @PathVariable @ApiParam(required=true) String userId) {
         return service.removeUser(UserRole.builder().roleId(roleId).userId(userId).build());
     }
 

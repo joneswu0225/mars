@@ -44,7 +44,7 @@ public class ProjectModuleController extends BaseController {
     @ApiOperation(value = "更新一级分类顺序", notes = "更新一级分类")
     @PutMapping("{projectModuleId}")
     public BaseResponse update(
-            @PathVariable Long projectModuleId,
+            @PathVariable String projectModuleId,
             @RequestBody @ApiParam(required=true) ProjectModuleParam param) {
         BlockModule blockModule = BlockModule.builder().name(param.getName()).build();
         blockModule.setId(projectModuleId);
@@ -54,7 +54,7 @@ public class ProjectModuleController extends BaseController {
     // TODO 增加后台注解
     @ApiOperation(value = "删除一级分类", notes = "后台调用")
     @DeleteMapping("{projectModuleId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long projectModuleId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String projectModuleId) {
         return service.delete(projectModuleId);
     }
 

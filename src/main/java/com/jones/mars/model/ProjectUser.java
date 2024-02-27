@@ -17,8 +17,8 @@ import java.util.Date;
 public class ProjectUser extends BaseObject {
   public static final int PROJECT_MANAGER = 1;
   public static final int PROJECT_NORMAL = 0;
-  private Long projectId;
-  private Long userId;
+  private String projectId;
+  private String userId;
   private String sgname;
   private String mobile;
   private String avatar;

@@ -45,7 +45,7 @@ public class BlockTypeController extends BaseController {
     @ApiOperation(value = "更新模块类型", notes = "更新模块类型")
     @PutMapping("{blockTypeId}")
     public BaseResponse update(
-            @PathVariable Long blockTypeId,
+            @PathVariable String blockTypeId,
             @RequestBody @ApiParam(required=true) BlockTypeParam param) {
         BlockType sceneType = BlockType.builder().enterpriseId(param.getEnterpriseId()).name(param.getName()).detail(param.getDetail()).build();
         sceneType.setId(blockTypeId);
@@ -59,7 +59,7 @@ public class BlockTypeController extends BaseController {
     }
     @ApiOperation(value = "删除模块类型", notes = "后台调用")
     @DeleteMapping("{blockTypeId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long blockTypeId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String blockTypeId) {
         return service.delete(blockTypeId);
     }
 

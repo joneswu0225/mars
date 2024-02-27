@@ -14,13 +14,13 @@ import lombok.NoArgsConstructor;
 @ApiModel(value="企业人员")
 public class EnterpriseUserQuery extends Query {
     @ApiModelProperty(value="企业ID",name="enterpriseId")
-    private Long enterpriseId;
+    private String enterpriseId;
     @ApiModelProperty(value="员工名称",name="sgname")
     private String sgname;
     @ApiModelProperty(value="员工名称",name="userId")
-    private Long userId;
+    private String userId;
     @ApiModelProperty(value="部门ID",name="departmentId")
-    private Long departmentId;
+    private String departmentId;
     @ApiModelProperty(value="是否为企业管理员",name="isManager")
     private Integer isManager;
 }

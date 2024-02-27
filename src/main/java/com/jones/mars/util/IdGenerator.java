@@ -15,8 +15,11 @@ public class IdGenerator {
 
     private static final String LOCAL_IP = getLocalIp();
     private static final String ENC_IP = getEncIp();
-    private static long ENTERPRISE_ID;
+    private static String ENTERPRISE_ID;
 
+    public static String Dec2Enc(String number, int round){
+        return Dec2Enc(Long.parseLong(number), round);
+    }
     public static String Dec2Enc(Long number, int round){
         StringBuilder sb = new StringBuilder();
         for (int i=0; i<round; i++){
@@ -65,7 +68,7 @@ public class IdGenerator {
         return sb.toString();
     }
 
-    public static String getId(Long enterpriseId, Long blockId){
+    public static String getId(String enterpriseId, String blockId){
         StringBuilder sb = new StringBuilder();
         sb.append(Dec2Enc(enterpriseId, 3))
                 .append(Dec2Enc(blockId, 4))
@@ -75,16 +78,16 @@ public class IdGenerator {
         return sb.toString();
     }
 
-    public static String getId(Long blockId){
+    public static String getId(String blockId){
         return getId(ENTERPRISE_ID, blockId);
     }
 
     public static String getId(){
-        return getId(0l);
+        return getId("0");
     }
 
 //    @Value("${app.enterprise.id:0}")
-    public static void setEnterpriseId(Long enterpriseId) {
+    public static void setEnterpriseId(String enterpriseId) {
         ENTERPRISE_ID=enterpriseId;
     }
 //    public static void main(String[] args){

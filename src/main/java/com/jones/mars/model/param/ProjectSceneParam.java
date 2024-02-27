@@ -18,14 +18,14 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjectSceneParam {
     @ApiParam(hidden = true)
-    private Long id;
+    private String id;
     @ApiParam(hidden = true)
     private Integer seq;
     @ApiParam(hidden = true)
-    private Long projectId;
+    private String projectId;
     @ApiModelProperty(value="场景ID",name="sceneId")
-    private Long sceneId;
+    private String sceneId;
     @ApiModelProperty(value="场景ID列表(场景顺序按照场景ID顺序排列)",name="sceneIds")
-    private List<Long> sceneIds;
+    private List<String> sceneIds;
 }
 

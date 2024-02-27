@@ -66,7 +66,7 @@ public class FileUploadService extends BaseService{
         return this.mapper;
     }
 
-    public BaseResponse uploadFile(MultipartFile file, String fileName, FileType fileType, Long relatedId){
+    public BaseResponse uploadFile(MultipartFile file, String fileName, FileType fileType, String relatedId){
         try {
             fileName = StringUtils.isEmpty(fileName) ? file.getOriginalFilename() : fileName;
             int fileSurfixIndex = fileName.lastIndexOf(".");
@@ -103,7 +103,7 @@ public class FileUploadService extends BaseService{
         List<Hotspot> hotspotList = hotspotMapper.findAllByQuery(HotspotQuery.builder().build());
         List<Scene> sceneList = sceneMapper.findAll(SceneQuery.builder().build());
         List<AppConst> appConstList = appConstMapper.findAll(AppConstQuery.builder().build());
-        Map<Long, Block> blockMap = blockList.parallelStream().collect(Collectors.toMap(Block::getId, Block -> Block));
+        Map<String, Block> blockMap = blockList.parallelStream().collect(Collectors.toMap(Block::getId, Block -> Block));
         blockContentMapper.findAll(BlockContentQuery.builder().build()).forEach(blockContent -> {
             if (blockMap.containsKey(blockContent.getBlockId())){
                 blockMap.get(blockContent.getBlockId()).getBlockContentList().add(blockContent);

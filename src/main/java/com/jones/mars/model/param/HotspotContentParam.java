@@ -27,9 +27,9 @@ public class HotspotContentParam {
     private String title;
     @NotNull
     @ApiModelProperty(value="热点ID",name="hotspotId")
-    private Long hotspotId;
+    private String hotspotId;
     @ApiParam(hidden = true)
-    private Long id;
+    private String id;
     @ApiParam(hidden = true)
     private Integer seq;
 }

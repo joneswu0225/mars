@@ -17,6 +17,6 @@ import javax.validation.constraints.NotBlank;
 public class ProjectModuleQuery extends Query {
     @NotBlank(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
 }
 

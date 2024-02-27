@@ -16,6 +16,6 @@ public class BlockExamineContent extends BaseObject {
     private String extra;
     private String content;
     private String title;
-    private Long examineId;
+    private String examineId;
 }
 

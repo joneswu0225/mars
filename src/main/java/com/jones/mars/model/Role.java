@@ -19,10 +19,10 @@ import java.util.List;
 public class Role extends BaseObject {
   private String name;
   private String image;
-  private Long enterpriseId;
+  private String enterpriseId;
   private String enterpriseName;
   private String enterpriseAvatar;
-  private Long blockId;
+  private String blockId;
   private String blockName;
   private String blockImageUrl;
   private Date updateTime;

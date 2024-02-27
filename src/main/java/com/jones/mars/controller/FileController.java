@@ -42,7 +42,7 @@ public class FileController extends BaseController {
     public BaseResponse fileUpload(
             @NotNull(message = "上传文件不能为空") @RequestParam(name="file") @ApiParam(value="上传文件",name="file") MultipartFile file,
             @RequestParam(name="fileName", required = false) @ApiParam(value="文件名称",name="fileName") String fileName,
-            @RequestParam(name="relatedId", required = false) @ApiParam(value="关联内容的id， 如上传名片为userId, 上传企业logo为enterpirseId",name="relatedId") Long relatedId,
+            @RequestParam(name="relatedId", required = false) @ApiParam(value="关联内容的id， 如上传名片为userId, 上传企业logo为enterpirseId",name="relatedId") String relatedId,
             @RequestParam(name="fileType") @ApiParam(value="文件类型",name="fileType") FileType fileType) throws Exception{
         BaseResponse resp = service.uploadFile(file, fileName, fileType, relatedId);
         return resp;

@@ -31,12 +31,12 @@ public class BlockTypeService extends BaseService{
         param.setSeq(maxSeq == null ? 0 : maxSeq + 1);
         BlockType sceneType = BlockType.builder().enterpriseId(param.getEnterpriseId()).name(param.getName()).detail(param.getDetail()).seq(maxSeq).build();
         mapper.insert(sceneType);
-        Map<String, Long> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("id", sceneType.getId());
         return BaseResponse.builder().data(map).build();
     }
 
-    public BaseResponse allName(Long enterpriseId){
+    public BaseResponse allName(String enterpriseId){
         List<BlockType> list = mapper.findAllName(BlockTypeQuery.builder().enterpriseId(enterpriseId).build());
         return BaseResponse.builder().data(list).build();
     }

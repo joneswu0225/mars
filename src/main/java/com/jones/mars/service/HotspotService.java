@@ -47,7 +47,7 @@ public class HotspotService  extends BaseService{
     }
 
     @Transactional
-    public BaseResponse delete(Long hotspotId){
+    public BaseResponse delete(String hotspotId){
         if(mapper.findOne(hotspotId).getType().equals(Hotspot.TYPE_GUIDE)){
             projectHotspotMapper.delete(hotspotId);
         }

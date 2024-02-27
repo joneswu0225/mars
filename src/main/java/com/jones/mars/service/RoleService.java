@@ -51,7 +51,7 @@ public class RoleService extends BaseService{
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public BaseResponse delete(Long roleId){
+    public BaseResponse delete(String roleId){
         List<UserRole> users = userRoleMapper.findAll(UserRoleQuery.builder().roleId(roleId).build());
         if(users.size() > 0){
             return BaseResponse.builder().code(ErrorCode.ROLE_DELETE_EXIST_USER).build();
@@ -69,12 +69,12 @@ public class RoleService extends BaseService{
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public BaseResponse removePermission(Long permissionId){
+    public BaseResponse removePermission(String permissionId){
         if(LoginUtil.getInstance().getUser().getUserType().equals(User.ADMIN)) {
             // 刪除只依赖该角色所成为的项目共建人
             List<ProjectUser> projectUsers = projectUserMapper.findProjectUserByRolePermission(RolePermissionParam.builder().permissionId(permissionId).build());
             if(projectUsers.size() > 0) {
-                List<Long> projectUserIds = projectUsers.stream().map(p -> p.getId()).collect(Collectors.toList());
+                List<String> projectUserIds = projectUsers.stream().map(p -> p.getId()).collect(Collectors.toList());
                 projectUserMapper.delete(ProjectUserParam.builder().ids(projectUserIds).build());
             }
             rolePermissionMapper.delete(permissionId);
@@ -94,7 +94,7 @@ public class RoleService extends BaseService{
         // 刪除只依赖该角色所成为的项目共建人
         List<ProjectUser> projectUsers = projectUserMapper.findProjectUserByRolePermission(RolePermissionParam.builder().roleId(param.getRoleId()).userId(param.getUserId()).build());
         if(projectUsers.size() > 0) {
-            List<Long> projectUserIds = projectUsers.stream().map(p -> p.getId()).collect(Collectors.toList());
+            List<String> projectUserIds = projectUsers.stream().map(p -> p.getId()).collect(Collectors.toList());
             projectUserMapper.delete(ProjectUserParam.builder().ids(projectUserIds).build());
         }
         userRoleMapper.delete(param);

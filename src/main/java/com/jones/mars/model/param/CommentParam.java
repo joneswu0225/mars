@@ -23,12 +23,12 @@ public class CommentParam extends BaseObject {
     @ApiModelProperty(value="评论类型",name="type")
     private CommentType type;
     @ApiModelProperty(value="评论关联ID",name="relatedId")
-    private Long relatedId;
+    private String relatedId;
     @ApiModelProperty(value="评论类型",name="extType")
     private CommentType extType;
     @ApiModelProperty(value="评论关联ID",name="extRelatedId")
-    private Long extRelatedId;
+    private String extRelatedId;
     @ApiParam(hidden = true)
-    private Long userId;
+    private String userId;
 }
 

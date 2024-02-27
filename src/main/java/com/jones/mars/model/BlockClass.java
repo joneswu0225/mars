@@ -14,10 +14,9 @@ import lombok.NoArgsConstructor;
 @TableName("block_class")
 public class BlockClass extends BaseObject {
     private String name;
-    private Long moduleId;
+    private String moduleId;
     private Integer operation;
-    private Long id;
     private Integer seq;
-    private Long permissionId;
+    private String permissionId;
 }
 

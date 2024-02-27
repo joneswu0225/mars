@@ -16,8 +16,8 @@ import javax.validation.constraints.NotBlank;
 @ApiModel(value="权限查询参数")
 public class RoleQuery extends Query {
     @ApiModelProperty(value="企业ID",name="enterpriseId")
-    private Long enterpriseId;
+    private String enterpriseId;
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
 }
 

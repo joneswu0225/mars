@@ -35,6 +35,6 @@ public class UserProfileParam {
     @ApiModelProperty(value="个人简介",name="description")
     private String description;
     @ApiParam(hidden = true)
-    private Long userId;
+    private String userId;
 }
 

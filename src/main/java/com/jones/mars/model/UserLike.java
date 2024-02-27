@@ -19,9 +19,8 @@ public class UserLike extends BaseObject {
     public static final String LIKE = "LIKE";
     public static final String UNLIKE = "UNLIKE";
 
-    private Long id;
-    private Long userId;
-    private Long likeId;
+    private String userId;
+    private String likeId;
     private LikeType likeType;
     private String likeStatus;
     private Date createTime;

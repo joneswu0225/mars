@@ -21,10 +21,10 @@ public class Message extends BaseObject {
     private String content;
     private Date createTime;
     private Integer status;
-    private Long receiver;
-    private Long poster = 0l;
+    private String receiver;
+    private String poster = "0";
     private String messageType = DEFAULT_MESSAGE_TYPE;
-    private List<Long> receiverList;
+    private List<String> receiverList;
 
     public static final int STATUS_UNREAD = 0;
     public static final int STATUS_READ = 1;

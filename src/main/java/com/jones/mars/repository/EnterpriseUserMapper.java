@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface EnterpriseUserMapper extends CommonMapper<EnterpriseUser> {
-    List<EnterpriseUser> findEnterpriseUser(Long enterpriseId);
+    List<EnterpriseUser> findEnterpriseUser(String enterpriseId);
 }

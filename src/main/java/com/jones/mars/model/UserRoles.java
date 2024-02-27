@@ -22,7 +22,7 @@ public class UserRoles extends BaseObject {
     private List<UserRole> userRoleList = new ArrayList<>();
 
     public UserRoles(UserRoleParam param){
-        for(Long userId : param.getUserIds()){
+        for(String userId : param.getUserIds()){
             userRoleList.add(UserRole.builder().roleId(param.getRoleId()).userId(userId).build());
         }
     }

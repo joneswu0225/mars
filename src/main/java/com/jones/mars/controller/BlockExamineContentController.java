@@ -29,7 +29,7 @@ public class BlockExamineContentController extends BaseController {
 
     @ApiOperation(value = "查看单个船舶检查内容", notes = "")
     @GetMapping("/{blockExamineContentId}")
-    public BaseResponse findById(@PathVariable Long blockExamineContentId) {
+    public BaseResponse findById(@PathVariable String blockExamineContentId) {
         return service.findById(blockExamineContentId);
     }
 
@@ -42,7 +42,7 @@ public class BlockExamineContentController extends BaseController {
     @ApiOperation(value = "更新内容", notes = "")
     @PostMapping("/{blockExamineContentId}")
     public BaseResponse singleUpdate(
-            @PathVariable Long blockExamineContentId,
+            @PathVariable String blockExamineContentId,
             @RequestBody @ApiParam(required=true) BlockExamineContentParam param) {
         param.setId(blockExamineContentId);
         return service.update(param);
@@ -56,7 +56,7 @@ public class BlockExamineContentController extends BaseController {
 
     @ApiOperation(value = "删除船舶检查内容", notes = "")
     @DeleteMapping("{blockExamineContentId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long blockExamineContentId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String blockExamineContentId) {
         return service.delete(blockExamineContentId);
     }
 

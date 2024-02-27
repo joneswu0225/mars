@@ -8,9 +8,9 @@ import java.util.List;
 
 @Repository
 public interface BlockTourSpotMapper extends CommonMapper<BlockTourSpot> {
-    List<BlockTourSpot> findByBlockId(Long blockId);
-    void deleteByBlockId(Long blockId);
+    List<BlockTourSpot> findByBlockId(String blockId);
+    void deleteByBlockId(String blockId);
     void updateBlockTourSpotSeq(BlockTourSpotSeqParam param);
-    Integer findMaxSeqByBlockId(Long blockId);
+    Integer findMaxSeqByBlockId(String blockId);
 
 }

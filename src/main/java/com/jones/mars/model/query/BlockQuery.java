@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 public class BlockQuery extends Query {
     @ApiModelProperty(value="企业ID",name="enterpriseId")
-    private Long enterpriseId;
+    private String enterpriseId;
     @ApiModelProperty(value="模块名称",name="name")
     private String name;
     @ApiModelProperty(value="模块code",name="code")
@@ -27,13 +27,13 @@ public class BlockQuery extends Query {
     @ApiModelProperty(value="模块状态",name="status")
     private Integer status;
     @ApiModelProperty(value="模块类型ID",name="blockTypeId")
-    private Long blockTypeId;
+    private String blockTypeId;
     @ApiModelProperty(value="操作类型，0：企业项目，1：我的项目",name="operation")
     private Integer operation;
     @ApiParam(hidden = true)
-    private Long userId;
+    private String userId;
     @ApiModelProperty(value="模块IDs",name="blockIds")
-    private List<Long> blockIds;
+    private List<String> blockIds;
     @ApiParam(hidden = true)
-    private List<Long> enterpriseIds;
+    private List<String> enterpriseIds;
 }

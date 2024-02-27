@@ -35,16 +35,16 @@ public class BlockSceneTypeService extends BaseService{
         param.setSeq(maxSeq == null ? 0 : maxSeq + 1);
         BlockSceneType sceneType = BlockSceneType.builder().blockId(param.getBlockId()).name(param.getName()).detail(param.getDetail()).seq(maxSeq).build();
         mapper.insert(sceneType);
-        Map<String, Long> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("id", sceneType.getId());
         return BaseResponse.builder().data(map).build();
     }
 
-    public BaseResponse allName(Long blockId){
+    public BaseResponse allName(String blockId){
         List<BlockSceneType> list = mapper.findAllName(BlockSceneTypeQuery.builder().blockId(blockId).build());
         return BaseResponse.builder().data(list).build();
     }
-    public BaseResponse findSceneTypeProjectScene(Long blockId){
+    public BaseResponse findSceneTypeProjectScene(String blockId){
         List<BlockSceneType> list = mapper.findSceneTypeProjectScene(BlockSceneTypeQuery.builder().blockId(blockId).build());
         return BaseResponse.builder().data(list).build();
     }

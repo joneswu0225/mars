@@ -46,8 +46,8 @@ public class ApplicationConst {
         return APP_TABLES.indexOf(tableName) + 1;
     }
 
-    public static Long generateId(String tableName){
-        return new Snowflake(DEPLOY_ID, getTableId(tableName)).nextId();
+    public static String generateId(String tableName){
+        return new Snowflake(DEPLOY_ID, getTableId(tableName)).nextId() + "";
     }
 
     @Value("${app.mode.nologin.source.prefix:}")

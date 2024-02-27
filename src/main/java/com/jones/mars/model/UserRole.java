@@ -15,7 +15,7 @@ import java.util.Date;
 public class UserRole extends BaseObject {
     private Date updateTime;
     private Date createTime;
-    private Long roleId;
-    private Long userId;
+    private String roleId;
+    private String userId;
 }
 

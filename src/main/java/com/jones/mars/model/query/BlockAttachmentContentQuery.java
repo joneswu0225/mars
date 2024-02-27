@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @ApiModel(value="船舶检查参数")
 public class BlockAttachmentContentQuery extends Query {
     @ApiModelProperty(value="检查ID",name="attachmentId")
-    private Long attachmentId;
+    private String attachmentId;
     @ApiModelProperty(value="类型",name="type")
     private String type;
     @ApiModelProperty(value="blockId",name="blockId")
-    private Long blockId;
+    private String blockId;
 }

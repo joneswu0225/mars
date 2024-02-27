@@ -41,13 +41,13 @@ public class BlockExamineController extends BaseController {
 
     @ApiOperation(value = "获取模块下所有船舶检查名称", notes = "")
     @GetMapping("name")
-    public BaseResponse allName(@RequestParam(name="blockId") @ApiParam(required=true) Long blockId) {
+    public BaseResponse allName(@RequestParam(name="blockId") @ApiParam(required=true) String blockId) {
         return service.allName(blockId);
     }
 
     @ApiOperation(value = "船舶检查详情", notes = "")
     @GetMapping("{blockExamineId}")
-    public BaseResponse findOne(@PathVariable Long blockExamineId) {
+    public BaseResponse findOne(@PathVariable String blockExamineId) {
         return service.findBlockExamineById(blockExamineId);
     }
 
@@ -55,7 +55,7 @@ public class BlockExamineController extends BaseController {
     @ApiOperation(value = "更新船舶检查", notes = "")
     @PutMapping("{blockExamineId}")
     public BaseResponse update(
-            @PathVariable Long blockExamineId,
+            @PathVariable String blockExamineId,
             @RequestBody @ApiParam(required=true) BlockExamineParam param) {
         param.setOperatorId(getLoginUser().getId());
         param.setId(blockExamineId);
@@ -64,7 +64,7 @@ public class BlockExamineController extends BaseController {
 
     @ApiOperation(value = "删除船舶检查", notes = "")
     @DeleteMapping("{blockExamineId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long blockExamineId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String blockExamineId) {
         return service.deleteExamine(blockExamineId);
     }
 

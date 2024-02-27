@@ -19,13 +19,13 @@ import java.util.List;
 @TableName("role")
 public class RoleUserParam {
     @ApiParam(hidden = true)
-    private Long id;
+    private String id;
     @NotNull(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @NotNull(message = "企业ID不能为空")
     @ApiModelProperty(value="企业ID",name="enterpriseId")
-    private Long enterpriseId;
+    private String enterpriseId;
     @NotBlank(message = "权限名称不能为空")
     @ApiModelProperty(value="权限名称",name="name")
     private String name;
@@ -34,6 +34,6 @@ public class RoleUserParam {
     @ApiModelProperty(value="权限列表（classId, operation）",name="permissionList")
     private List<RolePermissionParam> permissionList;
     @ApiModelProperty(value="被授权用户id",name="userIds")
-    private List<Long> userIds;
+    private List<String> userIds;
 }
 

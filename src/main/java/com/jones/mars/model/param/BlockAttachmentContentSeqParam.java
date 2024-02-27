@@ -15,9 +15,9 @@ import java.util.List;
 public class BlockAttachmentContentSeqParam {
     @NotNull
     @ApiModelProperty(value="船舶检查ID",name="examineId")
-    private Long examineId;
+    private String examineId;
     @NotEmpty
     @ApiModelProperty(value="排序后ID列表",name="blockExamineContentIds")
-    private List<Long> blockExamineContentIds;
+    private List<String> blockExamineContentIds;
 }
 

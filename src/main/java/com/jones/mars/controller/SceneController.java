@@ -72,14 +72,14 @@ public class SceneController extends BaseController {
 
     @ApiOperation(value = "场景详情", notes = "场景详情,后台接口")
     @GetMapping("{sceneId}")
-    public BaseResponse findOne(@PathVariable Long sceneId) {
+    public BaseResponse findOne(@PathVariable String sceneId) {
         return sceneService.findById(sceneId);
     }
 
     @ApiOperation(value = "更新场景", notes = "更新场景,后台接口")
     @PutMapping("{sceneId}")
     public BaseResponse update(
-            @PathVariable Long sceneId,
+            @PathVariable String sceneId,
             @RequestBody @ApiParam(required=true) SceneParam param) {
         param.setId(sceneId);
         return sceneService.update(param);
@@ -93,14 +93,14 @@ public class SceneController extends BaseController {
 
     @ApiOperation(value = "删除场景", notes = "后台调用,后台接口")
     @DeleteMapping("{sceneId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long sceneId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String sceneId) {
         return sceneService.delete(sceneId);
     }
 
 
     @ApiOperation(value = "公开场景", notes = "")
     @PatchMapping("{sceneId}/public")
-    public BaseResponse publicScene(@PathVariable @ApiParam(required=true) Long sceneId) {
+    public BaseResponse publicScene(@PathVariable @ApiParam(required=true) String sceneId) {
         SceneParam param = SceneParam.builder().publicFlg(Scene.PUBLIC).build();
         param.setId(sceneId);
         return  sceneService.update(param);
@@ -108,7 +108,7 @@ public class SceneController extends BaseController {
 
     @ApiOperation(value = "取消公开场景", notes = "")
     @PatchMapping("{sceneId}/unpublic")
-    public BaseResponse unpublicScene(@PathVariable @ApiParam(required=true) Long sceneId) {
+    public BaseResponse unpublicScene(@PathVariable @ApiParam(required=true) String sceneId) {
         SceneParam param = SceneParam.builder().publicFlg(Scene.UNPUBLIC).build();
         param.setId(sceneId);
         return  sceneService.update(param);

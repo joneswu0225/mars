@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 public class BlockImageParam extends BaseObject {
     @NotNull(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @ApiModelProperty(value="模块名称",name="detail")
     private String detail;
     @ApiModelProperty(value="模块平面图名称",name="name")

@@ -44,19 +44,19 @@ public class BlockController extends BaseController {
 
     @ApiOperation(value = "获取公司下所有模块名称", notes = "")
     @GetMapping("name")
-    public BaseResponse allName(@RequestParam(name="enterpriseId") @ApiParam(required=true) Long enterpriseId) {
+    public BaseResponse allName(@RequestParam(name="enterpriseId") @ApiParam(required=true) String enterpriseId) {
         return service.allName(enterpriseId);
     }
 
     @ApiOperation(value = "企业共建人列表", notes = "")
     @GetMapping("{blockId}/class/{classId}/user") 
-    public BaseResponse findBlockUser(@PathVariable Long blockId,@PathVariable Long classId) {
+    public BaseResponse findBlockUser(@PathVariable String blockId,@PathVariable String classId) {
         return service.findClassPartner(classId);
     }
 
     @ApiOperation(value = "模块详情", notes = "")
     @GetMapping("{blockId}")
-    public BaseResponse findOne(@PathVariable Long blockId) {
+    public BaseResponse findOne(@PathVariable String blockId) {
         return service.findBlockById(blockId);
     }
 
@@ -69,7 +69,7 @@ public class BlockController extends BaseController {
     @ApiOperation(value = "更新模块", notes = "")
     @PutMapping("{blockId}")
     public BaseResponse update(
-            @PathVariable Long blockId,
+            @PathVariable String blockId,
             @RequestBody @ApiParam(required=true) BlockParam param) {
 //        param.setOperatorId(getLoginUser().getId());
         param.setId(blockId);
@@ -78,13 +78,13 @@ public class BlockController extends BaseController {
 
     @ApiOperation(value = "删除模块", notes = "")
     @DeleteMapping("{blockId}")
-    public BaseResponse delete(@PathVariable @ApiParam(required=true) Long blockId) {
+    public BaseResponse delete(@PathVariable @ApiParam(required=true) String blockId) {
         return service.delete(blockId);
     }
 
     @ApiOperation(value = "模块下所有场景类型列表", notes = "模块下所有场景类型列表")
     @GetMapping("{blockId}/sceneType")
-    public BaseResponse sceneType(@PathVariable @ApiParam(required=true) Long blockId) {
+    public BaseResponse sceneType(@PathVariable @ApiParam(required=true) String blockId) {
         return blockSceneTypeService.findSceneTypeProjectScene(blockId);
     }
 

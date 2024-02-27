@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BlockUserParam {
-    private Long blockId;
-    private List<Long> userIds;
+    private String blockId;
+    private List<String> userIds;
 }
 

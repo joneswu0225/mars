@@ -37,7 +37,7 @@ public class BlockService extends BaseService{
         return this.mapper;
     }
 
-    public BaseResponse allName(Long enterpriseId){
+    public BaseResponse allName(String enterpriseId){
         Query query = new Query(Block.builder().enterpriseId(enterpriseId).build());
         List<Object> list = mapper.findAllName(query);
         return BaseResponse.builder().data(list).build();
@@ -86,7 +86,7 @@ public class BlockService extends BaseService{
     }
 
 
-    public BaseResponse findBlockById(Long blockId){
+    public BaseResponse findBlockById(String blockId){
         Block block = mapper.findOne(blockId);
         block.setBlockContentList(blockContentMapper.findByBlockId(block.getId()));
         return BaseResponse.builder().data(block).build();
@@ -97,7 +97,7 @@ public class BlockService extends BaseService{
      * @param classId
      * @return
      */
-    public BaseResponse findClassPartner(Long classId){
+    public BaseResponse findClassPartner(String classId){
         return BaseResponse.builder().data(rolePermissionMapper.findGrantedUserByClassId(RolePermissionQuery.builder().classId(classId).operation(RolePermission.CREATE).build())).build();
     }
 

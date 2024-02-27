@@ -22,9 +22,7 @@ public class News extends BaseObject {
     public static final int TOP_SET = 1;
     public static final int TOP_CANCEL = 0;
 
-
-    private Long id;
-    private String contentUrl;
+    private String id;
     private String contentHtml;
     private String author;
     private Date publishTime;

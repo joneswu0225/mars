@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public interface CommonMapper<T> {
     List<T> findList(Query paramQuery);
 
-    T findOne(Long id);
+    T findOne(String id);
 
     int findCount(Query paramQuery);
 
@@ -26,7 +26,7 @@ public interface CommonMapper<T> {
 
     Long insertRecord (Object param);
 
-    default Long insert(Object param) {
+    default String insert(Object param) {
         MetaObject metaObject = SystemMetaObject.forObject(param);
         String tableName = null;
         if(param.getClass().isAnnotationPresent(TableName.class)){
@@ -39,7 +39,7 @@ public interface CommonMapper<T> {
                 }
             }
         }
-        Long totalId = ApplicationConst.generateId(tableName);
+        String totalId = ApplicationConst.generateId(tableName);
         setId(metaObject, totalId);
         this.insertRecord(metaObject.getOriginalObject());
         return totalId;
@@ -49,7 +49,7 @@ public interface CommonMapper<T> {
         this.insert(param);
     }
 
-    default void setId(MetaObject metaObject, Long id) {
+    default void setId(MetaObject metaObject, String id) {
         if(metaObject.hasSetter("id")){
             metaObject.setValue("id", id);
         }

@@ -13,10 +13,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 
 import java.math.BigInteger;
 
-/**
- * @author yue.su
- * @date 2018年3月28日
- */
+
 @Configuration
 public class ServletConfig {
 

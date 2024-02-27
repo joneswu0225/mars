@@ -21,7 +21,7 @@ public class ProjectHotspots {
     private List<ProjectHotspot> projectHotspotList = new ArrayList<>();
 
     public ProjectHotspots(ProjectHotspotParam param){
-        for(Long hotspotId : param.getHotspotIds()){
+        for(String hotspotId : param.getHotspotIds()){
             projectHotspotList.add(ProjectHotspot.builder().projectId(param.getProjectId()).hotspotId(hotspotId).build());
         }
     }

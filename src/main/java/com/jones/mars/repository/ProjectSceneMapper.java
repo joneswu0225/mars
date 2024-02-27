@@ -8,5 +8,5 @@ public interface ProjectSceneMapper {
     void insertOne(Object param);
     void delete(Object param);
     void updateProjectSceneSeq(Object param);
-    Integer findMaxSeqByProjectId(Long projectId);
+    Integer findMaxSeqByProjectId(String projectId);
 }

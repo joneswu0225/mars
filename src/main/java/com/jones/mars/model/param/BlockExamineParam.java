@@ -20,9 +20,9 @@ public class BlockExamineParam extends BaseObject {
     private String name;
     @NotBlank(message = "模块ID不能为空")
     @ApiModelProperty(value="模块ID",name="blockId")
-    private Long blockId;
+    private String blockId;
     @ApiModelProperty(value="父ID",name="parentId")
-    private Long parentId;
+    private String parentId;
     @ApiModelProperty(value="简介",name="detail")
     private String detail;
     @ApiModelProperty(value="类型",name="类型")
@@ -30,8 +30,8 @@ public class BlockExamineParam extends BaseObject {
     @ApiModelProperty(value="图片URL",name="imageUrl")
     private String imageUrl;
     @ApiParam(hidden = true)
-    private Long creatorId;
+    private String creatorId;
     @ApiParam(hidden = true)
-    private Long operatorId;
+    private String operatorId;
 }
 

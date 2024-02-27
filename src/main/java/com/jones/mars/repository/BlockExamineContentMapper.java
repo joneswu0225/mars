@@ -10,9 +10,9 @@ import java.util.List;
 
 @Repository
 public interface BlockExamineContentMapper extends CommonMapper<BlockExamineContent> {
-    List<BlockExamineContent> findByExamineId(Long examineId);
-    void deleteByExamineId(Long examineId);
+    List<BlockExamineContent> findByExamineId(String examineId);
+    void deleteByExamineId(String examineId);
     void updateExamineContentSeq(BlockExamineContentSeqParam param);
-    Integer findMaxSeqByExamineId(Long examineId);
+    Integer findMaxSeqByExamineId(String examineId);
 
 }
