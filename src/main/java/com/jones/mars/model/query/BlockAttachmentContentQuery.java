@@ -17,4 +17,6 @@ public class BlockAttachmentContentQuery extends Query {
     private Long attachmentId;
     @ApiModelProperty(value="类型",name="type")
     private String type;
+    @ApiModelProperty(value="blockId",name="blockId")
+    private Long blockId;
 }

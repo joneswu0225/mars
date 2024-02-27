@@ -15,4 +15,6 @@ import lombok.NoArgsConstructor;
 public class DeployLicenseQuery extends Query {
     @ApiModelProperty(value="磁盘序列号",name="diskSeries")
     private String diskSeries;
+    @ApiModelProperty(value="路径",name="path")
+    private String path;
 }

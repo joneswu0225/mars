@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,6 +17,8 @@ import lombok.NoArgsConstructor;
 public class BlockTourSpotQuery extends Query {
     @ApiModelProperty(value="模块ID",name="blockId")
     private Long blockId;
+    @ApiModelProperty(value="模块IDs",name="blockIds")
+    private List<Long> blockIds;
     @ApiModelProperty(value="类型",name="type")
     private String type;
 }

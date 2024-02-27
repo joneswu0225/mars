@@ -48,15 +48,21 @@
     </select>
 
     <select id="findAll" resultType="BlockAttachmentContent">
-        select * from block_attachment_content
+        select * from block_attachment_content a
+        <if test="blockId != null">
+            inner join block_attachment b on a.attachment_id=b.id
+        </if>
         where 1=1
+        <if test="blockId != null">
+            and b.id = #{blockId}
+        </if>
         <if test="attachmentId != null">
             and attachment_id=#{attachmentId}
         </if>
         <if test="type != null and type != ''">
             and `type`=#{type}
         </if>
-        order by seq
+        order by a.seq
     </select>
 
     <select id="findOne" resultType="BlockAttachmentContent">

@@ -24,7 +24,7 @@ public interface CommonMapper<T> {
 
     List<T> findAll(Query paramQuery);
 
-    void insertRecord (Object param);
+    Long insertRecord (Object param);
 
     default Long insert(Object param) {
         MetaObject metaObject = SystemMetaObject.forObject(param);

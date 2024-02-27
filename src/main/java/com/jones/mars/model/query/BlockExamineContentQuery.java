@@ -17,4 +17,6 @@ public class BlockExamineContentQuery extends Query {
     private Long examineId;
     @ApiModelProperty(value="类型",name="type")
     private String type;
+    @ApiModelProperty(value="blockId",name="blockId")
+    private Long blockId;
 }

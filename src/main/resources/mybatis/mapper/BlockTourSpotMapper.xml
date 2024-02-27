@@ -33,12 +33,32 @@
         <if test="type != null and type != ''">
             and `type`=#{type}
         </if>
+        <if test="blockIds != null">
+            and block_id in (
+            <foreach collection="blockIds" item="bid" index="index" separator=",">
+                #{bid}
+            </foreach>
+            )
+        </if>
         order by `type`, seq
     </select>
 
     <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
         select count(*) from block_tour_spot
-        where block_id=#{blockId}
+        where 1=1
+        <if test="blockId != null">
+            and block_id=#{blockId}
+        </if>
+        <if test="type != null and type != ''">
+            and `type`=#{type}
+        </if>
+        <if test="blockIds != null">
+            and block_id in (
+            <foreach collection="blockIds" item="bid" index="index" separator=",">
+                #{bid}
+            </foreach>
+            )
+        </if>
     </select>
 
     <select id="findByBlockId" resultType="BlockTourSpot" parameterType="java.lang.Long">
@@ -55,6 +75,13 @@
         </if>
         <if test="type != null and type != ''">
             and `type`=#{type}
+        </if>
+        <if test="blockIds != null">
+            and block_id in (
+            <foreach collection="blockIds" item="bid" index="index" separator=",">
+                #{bid}
+            </foreach>
+            )
         </if>
         order by seq
     </select>

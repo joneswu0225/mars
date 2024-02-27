@@ -44,6 +44,9 @@
         <if test="diskSeries != null and diskSeries != ''">
             and `disk_series`=#{diskSeries}
         </if>
+        <if test="path != null and path != ''">
+            and `path`=#{path}
+        </if>
         order by id
         <include refid="com.jones.mars.repository.CommonMapper.endPage" />
     </select>
@@ -54,6 +57,9 @@
         select * from deploy_license where 1=1
         <if test="diskSeries != null and diskSeries != ''">
             and `disk_series`=#{diskSeries}
+        </if>
+        <if test="path != null and path != ''">
+            and `path`=#{path}
         </if>
         order by id
     </select>

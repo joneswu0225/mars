@@ -4,6 +4,7 @@ import com.jones.mars.model.DeployLicense;
 import com.jones.mars.model.constant.FileType;
 import com.jones.mars.model.param.DeployLicenseParam;
 import com.jones.mars.model.param.EnterpriseParam;
+import com.jones.mars.model.param.LocalDbInfoParam;
 import com.jones.mars.model.query.BlockQuery;
 import com.jones.mars.model.query.DeployLicenseQuery;
 import com.jones.mars.model.query.Query;
@@ -55,4 +56,14 @@ public class DeployLicenseController extends BaseController {
     }
 
 
+    @ApiOperation(value = "导出本地数据文件", notes = "导出本地数据文件")
+    @PostMapping("exportData")
+    public ResponseEntity list(@ApiParam LocalDbInfoParam param) throws Exception {
+        HttpHeaders headers=new HttpHeaders();//设置响应头
+        headers.add("Content-Disposition", "attachment;filename=" + param.getFileName());
+        HttpStatus statusCode = HttpStatus.OK;//设置响应吗
+        String result = service.getEncryptedDbInfo(param.getKey(), param.getBlockId());
+        ResponseEntity<byte[]> response=new ResponseEntity(IOUtils.toByteArray(IOUtils.toInputStream(result)), headers, statusCode);
+        return response;
+    }
 }

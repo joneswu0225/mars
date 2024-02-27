@@ -48,15 +48,21 @@
     </select>
 
     <select id="findAll" resultType="BlockExamineContent">
-        select * from block_examine_content
+        select * from block_examine_content a
+        <if test="blockId != null">
+            inner join block_examine b on a.examine_id=b.id
+        </if>
         where 1=1
+        <if test="blockId != null">
+            and b.id = #{blockId}
+        </if>
         <if test="examineId != null">
-            and examine_id=#{examineId}
+            and a.examine_id=#{examineId}
         </if>
         <if test="type != null and type != ''">
-            and `type`=#{type}
+            and a.`type`=#{type}
         </if>
-        order by seq
+        order by a.seq
     </select>
 
     <select id="findOne" resultType="BlockExamineContent">
