@@ -34,7 +34,7 @@
         </if>
         order by seq, name
     </select>
-    <select id="findMaxSeqByEnterpriseId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    <select id="findMaxSeqByEnterpriseId" parameterType="java.lang.String" resultType="java.lang.Long">
         select max(seq) from block_type where enterprise_id=#{enterpriseId}
     </select>
     <update id="updateBlockTypeSeq">

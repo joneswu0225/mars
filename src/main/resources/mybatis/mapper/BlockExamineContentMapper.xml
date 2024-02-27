@@ -10,7 +10,7 @@
         set content = #{content}, title = #{title}, `type` = #{type}, extra = #{extra}
         where id = #{id}
     </update>
-    <select id="findMaxSeqByExamineId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    <select id="findMaxSeqByExamineId" parameterType="java.lang.String" resultType="java.lang.Integer">
         select max(seq) from block_examine_content where examine_id=#{examineId}
     </select>
     <update id="updateBlockExamineContentSeq">
@@ -41,7 +41,7 @@
         where examine_id=#{examineId}
     </select>
 
-    <select id="findByExamineId" resultType="BlockExamineContent" parameterType="java.lang.Long">
+    <select id="findByExamineId" resultType="BlockExamineContent" parameterType="java.lang.String">
         select * from block_examine_content
         where examine_id=#{examineId}
         order by seq

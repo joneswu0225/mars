@@ -23,7 +23,7 @@
         where id = #{param.id}
         </foreach>
     </update>
-    <select id="findMaxSeqByhotspotId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    <select id="findMaxSeqByhotspotId" parameterType="java.lang.String" resultType="java.lang.Integer">
         select max(seq) from hotspot_content where hotspot_id=#{hotspotId}
     </select>
     <update id="updateHotspotContentSeq">
@@ -54,7 +54,7 @@
         where hotspot_id=#{hotspotId}
     </select>
 
-    <select id="findByHotspotId" resultType="HotspotContent" parameterType="java.lang.Long">
+    <select id="findByHotspotId" resultType="HotspotContent" parameterType="java.lang.String">
         select * from hotspot_content
         where hotspot_id=#{hotspotId}
         order by seq

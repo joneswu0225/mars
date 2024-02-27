@@ -34,7 +34,7 @@
         </if>
         order by seq, name
     </select>
-    <select id="findMaxSeqByBlockId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    <select id="findMaxSeqByBlockId" parameterType="java.lang.String" resultType="java.lang.Long">
         select max(seq) from block_scene_type where block_id=#{blockId}
     </select>
     <update id="updateBlockSceneTypeSeq">

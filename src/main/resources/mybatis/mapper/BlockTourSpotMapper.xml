@@ -10,7 +10,7 @@
         set title = #{title},ath = #{ath}, atv = #{atv}, fov = #{fov}, acode = #{acode}, scode = #{scode},  `type` = #{type}, detail = #{detail}
         where id = #{id}
     </update>
-    <select id="findMaxSeqByBlockId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    <select id="findMaxSeqByBlockId" parameterType="java.lang.String" resultType="java.lang.Integer">
         select max(seq) from block_tour_spot where block_id=#{blockId}
     </select>
     <update id="updateBlockTourSpotSeq">
@@ -61,7 +61,7 @@
         </if>
     </select>
 
-    <select id="findByBlockId" resultType="BlockTourSpot" parameterType="java.lang.Long">
+    <select id="findByBlockId" resultType="BlockTourSpot" parameterType="java.lang.String">
         select * from block_tour_spot
         where block_id=#{blockId}
         order by seq

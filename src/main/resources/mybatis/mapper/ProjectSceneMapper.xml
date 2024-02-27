@@ -15,7 +15,7 @@
         insert into project_scene(`id`,`project_id`, `scene_id`, `seq`) values
         (#{id}, #{projectId}, #{sceneId}, #{seq}) ON DUPLICATE KEY UPDATE seq=#{seq}
     </insert>
-    <select id="findMaxSeqByProjectId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    <select id="findMaxSeqByProjectId" parameterType="java.lang.String" resultType="java.lang.Integer">
         select max(seq) from project_scene where project_id=#{projdectId}
     </select>
     <update id="updateProjectSceneSeq" parameterType="ProjectSceneParam">

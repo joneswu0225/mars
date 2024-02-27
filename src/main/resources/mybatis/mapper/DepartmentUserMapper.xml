@@ -9,7 +9,7 @@
             update_time=now()
         </foreach>
     </insert>
-    <select id="findList" parameterType="java.lang.Long" resultType="DepartmentUser">
+    <select id="findList" parameterType="java.lang.String" resultType="DepartmentUser">
         <include refid="com.jones.mars.repository.CommonMapper.startPage" />
         select du.*, p.sgname as userSgname
         from department_user du left join user_profile p on du.user_id=p.user_id
@@ -21,7 +21,7 @@
         select count(*) from department_user du
         where department_id=#{departmentId}
     </select>
-    <select id="findAll" parameterType="java.lang.Long" resultType="DepartmentUser">
+    <select id="findAll" parameterType="java.lang.String" resultType="DepartmentUser">
         select du.*, p.sgname as userSgname
         from department_user du left join user_profile p on du.user_id=p.user_id
         where 1=1

@@ -13,7 +13,7 @@
         </if>
         where enterprise_id=#{enterpriseId} and user_id=#{userId}
     </update>
-    <select id="findEnterpriseUser" parameterType="java.lang.Long" resultType="EnterpriseUser">
+    <select id="findEnterpriseUser" parameterType="java.lang.String" resultType="EnterpriseUser">
         select eu.*, p.sgname as userSgname, u.mobile, p.avatar,p.email, p.description
         from enterprise_user eu left join user_profile p on eu.user_id=p.user_id
         left join user u on eu.user_id=u.id
