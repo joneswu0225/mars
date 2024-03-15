@@ -25,6 +25,8 @@ public class BlockParam extends BaseObject {
     private String enterpriseId;
     @ApiModelProperty(value="模块类型ID",name="blockTypeId")
     private String blockTypeId;
+    @ApiModelProperty(value="src模块ID",name="srcBlockId")
+    private String srcBlockId;
 //    @ApiModelProperty(value="是否为平台内部模块，1：是，0：否",name="plateformFlg")
 //    private Integer plateformFlg;
     @ApiModelProperty(value="模块简介",name="detail")

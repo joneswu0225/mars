@@ -5,6 +5,7 @@
         <id column="blockId" property="id" />
         <result column="enterprise_id" property="enterpriseId" />
         <result column="blockTypeId" property="blockTypeId" />
+        <result column="srcBlockId" property="srcBlockId" />
         <result column="blockName" property="name" />
         <result column="blockCode" property="code" />
         <result column="blockDetail" property="detail" />
@@ -36,6 +37,9 @@
         <if test="blockTypeId != null">
             and b.block_type_id=#{blockTypeId}
         </if>
+        <if test="srcBlockId != null">
+            and b.src_block_id=#{srcBlockId}
+        </if>
         <if test="moduleName != null and moduleName != ''">
             and m.name=#{moduleName}
         </if>
@@ -56,8 +60,8 @@
         <if test="blockTypeId != null">
             and b.block_type_id=#{blockTypeId}
         </if>
-        <if test="blockTypeId != null">
-            and b.block_type_id=#{blockTypeId}
+        <if test="srcBlockId != null">
+            and b.src_block_id=#{srcBlockId}
         </if>
         <if test="code != null and code != ''">
             and b.code=#{code}
@@ -81,6 +85,9 @@
         <if test="blockTypeId != null">
             and b.block_type_id=#{blockTypeId}
         </if>
+        <if test="srcBlockId != null">
+            and b.src_block_id=#{srcBlockId}
+        </if>
         <if test="moduleName != null and moduleName != ''">
             and m.name=#{moduleName}
         </if>
@@ -93,8 +100,8 @@
         order by b.enterprise_id, b.id, m.seq, c.seq
     </select>
     <insert id="insertRecord" parameterType="Block" useGeneratedKeys="true" keyProperty="id">
-        insert into block(`id`, `name`, `enterprise_id`, `block_type_id`,`create_time`, `update_time`, `operator_id`, `detail`,`icon`,`image_url`,`pano_path`,`code`)
-        values(#{id}, #{name}, #{enterpriseId},#{blockTypeId}, now(), now(), #{operatorId}, #{detail},#{icon},#{imageUrl},#{panoPath}, #{code})
+        insert into block(`id`, `name`, `enterprise_id`, `block_type_id`, `src_block_id`,`create_time`, `update_time`, `operator_id`, `detail`,`icon`,`image_url`,`pano_path`,`code`)
+        values(#{id}, #{name}, #{enterpriseId},#{blockTypeId},#{srcBlockId}, now(), now(), #{operatorId}, #{detail},#{icon},#{imageUrl},#{panoPath}, #{code})
     </insert>
     <update id="update" parameterType="Block" >
         update block
@@ -119,6 +126,9 @@
         </if>
         <if test="blockTypeId != null">
             , block_type_id = #{blockTypeId}
+        </if>
+        <if test="srcBlockId != null">
+            , src_block_id = #{srcBlockId}
         </if>
         <if test="status != null">
             , status = #{status}
@@ -147,6 +157,9 @@
         </if>
         <if test="blockTypeId != null">
             and block_type_id=#{blockTypeId}
+        </if>
+        <if test="srcBlockId != null">
+            and b.src_block_id=#{srcBlockId}
         </if>
         <if test="code != null and code !=''">
             and code=#{code}
@@ -179,6 +192,9 @@
         <if test="blockTypeId != null">
             and block_type_id=#{blockTypeId}
         </if>
+        <if test="srcBlockId != null">
+            and b.src_block_id=#{srcBlockId}
+        </if>
         <if test="blockIds != null">
             and id in (
             <foreach collection="blockIds" item="bid" index="index" separator=",">
@@ -198,6 +214,9 @@
         </if>
         <if test="blockTypeId != null">
             and block_type_id=#{blockTypeId}
+        </if>
+        <if test="srcBlockId != null">
+            and b.src_block_id=#{srcBlockId}
         </if>
         <if test="code != null and code !=''">
             and code=#{code}
@@ -225,6 +244,9 @@
         </if>
         <if test="blockTypeId != null">
             and block_type_id=#{blockTypeId}
+        </if>
+        <if test="srcBlockId != null">
+            and b.src_block_id=#{srcBlockId}
         </if>
         <if test="code != null and code !=''">
             and code=#{code}

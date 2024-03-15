@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.ChannelResourceMapper" >
+    <insert id="insertRecord" parameterType="ChannelResource" useGeneratedKeys="true" keyProperty="id">
+        insert into channel_resource(`id`, `enterprise_id`, `company`, `detail`, `auth_url`, `redirect_url`, `validate_content`, `user_id`, `create_time`)
+        values(#{id}, #{enterpriseId}, #{company}, #{detail}, #{authUrl}, #{redirectUrl}, #{validateContent}, #{userId}, now())
+    </insert>
+    <update id="update" parameterType="ChannelResource">
+        update channel_resource set id=#{id}
+        <if test="enterpriseId != null and enterpriseId != ''">
+            , enterprise_id=#{enterpriseId}
+        </if>
+        <if test="company != null and company != ''">
+            , company=#{company}
+        </if>
+        <if test="detail != null and detail != ''">
+            , detail=#{detail}
+        </if>
+        <if test="authUrl != null and authUrl != ''">
+            , auth_url=#{authUrl}
+        </if>
+        <if test="redirectUrl != null and redirectUrl != ''">
+            , redirect_url=#{redirectUrl}
+        </if>
+        <if test="validateContent != null and validateContent != ''">
+            , validate_content=#{validateContent}
+        </if>
+        <if test="redirectUrl != null and redirectUrl != ''">
+            , redirect_url=#{redirectUrl}
+        </if>
+        <if test="userId != null and userId != ''">
+            , user_id=#{userId}
+        </if>
+        <if test="token != null and token != ''">
+            , token=#{token}
+        </if>
+        <if test="tokenUpdateTime != null ">
+            , token_update_time=now()
+        </if>
+        where id=#{id}
+    </update>
+    <select id="findList" resultType="ChannelResource" parameterType="Query">
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
+        select * from channel_resource
+        where delete_flg=0
+        <if test="enterpriseId != null">
+            and enterprise_id = #{enterpriseId}
+        </if>
+        <if test="company != null and company != ''">
+            and company = #{company}
+        </if>
+        <if test="token != null and token != ''">
+            and token = #{token}
+        </if>
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select * from channel_resource
+        where delete_flg=0
+        <if test="enterpriseId != null">
+            and enterprise_id = #{enterpriseId}
+        </if>
+        <if test="company != null and company != ''">
+            and company = #{company}
+        </if>
+        <if test="token != null and token != ''">
+            and token = #{token}
+        </if>
+    </select>
+    <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
+        select * from channel_resource
+        where delete_flg=0
+        <if test="enterpriseId != null">
+            and enterprise_id = #{enterpriseId}
+        </if>
+        <if test="company != null and company != ''">
+            and company = #{company}
+        </if>
+        <if test="token != null and token != ''">
+            and token = #{token}
+        </if>
+    </select>
+    <select id="findAll" resultType="ChannelResource" parameterType="Query">
+        select * from channel_resource
+        where delete_flg=0
+        <if test="enterpriseId != null">
+            and enterprise_id = #{enterpriseId}
+        </if>
+        <if test="company != null and company != ''">
+            and company = #{company}
+        </if>
+        <if test="token != null and token != ''">
+            and token = #{token}
+        </if>
+    </select>
+    <select id="findOne" resultType="ChannelResource">
+        select * from channel_resource where id=#{id}
+    </select>
+    <delete id="delete">
+        update channel_resource set delete_flg=1 where id=#{id}
+    </delete>
+</mapper>

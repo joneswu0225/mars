@@ -28,6 +28,8 @@ public class BlockQuery extends Query {
     private Integer status;
     @ApiModelProperty(value="模块类型ID",name="blockTypeId")
     private String blockTypeId;
+    @ApiModelProperty(value="src模块ID",name="srcBlockId")
+    private String srcBlockId;
     @ApiModelProperty(value="操作类型，0：企业项目，1：我的项目",name="operation")
     private Integer operation;
     @ApiParam(hidden = true)

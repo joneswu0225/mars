@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.mars.repository.BlockTipMapper" >
+    <insert id="insertRecord" parameterType="BlockTipParams" useGeneratedKeys="true" keyProperty="id">
+        insert into block_tip(`id`, `block_id`, `spot_id`, `detail`) values
+            <foreach collection="blockTipParams" item="item" index="index" separator=",">
+            (#{item.id},#{item.blockId},#{item.spotId}, #{item.detail})
+            </foreach>
+            ON DUPLICATE KEY UPDATE update_time=now()
+    </insert>
+    <update id="update" parameterType="BlockTipParam">
+        update block_tip
+        set id=#{id}
+        <if test="detail != null and detail != ''">
+            , detail = #{detail}
+        </if>
+        where id=#{id}
+    </update>
+    <select id="findList" resultType="BlockTip" parameterType="Query">
+        <include refid="com.jones.mars.repository.CommonMapper.startPage" />
+        select a.id, a.block_id, a.spot_id, a.detail,
+               b.title, b.block_id as spot_block_id, b.ath, b.atv, b.fov, b.scode, b.acode, b.type, b.detail as spot_detail, b.seq
+        from block_tip a join block_tour_spot b on a.spot_id=b.id
+        where  b.delete_flg=0
+        <if test="blockId != null">
+            and a.block_id=#{blockId}
+        </if>
+        <if test="spotId != null">
+            and a.spot_id=#{spotId}
+        </if>
+        <if test="type != null and type != ''">
+            and b.`type`=#{type}
+        </if>
+        <if test="blockIds != null">
+            and a.block_id in (
+            <foreach collection="blockIds" item="bid" index="index" separator=",">
+                #{bid}
+            </foreach>
+            )
+        </if>
+        order by a.block_id desc, b.seq
+        <include refid="com.jones.mars.repository.CommonMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*)
+        from block_tip a join block_tour_spot b on a.spot_id=b.id
+        where  b.delete_flg=0
+        <if test="blockId != null">
+            and a.block_id=#{blockId}
+        </if>
+        <if test="spotId != null">
+            and a.spot_id=#{spotId}
+        </if>
+        <if test="type != null and type != ''">
+            and b.`type`=#{type}
+        </if>
+        <if test="blockIds != null">
+            and a.block_id in (
+            <foreach collection="blockIds" item="bid" index="index" separator=",">
+                #{bid}
+            </foreach>
+            )
+        </if>
+    </select>
+    <select id="findAllName" resultType="java.lang.Object" parameterType="Query">
+        select a.id,  b.title,
+        from block_tip a join block_tour_spot b on a.spot_id=b.id
+        where  b.delete_flg=0
+        <if test="blockId != null">
+            and block_id=#{blockId}
+        </if>
+        <if test="spotId != null">
+            and spot_id=#{spotId}
+        </if>
+        order by id desc
+    </select>
+    <select id="findAll" resultType="BlockTip">
+        select a.id, a.block_id, a.spot_id, a.detail,
+        b.title, b.block_id as spot_block_id, b.ath, b.atv, b.fov, b.scode, b.acode, b.type, b.detail as spot_detail, b.seq
+        from block_tip a join block_tour_spot b on a.spot_id=b.id
+        where  b.delete_flg=0
+        <if test="blockId != null">
+            and a.block_id=#{blockId}
+        </if>
+        <if test="spotId != null">
+            and a.spot_id=#{spotId}
+        </if>
+        <if test="type != null and type != ''">
+            and b.`type`=#{type}
+        </if>
+        <if test="blockIds != null">
+            and a.block_id in (
+            <foreach collection="blockIds" item="bid" index="index" separator=",">
+                #{bid}
+            </foreach>
+            )
+        </if>
+        order by a.block_id desc, b.seq
+    </select>
+    <select id="findOne" resultType="BlockTip">
+        select * from block_tip where id=#{id}
+    </select>
+    <delete id="delete">
+        delete from block_tip where id=#{id} 
+    </delete>
+</mapper>

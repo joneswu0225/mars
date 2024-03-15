@@ -27,6 +27,7 @@ public class Block extends BaseObject {
     private String status;
     private String enterpriseId;
     private String blockTypeId;
+    private String srcBlockId;
     private String name;
     private String panoPath;
     private Integer seq;

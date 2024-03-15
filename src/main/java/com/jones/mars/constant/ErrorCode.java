@@ -29,6 +29,8 @@ public enum ErrorCode {
 	VALIDATION_FAILED("1011", "参数校验失败"),
 	BAD_REQUEST("1012", "请求参数错误 [%s]"),
 	UPLOAD_FAILED("1013", "文件上传失败"),
+	CHANNEL_TOKEN_VALIDATE_FAILED("1021", "来源token验证失败"),
+	CHANNEL_CONTENT_VALIDATE_FAILED("1021", "来源信息验证失败"),
 
 	// 项目审核
 	PROJECT_STATUS_ERROR("4000", "项目状态错误"),

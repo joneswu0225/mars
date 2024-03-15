@@ -181,42 +181,49 @@ public class UserService extends BaseService<User>{
         }
         List<User> users = mapper.findList(builder.build());
         if(users.size() == 1){
-            Date now = new Date();
-            User user_db = users.get(0);
-            user_db.setLastLoginTime(now);
-            User user_update = User.builder().lastLoginTime(now).build();
-            user_update.setId(user_db.getId());
-            mapper.update(user_update);
-            Map<String, Object> result = new HashMap<>();
-            String authorization = "Basic" + UuidUtil.generate().toUpperCase();
-            result.put("id", user_db.getId());
-            result.put("avatar", user_db.getAvatar());
-            // 返回用户基本信息
-            // 从enterprise_user表中查询所有的企业
-            // 如果是管理员则不返回
-            log.info("userparam appsource: " + appSource);
-            if(user_db.getUserType().equals(User.COMMON) && CommonConstant.APP_SOURCE_ADMIN.equals(appSource)) {
-                // 普通用户登录后台要拒绝
-                log.info("当前用户%s,　为普通用户无权限登录后台管理");
-                return BaseResponse.builder().code(ErrorCode.ADMIN_LOGIN_DENIED).build();
-            }
-            List<EnterpriseUser> enterprises = enterpriseUserMapper.findAll(EnterpriseUserQuery.builder().userId(user_db.getId()).build());
-            user_db.setEnterprises(enterprises);
-//            if(user_db.getUserType().equals(User.COMMON)){
-//                List<Block> roleList = roleMapper.findGrantedBlock(user_db.getId());
-//                result.put("roles", roleList);
-//            }
-            result.put("enterprises", enterprises);
-            result.put("expireTime", new Date(now.getTime() + LoginUtil.COOKIE_MAX_INACTIVE_INTERVAL));
-            result.put("userType", user_db.getUserType());
-            LoginUtil.getInstance().setUser(authorization, user_db);
-            result.put("authorization", user_db.getAuth());
-            return BaseResponse.builder().data(result).build();
+            return login(users.get(0), appSource);
         } else if(users.size() < 1){
             return BaseResponse.builder().code(ErrorCode.LOGIN_FAIL).build();
         } else {
             throw new InternalException("手机及验证码重复");
         }
+    }
+    public BaseResponse innerLogin(String userId, String appSource){
+        User user = mapper.findOne(userId);
+        return login(user, appSource);
+    }
+    public BaseResponse login(User user, String appSource){
+        Date now = new Date();
+//        User user_db = users.get(0);
+        user.setLastLoginTime(now);
+        User user_update = User.builder().lastLoginTime(now).build();
+        user_update.setId(user.getId());
+        mapper.update(user_update);
+        Map<String, Object> result = new HashMap<>();
+        String authorization = "Basic" + UuidUtil.generate().toUpperCase();
+        result.put("id", user.getId());
+        result.put("avatar", user.getAvatar());
+        // 返回用户基本信息
+        // 从enterprise_user表中查询所有的企业
+        // 如果是管理员则不返回
+        log.info("userparam appsource: " + appSource);
+        if(user.getUserType().equals(User.COMMON) && CommonConstant.APP_SOURCE_ADMIN.equals(appSource)) {
+            // 普通用户登录后台要拒绝
+            log.info("当前用户%s,　为普通用户无权限登录后台管理");
+            return BaseResponse.builder().code(ErrorCode.ADMIN_LOGIN_DENIED).build();
+        }
+        List<EnterpriseUser> enterprises = enterpriseUserMapper.findAll(EnterpriseUserQuery.builder().userId(user.getId()).build());
+        user.setEnterprises(enterprises);
+//            if(user_db.getUserType().equals(User.COMMON)){
+//                List<Block> roleList = roleMapper.findGrantedBlock(user_db.getId());
+//                result.put("roles", roleList);
+//            }
+        result.put("enterprises", enterprises);
+        result.put("expireTime", new Date(now.getTime() + LoginUtil.COOKIE_MAX_INACTIVE_INTERVAL));
+        result.put("userType", user.getUserType());
+        LoginUtil.getInstance().setUser(authorization, user);
+        result.put("authorization", user.getAuth());
+        return BaseResponse.builder().data(result).build();
     }
 
     public BaseResponse doWxLogin(UserWXLoginParam param){
