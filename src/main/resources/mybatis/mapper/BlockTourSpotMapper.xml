@@ -7,7 +7,31 @@
     </insert>
     <update id="update" parameterType="BlockTourSpotParam">
         update block_tour_spot
-        set title = #{title},ath = #{ath}, atv = #{atv}, fov = #{fov}, acode = #{acode}, scode = #{scode},  `type` = #{type}, detail = #{detail}
+        set id = #{id}
+        <if test="title != null and title != ''">
+            , title = #{title}
+        </if>
+        <if test="ath != null">
+            , ath = #{ath}
+        </if>
+        <if test="atv != null">
+            , atv = #{atv}
+        </if>
+        <if test="fov != null">
+            , fov = #{fov}
+        </if>
+        <if test="acode != null and acode != ''">
+            , acode = #{acode}
+        </if>
+        <if test="scode != null and scode != ''">
+            , scode = #{scode}
+        </if>
+        <if test="type != null and type != ''">
+            , type = #{type}
+        </if>
+        <if test="detail != null and detail != ''">
+            , detail = #{detail}
+        </if>
         where id = #{id}
     </update>
     <select id="findMaxSeqByBlockId" parameterType="java.lang.String" resultType="java.lang.Integer">

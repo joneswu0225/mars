@@ -44,41 +44,15 @@ public class Snowflake implements Serializable {
     @SuppressWarnings({"PointlessBitwiseExpression", "FieldCanBeLocal"})
     private final long sequenceMask = -1L ^ (-1L << sequenceBits);// 4095
 
-    private final long tableId;
-    private final long deployId;
     private volatile long sequence = 0L;
-    private long lastTimestamp = -1L;
+    private volatile long lastTimestamp = -1L;
 
 
     /**
      * 构造
-     * @param deployId     部署ID
-     * @param tableId      表排序ID
      */
-    public Snowflake(long deployId, long tableId) {
-        this(null, deployId, tableId);
-    }
+    public Snowflake(){
 
-    /**
-     * @param epochDate        初始化时间起点（null表示默认起始日期）,后期修改会导致id重复,如果要修改连tableId deployId，慎用
-     * @param tableId         工作机器节点id
-     * @param deployId     部署id
-     */
-    public Snowflake(Date epochDate, long deployId, long tableId) {
-//        if (null != epochDate) {
-//            this.twepoch = epochDate.getTime();
-//        } else{
-//            // Mon Oct 23 2023 13:26:19 GMT+0800
-//            this.twepoch = 1398038779076L;
-//        }
-        if (tableId > maxTableId || tableId < 0) {
-            throw new IllegalArgumentException(String.format("table Id can't be greater than {} or less than 0", maxTableId));
-        }
-        if (deployId > maxDeployId || deployId < 0) {
-            throw new IllegalArgumentException(String.format("datacenter Id can't be greater than {} or less than 0", maxDeployId));
-        }
-        this.tableId = tableId;
-        this.deployId = deployId;
     }
 
     /**
@@ -116,7 +90,7 @@ public class Snowflake implements Serializable {
      *
      * @return ID
      */
-    public synchronized long nextId() {
+    public synchronized long nextId(long deployId, long tableId) {
         long timestamp = genTime();
         if (timestamp < lastTimestamp) {
             if(lastTimestamp - timestamp < 2000){
@@ -139,9 +113,7 @@ public class Snowflake implements Serializable {
             sequence = 0L;
         }
         lastTimestamp = timestamp;
-        System.out.println(((timestamp - twepoch) << timestampLeftShift) | (deployId << deployIdShift) | (tableId << tableIdShift) | sequence);
         long id = ((timestamp - twepoch) << timestampLeftShift) | (deployId << deployIdShift) | (tableId << tableIdShift) | sequence;
-        System.out.println(id);
         return id;
     }
 
@@ -150,8 +122,8 @@ public class Snowflake implements Serializable {
      *
      * @return ID 字符串形式
      */
-    public String nextIdStr() {
-        return Long.toString(nextId());
+    public String nextIdStr(long deployId, long tableId) {
+        return Long.toString(nextId(deployId, tableId));
     }
 
     // ------------------------------------------------------------------------------------------------------------------------------------ Private method start
@@ -188,9 +160,9 @@ public class Snowflake implements Serializable {
     public static void main(String[] args) {
         long deployId = 111l;
         long tableId = 63l;
-        Snowflake snowflake = new Snowflake(deployId, tableId);
+        Snowflake snowflake = new Snowflake();
         for(int i=0;i<=10;i++){
-            long id = snowflake.nextId();
+            long id = snowflake.nextId(deployId, tableId);
             System.out.println(id );
         }
 

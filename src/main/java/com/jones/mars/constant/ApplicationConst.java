@@ -1,6 +1,7 @@
 package com.jones.mars.constant;
 
 import com.jones.mars.util.Snowflake;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,6 +24,7 @@ public class ApplicationConst {
     public static String UPLOAD_PATH_TMP_PANOIMAGE;
     public static String UPLOAD_PATH_TMP_AUDIO;
     public static String APP_DOMAIN;
+    public static Snowflake snowflake = new Snowflake();
 
     @Value("${app.domain:vr2shipping.com}")
     public void setAppDomain(String appDomain) {
@@ -47,7 +49,7 @@ public class ApplicationConst {
     }
 
     public static String generateId(String tableName){
-        return new Snowflake(DEPLOY_ID, getTableId(tableName)).nextId() + "";
+        return snowflake.nextIdStr(DEPLOY_ID, getTableId(tableName));
     }
 
     @Value("${app.mode.nologin.source.prefix:}")

@@ -33,10 +33,10 @@ public class ToolController extends BaseController {
         }
         size = size > 0 ? size : 1;
         deployId = deployId == null ? ApplicationConst.DEPLOY_ID : deployId;
-        Snowflake snowflake = new Snowflake(deployId, tableId);
+        Snowflake snowflake = new Snowflake();
         List<String> ids = new ArrayList<>(size);
         for(int i=0; i<size;i++){
-            ids.add(snowflake.nextIdStr());
+            ids.add(snowflake.nextIdStr(deployId, tableId));
         }
         return BaseResponse.builder().data(ids).build();
     }
