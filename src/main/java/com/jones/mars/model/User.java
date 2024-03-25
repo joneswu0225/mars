@@ -39,6 +39,7 @@ public class User extends BaseObject {
     private Date updateTime;
     private Date createTime;
     private Integer status;
+    private Integer terminalLimit;
     private String job;
     private String city;
     private String province;

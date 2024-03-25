@@ -22,7 +22,9 @@ public class ChannelResource extends BaseObject {
     private String authUrl;
     private String redirectUrl;
     private String validateContent;
-    private String userId;
+    private String roleField;
+    private String roleMapping;
+    private String defaultUserId;
     private String token;
     private Date tokenUpdateTime;
     private Date createTime;

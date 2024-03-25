@@ -32,6 +32,8 @@ public enum ErrorCode {
 	CHANNEL_TOKEN_VALIDATE_FAILED("1021", "来源token验证失败"),
 	CHANNEL_CONTENT_VALIDATE_FAILED("1021", "来源信息验证失败"),
 
+	CHANNEL_CONTENT_ROLE_MAPPING_FAILED("1022", "来源信息无法找到匹配的用户id"),
+
 	// 项目审核
 	PROJECT_STATUS_ERROR("4000", "项目状态错误"),
 	PROJECT_VERIFY_VERIFIED("4001", "项目状态错误，编辑状态下才能提交审核"),

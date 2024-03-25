@@ -85,6 +85,8 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
         addInterceptor.excludePathPatterns("/user/**/exists");
         addInterceptor.excludePathPatterns("/user/logout");
         addInterceptor.excludePathPatterns("/pano**");
+        addInterceptor.excludePathPatterns("/channelResource/**/token");
+        addInterceptor.excludePathPatterns("/channelResource/**/validate");
         // socket接口
         addInterceptor.excludePathPatterns("/ws/**");
         addInterceptor.excludePathPatterns("/wss/**");
@@ -197,7 +199,6 @@ public class AuthInterceptor extends WebMvcConfigurerAdapter {
             }
             return true;
         }
-
     }
 
     private boolean hasPermission(Object handler) {

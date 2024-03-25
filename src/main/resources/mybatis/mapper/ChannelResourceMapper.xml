@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jones.mars.repository.ChannelResourceMapper" >
     <insert id="insertRecord" parameterType="ChannelResource" useGeneratedKeys="true" keyProperty="id">
-        insert into channel_resource(`id`, `enterprise_id`, `company`, `detail`, `auth_url`, `redirect_url`, `validate_content`, `user_id`, `create_time`)
-        values(#{id}, #{enterpriseId}, #{company}, #{detail}, #{authUrl}, #{redirectUrl}, #{validateContent}, #{userId}, now())
+        insert into channel_resource(`id`, `enterprise_id`, `company`, `detail`, `auth_url`, `redirect_url`, `validate_content`, `role_field`, `role_mapping`, `default_user_id`, `create_time`)
+        values(#{id}, #{enterpriseId}, #{company}, #{detail}, #{authUrl}, #{redirectUrl}, #{validateContent}, #{roleField}, #{roleMapping}, #{defaultUserId}, now())
     </insert>
     <update id="update" parameterType="ChannelResource">
         update channel_resource set id=#{id}
@@ -28,8 +28,14 @@
         <if test="redirectUrl != null and redirectUrl != ''">
             , redirect_url=#{redirectUrl}
         </if>
-        <if test="userId != null and userId != ''">
-            , user_id=#{userId}
+        <if test="defaultUserId != null">
+            , default_user_id=#{defaultUserId}
+        </if>
+        <if test="roleField != null and roleField != ''">
+            , role_field=#{roleField}
+        </if>
+        <if test="roleMapping != null and roleMapping != ''">
+            , role_mapping=#{roleMapping}
         </if>
         <if test="token != null and token != ''">
             , token=#{token}

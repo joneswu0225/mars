@@ -27,7 +27,11 @@ public class ChannelResourceParam extends BaseObject {
     private String redirectUrl;
     @ApiModelProperty(value="校验信息json",name="validateContent")
     private String validateContent;
-    @ApiModelProperty(value="对应的登录用户ID",name="userId")
-    private String userId;
+    @ApiModelProperty(value="校验接口返回信息的角色字段",name="roleField")
+    private String roleField;
+    @ApiModelProperty(value="角色映射内部用户id",name="roleMapping")
+    private String roleMapping;
+    @ApiModelProperty(value="默认的登录用户ID",name="defaultUserId")
+    private String defaultUserId;
 }
 

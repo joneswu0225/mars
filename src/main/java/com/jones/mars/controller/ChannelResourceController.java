@@ -45,7 +45,7 @@ public class ChannelResourceController extends BaseController {
         return service.generateToken(channelResourceId);
     }
 
-    @ApiOperation(value = "生成渠道token", notes = "生成渠道token")
+    @ApiOperation(value = "校验渠道信息及token", notes = "校验渠道信息及token")
     @PostMapping("{channelResourceId}/validate")
     public BaseResponse validateAndLogin(@PathVariable String channelResourceId, @ApiParam(required=true) ChannelResourceAuthParam param) {
         param.setId(channelResourceId);

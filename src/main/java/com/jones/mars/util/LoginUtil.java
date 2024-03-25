@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,7 +27,7 @@ public class LoginUtil {
     public static final int COOKIE_MAX_INACTIVE_INTERVAL = 86400;
     public static LoginUtil INSTANCE = null;
     private ConcurrentHashMap<String, User> loginUser = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String, String> userIdAuth = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, LinkedList<String>> userIdAuth = new ConcurrentHashMap<>();
 
 //    @Value("${app.domain:vr2shipping.com}")
 //    private void setAppDomain(String appDomain){
@@ -132,15 +133,17 @@ public class LoginUtil {
         }
     }
 
-    @Transactional
-    void setLoginUser(String authorization, User user){
-        // 只能单点登录，互踢机制
-        if(userIdAuth.containsKey(user.getId())){
-            loginUser.remove(userIdAuth.get(user.getId()));
+    synchronized void setLoginUser(String authorization, User user){
+        LinkedList<String> authList = userIdAuth.getOrDefault(user.getId(), new LinkedList<>());
+        authList.remove(authorization);
+        if(authList.size()>=user.getTerminalLimit()){
+            String oldAuth = authList.poll();
+            loginUser.remove(oldAuth);
         }
+        authList.offer(authorization);
+        userIdAuth.put(user.getId(), authList);
         user.setAuth(authorization);
         loginUser.put(authorization, user);
-        userIdAuth.put(user.getId(), authorization);
     }
 
 }

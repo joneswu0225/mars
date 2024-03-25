@@ -27,5 +27,7 @@ public class UserParam {
     private Integer userType;
     @ApiModelProperty(value="用户状态",name="status")
     private Integer status;
+    @ApiModelProperty(value="登录设备数量限制",name="terminalLimit")
+    private Integer terminalLimit;
 }
 
